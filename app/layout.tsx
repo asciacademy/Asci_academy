@@ -1,0 +1,90 @@
+import type { Metadata, Viewport } from 'next'
+import { Inter, JetBrains_Mono, EB_Garamond } from 'next/font/google'
+import { ThemeProvider } from '@/components/theme-provider'
+import { Analytics } from '@vercel/analytics/next'
+import Script from 'next/script'
+import './globals.css'
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+})
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-jetbrains-mono',
+})
+
+const ebGaramond = EB_Garamond({
+  subsets: ['latin'],
+  variable: '--font-eb-garamond',
+  weight: ['400', '500', '600', '700'],
+})
+
+export const metadata: Metadata = {
+  title: 'ASCI — Master DSA & Modern Web Development',
+  description:
+    'Comprehensive learning platform for mastering Data Structures, Algorithms, and full-stack web development. Interactive visualizers, 1-on-1 mentorship, real-world projects, and career-focused curriculum.',
+  icons: {
+    icon: [
+      { url: '/icon.svg', type: 'image/svg+xml' },
+      { url: '/logo.png', sizes: '32x32', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+  },
+}
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#fdfbf7' },
+    { media: '(prefers-color-scheme: dark)', color: '#000000' },
+  ],
+}
+
+import { Suspense } from 'react'
+import { AuthProvider } from "@/context/auth-context"
+import { AdminProvider } from "@/context/admin-context"
+import { UserSettingsProvider } from "@/context/user-settings-context"
+import { AxelProvider } from "@/context/axel-context"
+import { ScrollRobotWrapper } from "@/components/scroll-robot-wrapper"
+import { RouteProgressBar } from "@/components/route-progress-bar"
+import { SplashScreen } from "@/components/splash-screen"
+import { XpCelebrationToast } from "@/components/gamification/xp-celebration-toast"
+import { GoogleOneTap } from "@/components/auth/google-one-tap"
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode
+}>) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={`${inter.variable} ${jetbrainsMono.variable} ${ebGaramond.variable} font-sans antialiased bg-background text-foreground min-h-screen transition-colors duration-200`}
+      >
+        <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          <AuthProvider>
+            <UserSettingsProvider>
+              <AdminProvider>
+                <AxelProvider>
+                  <Suspense fallback={null}>
+                    <RouteProgressBar />
+                  </Suspense>
+                  <GoogleOneTap />
+                  <SplashScreen />
+                  <XpCelebrationToast />
+                  {children}
+                  <ScrollRobotWrapper />
+                </AxelProvider>
+              </AdminProvider>
+            </UserSettingsProvider>
+          </AuthProvider>
+        </ThemeProvider>
+        <Analytics />
+      </body>
+    </html>
+  )
+}

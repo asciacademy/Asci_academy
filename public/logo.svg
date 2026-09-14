@@ -1,0 +1,28 @@
+<svg viewBox="0 0 240 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="asciLogoGradFull" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f97316" />
+      <stop offset="50%" stop-color="#ea580c" />
+      <stop offset="100%" stop-color="#c2410c" />
+    </linearGradient>
+  </defs>
+
+  <!-- Logo Mark Icon (Scaled to fit 48x48 inside 0-50 x) -->
+  <g transform="translate(6, 6) scale(0.48)">
+    <path d="M50 14L88 31L50 48L12 31L50 14Z" fill="url(#asciLogoGradFull)" />
+    <path d="M27 38.5C33 34.5 41 33 50 33C59 33 67 34.5 73 38.5V44C67 40 59 38.5 50 38.5C41 38.5 33 40 27 44V38.5Z" fill="url(#asciLogoGradFull)" />
+    <circle cx="79" cy="36" r="2" fill="url(#asciLogoGradFull)" />
+    <path d="M79 36C80 39 81 41 81 44" stroke="url(#asciLogoGradFull)" stroke-width="1.5" stroke-linecap="round" />
+    <rect x="79.5" y="44" width="3.2" height="8" rx="1.6" fill="url(#asciLogoGradFull)" />
+    <path d="M50 43C50 49 46 53 42 53C46 53 50 57 50 63C50 57 54 53 58 53C54 53 50 49 50 43Z" fill="url(#asciLogoGradFull)" />
+    <path d="M47.5 65.5C36 60.5 25 55 16 54V70C25 71 36 76 47.5 81V65.5Z" fill="url(#asciLogoGradFull)" />
+    <path d="M52.5 65.5C64 60.5 75 55 84 54V70C75 71 64 76 52.5 81V65.5Z" fill="url(#asciLogoGradFull)" />
+  </g>
+
+  <!-- Wordmark "ASCI" in serif -->
+  <text x="68" y="38" font-family="'EB Garamond', 'Georgia', serif" font-size="28" font-weight="500" fill="currentColor" letter-spacing="1">ASCI</text>
+
+  <!-- LMS Pill Badge -->
+  <rect x="156" y="20" width="46" height="22" rx="11" fill="#ea580c" />
+  <text x="179" y="35" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#ffffff" text-anchor="middle" letter-spacing="1.2">LMS</text>
+</svg>

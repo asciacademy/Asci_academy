@@ -1,0 +1,29 @@
+<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="asciGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f97316" />
+      <stop offset="50%" stop-color="#ea580c" />
+      <stop offset="100%" stop-color="#c2410c" />
+    </linearGradient>
+  </defs>
+
+  <!-- Mortarboard Cap Top -->
+  <path d="M50 14L88 31L50 48L12 31L50 14Z" fill="url(#asciGrad)" />
+
+  <!-- Cap Under-Arch Band -->
+  <path d="M27 38.5C33 34.5 41 33 50 33C59 33 67 34.5 73 38.5V44C67 40 59 38.5 50 38.5C41 38.5 33 40 27 44V38.5Z" fill="url(#asciGrad)" />
+
+  <!-- Tassel -->
+  <circle cx="79" cy="36" r="2" fill="url(#asciGrad)" />
+  <path d="M79 36C80 39 81 41 81 44" stroke="url(#asciGrad)" stroke-width="1.5" stroke-linecap="round" />
+  <rect x="79.5" y="44" width="3.2" height="8" rx="1.6" fill="url(#asciGrad)" />
+
+  <!-- Central Illuminating Star -->
+  <path d="M50 43C50 49 46 53 42 53C46 53 50 57 50 63C50 57 54 53 58 53C54 53 50 49 50 43Z" fill="url(#asciGrad)" />
+
+  <!-- Left Page / Pedestal -->
+  <path d="M47.5 65.5C36 60.5 25 55 16 54V70C25 71 36 76 47.5 81V65.5Z" fill="url(#asciGrad)" />
+
+  <!-- Right Page / Pedestal -->
+  <path d="M52.5 65.5C64 60.5 75 55 84 54V70C75 71 64 76 52.5 81V65.5Z" fill="url(#asciGrad)" />
+</svg>
