@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "node scripts/build-dispatcher.js",
+    "build:next": "next build",
     "build:cloudflare": "opennextjs-cloudflare build",
     "deploy:cloudflare": "opennextjs-cloudflare build && wrangler deploy",
     "deploy": "opennextjs-cloudflare build && wrangler deploy",
