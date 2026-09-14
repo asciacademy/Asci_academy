@@ -28,9 +28,9 @@ if (isCloudflare) {
   const workerProxyCode = `export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
-    const targetUrl = new URL(url.pathname + url.search, "https://asci-academy.hello-asciacademy.workers.dev");
+    const targetUrl = new URL(url.pathname + url.search, "https://asci-academy.vercel.app");
     const headers = new Headers(request.headers);
-    headers.set("host", "asci-academy.hello-asciacademy.workers.dev");
+    headers.set("host", "asci-academy.vercel.app");
     headers.set("x-forwarded-host", url.host);
     headers.set("x-forwarded-proto", url.protocol.replace(":", ""));
     const init = {
