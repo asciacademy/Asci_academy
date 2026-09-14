@@ -53,7 +53,8 @@ if (isCloudflare) {
   const assetsDir = path.join(__dirname, '..', '.open-next', 'assets');
   if (fs.existsSync(assetsDir)) {
     fs.writeFileSync(path.join(assetsDir, '_worker.js'), workerProxyCode, 'utf8');
-    console.log('⚡ Injected _worker.js proxy into .open-next/assets for Cloudflare Pages!');
+    fs.writeFileSync(path.join(assetsDir, '.assetsignore'), '_worker.js\n', 'utf8');
+    console.log('⚡ Injected _worker.js proxy and .assetsignore into .open-next/assets for Cloudflare Pages!');
   }
 } else {
   console.log('▲ Building with standard Next.js (Vercel / Local)...');
