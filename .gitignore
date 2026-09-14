@@ -9,6 +9,8 @@ node_modules/
 
 # Next.js Build & Outputs
 .next/
+.open-next/
+.wrangler/
 out/
 build/
 dist/
