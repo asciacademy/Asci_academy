@@ -10,7 +10,7 @@
 ───────────────────────────────────────────── */
 
 :root {
-  /* Core palette — Creamy White & Warm Claude Orange */
+  /* Core palette — Warm Editorial Cream & Ink */
   --background: #fdfbf7;
   --foreground: #141413;
   --card: #f5f0e8;
@@ -20,94 +20,96 @@
   --primary: #ea580c;
   --primary-foreground: #ffffff;
   --primary-active: #c2410c;
-  --secondary: #f3ede2;
-  --secondary-foreground: #141413;
-  --muted: #e8e2d8;
+  --secondary: #efe9de;
+  --secondary-foreground: #57534e;
+  --muted: #e7e1d8;
   --muted-foreground: #6c6a64;
   --accent: #ea580c;
   --accent-foreground: #ffffff;
-  --destructive: #c64545;
+  --destructive: #dc2626;
   --destructive-foreground: #ffffff;
-  --border: #e8e2d8;
-  --input: #e8e2d8;
+  --border: #e7e1d8;
+  --input: #e7e1d8;
   --ring: #ea580c;
 
   /* Extended surfaces */
-  --surface: #fdfbf7;
-  --surface-2: #f3ede2;
+  --surface: #f5f0e8;
+  --surface-2: #efe9de;
   --surface-card: #f5f0e8;
-  --surface-cream-strong: #ebe3d5;
-  --surface-dark: #181715;
-  --surface-dark-elevated: #252320;
-  --surface-dark-soft: #1f1e1b;
-  --on-dark: #fdfbf7;
-  --on-dark-soft: #a09d96;
+  --surface-elevated: #ffffff;
+  --surface-cream-strong: #e7e1d8;
+  --surface-dark: #11110f;
+  --surface-dark-elevated: #22211e;
+  --surface-dark-soft: #1a1917;
+  --on-dark: #f5f2ea;
+  --on-dark-soft: #a8a29e;
 
   /* Semantic */
-  --success: #ea580c;
-  --warning: #d4a017;
-  --info: #ea580c;
-  --error: #c64545;
+  --success: #15803d;
+  --warning: #b45309;
+  --info: #0284c7;
+  --error: #dc2626;
 
   /* Ink hierarchy */
   --ink: #141413;
   --body: #3d3d3a;
-  --body-strong: #252523;
+  --body-strong: #141413;
   --muted-soft: #8e8b82;
-  --hairline: #e8e2d8;
-  --hairline-soft: #ede7de;
+  --hairline: #e7e1d8;
+  --hairline-soft: #efe9de;
 
-  /* Shape */
+  /* Shape & Elevation */
   --radius: 0.5rem;
 }
 
 .dark {
-  /* Core palette — Dark Navy/Obsidian & Terracotta Warm */
-  --background: #141413;
-  --foreground: #fdfbf7;
-  --card: #1e1d1a;
-  --card-foreground: #fdfbf7;
-  --popover: #141413;
-  --popover-foreground: #fdfbf7;
-  --primary: #ea580c;
+  /* Core palette — Obsidian Technical Warmth */
+  --background: #11110f;
+  --foreground: #f5f2ea;
+  --card: #1a1917;
+  --card-foreground: #f5f2ea;
+  --popover: #11110f;
+  --popover-foreground: #f5f2ea;
+  --primary: #f97316;
   --primary-foreground: #ffffff;
-  --primary-active: #c2410c;
-  --secondary: #1f1e1b;
-  --secondary-foreground: #fdfbf7;
-  --muted: #1f1e1b;
-  --muted-foreground: #a09d96;
-  --accent: #ea580c;
+  --primary-active: #ea580c;
+  --secondary: #161513;
+  --secondary-foreground: #a8a29e;
+  --muted: #22211e;
+  --muted-foreground: #a8a29e;
+  --accent: #f97316;
   --accent-foreground: #ffffff;
   --destructive: #ef4444;
   --destructive-foreground: #ffffff;
-  --border: #252320;
-  --input: #252320;
-  --ring: #ea580c;
+  --border: rgba(255, 255, 255, 0.09);
+  --input: rgba(255, 255, 255, 0.12);
+  --ring: #f97316;
 
   /* Extended surfaces */
-  --surface: #141413;
-  --surface-2: #1c1a17;
-  --surface-card: #1e1d1a;
-  --surface-cream-strong: #252320;
-  --surface-dark: #100f0e;
-  --surface-dark-elevated: #181715;
-  --surface-dark-soft: #141413;
-  --on-dark: #fdfbf7;
-  --on-dark-soft: #a09d96;
+  --surface: #1a1917;
+  --surface-2: #161513;
+  --surface-card: #1a1917;
+  --surface-elevated: #22211e;
+  --surface-cream-strong: #22211e;
+  --surface-dark: #0d0c0b;
+  --surface-dark-elevated: #22211e;
+  --surface-dark-soft: #161513;
+  --on-dark: #f5f2ea;
+  --on-dark-soft: #a8a29e;
 
   /* Semantic */
-  --success: #ea580c;
+  --success: #22c55e;
   --warning: #f59e0b;
   --info: #38bdf8;
-  --error: #f87171;
+  --error: #ef4444;
 
   /* Ink hierarchy */
-  --ink: #ffffff;
+  --ink: #f5f2ea;
   --body: #d4d4d8;
   --body-strong: #ffffff;
-  --muted-soft: #71717a;
-  --hairline: #252320;
-  --hairline-soft: #1c1a17;
+  --muted-soft: #a8a29e;
+  --hairline: rgba(255, 255, 255, 0.08);
+  --hairline-soft: rgba(255, 255, 255, 0.05);
 }
 
 @theme inline {
@@ -1035,5 +1037,17 @@ html {
     break-inside: avoid !important;
     page-break-after: avoid !important;
     page-break-before: avoid !important;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   ACCESSIBILITY: PREFERS REDUCED MOTION
+───────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

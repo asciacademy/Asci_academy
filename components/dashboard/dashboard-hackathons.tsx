@@ -296,7 +296,7 @@ export function DashboardHackathons() {
         >
           <Users className="w-3.5 h-3.5" />
           <span>Find Teammates Matchmaker</span>
-          <span className="text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-secondary border border-hairline text-foreground">
+          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-full bg-secondary border border-hairline text-foreground leading-none">
             {activeTeammatesCount}
           </span>
         </button>
@@ -610,18 +610,18 @@ export function DashboardHackathons() {
               >
                 <div>
                   {/* Top Badges */}
-                  <div className="flex items-center justify-between gap-3 mb-3">
-                    <span className="text-[10px] font-mono uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-amber-500/10 text-amber-700 dark:text-amber-300 font-semibold border border-amber-500/20">
+                  <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+                    <span className="text-[10px] font-mono uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-amber-500/10 text-amber-700 dark:text-amber-300 font-semibold border border-amber-500/20 shrink-0 leading-none">
                       {hackathon.bannerTag}
                     </span>
 
                     {hackathon.isRegistered ? (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase tracking-wider bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 font-semibold">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase tracking-wider bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 font-semibold shrink-0 leading-none">
                         <CheckCircle2 className="w-3 h-3" />
                         Registered
                       </span>
                     ) : (
-                      <span className="text-[10px] font-mono text-muted-foreground flex items-center gap-1">
+                      <span className="text-[10px] font-mono text-muted-foreground flex items-center gap-1 shrink-0">
                         <Clock className="w-3 h-3" />
                         Closes {hackathon.deadline}
                       </span>
@@ -695,17 +695,17 @@ export function DashboardHackathons() {
                 </div>
 
                 {/* Bottom Actions */}
-                <div className="pt-4 border-t border-hairline flex items-center justify-between gap-3">
-                  <span className="text-[11px] font-mono text-muted-foreground flex items-center gap-1">
+                <div className="pt-4 border-t border-hairline flex flex-wrap items-center justify-between gap-3">
+                  <span className="text-[11px] font-mono text-muted-foreground flex items-center gap-1 shrink-0">
                     <Users className="w-3.5 h-3.5" />
                     {hackathon.registeredCount.toLocaleString()} participants
                   </span>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 shrink-0">
                     {hackathon.isRegistered ? (
                       <button
                         onClick={() => setSelectedHackathonForSubmit(hackathon)}
-                        className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-medium transition-colors cursor-pointer ${
+                        className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-medium transition-colors cursor-pointer shrink-0 ${
                           hasSubmitted
                             ? "bg-secondary text-foreground border border-hairline hover:bg-secondary/80"
                             : "bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white shadow-xs"
@@ -717,7 +717,7 @@ export function DashboardHackathons() {
                     ) : (
                       <button
                         onClick={() => setSelectedHackathonForReg(hackathon)}
-                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-xs font-medium shadow-xs transition-all cursor-pointer"
+                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-xs font-medium shadow-xs transition-all cursor-pointer shrink-0"
                       >
                         <span>Register Now</span>
                         <ChevronRight className="w-3.5 h-3.5" />

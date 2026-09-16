@@ -29,7 +29,8 @@ import {
     FileCode2,
     Zap,
     CornerDownLeft,
-    Flame
+    Flame,
+    Bot
 } from "lucide-react"
 import Link from "next/link"
 import { usePython } from "@/hooks/use-python"
@@ -40,6 +41,7 @@ import { ThemeToggle } from "@/components/theme-toggle"
 import { generateCertificateAction } from "@/app/actions/certificates"
 import { saveLocalCertificate } from "@/lib/certificate-store"
 import { getCurriculumCourseBySlug } from "@/lib/curriculum-data"
+import { AxelTutorDrawer } from "@/components/dsa/axel-tutor-drawer"
 
 interface RunState {
     status: "idle" | "compiling" | "executing" | "completed" | "error"
@@ -67,6 +69,7 @@ export default function LessonPage() {
     const [copiedExpected, setCopiedExpected] = useState(false)
     const [activeTab, setActiveTab] = useState<"terminal" | "tests" | "diagnostics">("terminal")
     const [isConsoleExpanded, setIsConsoleExpanded] = useState(false)
+    const [isAxelOpen, setIsAxelOpen] = useState(false)
 
     const [runState, setRunState] = useState<RunState>({
         status: "idle",
@@ -447,6 +450,16 @@ export default function LessonPage() {
 
                                 <ThemeToggle className="h-7 w-7 border-[#222222] bg-black hover:bg-[#141414]" />
 
+                                {/* Axel AI Engineering Mentor Trigger */}
+                                <button
+                                    onClick={() => setIsAxelOpen(true)}
+                                    title="Open Axel AI Engineering Mentor"
+                                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-orange-500/40 bg-orange-500/10 hover:bg-orange-500/20 text-[11px] font-mono font-medium text-orange-400 hover:text-orange-300 transition-colors cursor-pointer shadow-2xs"
+                                >
+                                    <Bot className="h-3.5 w-3.5" />
+                                    <span className="hidden sm:inline">Axel AI</span>
+                                </button>
+
                                 {/* Primary Compile & Run Button */}
                                 <button
                                     onClick={handleRunCode}
@@ -467,7 +480,7 @@ export default function LessonPage() {
                                             ? runState.status === "compiling" ? "Compiling..." : "Executing..."
                                             : "Compile & Run"}
                                     </span>
-                                    <span className="hidden sm:inline-flex items-center text-[10px] font-mono px-1.5 py-0.2 rounded bg-black/40 text-white/80 border border-white/10">
+                                    <span className="hidden sm:inline-flex items-center text-[10px] font-mono px-1.5 py-0.5 rounded bg-black/40 text-white/80 border border-white/10 leading-none">
                                         Ctrl ↵
                                     </span>
                                 </button>
@@ -575,7 +588,7 @@ export default function LessonPage() {
                                         <CheckCircle2 className="h-3 w-3" />
                                         <span>Test Verification</span>
                                         {runState.testPassed !== null && (
-                                            <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono font-semibold ${
+                                            <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-mono font-semibold leading-none ${
                                                 runState.testPassed
                                                     ? "bg-primary/20 text-primary border border-primary/30"
                                                     : "bg-rose-500/20 text-rose-400 border border-rose-500/30"
@@ -846,6 +859,33 @@ export default function LessonPage() {
                     </div>
                 )}
             </div>
+
+            {/* Axel AI Mentor Drawer */}
+            {lesson && (
+                <AxelTutorDrawer
+                    isOpen={isAxelOpen}
+                    onClose={() => setIsAxelOpen(false)}
+                    problem={{
+                        id: lesson.id || "lesson",
+                        title: lesson.title || "Lesson Challenge",
+                        difficulty: "Medium",
+                        category: isJavaCourse ? "Java" : "Python",
+                        description: lesson.challenge_data?.description || lesson.content || "",
+                        starterCode: lesson.challenge_data?.initialCode || "",
+                        tests: lesson.challenge_data?.tests || [],
+                    } as any}
+                    userCode={code}
+                    runResult={runState.hasExecuted ? {
+                        status: runState.testPassed ? "success" : "error",
+                        output: runState.output,
+                        error: runState.error,
+                        executionMs: runState.executionMs,
+                        compileMs: runState.compileMs,
+                        testsPassed: runState.testPassed ? 1 : 0,
+                        testsTotal: 1,
+                    } as any : null}
+                />
+            )}
         </div>
     )
 }

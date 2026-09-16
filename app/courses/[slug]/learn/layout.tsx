@@ -21,6 +21,7 @@ export default function CourseLayout({
     const [openModule, setOpenModule] = useState<string>("")
     const [courseModules, setCourseModules] = useState<any[] | null>(null)
     const [userProfile, setUserProfile] = useState<any>(null)
+    const [mobileSyllabusOpen, setMobileSyllabusOpen] = useState(false)
 
     useEffect(() => {
         async function loadLayoutData() {
@@ -85,21 +86,31 @@ export default function CourseLayout({
 
             <div className="flex flex-1 flex-col lg:flex-row mt-[72px]">
                 {/* Sidebar Navigation */}
-                <aside className="w-full shrink-0 border-r border-border/80 bg-card/70 backdrop-blur-2xl lg:w-80 flex flex-col h-full lg:min-h-[calc(100vh-72px)]">
+                <aside className="w-full shrink-0 border-r border-border/80 bg-card/70 backdrop-blur-2xl lg:w-80 flex flex-col h-auto lg:h-full lg:min-h-[calc(100vh-72px)]">
                     {/* Header */}
-                    <div className="flex items-center gap-3 border-b border-border/80 p-5 bg-card/50">
-                        <div className="bg-primary/10 p-2 rounded-xl text-primary">
-                            <BookOpen className="h-4 w-4" />
+                    <div className="flex items-center justify-between border-b border-border/80 p-4 sm:p-5 bg-card/50">
+                        <div className="flex items-center gap-3">
+                            <div className="bg-primary/10 p-2 rounded-xl text-primary">
+                                <BookOpen className="h-4 w-4" />
+                            </div>
+                            <div>
+                                <h2 className="font-serif text-base font-semibold capitalize text-foreground">
+                                    {slug.replace("-", " ")}
+                                </h2>
+                                <p className="text-[11px] text-muted-foreground">Curriculum Index</p>
+                            </div>
                         </div>
-                        <div>
-                            <h2 className="font-serif text-base font-semibold capitalize text-foreground">
-                                {slug.replace("-", " ")}
-                            </h2>
-                            <p className="text-[11px] text-muted-foreground">Curriculum Index</p>
-                        </div>
+                        <button
+                            onClick={() => setMobileSyllabusOpen(v => !v)}
+                            className="lg:hidden flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border/80 bg-secondary/80 text-xs font-semibold text-foreground hover:bg-secondary transition-colors cursor-pointer"
+                        >
+                            <span>{mobileSyllabusOpen ? "Hide" : "Syllabus"}</span>
+                            <ChevronDown className={cn("h-3.5 w-3.5 transition-transform duration-200", mobileSyllabusOpen && "rotate-180")} />
+                        </button>
                     </div>
 
-                    {/* XP Tracker */}
+                    <div className={cn("flex flex-col flex-1", !mobileSyllabusOpen && "hidden lg:flex")}>
+                        {/* XP Tracker */}
                     <div className="px-5 py-4 border-b border-border/80 bg-card/30 shrink-0">
                         <div className="flex items-center justify-between mb-1.5">
                             <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground">Current Level</span>
@@ -199,6 +210,7 @@ export default function CourseLayout({
                             )
                         })}
                     </nav>
+                    </div>
                 </aside>
 
                 {/* Main Content Area */}

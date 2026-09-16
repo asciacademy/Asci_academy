@@ -16,110 +16,194 @@ if (typeof window !== "undefined") {
 }
 
 const roadmaps = {
-  fullstack: {
-    id: "fullstack",
-    name: "Full-Stack Developer",
-    description: "A clear 24-week path from basic coding to building real full-stack web applications.",
+  software: {
+    id: "software",
+    name: "Software Engineering",
+    effort: "24 Weeks · 12-15 hrs/wk",
+    difficulty: "Beginner to Advanced",
+    outcomes: "Design, build, test, and ship complete software systems with enterprise architecture standards.",
+    projects: "Distributed Key-Value Cache, Real-Time Collaboration Canvas, Microservices API Gateway",
+    skills: ["TypeScript", "Python", "Data Structures", "System Design", "CI/CD GitOps", "Testing"],
+    description: "A comprehensive engineering pathway from programming foundations to enterprise system design and production deployments.",
     phases: [
       {
-        phase: "Phase 1", title: "Coding Basics & Logic", weeks: "Weeks 1-4",
-        topics: ["JavaScript & TypeScript Basics", "Variables, Loops & Functions", "Basic Data Structures", "Git & GitHub Basics"],
+        phase: "Phase 1", title: "Computing Fundamentals & Clean Code", weeks: "Weeks 1-4",
+        topics: ["Memory models, pointers, and memory layout", "Clean architecture & SOLID design principles", "Version control workflows, trunk-based development", "Unit testing & automated assertion suites"],
         icon: Code2
       },
       {
-        phase: "Phase 2", title: "Data Structures & Algorithms", weeks: "Weeks 5-10",
-        topics: ["Lists, Stacks & Queues", "Trees & Graphs Explained Simply", "Sorting & Searching Algorithms", "Problem Solving Practice"],
+        phase: "Phase 2", title: "Data Structures & Algorithmic Patterns", weeks: "Weeks 5-10",
+        topics: ["Asymptotic complexity & Big-O optimization", "Trees, red-black structures, and heaps", "Dynamic programming & graph traversal", "Sliding window and two-pointer paradigms"],
         icon: Braces
       },
       {
-        phase: "Phase 3", title: "Building Full-Stack Apps", weeks: "Weeks 11-18",
-        topics: ["Modern React & Next.js", "Building REST APIs with Node.js", "Databases with PostgreSQL & Supabase", "Deploying Apps to the Web"],
+        phase: "Phase 3", title: "Full-Stack System Architecture", weeks: "Weeks 11-18",
+        topics: ["High-concurrency backend services", "Relational database schema normalization", "Modern reactive UI architecture (React 19 / Next.js)", "REST & gRPC service interfaces"],
         icon: Globe
       },
       {
-        phase: "Phase 4", title: "System Design & Interview Prep", weeks: "Weeks 19-24",
-        topics: ["How Big Systems Work", "Practice Coding Interviews", "Polishing Your Portfolio", "Resume & Job Search Help"],
+        phase: "Phase 4", title: "Distributed Scalability & Reliability", weeks: "Weeks 19-24",
+        topics: ["Database sharding, replication, and consensus", "Cache-aside and write-through patterns with Redis", "Fault-tolerant queue processing with Kafka", "Production post-mortems and site reliability"],
+        icon: Layers
+      }
+    ]
+  },
+  ai: {
+    id: "ai",
+    name: "AI Engineering",
+    effort: "20 Weeks · 15 hrs/wk",
+    difficulty: "Intermediate to Advanced",
+    outcomes: "Architect autonomous agent swarms, vector retrieval systems, and fine-tuned neural models.",
+    projects: "Multi-Agent Code Review Swarm, Enterprise RAG Pipeline, Vision & Audio Multimodal Assistant",
+    skills: ["PyTorch", "LLM APIs", "LangChain/LangGraph", "Vector DBs", "RAG Systems", "Evaluation"],
+    description: "From modern Python to building production-ready autonomous agent swarms, vector indexing, and neural reasoning pipelines.",
+    phases: [
+      {
+        phase: "Phase 1", title: "Python for AI & Matrix Operations", weeks: "Weeks 1-4",
+        topics: ["Vectorized computation with NumPy & Pandas", "Tensor manipulation and gradient graphs", "FastAPI endpoints for inference serving", "Data sanitization and embedding pipelines"],
+        icon: Code2
+      },
+      {
+        phase: "Phase 2", title: "Neural Networks & Foundation Models", weeks: "Weeks 5-10",
+        topics: ["Transformer self-attention architecture", "Fine-tuning with LoRA & QLoRA", "Context window tokenization mechanics", "Embedding space clustering and cosine metrics"],
+        icon: BrainCircuit
+      },
+      {
+        phase: "Phase 3", title: "RAG & Knowledge Retrieval Systems", weeks: "Weeks 11-16",
+        topics: ["Hybrid dense/sparse vector search", "Recursive chunking and semantic re-ranking", "Document ingestion & metadata filtering", "RAG evaluation with Ragas metrics"],
+        icon: Cpu
+      },
+      {
+        phase: "Phase 4", title: "Autonomous Agent Swarms & Tool Use", weeks: "Weeks 17-20",
+        topics: ["ReAct loop planning and self-correction", "Tool-calling APIs with JSON schema validation", "Hierarchical multi-agent delegation swarms", "Sandboxed execution and prompt safety guardrails"],
+        icon: Layers
+      }
+    ]
+  },
+  backend: {
+    id: "backend",
+    name: "Backend Engineering",
+    effort: "22 Weeks · 12 hrs/wk",
+    difficulty: "Intermediate",
+    outcomes: "Construct high-throughput microservices, robust relational databases, and low-latency APIs.",
+    projects: "Financial Ledger Engine, Multi-Tenant SaaS Backend, Distributed Task Scheduler",
+    skills: ["Java Spring Boot", "Go", "PostgreSQL", "Kafka", "Docker", "OAuth2 / Security"],
+    description: "Learn to build resilient server architectures, concurrent message pipelines, and ACID-compliant transactional backends.",
+    phases: [
+      {
+        phase: "Phase 1", title: "Server Foundations & Concurrency", weeks: "Weeks 1-5",
+        topics: ["JVM memory architecture & GC tuning", "Thread pools, locks, and atomic operations", "Go goroutines, channels, and select patterns", "TCP/HTTP connection keep-alive lifecycles"],
+        icon: Server
+      },
+      {
+        phase: "Phase 2", title: "Relational Storage & Index Tuning", weeks: "Weeks 6-11",
+        topics: ["B-Tree indexing and query plan analysis (EXPLAIN ANALYZE)", "ACID transaction isolation levels (MVCC)", "Database migrations and connection pooling", "Write-heavy audit log schemas"],
+        icon: Database
+      },
+      {
+        phase: "Phase 3", title: "Distributed Microservices & Queues", weeks: "Weeks 12-17",
+        topics: ["Event-driven architectures with Apache Kafka", "Saga pattern for distributed transactions", "Idempotent API endpoint design", "Circuit breakers & rate limiters with Redis"],
+        icon: Blocks
+      },
+      {
+        phase: "Phase 4", title: "Containerization, Observability & Cloud", weeks: "Weeks 18-22",
+        topics: ["Docker container optimization & security hardening", "OpenTelemetry distributed tracing with Jaeger", "Prometheus metrics & Grafana alert dashboards", "Zero-downtime blue/green deployment strategies"],
+        icon: Cloud
+      }
+    ]
+  },
+  systems: {
+    id: "systems",
+    name: "Systems Engineering",
+    effort: "26 Weeks · 15 hrs/wk",
+    difficulty: "Advanced",
+    outcomes: "Master low-level OS interfaces, memory allocators, zero-copy networking, and kernel event loops.",
+    projects: "Zero-Copy HTTP Server, User-Space Memory Allocator, LSM-Tree Storage Engine",
+    skills: ["C", "C++20", "Rust", "Linux Kernel / epoll", "Assembly Basics", "Perf Profiling"],
+    description: "Deep-dive systems programming covering manual memory management, POSIX syscalls, and high-performance network runtimes.",
+    phases: [
+      {
+        phase: "Phase 1", title: "Low-Level C & Memory Internals", weeks: "Weeks 1-6",
+        topics: ["Pointer arithmetic, stack vs heap layout", "Manual memory management & Valgrind profiling", "Data alignment, cache lines, and struct padding", "Bitwise protocols and binary file parsing"],
+        icon: Cpu
+      },
+      {
+        phase: "Phase 2", title: "Modern C++20 & Systems Rust", weeks: "Weeks 7-13",
+        topics: ["RAII, smart pointers, and move semantics", "Rust ownership, lifetimes, and borrow checker", "Zero-cost abstractions and templates/generics", "SIMD vectorization and cache locality"],
+        icon: Code2
+      },
+      {
+        phase: "Phase 3", title: "Linux Syscalls & Asynchronous I/O", weeks: "Weeks 14-19",
+        topics: ["Non-blocking sockets with epoll / io_uring", "Zero-copy splice & sendfile data transfer", "Process fork, exec, signals, and shared memory", "Virtual memory mapping with mmap"],
+        icon: Server
+      },
+      {
+        phase: "Phase 4", title: "Storage Engines & Distributed Consensus", weeks: "Weeks 20-26",
+        topics: ["LSM-tree write-ahead logging (WAL)", "SSTable block indexing with Bloom filters", "Raft consensus election and log replication", "High-frequency benchmarking under contention"],
         icon: Layers
       }
     ]
   },
   frontend: {
     id: "frontend",
-    name: "Frontend Developer",
-    description: "Learn how to build responsive, beautiful, and accessible web user interfaces.",
+    name: "Frontend Engineering",
+    effort: "18 Weeks · 10-12 hrs/wk",
+    difficulty: "Beginner to Intermediate",
+    outcomes: "Engineer fluid, accessible, and ultra-fast web user interfaces with modern React and TypeScript.",
+    projects: "Component Design System, High-Density Analytics Dashboard, Markdown & Code Editor",
+    skills: ["React 19", "Next.js App Router", "TypeScript", "Tailwind CSS v4", "WCAG AA", "Web Vitals"],
+    description: "Master modern user interface engineering, design systems, animation mechanics, and sub-second web performance.",
     phases: [
       {
-        phase: "Phase 1", title: "HTML, CSS & Modern JavaScript", weeks: "Weeks 1-4",
-        topics: ["Modern HTML & Semantic Layouts", "CSS Styling & Responsive Design", "JavaScript ES6+ Basics", "Web Accessibility Standards"],
+        phase: "Phase 1", title: "Semantic Web & Design Systems", weeks: "Weeks 1-4",
+        topics: ["Semantic HTML5 and WCAG AA accessibility", "Tailwind CSS v4 design token architectures", "Responsive fluid layouts across mobile & desktop", "Stateful components and clean TypeScript props"],
         icon: Layout
       },
       {
-        phase: "Phase 2", title: "React & Next.js", weeks: "Weeks 5-10",
-        topics: ["React Components & Hooks", "Building Pages with Next.js", "State Management Made Simple", "Tailwind CSS Styling"],
+        phase: "Phase 2", title: "React 19 & Server Components", weeks: "Weeks 5-9",
+        topics: ["Server Components vs Client Components boundaries", "Streaming with Suspense and optimistic UI updates", "Custom hooks & performant re-render controls", "Server Actions and secure form handling"],
         icon: Code2
       },
       {
-        phase: "Phase 3", title: "Animations & Interactions", weeks: "Weeks 11-16",
-        topics: ["Smooth Page Transitions", "Interactive Animations with Framer Motion", "Forms & Input Validation", "Mobile-Friendly Touch Events"],
+        phase: "Phase 3", title: "Motion & Micro-Interactions", weeks: "Weeks 10-14",
+        topics: ["Spring-physics animations with Framer Motion", "Layout animation and gesture drag interactions", "Virtual lists for 10,000+ item performance", "Accessible keyboard navigation and focus rings"],
         icon: Smartphone
       },
       {
-        phase: "Phase 4", title: "Web Speed & Deployment", weeks: "Weeks 17-20",
-        topics: ["Making Pages Load Faster", "Testing Web Interfaces", "Deploying to Vercel & Netlify", "Frontend Interview Questions"],
+        phase: "Phase 4", title: "Performance Profiling & Next.js Scale", weeks: "Weeks 15-18",
+        topics: ["Core Web Vitals (LCP, INP, CLS) optimization", "Bundle splitting and dynamic component imports", "Image/font optimization pipelines", "End-to-end component testing with Playwright"],
         icon: Cloud
       }
     ]
   },
-  backend: {
-    id: "backend",
-    name: "Backend & Cloud",
-    description: "Learn how to build reliable servers, databases, and secure APIs.",
+  algorithms: {
+    id: "algorithms",
+    name: "Data & Algorithms",
+    effort: "20 Weeks · 12-14 hrs/wk",
+    difficulty: "Intermediate to Advanced",
+    outcomes: "Solve complex computational problems with mathematical rigor and excel in technical interview rounds.",
+    projects: "Graph Routing Visualizer, Compression Utility (Huffman), LeetCode Top 150 Master Suite",
+    skills: ["Dynamic Programming", "Graph Algorithms", "Tree Recursion", "Bit Manipulation", "Greedy Logic"],
+    description: "Master computational thinking, algorithmic efficiency, mathematical proofs, and competitive problem-solving patterns.",
     phases: [
       {
-        phase: "Phase 1", title: "Backend Fundamentals", weeks: "Weeks 1-4",
-        topics: ["Node.js & Express Basics", "REST API Design", "User Authentication & JWT", "Error Handling & Validation"],
-        icon: Server
+        phase: "Phase 1", title: "Linear Structures & Two Pointers", weeks: "Weeks 1-4",
+        topics: ["Arrays, matrices, and amortized resizing", "Two-pointer convergence and sliding window", "Prefix sums and difference arrays", "Monotonic stacks and queues"],
+        icon: Braces
       },
       {
-        phase: "Phase 2", title: "Databases & Storage", weeks: "Weeks 5-10",
-        topics: ["PostgreSQL & Relational Databases", "Writing SQL Queries", "Caching with Redis", "File Uploads & Storage"],
-        icon: Database
-      },
-      {
-        phase: "Phase 3", title: "Microservices & Docker", weeks: "Weeks 11-16",
-        topics: ["Docker Containers from Scratch", "Connecting Multiple Services", "Message Queues", "Real-Time WebSockets"],
-        icon: Blocks
-      },
-      {
-        phase: "Phase 4", title: "Cloud Deployment & Scale", weeks: "Weeks 17-20",
-        topics: ["Deploying to Cloud Servers", "Monitoring & Logging", "API Security Best Practices", "Backend System Design Interviews"],
-        icon: Cpu
-      }
-    ]
-  },
-  ai: {
-    id: "ai",
-    name: "Python & AI Engineering",
-    description: "From Python programming to building practical AI tools and apps.",
-    phases: [
-      {
-        phase: "Phase 1", title: "Python Programming", weeks: "Weeks 1-5",
-        topics: ["Python Syntax & Data Types", "Working with Data (Pandas & NumPy)", "Reading & Cleaning Data", "Basic Math for Machine Learning"],
+        phase: "Phase 2", title: "Trees, Tries & Priority Queues", weeks: "Weeks 5-9",
+        topics: ["Binary search trees and tree traversals", "Trie prefix indexing for autocomplete", "Binary heap construction and heap sort", "Lowest common ancestor and diameter algorithms"],
         icon: Code2
       },
       {
-        phase: "Phase 2", title: "Machine Learning Basics", weeks: "Weeks 6-12",
-        topics: ["How Machine Learning Works", "Predicting Data with Scikit-Learn", "Evaluating Model Accuracy", "Feature Engineering Simply Explained"],
-        icon: BrainCircuit
+        phase: "Phase 3", title: "Graphs, Shortest Paths & Flows", weeks: "Weeks 10-14",
+        topics: ["BFS / DFS connected components and bipartite checks", "Dijkstra, Bellman-Ford, and Floyd-Warshall", "Topological sorting and cycle detection (Tarjan)", "Minimum spanning trees (Kruskal / Prim)"],
+        icon: Globe
       },
       {
-        phase: "Phase 3", title: "Deep Learning & Neural Networks", weeks: "Weeks 13-18",
-        topics: ["Neural Networks Explained Step-by-Step", "Building Models with PyTorch", "Natural Language Processing", "Working with Pretrained Models"],
-        icon: Cpu
-      },
-      {
-        phase: "Phase 4", title: "Building AI Applications", weeks: "Weeks 19-24",
-        topics: ["Building Apps with LLM APIs", "RAG: Giving AI Your Own Documents", "AI Chatbots & Agents", "Deploying AI Apps Online"],
+        phase: "Phase 4", title: "Dynamic Programming & Advanced Paradigms", weeks: "Weeks 15-20",
+        topics: ["1D & 2D memoization vs tabulation", "Knapsack variants and subset sum optimizations", "Bitmask dynamic programming and digit DP", "Segment trees with lazy propagation"],
         icon: Layers
       }
     ]
@@ -129,7 +213,7 @@ const roadmaps = {
 type RoadmapKey = keyof typeof roadmaps
 
 export function LearningPaths() {
-  const [activeTab, setActiveTab] = useState<RoadmapKey>("fullstack")
+  const [activeTab, setActiveTab] = useState<RoadmapKey>("software")
   const headerRef = useScrollReveal<HTMLDivElement>({ y: 30, duration: 0.7 })
   const timelineRef = useRef<HTMLDivElement>(null)
 
@@ -219,6 +303,57 @@ export function LearningPaths() {
                 </button>
               )
             })}
+          </div>
+        </div>
+
+        {/* Pathway Metadata Overview Banner */}
+        <div className="max-w-4xl mx-auto mb-12 p-6 rounded-2xl border border-hairline bg-card/80 space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-hairline/60 pb-3">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-mono font-semibold px-2.5 py-0.5 rounded bg-primary/10 text-primary border border-primary/20">
+                {activeRoadmap.difficulty}
+              </span>
+              <span className="text-xs font-mono text-muted-foreground flex items-center gap-1.5">
+                <Clock className="w-3.5 h-3.5" />
+                {activeRoadmap.effort}
+              </span>
+            </div>
+            <div className="text-xs font-mono text-muted-foreground">
+              4 Phased Progression Milestones
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+            <div>
+              <span className="font-mono uppercase tracking-wider text-muted-foreground text-[10px] font-semibold block mb-1">
+                Target Engineering Outcome
+              </span>
+              <p className="text-foreground leading-relaxed">
+                {activeRoadmap.outcomes}
+              </p>
+            </div>
+            <div>
+              <span className="font-mono uppercase tracking-wider text-muted-foreground text-[10px] font-semibold block mb-1">
+                Featured Capstone Projects
+              </span>
+              <p className="text-foreground leading-relaxed">
+                {activeRoadmap.projects}
+              </p>
+            </div>
+          </div>
+
+          <div className="pt-2 border-t border-hairline/40 flex flex-wrap items-center gap-1.5">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground font-semibold mr-1">
+              Skills:
+            </span>
+            {activeRoadmap.skills.map((skill) => (
+              <span
+                key={skill}
+                className="px-2 py-0.5 rounded bg-secondary text-[11px] font-mono text-foreground border border-hairline"
+              >
+                {skill}
+              </span>
+            ))}
           </div>
         </div>
 

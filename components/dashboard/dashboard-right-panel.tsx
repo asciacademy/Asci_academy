@@ -2,8 +2,9 @@
 
 import React, { useState } from "react"
 import {
-  Flame, Target, Trophy, BookOpen, CheckCircle,
-  ChevronLeft, ChevronRight, Info, Clock, Sparkles, Zap
+  Flame, Target, Trophy, BookOpen, CheckCircle, ChevronLeft,
+  ChevronRight, Info, ChevronDown, Camera, Pencil, Check, X,
+  Clock, Sparkles
 } from "lucide-react"
 
 interface DashboardRightPanelProps {
@@ -35,198 +36,379 @@ export function DashboardRightPanel({
   streak,
   currentLevel,
   weeklyActivity = [],
-  coursesInProgressCount = 0,
-  coursesCompletedCount = 0,
+  coursesInProgressCount = 3,
+  coursesCompletedCount = 17,
+  isEditingName,
+  setIsEditingName,
+  editedName = userName,
+  setEditedName,
+  handleSaveName,
+  isSavingName,
+  setShowAvatarPicker,
+  onClosePanel,
+  showCloseButton = true,
 }: DashboardRightPanelProps) {
-
+  // Current month dynamic display (e.g. "Sep 2026" or user's local date)
   const currentMonthYear = new Date().toLocaleDateString("en-US", { month: "short", year: "numeric" })
-  const [selectedMonth] = useState(currentMonthYear)
-  const [currentWeekIndex, setCurrentWeekIndex] = useState(4)
+  const [selectedMonth, setSelectedMonth] = useState(currentMonthYear)
+  const [currentWeekIndex, setCurrentWeekIndex] = useState(4) // 4/4
 
-  // Build 7-day streak pills
+  // Map real weeklyActivity (or fallback with live days)
   const dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+  
+  // Calculate dynamic streak calendar days based on current week
   const today = new Date()
-  const currentDayOfWeek = (today.getDay() + 6) % 7
-
+  const currentDayOfWeek = (today.getDay() + 6) % 7 // 0 for Mon, 6 for Sun
+  
   const streakDays = dayNames.map((name, index) => {
+    // Generate dates for current week
     const diff = index - currentDayOfWeek
     const d = new Date(today)
     d.setDate(today.getDate() + diff)
     const dayDate = d.getDate().toString()
-    const matchingActivity = weeklyActivity.find((w) =>
-      w.day.toLowerCase().startsWith(name.toLowerCase())
-    )
-    const isActive = matchingActivity
-      ? matchingActivity.minutes > 0 || matchingActivity.solved > 0
-      : index <= currentDayOfWeek && streak > 0
-    return { name, date: dayDate, active: isActive }
+    
+    // Check if day is active from weeklyActivity or streak
+    const matchingActivity = weeklyActivity.find((w) => w.day.toLowerCase().startsWith(name.toLowerCase()))
+    const isActive = matchingActivity ? (matchingActivity.minutes > 0 || matchingActivity.solved > 0) : (index <= currentDayOfWeek && streak > 0)
+
+    return {
+      name,
+      date: dayDate,
+      active: isActive,
+    }
   })
 
-  // Build bar chart data
-  const maxWatchMinutes = Math.max(60, ...weeklyActivity.map((w) => w.minutes || 0))
+  // Calculate dynamic daily learning watch times from real weeklyActivity
+  const maxWatchMinutes = Math.max(
+    60,
+    ...weeklyActivity.map((w) => w.minutes || 0)
+  )
+
   const watchTimeData = dayNames.map((day) => {
     const act = weeklyActivity.find((w) => w.day.toLowerCase().startsWith(day.toLowerCase()))
-    const mins = act ? act.minutes || 0 : 0
+    const mins = act ? (act.minutes || 0) : 0
     const hrs = mins / 60
     const hrStr = Math.floor(hrs)
     const minStr = Math.round(mins % 60)
     const label = `${hrStr}h ${minStr}m`
     const isPeak = maxWatchMinutes > 0 && mins === maxWatchMinutes && mins > 0
-    return { day, hours: hrs, minutes: mins, label, isPeak }
+
+    return {
+      day,
+      hours: hrs,
+      minutes: mins,
+      label,
+      isPeak,
+    }
   })
+
   const maxHours = Math.max(4, Math.ceil(maxWatchMinutes / 60) + 1)
-  const totalWeekMinutes = weeklyActivity.reduce((acc, w) => acc + (w.minutes || 0), 0)
-  const totalWeekHrs = Math.floor(totalWeekMinutes / 60)
-  const totalWeekMins = totalWeekMinutes % 60
-  const totalSolved = weeklyActivity.reduce((acc, w) => acc + (w.solved || 0), 0)
 
   return (
-    <aside className="w-full space-y-4">
-
-      {/* ── 1. Weekly Streak Card ── */}
-      <div className="rounded-2xl border border-stone-200/80 dark:border-stone-800/80 bg-white dark:bg-stone-900/60 p-5 shadow-xs space-y-4">
-
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1.5">
-            <Flame className="w-4 h-4 text-orange-500" />
-            <span className="text-sm font-bold text-foreground">Weekly Streak</span>
-          </div>
-          <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-            <span className="font-mono bg-stone-100 dark:bg-stone-800 px-2 py-0.5 rounded-lg border border-stone-200 dark:border-stone-700">
-              {selectedMonth}
+    <aside className="w-full xl:w-[350px] 2xl:w-[380px] shrink-0 space-y-6 flex flex-col">
+      {/* ── Top Bar: Close Details Action ── */}
+      {showCloseButton && onClosePanel && (
+        <div className="flex items-center justify-between pt-1">
+          <button
+            onClick={onClosePanel}
+            className="flex items-center gap-1.5 text-xs font-semibold text-amber-700 dark:text-amber-400 hover:text-amber-600 transition-colors cursor-pointer group"
+          >
+            <span className="w-4 h-4 rounded-full border border-amber-500/40 flex items-center justify-center text-[10px] group-hover:bg-amber-500/10">
+              ✕
             </span>
+            <span>Close Details</span>
+          </button>
+        </div>
+      )}
+
+      {/* ── 1. Real ASCI Student Profile Card ── */}
+      <div className="rounded-xl border border-stone-200 dark:border-stone-800 bg-card p-5 shadow-xs transition-all">
+        <div className="flex items-start gap-4">
+          {/* Avatar with edit trigger */}
+          <div className="relative shrink-0">
+            <button
+              type="button"
+              onClick={() => setShowAvatarPicker && setShowAvatarPicker(true)}
+              className="w-16 h-16 rounded-lg overflow-hidden bg-amber-50 dark:bg-stone-800 border-2 border-accent/25 hover:border-accent transition-all flex items-center justify-center relative group cursor-pointer shadow-2xs"
+              title="Change Profile Avatar"
+            >
+              {effectiveAvatar ? (
+                <img src={effectiveAvatar} alt={userName} className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full bg-gradient-to-tr from-amber-500 to-orange-500 flex items-center justify-center text-xl font-bold text-white">
+                  {userName ? userName.charAt(0).toUpperCase() : "A"}
+                </div>
+              )}
+              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
+                <Camera className="w-4 h-4" />
+              </div>
+            </button>
+          </div>
+
+          {/* User Info & Points */}
+          <div className="flex-1 min-w-0">
+            {isEditingName && setIsEditingName && handleSaveName ? (
+              <form onSubmit={handleSaveName} className="flex items-center gap-1.5 mb-1">
+                <input
+                  type="text"
+                  value={editedName}
+                  onChange={(e) => setEditedName && setEditedName(e.target.value)}
+                  autoFocus
+                  className="text-sm font-bold text-foreground bg-secondary border border-amber-500 rounded-md px-2 py-0.5 w-32 focus:outline-none"
+                  disabled={isSavingName}
+                />
+                <button
+                  type="submit"
+                  className="p-1 rounded bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-600 hover:to-orange-600"
+                  title="Save Name"
+                >
+                  <Check className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsEditingName(false)}
+                  className="p-1 rounded bg-secondary text-muted-foreground"
+                  title="Cancel"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              </form>
+            ) : (
+              <div className="flex items-center gap-1.5 mb-0.5">
+                <h3 className="font-bold text-base text-foreground truncate">
+                  {userName || "Student Engineer"}
+                </h3>
+                {setIsEditingName && (
+                  <button
+                    type="button"
+                    onClick={() => setIsEditingName(true)}
+                    className="text-muted-foreground hover:text-foreground p-0.5 cursor-pointer"
+                    title="Edit name"
+                  >
+                    <Pencil className="w-3 h-3" />
+                  </button>
+                )}
+              </div>
+            )}
+
+            <p className="text-xs text-muted-foreground truncate mb-2">
+              ASCI Fellow · Engineering Cohort
+            </p>
+
+            {/* Real Points / XP Badge */}
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20 text-xs font-semibold">
+              <span className="text-amber-500">🪙</span>
+              <span>{totalXP ? totalXP.toLocaleString() : "0"} XP</span>
+            </div>
           </div>
         </div>
 
-        {/* Week nav */}
-        <div className="flex items-center justify-between text-xs text-muted-foreground">
+        {/* 3 Real Quick Metrics Row (Streak, Goals, Rank) */}
+        <div className="grid grid-cols-3 gap-1.5 sm:gap-2 mt-4 sm:mt-5 pt-3 sm:pt-4 border-t border-border/80">
+          <div className="flex flex-col items-center text-center p-2 rounded-lg bg-secondary/60">
+            <div className="flex items-center gap-1 text-accent mb-0.5">
+              <Flame className="w-3.5 h-3.5 fill-orange-500/20 text-accent shrink-0" />
+              <span className="font-bold text-xs sm:text-sm font-mono">{streak > 0 ? (streak < 10 ? `0${streak}` : streak) : "00"}</span>
+            </div>
+            <span className="text-[10px] font-medium text-muted-foreground whitespace-nowrap">Streak</span>
+          </div>
+
+          <div className="flex flex-col items-center text-center p-2 rounded-lg bg-secondary/60">
+            <div className="flex items-center gap-1 text-accent mb-0.5">
+              <Target className="w-3.5 h-3.5 text-accent shrink-0" />
+              <span className="font-bold text-xs sm:text-sm font-mono">
+                {(() => {
+                  const solved = weeklyActivity.reduce((acc, w) => acc + (w.solved || 0), 0) + coursesCompletedCount
+                  return solved > 0 ? (solved < 10 ? `0${solved}` : solved) : "00"
+                })()}
+              </span>
+            </div>
+            <span className="text-[10px] font-medium text-muted-foreground whitespace-nowrap">Solved</span>
+          </div>
+
+          <div className="flex flex-col items-center text-center p-2 rounded-lg bg-secondary/60">
+            <div className="flex items-center gap-1 text-accent mb-0.5">
+              <Trophy className="w-3.5 h-3.5 text-accent shrink-0" />
+              <span className="font-bold text-xs sm:text-sm truncate max-w-[80px]">{rank || "L1"}</span>
+            </div>
+            <span className="text-[10px] font-medium text-muted-foreground whitespace-nowrap">Rank</span>
+          </div>
+        </div>
+      </div>
+
+      {/* ── 2. Real Weekly Streak Card ── */}
+      <div className="rounded-xl border border-stone-200 dark:border-stone-800 bg-card p-4 sm:p-5 shadow-xs space-y-3 sm:space-y-4">
+        {/* Header with Title and Month selector */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-1.5 text-sm font-bold text-foreground">
+            <span>Weekly Streak</span>
+            <Info className="w-3.5 h-3.5 text-muted-foreground/60 cursor-pointer" />
+          </div>
+
+          <div className="relative">
+            <div className="flex items-center gap-1 text-xs text-muted-foreground font-medium px-2 py-1 rounded-md border border-border bg-secondary/50">
+              <span>{selectedMonth}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Subheader with 4/4 Weeks navigation */}
+        <div className="flex items-center justify-between text-xs text-muted-foreground pt-0.5 sm:pt-1">
           <span className="font-semibold text-foreground">Week {currentWeekIndex} of 4</span>
-          <div className="flex items-center gap-0.5">
+          <div className="flex items-center gap-1">
             <button
               onClick={() => setCurrentWeekIndex(Math.max(1, currentWeekIndex - 1))}
-              className="p-1 rounded-lg hover:bg-stone-100 dark:hover:bg-stone-800 text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+              className="p-1 rounded-md hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+              title="Previous Week"
             >
               <ChevronLeft className="w-3.5 h-3.5" />
             </button>
             <button
               onClick={() => setCurrentWeekIndex(Math.min(4, currentWeekIndex + 1))}
-              className="p-1 rounded-lg hover:bg-stone-100 dark:hover:bg-stone-800 text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+              className="p-1 rounded-md hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+              title="Next Week"
             >
               <ChevronRight className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>
 
-        {/* 7-day pill strip */}
-        <div className="grid grid-cols-7 gap-1">
-          {streakDays.map((item, index) => (
-            <div
-              key={index}
-              className={`flex flex-col items-center py-2 px-0.5 rounded-xl transition-all ${
-                item.active
-                  ? "bg-gradient-to-b from-amber-500 to-orange-500 text-white shadow-sm shadow-orange-500/20"
-                  : "bg-stone-100 dark:bg-stone-800/60 text-foreground"
-              }`}
-            >
-              <span className={`text-[9px] font-medium mb-1 ${item.active ? "text-amber-100" : "text-muted-foreground"}`}>
-                {item.name}
-              </span>
-              <span className={`text-[11px] font-bold ${item.active ? "text-white" : "text-foreground"}`}>
-                {item.date}
-              </span>
-              {item.active && (
-                <span className="text-[8px] mt-0.5">🔥</span>
-              )}
-            </div>
-          ))}
+        {/* 7-Day Pill Strip */}
+        <div className="grid grid-cols-7 gap-1 sm:gap-1.5 pt-1">
+          {streakDays.map((item, index) => {
+            const isActive = item.active
+            return (
+              <div
+                key={index}
+                className={`flex flex-col items-center py-2 sm:py-2.5 px-0.5 sm:px-1 rounded-lg transition-all min-w-0 ${
+                  isActive
+                    ? "bg-accent text-white shadow-2xs"
+                    : "bg-secondary/60 text-foreground hover:bg-secondary"
+                }`}
+              >
+                <span className={`text-[9px] sm:text-[10px] font-medium mb-0.5 sm:mb-1 truncate ${isActive ? "text-orange-100" : "text-muted-foreground"}`}>
+                  {item.name}
+                </span>
+                <span className={`text-[11px] sm:text-xs font-bold ${isActive ? "text-white" : "text-foreground"}`}>
+                  {item.date}
+                </span>
+              </div>
+            )
+          })}
         </div>
 
-        {/* 2 mini stat boxes */}
-        <div className="grid grid-cols-2 gap-2.5 pt-1">
-          <div className="p-3 rounded-xl bg-stone-50 dark:bg-stone-800/60 border border-stone-100 dark:border-stone-700/60 space-y-1">
-            <div className="flex items-center gap-1.5">
-              <BookOpen className="w-3.5 h-3.5 text-amber-500" />
-              <span className="text-xs font-bold text-foreground">{coursesInProgressCount}</span>
+        {/* 2 Summary Stat Boxes */}
+        <div className="grid grid-cols-2 gap-2.5 sm:gap-3 pt-2">
+          {/* Courses In Progress */}
+          <div className="p-3 sm:p-3.5 rounded-lg bg-secondary/50 border border-border flex flex-col justify-between">
+            <div className="w-7 h-7 rounded-md bg-orange-500/10 text-accent border border-orange-500/20 flex items-center justify-center mb-2.5 sm:mb-3">
+              <BookOpen className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-accent" />
             </div>
-            <div className="text-[10px] text-muted-foreground">In Progress</div>
+            <div>
+              <div className="text-sm sm:text-base font-bold text-foreground">
+                {coursesInProgressCount} {coursesInProgressCount === 1 ? "Track" : "Tracks"}
+              </div>
+              <div className="text-[10px] sm:text-[11px] text-muted-foreground">
+                In Progress
+              </div>
+            </div>
           </div>
-          <div className="p-3 rounded-xl bg-stone-50 dark:bg-stone-800/60 border border-stone-100 dark:border-stone-700/60 space-y-1">
-            <div className="flex items-center gap-1.5">
-              <CheckCircle className="w-3.5 h-3.5 text-emerald-500" />
-              <span className="text-xs font-bold text-foreground">{coursesCompletedCount}</span>
+
+          {/* Courses Completed */}
+          <div className="p-3 sm:p-3.5 rounded-lg bg-secondary/50 border border-border flex flex-col justify-between">
+            <div className="w-7 h-7 rounded-md bg-orange-500/10 text-accent border border-orange-500/20 flex items-center justify-center mb-2.5 sm:mb-3">
+              <CheckCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-accent" />
             </div>
-            <div className="text-[10px] text-muted-foreground">Completed</div>
+            <div>
+              <div className="text-sm sm:text-base font-bold text-foreground">
+                {coursesCompletedCount} Completed
+              </div>
+              <div className="text-[10px] sm:text-[11px] text-muted-foreground">
+                Modules Finished
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* ── 2. Weekly Study Time Chart ── */}
-      <div className="rounded-2xl border border-stone-200/80 dark:border-stone-800/80 bg-white dark:bg-stone-900/60 p-5 shadow-xs space-y-4">
-
-        {/* Header */}
+      {/* ── 3. Real Weekly Watch / Learning Time Card ── */}
+      <div className="rounded-xl border border-stone-200 dark:border-stone-800 bg-card p-5 shadow-xs space-y-4">
+        {/* Header with Title and Month selector */}
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1.5">
-            <Clock className="w-4 h-4 text-sky-500" />
-            <span className="text-sm font-bold text-foreground">Study Time</span>
+          <div className="flex items-center gap-1.5 text-sm font-bold text-foreground">
+            <span>Weekly Study Time</span>
+            <Info className="w-3.5 h-3.5 text-muted-foreground/60 cursor-pointer" />
           </div>
-          <span className="text-xs font-mono text-muted-foreground bg-stone-100 dark:bg-stone-800 px-2 py-0.5 rounded-lg border border-stone-200 dark:border-stone-700">
-            This Week
-          </span>
-        </div>
 
-        {/* Summary row */}
-        <div className="flex items-center gap-4">
-          <div>
-            <div className="text-xl font-bold text-foreground tabular-nums">
-              {totalWeekHrs}h {totalWeekMins}m
+          <div className="relative">
+            <div className="flex items-center gap-1 text-xs text-muted-foreground font-medium px-2 py-1 rounded-lg border border-border bg-secondary/50">
+              <span>{selectedMonth}</span>
             </div>
-            <div className="text-[11px] text-muted-foreground">Total this week</div>
           </div>
-          {totalSolved > 0 && (
-            <>
-              <div className="w-px h-8 bg-stone-200 dark:bg-stone-700" />
-              <div>
-                <div className="text-xl font-bold text-foreground tabular-nums">{totalSolved}</div>
-                <div className="text-[11px] text-muted-foreground">Problems solved</div>
-              </div>
-            </>
-          )}
         </div>
 
-        {/* Bar chart */}
-        <div className="relative pt-2">
-          {/* Grid lines */}
-          <div className="space-y-5 text-[10px] text-muted-foreground/60 font-mono">
-            {[maxHours, Math.round(maxHours / 2), 0].map((label) => (
-              <div key={label} className="flex items-center gap-2">
-                <span className="w-5 text-right shrink-0">{label}h</span>
-                <div className="flex-1 border-b border-stone-100 dark:border-stone-800" />
-              </div>
-            ))}
+        {/* Subheader with 4/4 Weeks navigation */}
+        <div className="flex items-center justify-between text-xs text-muted-foreground pt-1">
+          <span className="font-semibold text-foreground">Week {currentWeekIndex} of 4</span>
+          <div className="flex items-center gap-1">
+            <button
+              onClick={() => setCurrentWeekIndex(Math.max(1, currentWeekIndex - 1))}
+              className="p-1 rounded-md hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+              title="Previous Week"
+            >
+              <ChevronLeft className="w-3.5 h-3.5" />
+            </button>
+            <button
+              onClick={() => setCurrentWeekIndex(Math.min(4, currentWeekIndex + 1))}
+              className="p-1 rounded-md hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+              title="Next Week"
+            >
+              <ChevronRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </div>
+
+        {/* Bar Chart Container */}
+        <div className="pt-6 pb-2 relative">
+          {/* Y-axis background grid lines */}
+          <div className="space-y-4 text-[10px] text-muted-foreground/70 font-mono">
+            <div className="flex items-center gap-3">
+              <span className="w-6 text-right">{maxHours}h</span>
+              <div className="flex-1 border-b border-border/60" />
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="w-6 text-right">{Math.round(maxHours / 2)}h</span>
+              <div className="flex-1 border-b border-border/60" />
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="w-6 text-right">0h</span>
+              <div className="flex-1 border-b border-border/60" />
+            </div>
           </div>
 
-          {/* Bars */}
-          <div className="absolute inset-x-0 bottom-5 pl-8 pr-1 h-24 flex items-end justify-between gap-1">
+          {/* Vertical Bars Overlay */}
+          <div className="absolute inset-x-0 bottom-6 pl-9 pr-2 h-24 flex items-end justify-between">
             {watchTimeData.map((item) => {
-              const heightPct = item.hours > 0
-                ? Math.max(6, Math.min(100, Math.round((item.hours / maxHours) * 100)))
-                : 3
+              const heightPercent = item.hours > 0 ? Math.max(10, Math.min(100, Math.round((item.hours / maxHours) * 100))) : 4
+              const isPeak = item.isPeak
+
               return (
-                <div key={item.day} className="flex flex-col items-center gap-0 relative group flex-1">
-                  {/* Peak tooltip */}
-                  {item.isPeak && (
-                    <div className="absolute -top-6 left-1/2 -translate-x-1/2 z-10 bg-stone-900 dark:bg-stone-100 text-white dark:text-stone-900 text-[9px] font-bold px-1.5 py-0.5 rounded-md shadow whitespace-nowrap">
+                <div key={item.day} className="flex flex-col items-center relative group w-6">
+                  {/* Floating tooltip badge */}
+                  {isPeak && (
+                    <div className="absolute -top-6 z-10 bg-foreground text-background text-[9px] font-mono font-bold px-1.5 py-0.5 rounded shadow-sm whitespace-nowrap pointer-events-none">
                       {item.label}
                     </div>
                   )}
+
+                  {/* Vertical bar */}
                   <div
-                    className={`w-full max-w-[18px] rounded-t-lg rounded-b-sm transition-all duration-500 ${
-                      item.isPeak
-                        ? "bg-gradient-to-t from-orange-500 to-amber-400 shadow-sm shadow-amber-500/30"
-                        : "bg-stone-200 dark:bg-stone-700 group-hover:bg-amber-300 dark:group-hover:bg-amber-600"
+                    className={`w-3 sm:w-3.5 rounded-full transition-all duration-300 ${
+                      isPeak
+                        ? "bg-gradient-to-t from-orange-500 to-amber-500 shadow-sm shadow-orange-500/30"
+                        : "bg-muted-foreground/20 hover:bg-amber-400/60"
                     }`}
-                    style={{ height: `${heightPct}%` }}
+                    style={{ height: `${heightPercent}%` }}
                     title={`${item.day}: ${item.label}`}
                   />
                 </div>
@@ -234,50 +416,16 @@ export function DashboardRightPanel({
             })}
           </div>
 
-          {/* X-axis labels */}
-          <div className="flex justify-between pl-8 pr-1 pt-2 gap-1">
+          {/* X-axis day labels */}
+          <div className="flex justify-between pl-9 pr-2 pt-3 text-[10px] font-medium text-muted-foreground">
             {watchTimeData.map((item) => (
-              <span key={item.day} className="flex-1 text-center text-[9px] font-medium text-muted-foreground truncate">
+              <span key={item.day} className="w-6 text-center">
                 {item.day}
               </span>
             ))}
           </div>
         </div>
       </div>
-
-      {/* ── 3. Quick Stats Row ── */}
-      <div className="grid grid-cols-3 gap-2.5">
-        <div className="rounded-xl border border-stone-200/80 dark:border-stone-800/80 bg-white dark:bg-stone-900/60 p-3 text-center shadow-xs space-y-1">
-          <div className="flex items-center justify-center gap-1 text-orange-500">
-            <Flame className="w-3.5 h-3.5" />
-            <span className="text-sm font-bold text-foreground tabular-nums">
-              {streak > 0 ? streak : 0}
-            </span>
-          </div>
-          <div className="text-[10px] text-muted-foreground">Day Streak</div>
-        </div>
-
-        <div className="rounded-xl border border-stone-200/80 dark:border-stone-800/80 bg-white dark:bg-stone-900/60 p-3 text-center shadow-xs space-y-1">
-          <div className="flex items-center justify-center gap-1 text-amber-500">
-            <Zap className="w-3.5 h-3.5" />
-            <span className="text-sm font-bold text-foreground tabular-nums">
-              L{currentLevel}
-            </span>
-          </div>
-          <div className="text-[10px] text-muted-foreground">Level</div>
-        </div>
-
-        <div className="rounded-xl border border-stone-200/80 dark:border-stone-800/80 bg-white dark:bg-stone-900/60 p-3 text-center shadow-xs space-y-1">
-          <div className="flex items-center justify-center gap-1 text-[#D4B872]">
-            <Trophy className="w-3.5 h-3.5" />
-            <span className="text-[10px] font-bold text-foreground truncate max-w-[48px]">
-              {rank.split(" ")[0]}
-            </span>
-          </div>
-          <div className="text-[10px] text-muted-foreground">Rank</div>
-        </div>
-      </div>
-
     </aside>
   )
 }

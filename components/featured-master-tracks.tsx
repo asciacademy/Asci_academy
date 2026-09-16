@@ -342,11 +342,11 @@ export function FeaturedMasterTracks() {
         </div>
 
         {/* Course Cards Grid: Uniform, Clean, Scannable */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {displayedCourses.map((course) => (
             <div
               key={course.id}
-              className="group relative flex flex-col justify-between rounded-2xl border border-hairline dark:border-white/[0.08] bg-card/95 dark:bg-[#181715]/95 p-5 sm:p-6 transition-all duration-200 hover:border-foreground/30 dark:hover:border-white/25 hover:-translate-y-0.5 shadow-2xs"
+              className="group relative flex flex-col justify-between rounded-2xl border border-hairline dark:border-white/[0.08] bg-card/95 dark:bg-[#181715]/95 p-4 sm:p-6 transition-all duration-200 hover:border-foreground/30 dark:hover:border-white/25 hover:-translate-y-0.5 shadow-2xs"
             >
               <div>
                 {/* Top Header: TechLogo + Badge + Tag */}

@@ -67,22 +67,25 @@ export function DashboardAmbassador() {
         className="rounded-2xl border border-hairline bg-card p-6 sm:p-8 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-6 relative overflow-hidden"
         id="dashboard-ambassador-header"
       >
-        <div className="space-y-2 max-w-2xl">
-          <div className="flex items-center gap-2">
-            <span className="badge-coral text-[10px]">Unstop Igniters Network</span>
-            <span className="text-xs font-mono text-muted-foreground">{ambassador.campusName}</span>
+        <div className="space-y-2.5 max-w-2xl min-w-0">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
+            <span className="badge-coral text-[10px] sm:text-[11px] shrink-0 leading-none font-semibold">Unstop Igniters Network</span>
+            <span className="text-xs font-mono text-muted-foreground shrink-0 flex items-center gap-1.5">
+              <span className="w-1 h-1 rounded-full bg-stone-300 dark:bg-stone-700 hidden sm:inline-block" />
+              <span>{ambassador.campusName}</span>
+            </span>
           </div>
-          <h1 className="font-serif text-2xl sm:text-3xl font-normal text-foreground flex items-center gap-2.5">
-            <Users className="w-6 h-6 text-primary" />
-            <span>Campus Ambassador &amp; Student Partner Program</span>
+          <h1 className="font-serif text-2xl sm:text-3xl font-normal text-foreground flex items-start sm:items-center gap-2.5 leading-tight">
+            <Users className="w-6 h-6 text-primary shrink-0 mt-0.5 sm:mt-0" />
+            <span className="break-words">Campus Ambassador &amp; Student Partner Program</span>
           </h1>
-          <p className="text-xs text-muted-foreground leading-relaxed">
+          <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed max-w-xl">
             Lead your college chapter, invite engineering peers to national hackathons, and earn verified
             leadership honors, exclusive tech swag, and direct interview passes.
           </p>
         </div>
 
-        <div className="flex items-center gap-4 shrink-0">
+        <div className="flex items-center gap-4 shrink-0 self-start sm:self-auto">
           <AxelStage
             id="dashboard-ambassador-robot-anchor"
             sectionId="dashboard-ambassador-header"

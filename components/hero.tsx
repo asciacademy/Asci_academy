@@ -131,122 +131,60 @@ export function Hero() {
           <div className="relative">
             <div className="max-w-3xl lg:max-w-xl xl:max-w-2xl">
               {/* Main headline — kinetic editorial reveal */}
-              <h1 className="font-serif text-[clamp(2.4rem,6vw,4.2rem)] leading-[1.08] tracking-[-0.035em] text-foreground font-normal select-none">
-                {/* Line 1: Learn coding */}
-                <span className="block">
-                  <span className="inline-block overflow-hidden pt-0.5 pb-2 -mb-2">
-                    <motion.span
-                      custom={0}
-                      variants={headlineWordVariants}
-                      initial="hidden"
-                      animate="visible"
-                      className="inline-block mr-[0.28em]"
-                    >
-                      Learn
-                    </motion.span>
-                  </span>
-                  <span className="inline-block overflow-hidden pt-0.5 pb-2 -mb-2">
-                    <motion.span
-                      custom={1}
-                      variants={headlineWordVariants}
-                      initial="hidden"
-                      animate="visible"
-                      className="inline-block"
-                    >
-                      coding
-                    </motion.span>
-                  </span>
+              <h1 className="font-serif text-[clamp(2.3rem,6vw,4.5rem)] leading-[1.04] tracking-[-0.035em] text-foreground font-normal select-none">
+                <span className="block font-normal">
+                  ENGINEERING IS A CRAFT.
                 </span>
+                <span className="relative inline-block mt-1">
+                  <span className="italic text-primary font-normal">MASTER IT</span>
+                  <span className="text-primary not-italic">.</span>
 
-                {/* Line 2: and algorithms, the simple way. */}
-                <span className="block">
-                  <span className="inline-block overflow-hidden pt-0.5 pb-2 -mb-2">
-                    <motion.span
-                      custom={2}
-                      variants={headlineWordVariants}
-                      initial="hidden"
-                      animate="visible"
-                      className="inline-block mr-[0.28em]"
-                    >
-                      and
-                    </motion.span>
-                  </span>
-                  <span className="inline-block overflow-hidden pt-0.5 pb-2 -mb-2">
-                    <motion.span
-                      custom={3}
-                      variants={headlineWordVariants}
-                      initial="hidden"
-                      animate="visible"
-                      className="inline-block mr-[0.28em]"
-                    >
-                      algorithms,
-                    </motion.span>
-                  </span>{" "}
-                  <span className="relative inline-block overflow-visible">
-                    <span className="inline-block overflow-hidden pt-0.5 pb-2 -mb-2">
-                      <motion.span
-                        custom={4}
-                        variants={headlineWordVariants}
-                        initial="hidden"
-                        animate="visible"
-                        className="italic text-primary inline-block"
-                      >
-                        <span className="text-primary">
-                          the simple way
-                        </span>
-                        <span className="text-primary font-normal not-italic">.</span>
-                      </motion.span>
-                    </span>
-
-                    {/* Hand-drawn editorial SVG underline curve */}
-                    <svg
-                      className="absolute -bottom-1 sm:-bottom-2 left-0 w-full h-2.5 sm:h-3.5 text-primary/45 dark:text-primary/60 overflow-visible pointer-events-none"
-                      viewBox="0 0 260 14"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                      aria-hidden="true"
-                    >
-                      <motion.path
-                        d="M 3 8 C 75 2.5, 185 2.5, 257 9.5"
-                        stroke="currentColor"
-                        strokeWidth="3"
-                        strokeLinecap="round"
-                        initial={{ pathLength: 0, opacity: 0 }}
-                        animate={{ pathLength: 1, opacity: 1 }}
-                        transition={{
-                          duration: 0.75,
-                          delay: 0.65,
-                          ease: [0.16, 1, 0.3, 1],
-                        }}
-                      />
-                    </svg>
-                  </span>
+                  {/* Hand-drawn editorial SVG underline curve */}
+                  <svg
+                    className="absolute -bottom-1 sm:-bottom-2 left-0 w-full h-2.5 sm:h-3.5 text-primary/45 dark:text-primary/60 overflow-visible pointer-events-none"
+                    viewBox="0 0 260 14"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
+                  >
+                    <motion.path
+                      d="M 3 8 C 75 2.5, 185 2.5, 257 9.5"
+                      stroke="currentColor"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                      initial={{ pathLength: 0, opacity: 0 }}
+                      animate={{ pathLength: 1, opacity: 1 }}
+                      transition={{
+                        duration: 0.75,
+                        delay: 0.45,
+                        ease: [0.16, 1, 0.3, 1],
+                      }}
+                    />
+                  </svg>
                 </span>
               </h1>
 
-              {/* Sub-headline — restrained, warm */}
+              {/* Sub-headline — restrained, editorial */}
               <motion.p
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.55, delay: 0.65, ease: [0.16, 1, 0.3, 1] }}
-                className="mt-5 text-[15px] sm:text-base leading-relaxed text-body max-w-lg"
+                transition={{ duration: 0.55, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                className="mt-5 text-[15px] sm:text-base leading-relaxed text-body max-w-xl font-normal"
               >
-                Clear, step-by-step courses in programming, data structures,
-                and web development. Practice with interactive visual guides
-                and get feedback from experienced mentors.
+                Learn software engineering, AI, systems, algorithms, and modern development through interactive lessons, real projects, and intelligent guidance.
               </motion.p>
 
-              {/* Confidence pills */}
+              {/* Confidence chips */}
               <motion.div
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.45, delay: 0.75, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ duration: 0.45, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
                 className="mt-5 flex flex-wrap items-center gap-2"
               >
-                {["Beginner Friendly", "Zero Setup Needed", "Live Visual Feedback"].map((label) => (
+                {["Production Systems", "Real-World Capstones", "Interactive Sandboxes"].map((label) => (
                   <span
                     key={label}
-                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-medium text-muted-foreground bg-secondary border border-hairline-soft"
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-medium text-muted-foreground bg-secondary border border-hairline"
                   >
                     <CheckCircle2 className="h-3 w-3 text-primary" />
                     {label}
@@ -258,7 +196,7 @@ export function Hero() {
               <motion.div
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.45, delay: 0.85, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ duration: 0.45, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
                 className="mt-8 flex flex-col sm:flex-row sm:items-center gap-3.5"
               >
                 {user ? (
@@ -267,42 +205,42 @@ export function Hero() {
                       href="/dashboard"
                       onMouseEnter={() => setCtaHovered(true)}
                       onMouseLeave={() => setCtaHovered(false)}
-                      className="group inline-flex items-center gap-2 rounded-full bg-primary hover:bg-primary-active text-primary-foreground px-6 py-3 text-sm font-semibold tracking-tight shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+                      className="group inline-flex items-center justify-center gap-2 rounded-lg bg-primary hover:bg-primary-active text-primary-foreground px-6 py-3 text-sm font-semibold tracking-tight shadow-sm transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer w-full sm:w-auto text-center"
                     >
                       <span>Go to Dashboard</span>
                       <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                     </Link>
                     <Link
                       href="/programs"
-                      className="inline-flex items-center gap-2 rounded-full border border-hairline hover:border-primary/30 bg-card/60 hover:bg-card px-5 py-3 text-sm font-medium text-foreground transition-all cursor-pointer"
+                      className="inline-flex items-center justify-center gap-2 rounded-lg border border-hairline hover:border-primary/30 bg-card/70 hover:bg-card px-5 py-3 text-sm font-medium text-foreground transition-all cursor-pointer w-full sm:w-auto text-center"
                     >
                       <Compass className="h-4 w-4 text-muted-foreground" />
-                      <span>Browse All Courses</span>
+                      <span>Explore Curriculum</span>
                     </Link>
                   </>
                 ) : (
-                  <div className="flex flex-col gap-3">
-                    <div className="flex flex-wrap items-center gap-3">
+                  <div className="flex flex-col gap-3 w-full sm:w-auto">
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
                       <Link
                         href="/signup"
                         onMouseEnter={() => setCtaHovered(true)}
                         onMouseLeave={() => setCtaHovered(false)}
-                        className="group inline-flex items-center gap-2 rounded-full bg-primary hover:bg-primary-active text-primary-foreground px-6 py-3 text-sm font-semibold tracking-tight shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+                        className="group inline-flex items-center justify-center gap-2 rounded-lg bg-primary hover:bg-primary-active text-primary-foreground px-6 py-3 text-sm font-semibold tracking-tight shadow-sm transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer w-full sm:w-auto text-center"
                       >
-                        <span>Start Learning Free</span>
+                        <span>Start Learning</span>
                         <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                       </Link>
                       <Link
                         href="/programs"
-                        className="inline-flex items-center gap-2 rounded-full border border-hairline hover:border-primary/30 bg-card/60 hover:bg-card px-5 py-3 text-sm font-medium text-foreground transition-all cursor-pointer"
+                        className="inline-flex items-center justify-center gap-2 rounded-lg border border-hairline hover:border-primary/30 bg-card/70 hover:bg-card px-5 py-3 text-sm font-medium text-foreground transition-all cursor-pointer w-full sm:w-auto text-center"
                       >
                         <Compass className="h-4 w-4 text-muted-foreground" />
-                        <span>Explore All Courses</span>
+                        <span>Explore Curriculum</span>
                       </Link>
                     </div>
                     <div className="flex items-center gap-1.5 text-[11px] font-mono text-muted-foreground">
                       <ShieldCheck className="h-3.5 w-3.5 text-primary/70" />
-                      <span>No credit card needed · Free instant access</span>
+                      <span>Zero setup needed · Free instant browser sandboxes</span>
                     </div>
                   </div>
                 )}
@@ -335,19 +273,15 @@ export function Hero() {
             <div className="h-px flex-1 bg-hairline" />
           </div>
 
-          {/* Asymmetric bento: first two cards tall, last two shorter side-by-side */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            {pillars.map((p, i) => {
+          {/* Balanced bento: 1 col on mobile, 2 on tablet, 4 on desktop */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            {pillars.map((p) => {
               const IconComponent = p.icon
-              // First card spans 2 rows on large screens for asymmetry
-              const isFeature = i === 0
               return (
                 <Link
                   key={p.code}
                   href={p.href}
-                  className={`group relative rounded-2xl border border-hairline dark:border-white/[0.08] bg-card/70 dark:bg-[#181715]/70 p-5 sm:p-6 flex flex-col justify-between transition-all duration-200 hover:border-foreground/30 dark:hover:border-white/25 hover:bg-card dark:hover:bg-[#1e1d1a] hover:-translate-y-0.5 shadow-2xs ${
-                    isFeature ? "lg:row-span-2" : ""
-                  }`}
+                  className="group relative rounded-2xl border border-hairline dark:border-white/[0.08] bg-card/70 dark:bg-[#181715]/70 p-5 sm:p-6 flex flex-col justify-between transition-all duration-200 hover:border-foreground/30 dark:hover:border-white/25 hover:bg-card dark:hover:bg-[#1e1d1a] hover:-translate-y-0.5 shadow-2xs min-h-[190px]"
                 >
                   {/* Top row: number + category */}
                   <div>
@@ -398,7 +332,7 @@ export function Hero() {
           className="mt-6 lg:mt-8 pb-1 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-t border-hairline pt-4"
         >
           {/* Left: Rating + learner count */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
             {/* Avatar stack */}
             <div className="flex -space-x-2.5">
               {["A", "S", "M", "R"].map((letter, i) => {
@@ -435,16 +369,18 @@ export function Hero() {
           </div>
 
           {/* Right: Alumni placements */}
-          <div className="flex items-center gap-2 text-[11px] font-mono">
+          <div className="flex flex-wrap items-center gap-2 text-[11px] font-mono">
             <span className="text-muted-foreground/50 uppercase tracking-wider text-[10px]">
               Alumni at
             </span>
-            {alumni.map((name, i) => (
-              <span key={name} className="flex items-center gap-2">
-                {i > 0 && <span className="text-hairline">·</span>}
-                <span className="text-foreground/70 font-medium">{name}</span>
-              </span>
-            ))}
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+              {alumni.map((name, i) => (
+                <span key={name} className="flex items-center gap-2">
+                  {i > 0 && <span className="text-hairline">·</span>}
+                  <span className="text-foreground/70 font-medium">{name}</span>
+                </span>
+              ))}
+            </div>
           </div>
         </motion.div>
       </div>

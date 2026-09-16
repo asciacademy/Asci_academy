@@ -298,7 +298,7 @@ export function SubjectCurriculumViewer({ subject }: Props) {
                           {mod.title}
                         </h3>
                         {masterTheory && (
-                          <span className="hidden md:inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.2 text-[9px] font-mono text-primary font-semibold border border-primary/20">
+                          <span className="hidden md:inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[9px] font-mono text-primary font-semibold border border-primary/20 leading-none">
                             Theory Ready
                           </span>
                         )}

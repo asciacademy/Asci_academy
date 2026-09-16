@@ -58,7 +58,7 @@ export function CertificateModal({
     const year = issueDate.getFullYear()
     const month = issueDate.getMonth() + 1
     const certName = encodeURIComponent(certificate.course_title)
-    const orgName = encodeURIComponent("ASCI Academy & Gravit Engineering")
+    const orgName = encodeURIComponent("ASCI Academy")
     const certUrl = encodeURIComponent(verifyUrl)
     const certId = encodeURIComponent(certificate.certificate_id)
 

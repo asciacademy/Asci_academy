@@ -33,6 +33,10 @@ import {
   LogOut,
   Bookmark,
   Clock,
+  Briefcase,
+  Trophy,
+  Hammer,
+  Sparkles,
 } from "lucide-react"
 import { createClient } from "@/utils/supabase/client"
 import { ThemeToggle } from "@/components/theme-toggle"
@@ -49,7 +53,7 @@ interface NavSubItem {
   title: string
   desc: string
   href: string
-  icon: React.ComponentType<{ className?: string }>
+  icon: any
   badge?: string
 }
 
@@ -57,6 +61,8 @@ interface NavItem {
   label: string
   href: string
   hasDropdown: boolean
+  icon?: any
+  desc?: string
   dropdownWidth?: string
   alignClass?: string
   items?: NavSubItem[]
@@ -65,138 +71,175 @@ interface NavItem {
 
 const NAV_ITEMS: NavItem[] = [
   {
-    label: "Courses",
+    label: "Learn",
     href: "/programs",
     hasDropdown: true,
+    icon: BookOpen,
+    desc: "Curricula & Engineering Tracks",
     dropdownWidth: "w-[380px]",
     alignClass: "left-0",
     items: [
       {
-        title: "Java & Spring Boot",
-        desc: "Complete guide from basics to building enterprise web apps",
-        href: "/programs/java",
+        title: "Systems Engineering",
+        desc: "Low-level C, C++20, and memory model fundamentals",
+        href: "/programs/cpp",
         icon: Cpu,
+        badge: "Core",
+      },
+      {
+        title: "Enterprise Backend & Java",
+        desc: "Spring Boot, Concurrency, and Microservices architecture",
+        href: "/programs/java",
+        icon: Server,
         badge: "Popular",
       },
       {
-        title: "Python for Developers",
-        desc: "Learn modern Python, APIs, automation, and backend",
+        title: "Agentic AI & Neural Systems",
+        desc: "Autonomous LLM swarms, tool use, and reasoning models",
+        href: "/courses/agentic-ai",
+        icon: Sparkles,
+        badge: "New",
+      },
+      {
+        title: "Python for Engineers",
+        desc: "High-throughput APIs, algorithms, and data pipelines",
         href: "/programs/python",
         icon: Terminal,
-        badge: "Popular",
       },
       {
-        title: "Backend Development",
-        desc: "Build fast web servers, databases, and microservices",
-        href: "/programs/backend",
-        icon: Braces,
-      },
-      {
-        title: "Modern React & Web",
-        desc: "Learn React, Next.js, and modern website design",
+        title: "Modern Web & Distributed UI",
+        desc: "React 19, TypeScript, and server components architecture",
         href: "/programs/react",
         icon: Layers,
       },
       {
-        title: "System Design Basics",
-        desc: "Learn how apps like Netflix and Uber scale to millions",
+        title: "System Design & Distributed Scalability",
+        desc: "Event sourcing, database sharding, and consensus protocols",
         href: "/programs/system-design",
         icon: Network,
-      },
-      {
-        title: "Practical AI & Apps",
-        desc: "Build practical AI applications and tools",
-        href: "/courses/agentic-ai",
-        icon: Cpu,
-        badge: "New",
+        badge: "Advanced",
       },
     ],
-    footerLink: { label: "View All 29 Courses", href: "/programs" },
+    footerLink: { label: "Explore All 47 Curricula", href: "/programs" },
   },
   {
-    label: "Practice & DSA",
+    label: "Practice",
     href: "/dsa",
     hasDropdown: true,
-    dropdownWidth: "w-[350px]",
-    alignClass: "left-[-40px]",
+    icon: Code2,
+    desc: "DSA Sheets, Problems & Quizzes",
+    dropdownWidth: "w-[360px]",
+    alignClass: "left-[-30px]",
     items: [
       {
         title: "Complete DSA Sheet",
-        desc: "474 hand-picked coding problems with visual guides",
+        desc: "474 hand-picked algorithmic problems with visual proofs",
         href: "/dsa/a2z-sheet",
         icon: Code2,
         badge: "474 Problems",
       },
       {
-        title: "Top 75 Interview Questions",
-        desc: "Most common questions asked in technical interviews",
-        href: "/dsa",
+        title: "Problem of the Day (POTD)",
+        desc: "Daily competitive coding challenge with XP rewards",
+        href: "/dashboard?tab=practice-arena",
+        icon: Flame,
+        badge: "Live",
+      },
+      {
+        title: "Interactive Visualizers",
+        desc: "Dynamic tree, graph, and sliding window canvas step-throughs",
+        href: "/dashboard?tab=practice",
+        icon: PlayCircle,
+      },
+      {
+        title: "Skill Competency Matrix",
+        desc: "Track mastery across arrays, graphs, trees, and concurrency",
+        href: "/dashboard?tab=practice-arena",
         icon: Award,
-        badge: "Essential",
-      },
-      {
-        title: "Browse All Problems",
-        desc: "Filter by topic, difficulty, and company tags",
-        href: "/dsa/problems",
-        icon: FolderGit2,
-      },
-      {
-        title: "Code Editor & AI Tutor",
-        desc: "Write and test code with friendly step-by-step help",
-        href: "/dsa/problems/1",
-        icon: Terminal,
-        badge: "Interactive",
       },
     ],
-    footerLink: { label: "Open Practice Workspace", href: "/dsa" },
+    footerLink: { label: "Open Practice Arena", href: "/dsa" },
+  },
+  {
+    label: "Build",
+    href: "/dashboard?tab=projects",
+    hasDropdown: true,
+    icon: Hammer,
+    desc: "Production Capstones & Showcase",
+    dropdownWidth: "w-[340px]",
+    alignClass: "left-[-20px]",
+    items: [
+      {
+        title: "Production Capstones",
+        desc: "End-to-end projects with architecture briefs & rubrics",
+        href: "/dashboard?tab=projects",
+        icon: Hammer,
+        badge: "Portfolio",
+      },
+      {
+        title: "Distributed Storage Engine",
+        desc: "Implement a LSM-tree key-value store with WAL",
+        href: "/dashboard?tab=projects",
+        icon: Database,
+      },
+      {
+        title: "High-Speed HTTP Server",
+        desc: "Custom epoll/kqueue network event loop in C/Rust",
+        href: "/dashboard?tab=projects",
+        icon: Server,
+      },
+      {
+        title: "Student Showcase",
+        desc: "Verified student open-source repositories and demos",
+        href: "/portfolio",
+        icon: FolderGit2,
+      },
+    ],
+    footerLink: { label: "View Capstone Milestones", href: "/dashboard?tab=projects" },
+  },
+  {
+    label: "Career",
+    href: "/dashboard?tab=career",
+    hasDropdown: true,
+    icon: Briefcase,
+    desc: "Jobs, Hackathons & Mentorship",
+    dropdownWidth: "w-[350px]",
+    alignClass: "right-0",
+    items: [
+      {
+        title: "Engineering Jobs & Roles",
+        desc: "Verified software engineering positions and internships",
+        href: "/dashboard?tab=jobs",
+        icon: Briefcase,
+        badge: "Hiring",
+      },
+      {
+        title: "Hackathons & Challenges",
+        desc: "Compete in live engineering hackathons with prize pools",
+        href: "/dashboard?tab=hackathons",
+        icon: Trophy,
+      },
+      {
+        title: "1:1 Mentorship",
+        desc: "Direct code reviews and mock interviews with tech leads",
+        href: "/dashboard?tab=mentorship",
+        icon: Users,
+      },
+      {
+        title: "ATS Resume Analyzer",
+        desc: "Real-time technical resume audit and keyword benchmarks",
+        href: "/dashboard?tab=resume-ats",
+        icon: Shield,
+      },
+    ],
+    footerLink: { label: "Open Career Ecosystem", href: "/dashboard?tab=career" },
   },
   {
     label: "Pricing",
     href: "/pricing",
     hasDropdown: false,
-  },
-  {
-    label: "Community",
-    href: "/community",
-    hasDropdown: true,
-    dropdownWidth: "w-[340px]",
-    alignClass: "right-0",
-    items: [
-      {
-        title: "Discord Community",
-        desc: "Join thousands of learners for help and live events",
-        href: "/community",
-        icon: Users,
-        badge: "10k+",
-      },
-      {
-        title: "Student Success Stories",
-        desc: "Real outcomes, job placements, and reviews",
-        href: "/results",
-        icon: Award,
-        badge: "96% Placed",
-      },
-      {
-        title: "Student Projects",
-        desc: "Real web apps and projects built by our students",
-        href: "/portfolio",
-        icon: FolderGit2,
-      },
-      {
-        title: "Career Paths",
-        desc: "Step-by-step guides for different engineering roles",
-        href: "/degrees",
-        icon: GraduationCap,
-      },
-      {
-        title: "Verify Credential",
-        desc: "Validate official ASCI certificates & completion serials",
-        href: "/verify",
-        icon: Shield,
-        badge: "Official",
-      },
-    ],
-    footerLink: { label: "Join Discord Community", href: "/community" },
+    icon: Sparkles,
+    desc: "Fellowship & Membership Plans",
   },
 ]
 
@@ -209,6 +252,7 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [wishlistDrawerOpen, setWishlistDrawerOpen] = useState(false)
+  const [mobileExpandedSection, setMobileExpandedSection] = useState<string | null>(null)
   const { count: wishlistCount } = useWishlist()
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
@@ -269,6 +313,7 @@ export function Navbar() {
   useEffect(() => {
     setMobileOpen(false)
     setActiveDropdown(null)
+    setMobileExpandedSection(null)
   }, [pathname])
 
   // Lock body scroll when mobile menu is open to prevent background scroll jank
@@ -298,9 +343,16 @@ export function Navbar() {
   }, [])
 
   useEffect(() => {
+    let ticking = false
     const onScroll = () => {
-      const isScrolled = window.scrollY > 15
-      setScrolled((prev) => (prev !== isScrolled ? isScrolled : prev))
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const isScrolled = window.scrollY > 15
+          setScrolled((prev) => (prev !== isScrolled ? isScrolled : prev))
+          ticking = false
+        })
+        ticking = true
+      }
     }
     window.addEventListener("scroll", onScroll, { passive: true })
 
@@ -359,7 +411,7 @@ export function Navbar() {
         )}
       </AnimatePresence>
 
-      <div className="mx-auto flex h-16 sm:h-[68px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-16 sm:h-[68px] max-w-7xl items-center justify-between px-3.5 sm:px-6 lg:px-8">
         {/* 1. Brand Logo (Pure & Minimalist) */}
         <Link
           href="/"
@@ -447,7 +499,7 @@ export function Navbar() {
                                       {item.title}
                                     </span>
                                     {item.badge && (
-                                      <span className="shrink-0 text-[8px] font-mono uppercase tracking-wider px-1.5 py-0.2 rounded-full bg-primary/10 text-primary font-medium border border-primary/20">
+                                      <span className="shrink-0 text-[8px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-bold border border-primary/20 leading-none">
                                         {item.badge}
                                       </span>
                                     )}
@@ -488,24 +540,24 @@ export function Navbar() {
         </nav>
 
         {/* 3. Right Action Gateway */}
-        <div className="flex items-center gap-2 sm:gap-2.5">
+        <div className="flex items-center gap-1.5 sm:gap-2.5">
           {/* Search Icon Trigger (Minimalist & Snappy) */}
           <button
             type="button"
             onClick={() => setSearchOpen(true)}
             aria-label="Search ASCI curriculum & problems"
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-border/80 dark:border-white/15 bg-secondary/30 text-muted-foreground transition-all hover:bg-secondary hover:text-foreground hover:border-primary/40 dark:hover:border-primary/50 shadow-2xs cursor-pointer"
+            className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full border border-border/80 dark:border-white/15 bg-secondary/30 text-muted-foreground transition-all hover:bg-secondary hover:text-foreground hover:border-primary/40 dark:hover:border-primary/50 shadow-2xs cursor-pointer"
             title="Search curriculum & problems (⌘K)"
           >
             <Search className="h-4 w-4 text-foreground/80 hover:text-primary transition-colors" />
           </button>
 
-          {/* Saved Courses Wishlist Trigger */}
+          {/* Saved Courses Wishlist Trigger (Hidden on < 420px screens to prevent header wrapping; accessible in mobile menu) */}
           <button
             type="button"
             onClick={() => setWishlistDrawerOpen(true)}
             aria-label="View Saved Courses Wishlist"
-            className="relative flex h-10 w-10 items-center justify-center rounded-full border border-border/80 dark:border-white/15 bg-secondary/30 text-muted-foreground transition-all hover:bg-secondary hover:text-foreground hover:border-[#D4B872]/50 shadow-2xs cursor-pointer group"
+            className="relative hidden min-[420px]:flex sm:flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full border border-border/80 dark:border-white/15 bg-secondary/30 text-muted-foreground transition-all hover:bg-secondary hover:text-foreground hover:border-[#D4B872]/50 shadow-2xs cursor-pointer group"
             title="Saved Courses & Wishlist"
           >
             <Bookmark className="h-4 w-4 text-foreground/80 group-hover:text-[#D4B872] group-hover:fill-[#D4B872]/20 transition-colors" />
@@ -517,7 +569,7 @@ export function Navbar() {
           </button>
 
           {/* Theme Toggle */}
-          <ThemeToggle className="!h-10 !w-10" />
+          <ThemeToggle className="!h-9 !w-9 sm:!h-10 sm:!w-10" />
 
           {/* Structural Hairline Divider */}
           <div className="hidden md:block h-5 w-px bg-border/80 dark:border-white/15 mx-1" />
@@ -571,7 +623,7 @@ export function Navbar() {
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             suppressHydrationWarning
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-border/80 dark:border-white/15 bg-secondary/30 text-muted-foreground transition-all hover:bg-secondary hover:text-foreground lg:hidden cursor-pointer"
+            className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full border border-border/80 dark:border-white/15 bg-secondary/30 text-muted-foreground transition-all hover:bg-secondary hover:text-foreground lg:hidden cursor-pointer"
             aria-label="Toggle menu"
           >
             <div
@@ -579,20 +631,35 @@ export function Navbar() {
                 mobileOpen ? "rotate-90 opacity-0" : "rotate-0 opacity-100"
               } absolute`}
             >
-              <Menu className="h-4.5 w-4.5" />
+              <Menu className="h-4 w-4 sm:h-4.5 sm:w-4.5" />
             </div>
             <div
               className={`transition-all duration-300 ${
                 mobileOpen ? "rotate-0 opacity-100" : "-rotate-90 opacity-0"
               } absolute`}
             >
-              <X className="h-4.5 w-4.5" />
+              <X className="h-4 w-4 sm:h-4.5 sm:w-4.5" />
             </div>
           </button>
         </div>
       </div>
 
-      {/* 4. Mobile Drawer Accordion */}
+      {/* 4. Mobile Drawer Overlay Backdrop (tap outside to close) */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={() => setMobileOpen(false)}
+            className="fixed inset-0 top-16 sm:top-[68px] bg-black/60 backdrop-blur-xs z-40 lg:hidden"
+            aria-hidden="true"
+          />
+        )}
+      </AnimatePresence>
+
+      {/* 5. Mobile Drawer Content */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
@@ -600,42 +667,169 @@ export function Navbar() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className="overflow-hidden border-t border-border/80 dark:border-white/10 bg-background/98 dark:bg-[#0c0c0e]/98 backdrop-blur-3xl lg:hidden shadow-2xl"
+            className="relative z-50 overflow-hidden border-t border-border/80 dark:border-white/10 bg-background/98 dark:bg-[#0c0c0e]/98 backdrop-blur-3xl lg:hidden shadow-2xl"
           >
             <nav
-              className="px-5 py-5 max-h-[82vh] overflow-y-auto"
+              className="px-4 py-4 max-h-[85vh] overflow-y-auto space-y-3.5 selection:bg-accent/20"
               aria-label="Mobile navigation"
             >
-              {/* Mobile Search Button */}
+              {/* 1. Profile Header at TOP with Logo/Avatar & Instant Dashboard Action */}
+              {user ? (
+                <div className="rounded-2xl border border-stone-200 dark:border-stone-800 bg-secondary/50 dark:bg-[#121214] p-3.5 space-y-3 shadow-2xs">
+                  <div className="flex items-center justify-between gap-3">
+                    {/* User Avatar / Logo + Active Status */}
+                    <div className="flex items-center gap-3 min-w-0 flex-1">
+                      <div className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-orange-500/10 text-accent font-bold text-sm uppercase border border-orange-500/25 overflow-hidden shadow-xs">
+                        {navAvatar ? (
+                          <img
+                            src={navAvatar}
+                            alt={displayName}
+                            className="w-full h-full object-cover"
+                            referrerPolicy="no-referrer"
+                          />
+                        ) : (
+                          <span className="font-mono">{userInitials}</span>
+                        )}
+                        <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-emerald-500 border-2 border-background z-10" />
+                      </div>
+
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <p className="text-xs sm:text-sm font-bold text-foreground truncate tracking-tight">
+                            {displayName}
+                          </p>
+                          <span
+                            className={`shrink-0 text-[8.5px] font-mono uppercase px-1.5 py-0.5 rounded-md font-bold leading-none border ${
+                              isAdmin
+                                ? "bg-destructive/15 text-destructive border-destructive/30"
+                                : "bg-orange-500/10 text-accent border-orange-500/20"
+                            }`}
+                          >
+                            {userRoleBadge}
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-muted-foreground truncate font-mono mt-0.5">
+                          {user.email}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Official ASCI Academy Logo Mark Badge */}
+                    <div
+                      className="shrink-0 flex items-center justify-center p-2 rounded-xl bg-background/90 dark:bg-black/50 border border-stone-200/80 dark:border-stone-800 shadow-2xs"
+                      title="ASCI Academy"
+                    >
+                      <AsciLogo size={22} showText={false} useVector />
+                    </div>
+                  </div>
+
+                  {/* Primary 1-Tap Dashboard CTA */}
+                  <Link
+                    href="/dashboard"
+                    onClick={() => setMobileOpen(false)}
+                    className="w-full flex items-center justify-between rounded-xl bg-accent hover:bg-orange-700 text-white px-3.5 py-2.5 text-xs font-bold shadow-2xs transition-colors group"
+                  >
+                    <div className="flex items-center gap-2">
+                      <LayoutDashboard className="h-3.5 w-3.5" />
+                      <span>Open Engineering Dashboard</span>
+                    </div>
+                    <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+                  </Link>
+                </div>
+              ) : (
+                /* Guest Brand & Auth Card with Clean Stacked Layout to Prevent Overlapping */
+                <div className="rounded-2xl border border-stone-200 dark:border-stone-800 bg-secondary/50 dark:bg-[#121214] p-4 space-y-3 shadow-2xs">
+                  <div className="flex items-center gap-2.5">
+                    <AsciLogo size={32} showText showBadge badgeText="Academy" useVector={false} />
+                  </div>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    Interactive engineering curriculum, algorithmic sandboxes &amp; verified career credentials.
+                  </p>
+                  <div className="grid grid-cols-2 gap-2 pt-0.5">
+                    <Link
+                      href="/login"
+                      onClick={() => setMobileOpen(false)}
+                      className="flex items-center justify-center rounded-xl border border-stone-200 dark:border-stone-800 bg-card hover:bg-secondary px-3 py-2 text-xs font-semibold text-foreground transition-colors"
+                    >
+                      Log in
+                    </Link>
+                    <Link
+                      href="/signup"
+                      onClick={() => setMobileOpen(false)}
+                      className="flex items-center justify-center gap-1.5 rounded-xl bg-accent hover:bg-orange-700 text-white px-3 py-2 text-xs font-semibold shadow-2xs transition-colors"
+                    >
+                      <span>Get Started</span>
+                      <ArrowRight className="h-3.5 w-3.5" />
+                    </Link>
+                  </div>
+                </div>
+              )}
+
+              {/* 2. Quick Search Trigger */}
               <button
                 type="button"
                 onClick={() => {
                   setMobileOpen(false)
                   setSearchOpen(true)
                 }}
-                className="w-full flex items-center justify-between rounded-xl border border-border/80 bg-secondary/70 px-3.5 py-2.5 text-sm text-muted-foreground hover:text-foreground mb-4 shadow-inner cursor-pointer"
+                className="w-full flex items-center justify-between rounded-xl border border-stone-200 dark:border-stone-800 bg-secondary/60 px-3.5 py-2.5 text-xs text-muted-foreground hover:text-foreground shadow-2xs cursor-pointer transition-colors"
               >
                 <div className="flex items-center gap-2.5">
-                  <Search className="h-4 w-4 text-primary" />
-                  <span>Search curriculum, problems...</span>
+                  <Search className="h-4 w-4 text-accent" />
+                  <span>Search curriculum, code labs...</span>
                 </div>
-                <kbd className="rounded border border-border/80 bg-background/90 px-1.5 py-0.5 text-[9px] font-mono font-medium text-muted-foreground">
+                <kbd className="rounded border border-stone-200 dark:border-stone-700 bg-background px-1.5 py-0.5 text-[9px] font-mono font-medium text-muted-foreground">
                   ⌘K
                 </kbd>
               </button>
 
-              {/* Sections List */}
-              <div className="flex flex-col gap-2.5">
+              {/* 3. Compact Problem of the Day Banner */}
+              <Link
+                href="/dashboard?tab=practice-arena"
+                onClick={() => setMobileOpen(false)}
+                className="flex items-center justify-between p-3 rounded-xl border border-orange-500/25 bg-orange-500/5 hover:bg-orange-500/10 transition-colors group"
+              >
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="w-7 h-7 rounded-lg bg-orange-500/15 text-accent flex items-center justify-center shrink-0">
+                    <Flame className="w-4 h-4 fill-current" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="text-[10px] font-mono uppercase tracking-wider font-bold text-accent">
+                      Problem of the Day
+                    </div>
+                    <div className="text-xs font-bold text-foreground truncate">
+                      Sliding Window Maximum
+                    </div>
+                  </div>
+                </div>
+                <span className="shrink-0 text-[10px] font-mono font-bold text-accent bg-orange-500/15 px-2 py-0.5 rounded-md">
+                  +50 XP →
+                </span>
+              </Link>
+
+              {/* 4. Primary Navigation Accordion Rows (Clean, Glanceable, Tap-Friendly) */}
+              <div className="space-y-1.5 pt-0.5">
                 {NAV_ITEMS.map((section) => {
+                  const Icon = section.icon || BookOpen
+                  const isExpanded = mobileExpandedSection === section.label
+
                   if (!section.hasDropdown) {
                     return (
                       <Link
                         key={section.label}
                         href={section.href}
                         onClick={() => setMobileOpen(false)}
-                        className="flex items-center justify-between rounded-xl border border-border/70 dark:border-white/10 bg-card/60 dark:bg-[#121216]/60 px-4 py-3 text-xs font-semibold text-foreground hover:text-primary transition-colors"
+                        className="flex items-center justify-between p-3 rounded-xl border border-stone-200 dark:border-stone-800 bg-card hover:bg-secondary transition-colors"
                       >
-                        <span>{section.label}</span>
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-lg bg-orange-500/10 text-accent flex items-center justify-center shrink-0">
+                            <Icon className="w-4 h-4" />
+                          </div>
+                          <div>
+                            <div className="text-xs font-bold text-foreground">{section.label}</div>
+                            <div className="text-[11px] text-muted-foreground">{section.desc}</div>
+                          </div>
+                        </div>
                         <ArrowRight className="h-3.5 w-3.5 text-muted-foreground" />
                       </Link>
                     )
@@ -644,158 +838,146 @@ export function Navbar() {
                   return (
                     <div
                       key={section.label}
-                      className="rounded-2xl border border-border/70 dark:border-white/10 bg-card/60 dark:bg-[#121216]/60 p-3"
+                      className="rounded-xl border border-stone-200 dark:border-stone-800 bg-card overflow-hidden transition-all"
                     >
-                      <div className="flex items-center justify-between pb-2 border-b border-border/50">
-                        <Link
-                          href={section.href}
-                          onClick={() => setMobileOpen(false)}
-                          className="text-xs font-semibold text-foreground hover:text-primary transition-colors"
-                        >
-                          {section.label}
-                        </Link>
-                        {section.footerLink && (
-                          <Link
-                            href={section.footerLink.href}
-                            onClick={() => setMobileOpen(false)}
-                            className="text-[10px] font-mono text-primary uppercase font-medium hover:underline"
-                          >
-                            View all →
-                          </Link>
-                        )}
-                      </div>
-
-                      <div className="mt-2 space-y-1">
-                        {section.items?.map((item) => {
-                          const Icon = item.icon
-                          return (
-                            <Link
-                              key={item.title}
-                              href={item.href}
-                              onClick={() => setMobileOpen(false)}
-                              className="flex items-center justify-between rounded-lg px-2 py-1.5 text-xs text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
-                            >
-                              <div className="flex items-center gap-2 min-w-0">
-                                <Icon className="h-3.5 w-3.5 text-primary shrink-0" />
-                                <span className="truncate">{item.title}</span>
-                              </div>
-                              {item.badge && (
-                                <span className="shrink-0 text-[8px] font-mono uppercase px-1 rounded bg-secondary text-muted-foreground">
-                                  {item.badge}
+                      {/* Accordion Trigger Header */}
+                      <button
+                        type="button"
+                        onClick={() => setMobileExpandedSection(isExpanded ? null : section.label)}
+                        className="w-full flex items-center justify-between p-3 text-left hover:bg-secondary/60 transition-colors cursor-pointer"
+                        aria-expanded={isExpanded}
+                      >
+                        <div className="flex items-center gap-3 min-w-0 flex-1 pr-2">
+                          <div className="w-8 h-8 rounded-lg bg-orange-500/10 text-accent flex items-center justify-center shrink-0">
+                            <Icon className="w-4 h-4" />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-center gap-2">
+                              <span className="text-xs font-bold text-foreground">{section.label}</span>
+                              {section.items && (
+                                <span className="text-[9px] font-mono font-semibold px-1.5 py-0.5 rounded bg-stone-100 dark:bg-stone-800 text-muted-foreground leading-none">
+                                  {section.items.length}
                                 </span>
                               )}
-                            </Link>
-                          )
-                        })}
-                      </div>
+                            </div>
+                            <div className="text-[11px] text-muted-foreground line-clamp-1 leading-normal mt-0.5">
+                              {section.desc}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className={`p-1.5 rounded-lg transition-transform duration-200 text-muted-foreground shrink-0 ${isExpanded ? "rotate-180 text-foreground bg-secondary" : ""}`}>
+                          <ChevronDown className="h-4 w-4" />
+                        </div>
+                      </button>
+
+                      {/* Accordion Drawer Content */}
+                      <AnimatePresence initial={false}>
+                        {isExpanded && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                            className="border-t border-stone-100 dark:border-stone-800/80 bg-secondary/30 px-2.5 py-2 space-y-0.5"
+                          >
+                            {section.items?.map((item) => {
+                              const SubIcon = item.icon
+                              return (
+                                <Link
+                                  key={item.title}
+                                  href={item.href}
+                                  onClick={() => setMobileOpen(false)}
+                                  className="flex items-center justify-between gap-2 p-2 rounded-lg text-xs text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+                                >
+                                  <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                                    <SubIcon className="w-3.5 h-3.5 text-accent shrink-0" />
+                                    <span className="truncate font-medium">{item.title}</span>
+                                  </div>
+                                  {item.badge && (
+                                    <span className="shrink-0 text-[8px] font-mono uppercase px-1.5 py-0.5 rounded bg-stone-200 dark:bg-stone-800 text-stone-700 dark:text-stone-300 font-bold leading-none">
+                                      {item.badge}
+                                    </span>
+                                  )}
+                                </Link>
+                              )
+                            })}
+
+                            <div className="pt-1 border-t border-stone-200/60 dark:border-stone-800/60 mt-1">
+                              <Link
+                                href={section.href}
+                                onClick={() => setMobileOpen(false)}
+                                className="flex items-center justify-between px-2 py-1.5 text-xs font-semibold text-accent hover:underline"
+                              >
+                                <span>Explore all {section.label}</span>
+                                <ArrowRight className="w-3.5 h-3.5" />
+                              </Link>
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     </div>
                   )
                 })}
               </div>
 
-              {/* Mobile User Actions Footer */}
-              <div className="mt-4 pt-3 border-t border-border/80 space-y-2.5">
-                <div className="flex items-center justify-between px-3 py-2 text-xs font-medium text-muted-foreground rounded-lg bg-secondary/40 border border-border/60 dark:border-white/10">
-                  <span>Theme Preference</span>
-                  <ThemeToggle showLabel />
-                </div>
+              {/* 5. Saved Wishlist Strip (if any items) */}
+              {wishlistCount > 0 && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileOpen(false)
+                    setWishlistDrawerOpen(true)
+                  }}
+                  className="w-full flex items-center justify-between rounded-xl border border-stone-200 dark:border-stone-800 bg-secondary/50 px-3.5 py-2 text-xs font-semibold text-foreground hover:bg-secondary cursor-pointer transition-colors"
+                >
+                  <div className="flex items-center gap-2">
+                    <Bookmark className="h-3.5 w-3.5 text-accent" />
+                    <span>Saved Tracks</span>
+                  </div>
+                  <span className="rounded-full bg-accent/15 px-2 py-0.5 text-[10px] font-mono font-bold text-accent">
+                    {wishlistCount} saved
+                  </span>
+                </button>
+              )}
 
+              {/* 6. Mobile Utility Footer: Appearance & Sign Out */}
+              <div className="pt-2 border-t border-stone-200 dark:border-stone-800 space-y-2">
                 {user ? (
-                  <div className="space-y-2 pt-1">
-                    {/* User Identity Card on Mobile */}
-                    <div className="flex items-center gap-3 p-3 rounded-xl bg-secondary/50 border border-border/60 dark:border-white/10">
-                      <div className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/20 text-primary font-bold text-xs uppercase border border-primary/30 shadow-inner">
-                        {userInitials}
-                        <span className="absolute bottom-0 right-0 h-2 w-2 rounded-full bg-emerald-500 border border-background" />
+                  <>
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="flex items-center justify-center px-2 py-1 rounded-xl bg-secondary/60 border border-stone-200 dark:border-stone-800">
+                        <ThemeToggle showLabel />
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between gap-1">
-                          <p className="text-xs font-semibold text-foreground truncate">
-                            {displayName}
-                          </p>
-                          <span
-                            className={`shrink-0 text-[8px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded-full font-semibold border ${
-                              isAdmin
-                                ? "bg-destructive/15 text-destructive border-destructive/30"
-                                : "bg-primary/10 text-primary border-primary/25"
-                            }`}
-                          >
-                            {userRoleBadge}
-                          </span>
-                        </div>
-                        <p className="text-[10px] text-muted-foreground truncate font-mono mt-0.5">
-                          {user.email}
-                        </p>
-                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setMobileOpen(false)
+                          handleSignOut()
+                        }}
+                        className="flex items-center justify-center gap-1.5 rounded-xl border border-destructive/30 bg-destructive/10 px-3 py-2 text-xs font-semibold text-destructive hover:bg-destructive/20 cursor-pointer transition-colors"
+                      >
+                        <LogOut className="h-3.5 w-3.5" />
+                        <span>Sign Out</span>
+                      </button>
                     </div>
-
-                    <Link
-                      href="/dashboard"
-                      onClick={() => setMobileOpen(false)}
-                      className="flex items-center justify-center gap-2 rounded-xl border border-border/80 dark:border-white/10 bg-secondary/60 hover:bg-secondary px-4 py-2.5 text-xs font-semibold text-foreground shadow-xs transition-colors"
-                    >
-                      <LayoutDashboard className="h-3.5 w-3.5 text-primary" />
-                      <span>My Dashboard</span>
-                    </Link>
-
-                    <Link
-                      href="/profile"
-                      onClick={() => setMobileOpen(false)}
-                      className="flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-xs font-semibold text-primary-foreground shadow-xs hover:bg-primary/90 transition-colors"
-                    >
-                      <User className="h-3.5 w-3.5" />
-                      <span>Engineer Profile</span>
-                    </Link>
-
-                    <Link
-                      href="/dsa"
-                      onClick={() => setMobileOpen(false)}
-                      className="flex items-center justify-center gap-2 rounded-xl border border-border/80 dark:border-white/10 bg-secondary/60 hover:bg-secondary px-4 py-2 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
-                    >
-                      <Code2 className="h-3.5 w-3.5 text-primary" />
-                      <span>DSA Practice & Sheets</span>
-                    </Link>
 
                     {isAdmin && (
                       <Link
                         href="/admin"
                         onClick={() => setMobileOpen(false)}
-                        className="flex items-center justify-center gap-2 rounded-xl border border-destructive/30 bg-destructive/10 px-4 py-2 text-xs font-semibold text-destructive"
+                        className="w-full flex items-center justify-center gap-2 rounded-xl border border-stone-200 dark:border-stone-800 bg-secondary/60 hover:bg-secondary px-3 py-2 text-xs font-medium text-foreground transition-colors"
                       >
-                        <Shield className="h-3.5 w-3.5" />
-                        <span>Admin Panel</span>
+                        <Shield className="h-3.5 w-3.5 text-accent" />
+                        <span>Admin Command Center</span>
                       </Link>
                     )}
-
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setMobileOpen(false)
-                        handleSignOut()
-                      }}
-                      className="w-full flex items-center justify-center gap-2 rounded-xl border border-destructive/30 bg-destructive/10 px-4 py-2 text-xs font-semibold text-destructive hover:bg-destructive/20 cursor-pointer transition-colors"
-                    >
-                      <LogOut className="h-3.5 w-3.5" />
-                      <span>Sign Out</span>
-                    </button>
-                  </div>
+                  </>
                 ) : (
-                  <div className="space-y-2 pt-1">
-                    <Link
-                      href="/login"
-                      onClick={() => setMobileOpen(false)}
-                      className="flex items-center justify-center rounded-xl border border-border/80 dark:border-white/10 bg-secondary/60 hover:bg-secondary px-4 py-2.5 text-xs font-semibold text-foreground transition-colors"
-                    >
-                      Log in
-                    </Link>
-                    <Link
-                      href="/signup"
-                      onClick={() => setMobileOpen(false)}
-                      className="flex items-center justify-center gap-1.5 rounded-xl bg-primary px-4 py-2.5 text-xs font-semibold text-primary-foreground shadow-xs w-full"
-                    >
-                      <span>Get Started</span>
-                      <ArrowRight className="h-3 w-3" />
-                    </Link>
+                  <div className="flex items-center justify-between px-3 py-2 rounded-xl bg-secondary/40 text-xs text-muted-foreground border border-stone-200 dark:border-stone-800">
+                    <span>Appearance</span>
+                    <ThemeToggle showLabel />
                   </div>
                 )}
               </div>

@@ -363,7 +363,7 @@ export function ProblemSolver({ initialProblem }: ProblemSolverProps) {
           >
             <ListFilter className="h-3.5 w-3.5 text-primary" />
             <span className="hidden sm:inline">Problem List</span>
-            <span className="px-1.5 py-0.2 rounded bg-secondary text-[11px] font-mono text-muted-foreground">
+            <span className="px-1.5 py-0.5 rounded bg-secondary text-[11px] font-mono text-muted-foreground leading-none">
               {adjacent.currentIndex + 1}/{adjacent.total}
             </span>
           </button>
@@ -514,7 +514,7 @@ export function ProblemSolver({ initialProblem }: ProblemSolverProps) {
                   <BookOpen className="h-3.5 w-3.5 text-amber-500" />
                   <span>Editorial & Hints</span>
                   {problem.hints.length > 0 && (
-                    <span className="px-1.5 py-0.2 rounded-full bg-secondary text-[10px] font-mono">
+                    <span className="px-1.5 py-0.5 rounded-full bg-secondary text-[10px] font-mono leading-none">
                       {problem.hints.length}
                     </span>
                   )}
@@ -532,7 +532,7 @@ export function ProblemSolver({ initialProblem }: ProblemSolverProps) {
                   <History className="h-3.5 w-3.5 text-cyan-500" />
                   <span>Submissions</span>
                   {submissions.length > 0 && (
-                    <span className="px-1.5 py-0.2 rounded-full bg-secondary text-[10px] font-mono">
+                    <span className="px-1.5 py-0.5 rounded-full bg-secondary text-[10px] font-mono leading-none">
                       {submissions.length}
                     </span>
                   )}
@@ -1081,7 +1081,7 @@ export function ProblemSolver({ initialProblem }: ProblemSolverProps) {
                       <span>Test Result</span>
                       {runResult && (
                         <span className={cn(
-                          "px-1.5 py-0.2 rounded text-[10px] font-mono",
+                          "px-1.5 py-0.5 rounded text-[10px] font-mono leading-none",
                           runResult.status === "ACCEPTED" ? "bg-primary/20 text-primary" : "bg-rose-500/20 text-rose-500"
                         )}>
                           {runResult.status === "ACCEPTED" ? "Passed" : "Failed"}

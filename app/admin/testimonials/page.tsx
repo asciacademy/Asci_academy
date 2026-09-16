@@ -162,7 +162,7 @@ export default function AdminTestimonialsPage() {
                         >
                             {f}
                             {f === "pending" && stats.pending > 0 && (
-                                <span className="ml-1.5 px-1.5 py-0.2 rounded-full text-[10px] bg-primary-foreground/20 text-primary-foreground font-bold">
+                                <span className="ml-1.5 px-1.5 py-0.5 rounded-full text-[10px] bg-primary-foreground/20 text-primary-foreground font-bold leading-none">
                                     {stats.pending}
                                 </span>
                             )}

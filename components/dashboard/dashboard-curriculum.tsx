@@ -163,17 +163,20 @@ export function DashboardCurriculum({
           Header & Search / Filter Controls
       ══════════════════════════════════════════════ */}
       <div id="dashboard-courses-header" className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-hairline">
-        <div>
-          <div className="flex items-center gap-2 mb-1.5">
-            <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20 font-semibold">
+        <div className="space-y-1.5 min-w-0">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
+            <span className="text-[10px] sm:text-[11px] font-mono px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20 font-semibold shrink-0 leading-none">
               Academic Directory
             </span>
-            <span className="text-xs font-mono text-muted-foreground">{enrolledList.length} Active Tracks</span>
+            <span className="text-xs font-mono text-muted-foreground shrink-0 flex items-center gap-1.5">
+              <span className="w-1 h-1 rounded-full bg-stone-300 dark:bg-stone-700 hidden sm:inline-block" />
+              <span>{enrolledList.length} Active Tracks</span>
+            </span>
           </div>
-          <h1 className="font-serif text-3xl font-normal tracking-tight text-foreground">
+          <h1 className="font-serif text-2xl sm:text-3xl font-normal tracking-tight text-foreground">
             My Engineering Curriculum
           </h1>
-          <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
+          <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed max-w-xl">
             Structured syllabi, algorithmic problem sets, and interactive compiler challenges.
           </p>
         </div>

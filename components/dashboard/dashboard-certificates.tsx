@@ -91,7 +91,7 @@ export function DashboardCertificates({
         }
       } else if (completed) {
         setGenerationSuccessMsg(
-          "Curriculum 100% Completed! Your official Gravit Certificate is conferred and ready to view below."
+          "Curriculum 100% Completed! Your official ASCI Academy Engineering Credential is conferred and ready to view below."
         )
         const matchingCert = certificates.find(
           (c) => c.course_slug === completed || c.course_id === completed
@@ -194,12 +194,12 @@ export function DashboardCertificates({
       <section id="dashboard-certificates-header" className="rounded-2xl border border-hairline bg-card p-6 sm:p-8 shadow-xs relative overflow-hidden">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
           <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase tracking-wider bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase tracking-wider bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20 shrink-0 leading-none">
                 <ShieldCheck className="w-3 h-3" />
                 Accredited Credentials
               </span>
-              <span className="text-xs font-mono text-muted-foreground">
+              <span className="text-xs font-mono text-muted-foreground shrink-0">
                 Gravit Engineering Partnership
               </span>
             </div>
@@ -312,14 +312,14 @@ export function DashboardCertificates({
                   </div>
                 </div>
 
-                <div className="mt-6 pt-4 border-t border-hairline flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2">
+                <div className="mt-6 pt-4 border-t border-hairline flex flex-wrap items-center justify-between gap-3">
+                  <div className="flex flex-wrap items-center gap-2">
                     <button
                       onClick={() => {
                         setSelectedCertificate(cert)
                         setModalOpen(true)
                       }}
-                      className="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-xs font-semibold shadow-xs transition-all cursor-pointer"
+                      className="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-xs font-semibold shadow-xs transition-all cursor-pointer shrink-0"
                     >
                       View &amp; Print
                     </button>
@@ -328,14 +328,14 @@ export function DashboardCertificates({
                       href={`/verify/${cert.certificate_id}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-3.5 py-2 rounded-xl border border-hairline hover:border-foreground/30 hover:bg-secondary text-xs font-mono font-medium text-foreground transition-colors inline-flex items-center gap-1.5"
+                      className="px-3.5 py-2 rounded-xl border border-hairline hover:border-foreground/30 hover:bg-secondary text-xs font-mono font-medium text-foreground transition-colors inline-flex items-center gap-1.5 shrink-0"
                     >
                       <span>Public Verify</span>
                       <ExternalLink className="w-3 h-3 text-muted-foreground" />
                     </a>
                   </div>
 
-                  <span className="font-mono text-[10px] text-muted-foreground/70 uppercase tracking-wider">
+                  <span className="font-mono text-[10px] text-muted-foreground/70 uppercase tracking-wider shrink-0">
                     ASCI × Gravit
                   </span>
                 </div>

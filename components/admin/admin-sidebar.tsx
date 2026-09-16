@@ -6,7 +6,8 @@ import { usePathname } from "next/navigation"
 import { createClient } from "@/utils/supabase/client"
 import {
     LayoutDashboard, Users, BookOpen, MessageSquare, Settings,
-    Megaphone, ChevronLeft, ChevronRight, LogOut, Shield, ExternalLink
+    Megaphone, ChevronLeft, ChevronRight, LogOut, Shield, ExternalLink,
+    Menu, X
 } from "lucide-react"
 
 const navLinks = [
@@ -21,6 +22,7 @@ const navLinks = [
 export function AdminSidebar({ userName, userRole }: { userName: string; userRole: string }) {
     const pathname = usePathname()
     const [collapsed, setCollapsed] = useState(false)
+    const [mobileOpen, setMobileOpen] = useState(false)
 
     const isActive = (href: string, exact?: boolean) => {
         if (exact) return pathname === href
@@ -33,18 +35,27 @@ export function AdminSidebar({ userName, userRole }: { userName: string; userRol
         window.location.href = "/"
     }
 
+    const isExpanded = !collapsed || mobileOpen
+
     return (
         <>
             {/* Mobile Top Bar */}
             <div className="md:hidden fixed top-0 left-0 right-0 h-14 bg-[#141413] border-b border-white/10 z-40 flex items-center px-4 gap-3 text-[#FDFBF7]">
-                <Link href="/" className="font-serif text-lg text-[#FDFBF7]">
+                <button
+                    onClick={() => setMobileOpen(true)}
+                    className="p-1.5 rounded-lg text-zinc-400 hover:text-[#FDFBF7] hover:bg-white/5 transition-colors cursor-pointer"
+                    aria-label="Open sidebar"
+                >
+                    <Menu className="h-5 w-5" />
+                </button>
+                <Link href="/admin" className="font-serif text-lg text-[#FDFBF7]">
                     ASCI
                 </Link>
                 <span className="text-[10px] font-mono uppercase tracking-widest px-1.5 py-0.5 rounded bg-primary/20 text-primary border border-primary/30">
                     Admin
                 </span>
                 <div className="ml-auto flex items-center gap-1">
-                    {navLinks.map(l => (
+                    {navLinks.slice(0, 3).map(l => (
                         <Link
                             key={l.href}
                             href={l.href}
@@ -61,35 +72,61 @@ export function AdminSidebar({ userName, userRole }: { userName: string; userRol
                 </div>
             </div>
 
-            {/* Desktop Sidebar */}
+            {/* Mobile Overlay Backdrop */}
+            {mobileOpen && (
+                <div
+                    className="fixed inset-0 bg-black/70 backdrop-blur-xs z-50 md:hidden transition-opacity"
+                    onClick={() => setMobileOpen(false)}
+                    aria-hidden="true"
+                />
+            )}
+
+            {/* Sidebar (Desktop Sticky + Mobile Slide-out Drawer) */}
             <aside
-                className={`hidden md:flex fixed top-0 left-0 h-screen flex-col bg-[#141413] border-r border-white/10 z-50 transition-all duration-300 ${
-                    collapsed ? "w-[68px]" : "w-64"
+                className={`fixed top-0 left-0 h-screen flex flex-col bg-[#141413] border-r border-white/10 z-50 transition-all duration-300 ease-in-out w-64 max-w-[85vw] ${
+                    collapsed ? "md:w-[68px]" : "md:w-64"
+                } ${
+                    mobileOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full md:translate-x-0"
                 }`}
             >
                 {/* Brand Header */}
                 <div className="flex items-center justify-between px-4 h-16 border-b border-white/10 flex-shrink-0">
-                    <Link href="/" className="flex items-center gap-2.5 min-w-0">
+                    <Link
+                        href="/"
+                        onClick={() => setMobileOpen(false)}
+                        className="flex items-center gap-2.5 min-w-0"
+                    >
                         <span className="font-serif text-xl tracking-tight text-[#FDFBF7]">
                             ASCI
                         </span>
-                        {!collapsed && (
+                        {isExpanded && (
                             <span className="text-[10px] font-mono uppercase tracking-widest px-2 py-0.5 rounded-full bg-primary/20 text-primary border border-primary/30">
                                 Admin
                             </span>
                         )}
                     </Link>
-                    <button
-                        onClick={() => setCollapsed(v => !v)}
-                        className="text-zinc-400 hover:text-[#FDFBF7] transition-colors p-1.5 rounded-lg hover:bg-white/5 cursor-pointer"
-                        title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-                    >
-                        {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
-                    </button>
+                    <div className="flex items-center gap-1">
+                        {/* Mobile Close Button */}
+                        <button
+                            onClick={() => setMobileOpen(false)}
+                            className="md:hidden text-zinc-400 hover:text-[#FDFBF7] transition-colors p-1.5 rounded-lg hover:bg-white/5 cursor-pointer"
+                            aria-label="Close sidebar"
+                        >
+                            <X className="h-4 w-4" />
+                        </button>
+                        {/* Desktop Collapse Button */}
+                        <button
+                            onClick={() => setCollapsed(v => !v)}
+                            className="hidden md:flex text-zinc-400 hover:text-[#FDFBF7] transition-colors p-1.5 rounded-lg hover:bg-white/5 cursor-pointer"
+                            title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+                        >
+                            {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
+                        </button>
+                    </div>
                 </div>
 
                 {/* User Identity Pill */}
-                {!collapsed && (
+                {isExpanded && (
                     <div className="mx-3 mt-4 mb-2 p-3 bg-white/5 border border-white/10 rounded-xl">
                         <div className="flex items-center gap-2.5">
                             <div className="w-8 h-8 rounded-lg bg-primary/20 text-primary border border-primary/30 flex items-center justify-center font-mono text-xs font-bold shrink-0">
@@ -114,6 +151,7 @@ export function AdminSidebar({ userName, userRole }: { userName: string; userRol
                             <Link
                                 key={link.href}
                                 href={link.href}
+                                onClick={() => setMobileOpen(false)}
                                 className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium transition-all ${
                                     active
                                         ? "bg-primary text-primary-foreground font-semibold shadow-xs"
@@ -122,7 +160,7 @@ export function AdminSidebar({ userName, userRole }: { userName: string; userRol
                                 title={collapsed ? link.name : undefined}
                             >
                                 <link.icon className={`h-4 w-4 shrink-0 ${active ? "text-primary-foreground" : "text-zinc-400"}`} />
-                                {!collapsed && <span>{link.name}</span>}
+                                {isExpanded && <span>{link.name}</span>}
                             </Link>
                         )
                     })}
@@ -132,19 +170,20 @@ export function AdminSidebar({ userName, userRole }: { userName: string; userRol
                 <div className="p-3 border-t border-white/10 flex flex-col gap-1">
                     <Link
                         href="/"
+                        onClick={() => setMobileOpen(false)}
                         className="flex items-center gap-3 px-3 py-2 rounded-xl text-xs text-zinc-400 hover:text-[#FDFBF7] hover:bg-white/5 transition-colors"
                         title={collapsed ? "Public Site" : undefined}
                     >
                         <ExternalLink className="h-4 w-4 shrink-0" />
-                        {!collapsed && <span>View Public Site</span>}
+                        {isExpanded && <span>View Public Site</span>}
                     </Link>
                     <button
                         onClick={handleSignOut}
-                        className="flex items-center gap-3 px-3 py-2 rounded-xl text-xs text-zinc-400 hover:text-red-400 hover:bg-red-500/10 transition-colors w-full text-left"
+                        className="flex items-center gap-3 px-3 py-2 rounded-xl text-xs text-zinc-400 hover:text-red-400 hover:bg-red-500/10 transition-colors w-full text-left cursor-pointer"
                         title={collapsed ? "Sign Out" : undefined}
                     >
                         <LogOut className="h-4 w-4 shrink-0" />
-                        {!collapsed && <span>Sign Out</span>}
+                        {isExpanded && <span>Sign Out</span>}
                     </button>
                 </div>
             </aside>

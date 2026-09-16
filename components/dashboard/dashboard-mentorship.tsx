@@ -267,7 +267,7 @@ export function DashboardMentorship() {
           <span>Direct Messages</span>
           {unreadCount > 0 && (
             <span
-              className={`text-[10px] font-mono px-1.5 py-0.2 rounded-full font-bold ${
+              className={`text-[10px] font-mono px-1.5 py-0.5 rounded-full font-bold leading-none ${
                 mentorshipMode === "inbox"
                   ? "bg-white text-amber-700"
                   : "bg-gradient-to-r from-amber-500 to-orange-500 text-white"
@@ -348,7 +348,7 @@ export function DashboardMentorship() {
                   <div className="space-y-1.5 min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
                       <span className="font-serif text-base font-medium text-foreground">{msg.sender}</span>
-                      <span className="text-[10px] font-mono px-2 py-0.2 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20">
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20 leading-none">
                         {msg.badge}
                       </span>
                       <span className="text-xs text-muted-foreground">• {msg.role}</span>
@@ -428,7 +428,7 @@ export function DashboardMentorship() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
             {filteredMentors.map((mentor) => (
               <div
                 key={mentor.id}
@@ -447,25 +447,25 @@ export function DashboardMentorship() {
                         <h3 className="font-serif text-lg font-normal text-foreground group-hover:text-primary transition-colors">
                           {mentor.name}
                         </h3>
-                        <ShieldCheck className="w-3.5 h-3.5 text-amber-500" />
+                        <ShieldCheck className="w-3.5 h-3.5 text-amber-500 shrink-0" />
                       </div>
                       <p className="text-xs text-muted-foreground">{mentor.role}</p>
                       <span className="text-[11px] font-semibold text-foreground flex items-center gap-1 mt-0.5">
-                        <Building2 className="w-3 h-3 text-muted-foreground" />
+                        <Building2 className="w-3 h-3 text-muted-foreground shrink-0" />
                         {mentor.company}
                       </span>
                     </div>
                   </div>
 
                   {/* Rating & Exp Strip */}
-                  <div className="flex items-center justify-between p-2.5 rounded-xl bg-secondary/50 border border-hairline text-xs mb-4">
-                    <div className="flex items-center gap-1 font-semibold text-foreground">
+                  <div className="flex flex-wrap items-center justify-between gap-2 p-2.5 rounded-xl bg-secondary/50 border border-hairline text-xs mb-4">
+                    <div className="flex items-center gap-1 font-semibold text-foreground shrink-0">
                       <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
                       <span>{mentor.rating}</span>
                       <span className="text-[10px] text-muted-foreground font-normal">({mentor.reviewsCount})</span>
                     </div>
-                    <span className="text-[11px] text-muted-foreground">{mentor.experienceYears} Years Exp</span>
-                    <span className="text-[11px] font-mono text-amber-600 dark:text-amber-400 font-semibold">{mentor.sessionDuration}</span>
+                    <span className="text-[11px] text-muted-foreground shrink-0">{mentor.experienceYears} Years Exp</span>
+                    <span className="text-[11px] font-mono text-amber-600 dark:text-amber-400 font-semibold shrink-0">{mentor.sessionDuration}</span>
                   </div>
 
                   {/* Bio */}
@@ -564,13 +564,13 @@ export function DashboardMentorship() {
                       </div>
                     </div>
 
-                    <div className="pt-4 border-t border-hairline flex items-center justify-between">
-                      <span className="text-[11px] text-muted-foreground">Video link verified</span>
+                    <div className="pt-4 border-t border-hairline flex flex-wrap items-center justify-between gap-2">
+                      <span className="text-[11px] text-muted-foreground shrink-0">Video link verified</span>
                       <a
                         href={booking.meetLink}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-xs font-medium shadow-xs transition-all"
+                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-xs font-medium shadow-xs transition-all shrink-0"
                       >
                         <Video className="w-3.5 h-3.5" />
                         <span>Join Google Meet</span>

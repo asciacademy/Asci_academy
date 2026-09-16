@@ -271,20 +271,23 @@ public class QuickSort {
           Header & Engine Selector Bar
       ══════════════════════════════════════════════ */}
       <div id="dashboard-practice-header" className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-hairline">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="badge-coral text-[10px]">Algorithm Workbench</span>
-            <span className="text-xs font-mono text-muted-foreground">8 Interactive Engines + Sandbox</span>
+        <div className="space-y-1.5 min-w-0">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
+            <span className="badge-coral text-[10px] sm:text-[11px] shrink-0 leading-none font-semibold">Algorithm Workbench</span>
+            <span className="text-xs font-mono text-muted-foreground shrink-0 flex items-center gap-1.5">
+              <span className="w-1 h-1 rounded-full bg-stone-300 dark:bg-stone-700 hidden sm:inline-block" />
+              <span>8 Interactive Engines + Sandbox</span>
+            </span>
           </div>
-          <h1 className="font-serif text-3xl font-normal tracking-tight text-foreground">
-            Visualizers & Code Sandbox
+          <h1 className="font-serif text-2xl sm:text-3xl font-normal tracking-tight text-foreground">
+            Visualizers &amp; Code Sandbox
           </h1>
-          <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
+          <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed max-w-xl">
             Step-by-step physical memory simulations, algorithm comparisons, and Wasm runtime compiler.
           </p>
         </div>
 
-        <div className="flex items-center gap-4 shrink-0">
+        <div className="flex items-center gap-4 shrink-0 self-start md:self-auto">
           <AxelStage
             id="dashboard-practice-robot-anchor"
             sectionId="dashboard-practice-header"
