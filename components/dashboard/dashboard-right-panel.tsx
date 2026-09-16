@@ -105,10 +105,13 @@ export function DashboardRightPanel({
   const maxHours = Math.max(4, Math.ceil(maxWatchMinutes / 60) + 1)
 
   return (
-    <aside className="w-full xl:w-[350px] 2xl:w-[380px] shrink-0 space-y-6 flex flex-col">
+    <aside className="w-full space-y-4 sm:space-y-5 flex flex-col">
       {/* ── Top Bar: Close Details Action ── */}
       {showCloseButton && onClosePanel && (
-        <div className="flex items-center justify-between pt-1">
+        <div className="flex items-center justify-between pt-0.5">
+          <span className="text-xs font-mono font-semibold uppercase tracking-wider text-muted-foreground/80">
+            Student Identity &amp; Cadence
+          </span>
           <button
             onClick={onClosePanel}
             className="flex items-center gap-1.5 text-xs font-semibold text-amber-700 dark:text-amber-400 hover:text-amber-600 transition-colors cursor-pointer group"
@@ -121,8 +124,10 @@ export function DashboardRightPanel({
         </div>
       )}
 
-      {/* ── 1. Real ASCI Student Profile Card ── */}
-      <div className="rounded-xl border border-stone-200 dark:border-stone-800 bg-card p-5 shadow-xs transition-all">
+      {/* Cards Grid: 1 col on mobile, 3 cols on tablet, 1 col in desktop sidebar */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-1 gap-4 sm:gap-5">
+        {/* ── 1. Real ASCI Student Profile Card ── */}
+        <div className="rounded-xl border border-stone-200 dark:border-stone-800 bg-card p-5 shadow-xs transition-all flex flex-col justify-between">
         <div className="flex items-start gap-4">
           {/* Avatar with edit trigger */}
           <div className="relative shrink-0">
@@ -237,7 +242,7 @@ export function DashboardRightPanel({
       </div>
 
       {/* ── 2. Real Weekly Streak Card ── */}
-      <div className="rounded-xl border border-stone-200 dark:border-stone-800 bg-card p-4 sm:p-5 shadow-xs space-y-3 sm:space-y-4">
+      <div className="rounded-xl border border-stone-200 dark:border-stone-800 bg-card p-4 sm:p-5 shadow-xs space-y-3 sm:space-y-4 flex flex-col justify-between">
         {/* Header with Title and Month selector */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1.5 text-sm font-bold text-foreground">
@@ -332,7 +337,7 @@ export function DashboardRightPanel({
       </div>
 
       {/* ── 3. Real Weekly Watch / Learning Time Card ── */}
-      <div className="rounded-xl border border-stone-200 dark:border-stone-800 bg-card p-5 shadow-xs space-y-4">
+      <div className="rounded-xl border border-stone-200 dark:border-stone-800 bg-card p-5 shadow-xs space-y-4 md:col-span-2 lg:col-span-1 flex flex-col justify-between">
         {/* Header with Title and Month selector */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1.5 text-sm font-bold text-foreground">
@@ -425,6 +430,7 @@ export function DashboardRightPanel({
             ))}
           </div>
         </div>
+      </div>
       </div>
     </aside>
   )

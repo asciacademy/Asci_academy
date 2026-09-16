@@ -180,12 +180,44 @@ export function DashboardOverview({
   return (
     <div className="animate-fadeIn pb-12">
       {/* ── Main Layout: Center Stream + Right Detail Column ── */}
-      <div className="flex flex-col xl:flex-row items-start gap-8">
+      <div className="flex flex-col xl:flex-row items-start gap-6 sm:gap-8">
         
         {/* ══════════════════════════════════════════════
-            Center Primary Stream
+            Student Metrics & Cadence Column (Profile, Streak, Study Time)
+            - Mobile & Tablet (< xl): Rendered at the TOP of the dashboard
+            - Desktop (>= xl): Rendered on the RIGHT side
         ══════════════════════════════════════════════ */}
-        <div className="flex-1 w-full min-w-0 space-y-8">
+        {showRightPanel && (
+          <div className="w-full xl:w-[350px] 2xl:w-[380px] shrink-0 order-1 xl:order-2">
+            <DashboardRightPanel
+              userName={userName}
+              effectiveAvatar={effectiveAvatar}
+              rank={rank}
+              totalXP={totalXP}
+              streak={streak}
+              currentLevel={currentLevel}
+              weeklyActivity={weeklyActivity}
+              coursesInProgressCount={enrollments.filter((e: any) => e.status !== "completed" && (e.progressPercent || 0) < 100).length}
+              coursesCompletedCount={enrollments.filter((e: any) => e.status === "completed" || (e.progressPercent || 0) >= 100).length}
+              isEditingName={isEditingName}
+              setIsEditingName={setIsEditingName}
+              editedName={editedName}
+              setEditedName={setEditedName}
+              handleSaveName={handleSaveName}
+              isSavingName={isSavingName}
+              setShowAvatarPicker={setShowAvatarPicker}
+              onClosePanel={() => setShowRightPanel(false)}
+              showCloseButton={true}
+            />
+          </div>
+        )}
+
+        {/* ══════════════════════════════════════════════
+            Center Primary Stream
+            - Mobile & Tablet (< xl): Rendered below the profile overview
+            - Desktop (>= xl): Rendered on the LEFT (main stream)
+        ══════════════════════════════════════════════ */}
+        <div className="flex-1 w-full min-w-0 space-y-6 sm:space-y-8 order-2 xl:order-1">
           
           {/* Top details toggle banner if right panel is hidden */}
           {!showRightPanel && (
@@ -195,7 +227,7 @@ export function DashboardOverview({
                 onClick={() => setShowRightPanel(true)}
                 className="text-xs font-semibold text-accent hover:underline cursor-pointer flex items-center gap-1"
               >
-                <span>Show Analytics</span>
+                <span>Show Profile &amp; Metrics</span>
                 <ChevronRight className="w-3.5 h-3.5" />
               </button>
             </div>
@@ -594,32 +626,6 @@ export function DashboardOverview({
           </section>
 
         </div>
-
-        {/* ══════════════════════════════════════════════
-            Right Detail Column (Profile, Streak, Study Time)
-        ══════════════════════════════════════════════ */}
-        {showRightPanel && (
-          <DashboardRightPanel
-            userName={userName}
-            effectiveAvatar={effectiveAvatar}
-            rank={rank}
-            totalXP={totalXP}
-            streak={streak}
-            currentLevel={currentLevel}
-            weeklyActivity={weeklyActivity}
-            coursesInProgressCount={enrollments.filter((e: any) => e.status !== "completed" && (e.progressPercent || 0) < 100).length}
-            coursesCompletedCount={enrollments.filter((e: any) => e.status === "completed" || (e.progressPercent || 0) >= 100).length}
-            isEditingName={isEditingName}
-            setIsEditingName={setIsEditingName}
-            editedName={editedName}
-            setEditedName={setEditedName}
-            handleSaveName={handleSaveName}
-            isSavingName={isSavingName}
-            setShowAvatarPicker={setShowAvatarPicker}
-            onClosePanel={() => setShowRightPanel(false)}
-            showCloseButton={true}
-          />
-        )}
 
       </div>
 
