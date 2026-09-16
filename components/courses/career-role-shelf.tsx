@@ -164,7 +164,7 @@ export function CareerRoleShelf({
       <div className="relative">
         <div
           ref={shelfRef}
-          className="flex gap-4 sm:gap-5 overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar py-2 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 touch-pan-x overscroll-x-contain"
+          className="flex gap-4 sm:gap-5 overflow-x-auto snap-x snap-proximity scroll-smooth no-scrollbar py-2 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 touch-auto"
         >
           {track.courses.map((course) => (
             <CareerCourseCard
@@ -236,7 +236,7 @@ function CareerCourseCard({
   }
 
   return (
-    <div className="w-[85vw] sm:w-[320px] md:w-[340px] shrink-0 snap-start flex flex-col justify-between overflow-hidden rounded-3xl border border-stone-200/80 dark:border-stone-800/80 bg-card hover:border-amber-500/40 dark:hover:border-amber-500/30 transition-[transform,border-color,box-shadow] duration-200 ease-out hover:-translate-y-0.5 shadow-xs hover:shadow-md will-change-[transform] group">
+    <div className="w-[85vw] sm:w-[320px] md:w-[340px] shrink-0 snap-start flex flex-col justify-between overflow-hidden rounded-3xl border border-stone-200/80 dark:border-stone-800/80 bg-card hover:border-amber-500/40 dark:hover:border-amber-500/30 transition-[transform,border-color,box-shadow] duration-200 ease-out hover:-translate-y-0.5 shadow-xs hover:shadow-md group">
       <div>
         {/* 16:9 Thumbnail Image: Clean Dashboard Cover */}
         <div className="relative aspect-[16/9] w-full overflow-hidden bg-stone-100 dark:bg-stone-900">
@@ -245,9 +245,9 @@ function CareerCourseCard({
             alt={course.title}
             fill
             sizes="(max-width: 640px) 85vw, 340px"
-            className="object-cover transition-transform duration-500 ease-out group-hover:scale-105 select-none"
+            className="object-cover transition-transform duration-500 ease-out group-hover:scale-105 select-none pointer-events-none"
           />
-          <div className="absolute inset-0 bg-black/20" />
+          <div className="absolute inset-0 bg-black/20 pointer-events-none" />
 
           {/* Top-Left Category Pill (Dashboard Style) */}
           <div className="absolute left-3 top-3 z-10">

@@ -883,9 +883,9 @@ function CourseGridCard({
             alt={course.title}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-            className="object-cover transition-transform duration-500 ease-out group-hover:scale-105 select-none"
+            className="object-cover transition-transform duration-500 ease-out group-hover:scale-105 select-none pointer-events-none"
           />
-          <div className="absolute inset-0 bg-black/20" />
+          <div className="absolute inset-0 bg-black/20 pointer-events-none" />
 
           {/* Top-Left Category Pill (Dashboard Style) */}
           <div className="absolute top-3 left-3 z-10">
