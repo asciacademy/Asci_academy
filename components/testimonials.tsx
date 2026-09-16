@@ -182,7 +182,7 @@ export function Testimonials() {
           </div>
 
           {/* Dedicated Axel Stage: Reserved layout space so nothing overlays */}
-          <div className="hidden lg:flex relative shrink-0 w-64 h-52 items-center justify-center self-center lg:self-auto">
+          <div className="hidden lg:flex relative shrink-0 w-64 h-56 items-center justify-center self-center lg:self-auto">
             <div
               id="testimonials-robot-anchor"
               className="w-full h-full relative flex items-center justify-center pointer-events-none select-none"

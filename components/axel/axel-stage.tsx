@@ -14,8 +14,8 @@ export interface AxelStageProps {
 }
 
 const SIZE_MAP = {
-  sm: "w-52 h-44",
-  md: "w-64 h-52",
+  sm: "w-56 h-48",
+  md: "w-64 h-56",
   lg: "w-72 h-60",
   hero: "w-full min-h-[480px] sm:min-h-[540px] lg:min-h-[600px]",
 }
@@ -25,7 +25,7 @@ export function AxelStage({
   sectionId,
   label,
   emotion = "happy",
-  scale = 0.46,
+  scale = 0.95,
   size = "md",
   className = "",
 }: AxelStageProps) {

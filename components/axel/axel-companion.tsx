@@ -32,7 +32,7 @@ const HOME_STATIONS: SectionStation[] = [
     anchorId: "courses-robot-anchor",
     label: "Curriculum Catalog",
     emotion: "happy",
-    scale: 0.46,
+    scale: 0.95,
   },
   {
     id: "features",
@@ -40,7 +40,7 @@ const HOME_STATIONS: SectionStation[] = [
     anchorId: "features-robot-anchor",
     label: "Core Pillars",
     emotion: "normal",
-    scale: 0.46,
+    scale: 0.95,
   },
   {
     id: "visualizer",
@@ -48,7 +48,7 @@ const HOME_STATIONS: SectionStation[] = [
     anchorId: "visualizer-robot-anchor",
     label: "Algorithm Engine",
     emotion: "shocked",
-    scale: 0.46,
+    scale: 0.95,
   },
   {
     id: "learning-paths",
@@ -56,7 +56,7 @@ const HOME_STATIONS: SectionStation[] = [
     anchorId: "learning-paths-robot-anchor",
     label: "Engineering Trajectory",
     emotion: "cute",
-    scale: 0.46,
+    scale: 0.95,
   },
   {
     id: "testimonials",
@@ -64,7 +64,7 @@ const HOME_STATIONS: SectionStation[] = [
     anchorId: "testimonials-robot-anchor",
     label: "Alumni Verification",
     emotion: "heart",
-    scale: 0.46,
+    scale: 0.95,
   },
   {
     id: "pricing",
@@ -72,7 +72,7 @@ const HOME_STATIONS: SectionStation[] = [
     anchorId: "pricing-robot-anchor",
     label: "Tuition & Fellowship",
     emotion: "normal",
-    scale: 0.46,
+    scale: 0.95,
   },
   {
     id: "faq",
@@ -80,7 +80,7 @@ const HOME_STATIONS: SectionStation[] = [
     anchorId: "faq-robot-anchor",
     label: "Questions & Answers",
     emotion: "happy",
-    scale: 0.46,
+    scale: 0.95,
   },
 ]
 
@@ -154,7 +154,7 @@ export function AxelCompanion() {
         el.parentElement?.closest("[id]")?.id ||
         anchorId.replace("-robot-anchor", "")
       const emotion = (el.getAttribute("data-emotion") as AxelEmotion) || "happy"
-      const scale = parseFloat(el.getAttribute("data-scale") || "0.46") || 0.46
+      const scale = parseFloat(el.getAttribute("data-scale") || "0.95") || 0.95
       const label = el.getAttribute("data-label") || `Section ${index + 1}`
 
       discovered.push({
@@ -433,32 +433,34 @@ export function AxelCompanion() {
   // Match the anchor's actual reserved stage size so there is ZERO overlay and ZERO overflow
   const stageW = isHero
     ? isMobile
-      ? Math.min(windowSize.w - 32, 280)
+      ? Math.min(windowSize.w - 32, 290)
       : isTablet
-      ? 320
+      ? 330
       : 380
     : isMobile
-    ? Math.min(windowSize.w - 32, 240)
-    : 256
+    ? Math.min(windowSize.w - 32, 260)
+    : 280
 
   const stageH = isHero
     ? isMobile
-      ? 260
+      ? 270
       : isTablet
-      ? 300
+      ? 310
       : 380
     : isMobile
-    ? 200
-    : 208
+    ? 220
+    : 240
 
-  const baseScale = currentStation?.scale || 0.46
+  const rawScale = currentStation?.scale || 0.95
+  // Maintain healthy, prominent Axel size: hero stays 1.15, placeholders never collapse below 0.92
+  const baseScale = isHero ? rawScale : Math.max(0.92, rawScale)
   const restingEmotion = currentStation?.emotion || "normal"
 
   // Responsive scaling: comfortably sized across mobile, tablet, and desktop
   const curScale = isMobile
-    ? baseScale * 0.68
+    ? baseScale * 0.88
     : isTablet
-    ? baseScale * 0.82
+    ? baseScale * 0.92
     : baseScale
 
   // GSAP: Buttery-smooth pop-up animation with tactile back overshoot

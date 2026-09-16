@@ -384,7 +384,7 @@ export function Courses({ hideHeader = false, className = "" }: CoursesProps = {
                 data-axel-anchor="true"
                 data-section-id="courses"
                 data-emotion="happy"
-                data-scale="0.46"
+                data-scale="0.95"
                 data-label="Curriculum Catalog"
                 className="w-full h-full relative flex items-center justify-center pointer-events-none select-none"
                 aria-hidden="true"
@@ -399,13 +399,13 @@ export function Courses({ hideHeader = false, className = "" }: CoursesProps = {
               <span className="text-xs font-mono uppercase tracking-widest text-primary">Course Catalog</span>
               <h2 className="font-serif text-2xl font-normal text-foreground mt-1">Specializations & Certificates</h2>
             </div>
-            <div className="hidden lg:flex relative shrink-0 w-52 h-40 items-center justify-center">
+            <div className="hidden lg:flex relative shrink-0 w-56 h-48 items-center justify-center">
               <div
                 id="courses-robot-anchor"
                 data-axel-anchor="true"
                 data-section-id="courses"
                 data-emotion="happy"
-                data-scale="0.44"
+                data-scale="0.92"
                 data-label="Course Catalog"
                 className="w-full h-full relative flex items-center justify-center pointer-events-none select-none"
                 aria-hidden="true"
