@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import Link from "next/link"
 import { createClient } from "@/utils/supabase/client"
 import {
@@ -9,7 +9,7 @@ import {
   Sliders, LogOut, ChevronRight, BarChart2, Layers, CheckCircle2,
   Bookmark, Clock, Trash2, ArrowRight, Trophy, Briefcase, Video,
   FileText, Terminal, Users, Shield, MessageSquare, LayoutGrid, Target,
-  Menu, X, Hammer
+  Menu, X, Hammer, User, ChevronDown
 } from "lucide-react"
 import { updateUserProfile } from "@/app/actions/user"
 import { DashboardOverview } from "@/components/dashboard/dashboard-overview"
@@ -106,11 +106,45 @@ export function DashboardWorkspace({ initialData, user }: DashboardWorkspaceProp
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
   const [notificationsOpen, setNotificationsOpen] = useState(false)
+  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false)
+  const profileDropdownRef = useRef<HTMLDivElement>(null)
+  const notificationsRef = useRef<HTMLDivElement>(null)
+
+  // Close dropdowns on outside click or Escape
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        profileDropdownRef.current &&
+        !profileDropdownRef.current.contains(e.target as Node)
+      ) {
+        setProfileDropdownOpen(false)
+      }
+      if (
+        notificationsRef.current &&
+        !notificationsRef.current.contains(e.target as Node)
+      ) {
+        setNotificationsOpen(false)
+      }
+    }
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setProfileDropdownOpen(false)
+        setNotificationsOpen(false)
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside)
+    document.addEventListener("keydown", handleKeyDown)
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+      document.removeEventListener("keydown", handleKeyDown)
+    }
+  }, [])
 
   // Switch tab and immediately inform Axel to re-anchor smoothly
   const handleSwitchTab = (tab: DashboardTab) => {
     setActiveTab(tab)
     setMobileSidebarOpen(false)
+    setProfileDropdownOpen(false)
     if (typeof window !== "undefined") {
       window.dispatchEvent(new CustomEvent("axel-refresh-stations"))
     }
@@ -604,9 +638,12 @@ export function DashboardWorkspace({ initialData, user }: DashboardWorkspaceProp
               </button>
 
               {/* Notification Bell */}
-              <div className="relative">
+              <div className="relative" ref={notificationsRef}>
                 <button
-                  onClick={() => setNotificationsOpen(!notificationsOpen)}
+                  onClick={() => {
+                    setNotificationsOpen(!notificationsOpen)
+                    setProfileDropdownOpen(false)
+                  }}
                   className="p-2 sm:p-2.5 rounded-full border border-stone-200 dark:border-stone-800 bg-card hover:bg-secondary text-muted-foreground hover:text-foreground transition-all relative cursor-pointer shadow-2xs shrink-0"
                   title="Notifications"
                 >
@@ -634,12 +671,178 @@ export function DashboardWorkspace({ initialData, user }: DashboardWorkspaceProp
                 )}
               </div>
 
-              {/* User Avatar Pill */}
-              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full overflow-hidden border border-amber-500/30 bg-amber-50 dark:bg-stone-800 flex items-center justify-center text-xs font-bold text-amber-700 dark:text-amber-300 shadow-2xs shrink-0">
-                {userAvatar ? (
-                  <img src={userAvatar} alt={userName} className="w-full h-full object-cover" />
-                ) : (
-                  userName ? userName.charAt(0).toUpperCase() : "B"
+              {/* Profile Trigger & Dropdown Menu */}
+              <div className="relative" ref={profileDropdownRef}>
+                <button
+                  onClick={() => {
+                    setProfileDropdownOpen((prev) => !prev)
+                    setNotificationsOpen(false)
+                  }}
+                  className={`flex items-center gap-2 p-1 sm:px-2.5 sm:py-1.5 rounded-full sm:rounded-2xl border transition-all cursor-pointer shadow-2xs active:scale-[0.98] ${
+                    profileDropdownOpen
+                      ? "border-amber-500/50 bg-secondary ring-2 ring-amber-500/20"
+                      : "border-stone-200 dark:border-stone-800 bg-card hover:bg-secondary hover:border-stone-300 dark:hover:border-stone-700"
+                  }`}
+                  aria-expanded={profileDropdownOpen}
+                  aria-label="User profile menu"
+                >
+                  {/* Avatar with Active Online Pip */}
+                  <div className="relative shrink-0">
+                    <div className="w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-full overflow-hidden border border-amber-500/30 bg-amber-50 dark:bg-stone-800 flex items-center justify-center text-xs font-bold text-amber-700 dark:text-amber-300 shadow-inner">
+                      {userAvatar ? (
+                        <img src={userAvatar} alt={userName} className="w-full h-full object-cover" />
+                      ) : (
+                        userName ? userName.charAt(0).toUpperCase() : "B"
+                      )}
+                    </div>
+                    <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 rounded-full ring-2 ring-card" />
+                  </div>
+
+                  {/* Desktop / Tablet User Identity */}
+                  <div className="hidden sm:flex flex-col text-left min-w-0 pr-0.5">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-xs font-semibold text-foreground truncate max-w-[90px] md:max-w-[120px]">
+                        {userName}
+                      </span>
+                      <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20 leading-none">
+                        L{currentLevel}
+                      </span>
+                    </div>
+                    <span className="text-[10px] font-mono text-muted-foreground truncate max-w-[110px]">
+                      {rank}
+                    </span>
+                  </div>
+
+                  <ChevronDown
+                    className={`hidden sm:block w-3.5 h-3.5 text-muted-foreground transition-transform duration-200 ${
+                      profileDropdownOpen ? "rotate-180 text-amber-500" : ""
+                    }`}
+                  />
+                </button>
+
+                {/* Responsive Profile Dropdown Card */}
+                {profileDropdownOpen && (
+                  <div className="absolute right-0 mt-2.5 w-72 sm:w-80 max-w-[calc(100vw-1.5rem)] rounded-2xl border border-stone-200/90 dark:border-stone-800/90 bg-card/95 backdrop-blur-xl shadow-xl p-3 sm:p-4 space-y-3 z-50 animate-fadeIn divide-y divide-hairline">
+                    {/* User Identity Header */}
+                    <div className="pb-3 flex items-center gap-3">
+                      <div className="relative shrink-0">
+                        <div className="w-11 h-11 rounded-2xl overflow-hidden border border-amber-500/40 bg-amber-50 dark:bg-stone-800 flex items-center justify-center text-sm font-bold text-amber-700 dark:text-amber-300 shadow-xs">
+                          {userAvatar ? (
+                            <img src={userAvatar} alt={userName} className="w-full h-full object-cover" />
+                          ) : (
+                            userName ? userName.charAt(0).toUpperCase() : "B"
+                          )}
+                        </div>
+                        <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 rounded-full ring-2 ring-card" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-1.5">
+                          <h4 className="text-sm font-semibold text-foreground truncate">
+                            {userName}
+                          </h4>
+                          <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20 leading-none">
+                            L{currentLevel}
+                          </span>
+                        </div>
+                        <p className="text-xs text-muted-foreground truncate font-mono mt-0.5">
+                          {profile?.email || user?.email || "scholar@asci.academy"}
+                        </p>
+                        <div className="flex items-center gap-2 mt-1 text-[11px] font-mono text-muted-foreground">
+                          <span className="text-amber-600 dark:text-amber-400 font-semibold">{rank}</span>
+                          <span>•</span>
+                          <span>{totalXP} XP</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Quick Profile Navigation Links */}
+                    <div className="pt-2.5 pb-1 space-y-1">
+                      <Link
+                        href="/profile"
+                        onClick={() => setProfileDropdownOpen(false)}
+                        className="flex items-center justify-between px-2.5 py-2 rounded-xl text-xs font-medium text-foreground hover:bg-secondary transition-colors group cursor-pointer"
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <div className="p-1.5 rounded-lg bg-primary/10 text-primary border border-primary/20">
+                            <User className="w-3.5 h-3.5" />
+                          </div>
+                          <div>
+                            <span className="font-semibold block leading-tight">View Full Profile</span>
+                            <span className="text-[10px] text-muted-foreground">Identity, Bio &amp; Preferences</span>
+                          </div>
+                        </div>
+                        <ChevronRight className="w-3.5 h-3.5 text-muted-foreground group-hover:translate-x-0.5 transition-transform" />
+                      </Link>
+
+                      <button
+                        onClick={() => {
+                          handleSwitchTab("certificates")
+                          setProfileDropdownOpen(false)
+                        }}
+                        className="w-full flex items-center justify-between px-2.5 py-2 rounded-xl text-xs font-medium text-foreground hover:bg-secondary transition-colors group cursor-pointer text-left"
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <div className="p-1.5 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+                            <Award className="w-3.5 h-3.5" />
+                          </div>
+                          <div>
+                            <span className="font-semibold block leading-tight">Certificates</span>
+                            <span className="text-[10px] text-muted-foreground">Verified credentials</span>
+                          </div>
+                        </div>
+                        <ChevronRight className="w-3.5 h-3.5 text-muted-foreground group-hover:translate-x-0.5 transition-transform" />
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          handleSwitchTab("wishlist")
+                          setProfileDropdownOpen(false)
+                        }}
+                        className="w-full flex items-center justify-between px-2.5 py-2 rounded-xl text-xs font-medium text-foreground hover:bg-secondary transition-colors group cursor-pointer text-left"
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <div className="p-1.5 rounded-lg bg-sky-500/10 text-sky-600 dark:text-sky-400 border border-sky-500/20">
+                            <Bookmark className="w-3.5 h-3.5" />
+                          </div>
+                          <div>
+                            <span className="font-semibold block leading-tight">Saved Tracks</span>
+                            <span className="text-[10px] text-muted-foreground">{wishlistCount} bookmarked</span>
+                          </div>
+                        </div>
+                        <ChevronRight className="w-3.5 h-3.5 text-muted-foreground group-hover:translate-x-0.5 transition-transform" />
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          handleSwitchTab("overview")
+                          setProfileDropdownOpen(false)
+                        }}
+                        className="w-full flex items-center justify-between px-2.5 py-2 rounded-xl text-xs font-medium text-foreground hover:bg-secondary transition-colors group cursor-pointer text-left"
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <div className="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                            <Settings className="w-3.5 h-3.5" />
+                          </div>
+                          <div>
+                            <span className="font-semibold block leading-tight">Dashboard Overview</span>
+                            <span className="text-[10px] text-muted-foreground">Streak &amp; Level stats</span>
+                          </div>
+                        </div>
+                        <ChevronRight className="w-3.5 h-3.5 text-muted-foreground group-hover:translate-x-0.5 transition-transform" />
+                      </button>
+                    </div>
+
+                    {/* Sign Out Action */}
+                    <div className="pt-2">
+                      <button
+                        onClick={handleSignOut}
+                        className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-xs font-semibold text-rose-600 dark:text-rose-400 hover:bg-rose-500/10 transition-colors cursor-pointer"
+                      >
+                        <LogOut className="w-4 h-4" />
+                        <span>Sign Out of ASCI</span>
+                      </button>
+                    </div>
+                  </div>
                 )}
               </div>
 
