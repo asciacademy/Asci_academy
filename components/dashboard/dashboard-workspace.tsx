@@ -284,7 +284,7 @@ export function DashboardWorkspace({ initialData, user }: DashboardWorkspaceProp
   // ─── Render ───────────────────────────────────────────────────────────────
 
   return (
-    <div className="min-h-svh bg-[#FDFBF7] dark:bg-[#080f0a] text-foreground flex antialiased">
+    <div className="min-h-svh bg-background text-foreground flex antialiased">
 
       {/* ── Mobile overlay backdrop ── */}
       {mobileSidebarOpen && (
@@ -296,20 +296,22 @@ export function DashboardWorkspace({ initialData, user }: DashboardWorkspaceProp
       )}
 
       {/* ══════════════════════════════════════════════
-          SIDEBAR — Dark Emerald, Emerald & Pearl
+          SIDEBAR NAVIGATION (Fixed / Sticky)
       ══════════════════════════════════════════════ */}
       <aside
         className={`
           fixed md:sticky top-0 left-0 h-svh z-50
           flex flex-col shrink-0
-          bg-[#062112] text-white
+          bg-secondary/95 dark:bg-[#181715]/95 backdrop-blur-xl
+          border-r border-border
+          text-foreground
           transition-all duration-300 ease-in-out
           ${sidebarCollapsed ? "w-[68px]" : "w-[260px]"}
           ${mobileSidebarOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full md:translate-x-0"}
         `}
       >
         {/* ── Logo / Header ── */}
-        <div className="h-16 flex items-center justify-between px-4 border-b border-white/8 shrink-0">
+        <div className="h-16 flex items-center justify-between px-4 border-b border-border shrink-0">
           <Link href="/" className="flex items-center gap-2.5 overflow-hidden min-w-0">
             <div className="shrink-0">
               <AsciLogo
@@ -324,7 +326,7 @@ export function DashboardWorkspace({ initialData, user }: DashboardWorkspaceProp
             {/* Mobile close */}
             <button
               onClick={() => setMobileSidebarOpen(false)}
-              className="md:hidden p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/8 transition-colors cursor-pointer"
+              className="md:hidden p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-card transition-colors cursor-pointer"
               aria-label="Close menu"
             >
               <X className="w-4 h-4" />
@@ -332,7 +334,7 @@ export function DashboardWorkspace({ initialData, user }: DashboardWorkspaceProp
             {/* Desktop collapse */}
             <button
               onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-              className="hidden md:flex p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/8 transition-colors cursor-pointer"
+              className="hidden md:flex p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-card transition-colors cursor-pointer"
               title={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
             >
               <ChevronLeft
@@ -348,12 +350,12 @@ export function DashboardWorkspace({ initialData, user }: DashboardWorkspaceProp
             <div key={group.label} className="space-y-0.5">
               {/* Group label */}
               {!sidebarCollapsed && (
-                <div className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/25 px-3 pb-1.5">
+                <div className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground/70 px-3 pb-1.5 font-mono">
                   {group.label}
                 </div>
               )}
               {sidebarCollapsed && (
-                <div className="h-px bg-white/8 mx-1 my-1" />
+                <div className="h-px bg-border mx-1 my-1" />
               )}
 
               {group.items.map((item) => {
@@ -367,28 +369,32 @@ export function DashboardWorkspace({ initialData, user }: DashboardWorkspaceProp
                       w-full flex items-center gap-3 px-3 py-2.5 rounded-xl
                       text-[13px] font-medium transition-all duration-150 cursor-pointer relative group
                       ${isActive
-                        ? "bg-[#D4B872]/15 text-[#D4B872] font-semibold"
-                        : "text-white/50 hover:text-white/90 hover:bg-white/6"
+                        ? "bg-primary text-primary-foreground font-semibold shadow-xs"
+                        : "text-muted-foreground hover:text-foreground hover:bg-card/70"
                       }
                       ${sidebarCollapsed ? "justify-center" : ""}
                     `}
                   >
                     {/* Active indicator */}
                     {isActive && (
-                      <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 rounded-r-full bg-[#D4B872] shadow-[0_0_8px_#D4B87280]" />
+                      <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 rounded-r-full bg-primary-foreground/40" />
                     )}
 
                     <item.icon
                       className={`shrink-0 transition-colors ${
                         sidebarCollapsed ? "w-5 h-5" : "w-4 h-4"
-                      } ${isActive ? "text-[#D4B872]" : "text-white/40 group-hover:text-white/80"}`}
+                      } ${isActive ? "text-primary-foreground" : "text-muted-foreground group-hover:text-foreground"}`}
                     />
 
                     {!sidebarCollapsed && (
                       <>
                         <span className="flex-1 text-left truncate">{item.label}</span>
                         {"badge" in item && item.badge !== undefined && (
-                          <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-amber-500 text-white shadow-sm shrink-0">
+                          <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full shrink-0 ${
+                            isActive
+                              ? "bg-primary-foreground/20 text-primary-foreground"
+                              : "bg-primary/10 text-primary border border-primary/20"
+                          }`}>
                             {item.badge}
                           </span>
                         )}
@@ -397,10 +403,10 @@ export function DashboardWorkspace({ initialData, user }: DashboardWorkspaceProp
 
                     {/* Collapsed tooltip */}
                     {sidebarCollapsed && (
-                      <div className="absolute left-full ml-3 px-2.5 py-1.5 rounded-lg bg-stone-900 text-white text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 shadow-xl border border-white/10">
+                      <div className="absolute left-full ml-3 px-2.5 py-1.5 rounded-lg bg-popover text-popover-foreground text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 shadow-xl border border-border">
                         {item.label}
                         {"badge" in item && item.badge !== undefined && (
-                          <span className="ml-1.5 text-[10px] font-bold px-1 rounded-full bg-amber-500 text-white">
+                          <span className="ml-1.5 text-[10px] font-bold px-1 rounded-full bg-primary text-primary-foreground">
                             {item.badge}
                           </span>
                         )}
@@ -416,17 +422,15 @@ export function DashboardWorkspace({ initialData, user }: DashboardWorkspaceProp
         {/* ── Upgrade Banner (expanded only) ── */}
         {!sidebarCollapsed && (
           <div className="px-3 pb-3 shrink-0">
-            <div className="rounded-2xl p-4 bg-gradient-to-b from-[#D4B872]/12 to-white/2 border border-[#D4B872]/20 relative overflow-hidden">
-              {/* Subtle glow */}
-              <div className="absolute -top-4 -right-4 w-16 h-16 rounded-full bg-[#D4B872]/10 blur-xl pointer-events-none" />
-              <div className="text-2xl mb-2">🚩</div>
-              <h4 className="font-bold text-sm text-white">ASCI Plus Pro</h4>
-              <p className="text-[11px] text-white/45 leading-relaxed mt-0.5 mb-3">
+            <div className="rounded-2xl p-4 bg-card border border-border relative overflow-hidden shadow-2xs">
+              <div className="text-2xl mb-2">⚡</div>
+              <h4 className="font-bold text-sm text-foreground">ASCI Plus Pro</h4>
+              <p className="text-[11px] text-muted-foreground leading-relaxed mt-0.5 mb-3">
                 Unlock hackathons, mock interviews & 1:1 mentor bookings.
               </p>
               <Link
                 href="/pricing"
-                className="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-[#D4B872] to-amber-500 hover:from-amber-400 hover:to-[#D4B872] text-[#062112] text-xs font-bold transition-all shadow-sm flex items-center justify-center gap-1.5"
+                className="w-full py-2 px-3 rounded-xl bg-primary hover:bg-primary-active text-primary-foreground text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-1.5"
               >
                 <span>Upgrade to Plus</span>
                 <span>↗</span>
@@ -436,40 +440,40 @@ export function DashboardWorkspace({ initialData, user }: DashboardWorkspaceProp
         )}
 
         {/* ── User Card ── */}
-        <div className="p-3 border-t border-white/8 shrink-0">
+        <div className="p-3 border-t border-border bg-secondary/60 shrink-0">
           <div
-            className={`flex items-center gap-2.5 p-2.5 rounded-xl hover:bg-white/5 transition-colors ${
+            className={`flex items-center gap-2.5 p-2 rounded-xl bg-card border border-border shadow-2xs ${
               sidebarCollapsed ? "justify-center" : ""
             }`}
           >
             {/* Avatar */}
             <div className="relative shrink-0">
-              <div className="w-8 h-8 rounded-xl bg-[#D4B872]/20 border border-[#D4B872]/30 flex items-center justify-center text-xs font-bold text-[#D4B872] overflow-hidden">
+              <div className="w-8 h-8 rounded-xl bg-secondary border border-border flex items-center justify-center text-xs font-bold text-primary overflow-hidden">
                 {userAvatar ? (
                   <img src={userAvatar} alt={userName} className="w-full h-full object-cover" />
                 ) : (
                   userName.charAt(0).toUpperCase()
                 )}
               </div>
-              <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-400 rounded-full ring-2 ring-[#062112]" />
+              <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 rounded-full ring-2 ring-card" />
             </div>
 
             {!sidebarCollapsed && (
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-1.5">
-                  <span className="text-xs font-semibold text-white truncate">{userName}</span>
-                  <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-[#D4B872]/15 text-[#D4B872] border border-[#D4B872]/20">
+                  <span className="text-xs font-semibold text-foreground truncate">{userName}</span>
+                  <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-primary/10 text-primary border border-primary/20">
                     L{currentLevel}
                   </span>
                 </div>
-                <span className="text-[10px] font-mono text-white/35 truncate block">{rank}</span>
+                <span className="text-[10px] font-mono text-muted-foreground truncate block">{rank}</span>
               </div>
             )}
 
             {!sidebarCollapsed && (
               <button
                 onClick={handleSignOut}
-                className="p-1.5 text-white/30 hover:text-red-400 hover:bg-red-500/10 transition-colors rounded-lg cursor-pointer shrink-0"
+                className="p-1.5 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors rounded-lg cursor-pointer shrink-0"
                 title="Sign Out"
               >
                 <LogOut className="w-3.5 h-3.5" />
@@ -485,7 +489,7 @@ export function DashboardWorkspace({ initialData, user }: DashboardWorkspaceProp
       <div className="flex-1 flex flex-col min-w-0 min-h-svh">
 
         {/* ── Top Header ── */}
-        <header className="sticky top-0 z-30 h-16 bg-[#FDFBF7]/92 dark:bg-[#080f0a]/92 backdrop-blur-xl border-b border-stone-200/80 dark:border-stone-800/80 shrink-0">
+        <header className="sticky top-0 z-30 h-16 bg-background/90 backdrop-blur-xl border-b border-border shrink-0">
           <div className="h-full px-4 sm:px-6 flex items-center justify-between gap-4">
 
             {/* Left: mobile hamburger + title */}
@@ -794,7 +798,7 @@ export function DashboardWorkspace({ initialData, user }: DashboardWorkspaceProp
         {/* ══════════════════════════════════════════════
             MOBILE BOTTOM TAB BAR
         ══════════════════════════════════════════════ */}
-        <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#062112] border-t border-white/8 safe-area-inset-bottom">
+        <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-card/95 backdrop-blur-xl border-t border-border safe-area-inset-bottom">
           <div className="flex items-center justify-around px-1 pt-2 pb-3">
             {BOTTOM_TABS.map((tab) => {
               const isActive = activeTab === tab.tab
@@ -803,19 +807,19 @@ export function DashboardWorkspace({ initialData, user }: DashboardWorkspaceProp
                   key={tab.id}
                   onClick={() => handleSwitchTab(tab.tab)}
                   className={`flex flex-col items-center gap-1 px-3 py-1 rounded-xl transition-all cursor-pointer min-w-0 ${
-                    isActive ? "text-[#D4B872]" : "text-white/40"
+                    isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
                   <tab.icon
                     className={`w-5 h-5 transition-all ${
-                      isActive ? "drop-shadow-[0_0_6px_#D4B87260]" : ""
+                      isActive ? "text-primary scale-110" : ""
                     }`}
                   />
-                  <span className={`text-[10px] font-semibold truncate ${isActive ? "text-[#D4B872]" : "text-white/35"}`}>
+                  <span className={`text-[10px] font-semibold truncate ${isActive ? "text-primary font-semibold" : "text-muted-foreground"}`}>
                     {tab.label}
                   </span>
                   {isActive && (
-                    <span className="w-1 h-1 rounded-full bg-[#D4B872] shadow-[0_0_4px_#D4B87280]" />
+                    <span className="w-1 h-1 rounded-full bg-primary" />
                   )}
                 </button>
               )
