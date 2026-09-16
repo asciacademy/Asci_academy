@@ -121,11 +121,22 @@ export function AxelCompanion() {
   const discoverStations = useCallback((): SectionStation[] => {
     if (typeof window === "undefined") return HOME_STATIONS
 
+    const isMobileDesign = window.innerWidth < 1024
+
+    // In responsive design (mobile/tablet < 1024px):
+    // Place Axel ONLY in the hero section of the home page, with NO other stops across the entire website
+    if (isMobileDesign) {
+      if (pathname === "/") {
+        return [HOME_STATIONS[0]] // only the hero station
+      }
+      return [] // no stations on subpages in mobile viewports
+    }
+
     if (pathname === "/") {
       return HOME_STATIONS
     }
 
-    // Query all registered Axel stages on this subpage
+    // Query all registered Axel stages on this subpage (desktop viewports)
     const anchorEls = document.querySelectorAll<HTMLElement>(
       '[data-axel-anchor="true"], [id$="-robot-anchor"]'
     )
@@ -200,37 +211,6 @@ export function AxelCompanion() {
     return () => window.removeEventListener("hero-cta-hover", handleCtaHover)
   }, [])
 
-  // Mount, resize, and initial measurement
-  useEffect(() => {
-    setMounted(true)
-    const winW = typeof window !== "undefined" ? window.innerWidth : 1280
-    const winH = typeof window !== "undefined" ? window.innerHeight : 800
-    setWindowSize({ w: winW, h: winH })
-
-    const handleResize = () => {
-      setWindowSize({ w: window.innerWidth, h: window.innerHeight })
-      updateAnchorPosition(lastActiveRef.current)
-    }
-
-    window.addEventListener("resize", handleResize)
-    return () => window.removeEventListener("resize", handleResize)
-  }, [updateAnchorPosition])
-
-  // Continuous layout shift observer (detects accordions, expanded cards, dynamic data loading)
-  useEffect(() => {
-    let ro: ResizeObserver | null = null
-    if (typeof ResizeObserver !== "undefined" && document.body) {
-      ro = new ResizeObserver(() => {
-        updateAnchorPosition(lastActiveRef.current)
-      })
-      ro.observe(document.body)
-    }
-
-    return () => {
-      if (ro) ro.disconnect()
-    }
-  }, [updateAnchorPosition])
-
   // Full dynamic refresh method: re-queries DOM for registered Axel stages
   const refreshStations = useCallback(() => {
     const newStations = discoverStations()
@@ -261,6 +241,38 @@ export function AxelCompanion() {
       setHasMeasuredCoords(false)
     }
   }, [discoverStations, setActiveSection, setExpression, updateAnchorPosition])
+
+  // Mount, resize, and initial measurement
+  useEffect(() => {
+    setMounted(true)
+    const winW = typeof window !== "undefined" ? window.innerWidth : 1280
+    const winH = typeof window !== "undefined" ? window.innerHeight : 800
+    setWindowSize({ w: winW, h: winH })
+
+    const handleResize = () => {
+      setWindowSize({ w: window.innerWidth, h: window.innerHeight })
+      refreshStations()
+      updateAnchorPosition(lastActiveRef.current)
+    }
+
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
+  }, [refreshStations, updateAnchorPosition])
+
+  // Continuous layout shift observer (detects accordions, expanded cards, dynamic data loading)
+  useEffect(() => {
+    let ro: ResizeObserver | null = null
+    if (typeof ResizeObserver !== "undefined" && document.body) {
+      ro = new ResizeObserver(() => {
+        updateAnchorPosition(lastActiveRef.current)
+      })
+      ro.observe(document.body)
+    }
+
+    return () => {
+      if (ro) ro.disconnect()
+    }
+  }, [updateAnchorPosition])
 
   // Route change & dynamic DOM lifecycle: observe tab switches and mutations
   useEffect(() => {
@@ -338,7 +350,7 @@ export function AxelCompanion() {
   // Live Section Detection with IntersectionObserver (zero scroll jank, runs off-main-thread)
   useEffect(() => {
     const curStations = stationsRef.current
-    if (!curStations || curStations.length === 0) return
+    if (!curStations || curStations.length <= 1) return
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -540,6 +552,7 @@ export function AxelCompanion() {
 
   useEffect(() => {
     const handleScrollVelocity = () => {
+      if (typeof window !== "undefined" && window.innerWidth < 1024) return
       const now = Date.now()
       const scrollY = window.scrollY || window.pageYOffset || 0
       const deltaY = Math.abs(scrollY - lastScrollYRef.current)

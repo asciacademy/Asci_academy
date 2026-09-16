@@ -378,7 +378,7 @@ export function Courses({ hideHeader = false, className = "" }: CoursesProps = {
             </div>
 
             {/* Dedicated Axel Stage: Reserved layout space so nothing overlays */}
-            <div className="relative shrink-0 w-64 h-56 flex items-center justify-center self-center lg:self-auto">
+            <div className="hidden lg:flex relative shrink-0 w-64 h-56 items-center justify-center self-center lg:self-auto">
               <div
                 id="courses-robot-anchor"
                 data-axel-anchor="true"
@@ -399,7 +399,7 @@ export function Courses({ hideHeader = false, className = "" }: CoursesProps = {
               <span className="text-xs font-mono uppercase tracking-widest text-primary">Course Catalog</span>
               <h2 className="font-serif text-2xl font-normal text-foreground mt-1">Specializations & Certificates</h2>
             </div>
-            <div className="relative shrink-0 w-52 h-40 flex items-center justify-center">
+            <div className="hidden lg:flex relative shrink-0 w-52 h-40 items-center justify-center">
               <div
                 id="courses-robot-anchor"
                 data-axel-anchor="true"

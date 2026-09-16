@@ -33,7 +33,7 @@ export function AxelStage({
 
   return (
     <div
-      className={`relative shrink-0 flex items-center justify-center self-center lg:self-auto ${sizeClass} ${className}`}
+      className={`relative shrink-0 hidden lg:flex items-center justify-center self-center lg:self-auto ${sizeClass} ${className}`}
       aria-hidden="true"
     >
       {/* Anchor point measured by AxelCompanion */}
