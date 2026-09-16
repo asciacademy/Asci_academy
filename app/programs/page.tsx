@@ -157,12 +157,12 @@ export default function ProgramsPage() {
                         {CORE_COURSES.map((course) => (
                             <div
                                 key={course.id}
-                                className="group relative flex flex-col justify-between rounded-2xl border border-hairline bg-card p-5 transition-all duration-300 hover:border-primary/40 hover:shadow-md hover:-translate-y-0.5"
+                                className="group relative flex flex-col justify-between rounded-2xl border border-hairline dark:border-white/[0.08] bg-card/90 dark:bg-[#181715]/90 p-5 transition-all duration-200 hover:border-foreground/30 dark:hover:border-white/25 hover:-translate-y-0.5 shadow-2xs"
                             >
                                 <div>
                                     {/* Header with Logo and Badge */}
                                     <div className="flex items-center justify-between gap-2 mb-4">
-                                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-border/80 bg-secondary/80 p-2 shadow-xs group-hover:scale-105 group-hover:border-primary/40 group-hover:bg-card transition-all duration-200">
+                                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-hairline bg-secondary text-primary p-2 shadow-2xs group-hover:scale-105 group-hover:border-foreground/20 transition-all duration-200">
                                             <TechLogo slug={course.id} className="h-7 w-7 object-contain" />
                                         </div>
                                         <div className="flex items-center gap-1.5">

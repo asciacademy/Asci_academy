@@ -190,10 +190,10 @@ const NAV_ITEMS: NavItem[] = [
       },
       {
         title: "Verify Credential",
-        desc: "Validate official Gravit certificates & completion serials",
+        desc: "Validate official ASCI certificates & completion serials",
         href: "/verify",
         icon: Shield,
-        badge: "Gravit",
+        badge: "Official",
       },
     ],
     footerLink: { label: "Join Discord Community", href: "/community" },
@@ -265,10 +265,29 @@ export function Navbar() {
     }
   }
 
+  // Close mobile navigation drawer and flyouts on route change
+  useEffect(() => {
+    setMobileOpen(false)
+    setActiveDropdown(null)
+  }, [pathname])
+
+  // Lock body scroll when mobile menu is open to prevent background scroll jank
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = "hidden"
+    } else {
+      document.body.style.overflow = ""
+    }
+    return () => {
+      document.body.style.overflow = ""
+    }
+  }, [mobileOpen])
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setActiveDropdown(null)
+        setMobileOpen(false)
       }
     }
 
@@ -279,7 +298,10 @@ export function Navbar() {
   }, [])
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 15)
+    const onScroll = () => {
+      const isScrolled = window.scrollY > 15
+      setScrolled((prev) => (prev !== isScrolled ? isScrolled : prev))
+    }
     window.addEventListener("scroll", onScroll, { passive: true })
 
     return () => {

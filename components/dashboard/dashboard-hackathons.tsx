@@ -37,9 +37,31 @@ export function DashboardHackathons() {
     activeTeammatesCount
   } = useUnstopEcosystem()
 
-  const [mainMode, setMainMode] = useState<"challenges" | "teammates">("challenges")
+  const [mainMode, setMainMode] = useState<"leaderboard" | "challenges" | "teammates">("leaderboard")
   const [filter, setFilter] = useState<"all" | "registered" | "live" | "big-prizes">("all")
   const [searchQuery, setSearchQuery] = useState("")
+
+  // National Engineering Leaderboard Data
+  const leaderboardEntries = [
+    { rank: 1, name: "Priya Sharma", college: "IIT Delhi", elo: 2420, tier: "Grandmaster", xp: "12,450 XP", solved: 142, avatar: "/avatars/ninja.png", badge: "🏆 Gold" },
+    { rank: 2, name: "Aryan Verma", college: "BITS Pilani", elo: 2340, tier: "Master", xp: "11,800 XP", solved: 136, avatar: "/avatars/hacker.png", badge: "🥈 Silver" },
+    { rank: 3, name: "Sneha Nair", college: "NIT Trichy", elo: 2290, tier: "Master", xp: "11,250 XP", solved: 129, avatar: "/avatars/robot.png", badge: "🥉 Bronze" },
+    { rank: 4, name: "Rohan Iyer", college: "IIIT Hyderabad", elo: 2180, tier: "Candidate Master", xp: "9,900 XP", solved: 118, avatar: "/avatars/astronaut.png" },
+    { rank: 5, name: "Ananya Sen", college: "IIT Bombay", elo: 2120, tier: "Candidate Master", xp: "9,450 XP", solved: 112, avatar: "/avatars/cat.png" },
+    { rank: 6, name: "Karthik R", college: "RVCE Bangalore", elo: 2040, tier: "Specialist", xp: "8,900 XP", solved: 104, avatar: "/avatars/skull.png" },
+    { rank: 7, name: "Tanvi Deshmukh", college: "COEP Pune", elo: 1980, tier: "Specialist", xp: "8,300 XP", solved: 98, avatar: "/avatars/hacker.png" },
+    { rank: 8, name: "Devansh Mehta", college: "DTU Delhi", elo: 1910, tier: "Specialist", xp: "7,850 XP", solved: 92, avatar: "/avatars/robot.png" },
+    { rank: 9, name: "Meera Patel", college: "IIT Madras", elo: 1840, tier: "Expert", xp: "7,400 XP", solved: 87, avatar: "/avatars/ninja.png" },
+    { rank: 10, name: "Kabir Das", college: "NSUT Delhi", elo: 1760, tier: "Expert", xp: "6,950 XP", solved: 81, avatar: "/avatars/astronaut.png" },
+  ]
+
+  const campusRankings = [
+    { rank: 1, college: "IIT Delhi", members: 184, totalXp: "94.2k XP", topSpecialty: "Distributed Systems" },
+    { rank: 2, college: "BITS Pilani", members: 162, totalXp: "88.5k XP", topSpecialty: "High-Throughput Concurrency" },
+    { rank: 3, college: "IIIT Hyderabad", members: 141, totalXp: "81.3k XP", topSpecialty: "Algorithmic Complexity" },
+    { rank: 4, college: "NIT Trichy", members: 129, totalXp: "76.8k XP", topSpecialty: "JVM Memory Systems" },
+    { rank: 5, college: "IIT Bombay", members: 118, totalXp: "71.4k XP", topSpecialty: "Neural Systems & AI" },
+  ]
   
   // Registration Modal State
   const [selectedHackathonForReg, setSelectedHackathonForReg] = useState<HackathonItem | null>(null)
@@ -239,25 +261,36 @@ export function DashboardHackathons() {
       </div>
 
       {/* ══════════════════════════════════════════════
-          Arena Mode Switcher (Challenges vs Teammate Matchmaker)
+          Arena Mode Switcher (Leaderboard vs Challenges vs Teammate Matchmaker)
       ══════════════════════════════════════════════ */}
-      <div className="flex items-center gap-2 border-b border-hairline pb-3">
+      <div className="flex flex-wrap items-center gap-2 border-b border-hairline pb-3">
         <button
-          onClick={() => setMainMode("challenges")}
-          className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer flex items-center gap-1.5 ${
-            mainMode === "challenges"
-              ? "bg-primary text-primary-foreground font-semibold"
+          onClick={() => setMainMode("leaderboard")}
+          className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5 ${
+            mainMode === "leaderboard"
+              ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold shadow-xs"
               : "bg-secondary text-muted-foreground hover:text-foreground"
           }`}
         >
           <Trophy className="w-3.5 h-3.5" />
-          <span>Active Competitions &amp; Grand Prix</span>
+          <span>National Student Leaderboard</span>
+        </button>
+        <button
+          onClick={() => setMainMode("challenges")}
+          className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5 ${
+            mainMode === "challenges"
+              ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold shadow-xs"
+              : "bg-secondary text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          <Award className="w-3.5 h-3.5" />
+          <span>Active Competitions &amp; Hackathons</span>
         </button>
         <button
           onClick={() => setMainMode("teammates")}
-          className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer flex items-center gap-1.5 ${
+          className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5 ${
             mainMode === "teammates"
-              ? "bg-primary text-primary-foreground font-semibold"
+              ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold shadow-xs"
               : "bg-secondary text-muted-foreground hover:text-foreground"
           }`}
         >
@@ -268,6 +301,240 @@ export function DashboardHackathons() {
           </span>
         </button>
       </div>
+
+      {/* ══════════════════════════════════════════════
+          National Student Leaderboard View
+      ══════════════════════════════════════════════ */}
+      {mainMode === "leaderboard" && (
+        <div className="space-y-6">
+          {/* Top 3 Podium Cards */}
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground block">
+                  Hall of Excellence
+                </span>
+                <h2 className="font-serif text-xl font-normal text-foreground">Top 3 National Grandmasters</h2>
+              </div>
+              <span className="text-xs font-mono text-muted-foreground">Updated live • Season 2026</span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {leaderboardEntries.slice(0, 3).map((entry) => {
+                const isFirst = entry.rank === 1
+                return (
+                  <div
+                    key={entry.rank}
+                    className={`rounded-2xl border p-5 flex flex-col justify-between transition-all relative overflow-hidden ${
+                      isFirst
+                        ? "border-amber-500/40 bg-card shadow-sm"
+                        : "border-hairline bg-card shadow-2xs"
+                    }`}
+                  >
+                    {isFirst && (
+                      <div className="absolute top-0 right-0 left-0 h-1 bg-gradient-to-r from-amber-500 via-orange-500 to-amber-500" />
+                    )}
+
+                    <div>
+                      <div className="flex items-center justify-between mb-3">
+                        <span
+                          className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold ${
+                            isFirst
+                              ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-2xs"
+                              : entry.rank === 2
+                              ? "bg-slate-500/15 text-slate-700 dark:text-slate-300 border border-slate-500/30"
+                              : "bg-amber-900/15 text-amber-800 dark:text-amber-200 border border-amber-900/30"
+                          }`}
+                        >
+                          {entry.badge}
+                        </span>
+                        <span className="text-xs font-mono text-emerald-600 dark:text-emerald-400 font-semibold">
+                          +{entry.solved} solved
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-3 mb-3">
+                        <div
+                          className={`w-12 h-12 rounded-2xl flex items-center justify-center font-serif text-sm font-semibold text-foreground overflow-hidden border ${
+                            isFirst ? "border-amber-500/40" : "border-hairline"
+                          }`}
+                        >
+                          <img
+                            src={entry.avatar}
+                            alt={entry.name}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div>
+                          <h3 className="font-serif text-base font-medium text-foreground">{entry.name}</h3>
+                          <p className="text-xs text-muted-foreground">{entry.college}</p>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-3 gap-2 py-3 border-y border-hairline my-2 text-center">
+                        <div>
+                          <span className="text-[9px] font-mono uppercase text-muted-foreground block">Rating</span>
+                          <span className="text-sm font-serif font-bold text-foreground">{entry.elo}</span>
+                        </div>
+                        <div>
+                          <span className="text-[9px] font-mono uppercase text-muted-foreground block">Tier</span>
+                          <span className="text-xs font-medium text-foreground">{entry.tier}</span>
+                        </div>
+                        <div>
+                          <span className="text-[9px] font-mono uppercase text-muted-foreground block">Solved</span>
+                          <span className="text-xs font-semibold text-amber-600 dark:text-amber-400">{entry.solved}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="pt-2 flex items-center justify-between text-xs">
+                      <span className="text-[11px] font-mono text-muted-foreground">{entry.xp}</span>
+                      <span className="text-[11px] font-mono text-amber-600 dark:text-amber-400 font-medium">Verified Profile</span>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+
+          {/* Current User Standing Simple Card */}
+          <div className="rounded-2xl border border-hairline bg-card p-5 shadow-2xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-500/20 to-orange-500/10 border border-amber-500/30 flex items-center justify-center font-serif text-base font-bold text-foreground">
+                #42
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-serif font-medium text-foreground">Arjun Mehta (Your Standing)</span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20">
+                    Division I
+                  </span>
+                </div>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  1,640 ELO • Top 6% in ASCI • 160 ELO to Master Tier (1,800 ELO)
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 w-full sm:w-auto">
+              <div className="hidden md:block w-36">
+                <div className="flex justify-between text-[10px] font-mono text-muted-foreground mb-1">
+                  <span>To Master</span>
+                  <span>78%</span>
+                </div>
+                <div className="h-1.5 w-full rounded-full bg-secondary overflow-hidden">
+                  <div className="h-full bg-gradient-to-r from-amber-500 to-orange-500 rounded-full" style={{ width: "78%" }} />
+                </div>
+              </div>
+              <button
+                onClick={() => setMainMode("challenges")}
+                className="w-full sm:w-auto px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-xs font-medium shadow-xs transition-all cursor-pointer flex items-center justify-center gap-1.5 shrink-0"
+              >
+                <span>Enter Weekly Contest</span>
+                <ChevronRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
+
+          {/* Split Layout: Ranks 4-10 Table + Campus Leaderboard */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* National Top Engineers Table (Ranks 4-10) */}
+            <div className="lg:col-span-2 rounded-2xl border border-hairline bg-card p-5 shadow-2xs space-y-4">
+              <div className="flex items-center justify-between pb-2 border-b border-hairline">
+                <div>
+                  <h3 className="font-serif text-base font-normal text-foreground">Engineering Division Ranks (4–10)</h3>
+                  <p className="text-xs text-muted-foreground">National algorithmic &amp; system architecture ranking</p>
+                </div>
+                <span className="text-[11px] font-mono text-muted-foreground">Season 2026</span>
+              </div>
+
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs">
+                  <thead>
+                    <tr className="border-b border-hairline text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
+                      <th className="pb-2.5 font-medium">Rank</th>
+                      <th className="pb-2.5 font-medium">Engineer</th>
+                      <th className="pb-2.5 font-medium">Campus</th>
+                      <th className="pb-2.5 font-medium">Tier</th>
+                      <th className="pb-2.5 font-medium text-right">Rating (ELO)</th>
+                      <th className="pb-2.5 font-medium text-right">Solved</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-hairline">
+                    {leaderboardEntries.slice(3).map((entry) => (
+                      <tr key={entry.rank} className="hover:bg-secondary/40 transition-colors">
+                        <td className="py-3 font-mono font-bold text-foreground">#{entry.rank}</td>
+                        <td className="py-3">
+                          <div className="flex items-center gap-2.5">
+                            <img
+                              src={entry.avatar}
+                              alt={entry.name}
+                              className="w-7 h-7 rounded-full object-cover border border-hairline"
+                            />
+                            <div>
+                              <span className="font-medium text-foreground block">{entry.name}</span>
+                              <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">+{entry.solved} solved</span>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="py-3 text-muted-foreground">{entry.college}</td>
+                        <td className="py-3">
+                          <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-secondary border border-hairline text-foreground">
+                            {entry.tier}
+                          </span>
+                        </td>
+                        <td className="py-3 text-right font-mono font-bold text-foreground">{entry.elo}</td>
+                        <td className="py-3 text-right font-mono text-muted-foreground">{entry.xp}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Top Engineering Campuses */}
+            <div className="rounded-2xl border border-hairline bg-card p-5 shadow-2xs space-y-4">
+              <div className="pb-2 border-b border-hairline">
+                <h3 className="font-serif text-base font-normal text-foreground">Top Engineering Campuses</h3>
+                <p className="text-xs text-muted-foreground">Cumulative collegiate rankings</p>
+              </div>
+
+              <div className="space-y-3">
+                {campusRankings.map((campus) => (
+                  <div
+                    key={campus.rank}
+                    className="p-3 rounded-xl bg-secondary/40 border border-hairline flex items-center justify-between"
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="w-6 h-6 rounded-lg bg-card border border-hairline flex items-center justify-center font-mono text-xs font-bold text-foreground">
+                        {campus.rank}
+                      </span>
+                      <div>
+                        <span className="text-xs font-medium text-foreground block">{campus.college}</span>
+                        <span className="text-[10px] text-muted-foreground">{campus.members} Active Fellows</span>
+                      </div>
+                    </div>
+                    <div className="text-right font-mono">
+                      <span className="text-xs font-semibold text-foreground block">{campus.totalXp}</span>
+                      <span className="text-[9px] text-muted-foreground uppercase">{campus.topSpecialty}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="pt-2">
+                <button
+                  onClick={() => setMainMode("teammates")}
+                  className="w-full py-2 rounded-xl bg-secondary hover:bg-secondary/80 border border-hairline text-foreground text-xs font-medium transition-colors cursor-pointer flex items-center justify-center gap-1.5"
+                >
+                  <Users className="w-3.5 h-3.5" />
+                  <span>Find Campus Teammates</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {mainMode === "challenges" && (
         <>
@@ -344,7 +611,7 @@ export function DashboardHackathons() {
                 <div>
                   {/* Top Badges */}
                   <div className="flex items-center justify-between gap-3 mb-3">
-                    <span className="text-[10px] font-mono uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-secondary text-primary font-semibold border border-hairline">
+                    <span className="text-[10px] font-mono uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-amber-500/10 text-amber-700 dark:text-amber-300 font-semibold border border-amber-500/20">
                       {hackathon.bannerTag}
                     </span>
 
@@ -379,7 +646,7 @@ export function DashboardHackathons() {
                   <div className="grid grid-cols-3 gap-2 my-4 p-3 rounded-xl bg-secondary/50 border border-hairline text-center">
                     <div>
                       <span className="text-[9px] font-mono uppercase text-muted-foreground block">Prize Pool</span>
-                      <span className="text-sm font-serif font-semibold text-foreground text-primary">{hackathon.prizePool}</span>
+                      <span className="text-sm font-serif font-bold text-amber-600 dark:text-amber-400">{hackathon.prizePool}</span>
                     </div>
                     <div>
                       <span className="text-[9px] font-mono uppercase text-muted-foreground block">First Prize</span>
@@ -441,7 +708,7 @@ export function DashboardHackathons() {
                         className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-medium transition-colors cursor-pointer ${
                           hasSubmitted
                             ? "bg-secondary text-foreground border border-hairline hover:bg-secondary/80"
-                            : "bg-primary text-white hover:bg-primary-active"
+                            : "bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white shadow-xs"
                         }`}
                       >
                         <Send className="w-3.5 h-3.5" />
@@ -450,7 +717,7 @@ export function DashboardHackathons() {
                     ) : (
                       <button
                         onClick={() => setSelectedHackathonForReg(hackathon)}
-                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary text-white text-xs font-medium hover:bg-primary-active transition-colors cursor-pointer"
+                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-xs font-medium shadow-xs transition-all cursor-pointer"
                       >
                         <span>Register Now</span>
                         <ChevronRight className="w-3.5 h-3.5" />
@@ -478,7 +745,7 @@ export function DashboardHackathons() {
                 <span className="text-xs font-mono text-muted-foreground">{activeTeammatesCount} Active Requests</span>
               </div>
               <h2 className="font-serif text-xl font-normal text-foreground flex items-center gap-2">
-                <Users className="w-5 h-5 text-[#ea580c]" />
+                <Users className="w-5 h-5 text-amber-500" />
                 <span>Hackathon Teammate Matchmaker</span>
               </h2>
               <p className="text-xs text-muted-foreground mt-0.5">
@@ -488,7 +755,7 @@ export function DashboardHackathons() {
 
             <button
               onClick={() => setShowPostTeammateModal(true)}
-              className="btn-primary text-xs px-4 py-2 cursor-pointer inline-flex items-center gap-1.5 shrink-0"
+              className="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-xs font-medium shadow-xs transition-colors cursor-pointer inline-flex items-center gap-1.5 shrink-0"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Post Teammate Pitch</span>
@@ -543,10 +810,10 @@ export function DashboardHackathons() {
                   </div>
 
                   <div className="space-y-1">
-                    <div className="text-[10px] font-mono text-[#ea580c] uppercase">Looking For:</div>
+                    <div className="text-[10px] font-mono text-amber-600 dark:text-amber-400 uppercase">Looking For:</div>
                     <div className="flex flex-wrap gap-1">
                       {post.lookingFor.map((s, idx) => (
-                        <span key={idx} className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#ea580c]/10 text-[#ea580c] border border-[#ea580c]/20">
+                        <span key={idx} className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20">
                           {s}
                         </span>
                       ))}
@@ -565,7 +832,7 @@ export function DashboardHackathons() {
                     className={`text-xs px-3 py-1.5 rounded-lg font-medium transition-colors cursor-pointer flex items-center gap-1 ${
                       post.invited
                         ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30"
-                        : "btn-primary"
+                        : "bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white shadow-xs"
                     }`}
                   >
                     {post.invited ? (
@@ -673,7 +940,7 @@ export function DashboardHackathons() {
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-primary text-white text-xs font-medium hover:bg-primary-active cursor-pointer"
+                  className="px-5 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-xs font-medium shadow-xs cursor-pointer transition-all"
                 >
                   Confirm Registration
                 </button>
@@ -754,7 +1021,7 @@ export function DashboardHackathons() {
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-primary text-white text-xs font-medium hover:bg-primary-active cursor-pointer"
+                  className="px-5 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-xs font-medium shadow-xs cursor-pointer transition-all"
                 >
                   Save &amp; Submit Prototype
                 </button>
@@ -895,7 +1162,7 @@ export function DashboardHackathons() {
                 </button>
                 <button
                   type="submit"
-                  className="btn-primary text-xs px-5 py-2 cursor-pointer"
+                  className="px-5 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-xs font-medium shadow-xs cursor-pointer transition-all"
                 >
                   Publish Pitch to Board
                 </button>

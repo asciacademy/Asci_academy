@@ -287,3 +287,185 @@ export function useLearningHistory() {
     refresh,
   }
 }
+
+// ==========================================
+// ENROLLMENTS CORE METHODS & REACT HOOK
+// ==========================================
+
+export interface EnrollmentItem {
+  id: string
+  slug: string
+  title: string
+  category?: string
+  difficulty?: string
+  modules?: number
+  duration?: string
+  thumbnail?: string
+  progressPercent?: number
+  lessonsCompleted?: number
+  totalLessons?: number
+  enrolledAt?: string
+}
+
+const ENROLLMENTS_KEY = "asci_user_enrollments_v1"
+
+export function getEnrollments(): EnrollmentItem[] {
+  if (typeof window === "undefined") return []
+  try {
+    const raw = localStorage.getItem(ENROLLMENTS_KEY)
+    if (!raw) return []
+    const parsed = JSON.parse(raw)
+    return Array.isArray(parsed) ? parsed : []
+  } catch (err) {
+    console.warn("Failed to load enrollments from storage:", err)
+    return []
+  }
+}
+
+export function isCourseEnrolled(slugOrId: string): boolean {
+  if (!slugOrId) return false
+  const list = getEnrollments()
+  const s = slugOrId.toLowerCase()
+  return list.some((item) => (item.slug && item.slug.toLowerCase() === s) || (item.id && item.id.toLowerCase() === s))
+}
+
+export function enrollCourse(
+  course: Partial<EnrollmentItem> & { slug: string; title: string }
+): { success: boolean; enrollments: EnrollmentItem[] } {
+  if (typeof window === "undefined") return { success: false, enrollments: [] }
+  try {
+    const current = getEnrollments()
+    const s = course.slug.toLowerCase()
+    if (current.some((c) => (c.slug && c.slug.toLowerCase() === s) || (c.id && c.id.toLowerCase() === s))) {
+      return { success: true, enrollments: current }
+    }
+
+    const newItem: EnrollmentItem = {
+      id: course.id || course.slug,
+      slug: course.slug,
+      title: course.title,
+      category: course.category || "Engineering",
+      difficulty: course.difficulty || "Intermediate",
+      modules: course.modules || 4,
+      duration: course.duration || "40h",
+      thumbnail: course.thumbnail,
+      progressPercent: course.progressPercent || 0,
+      lessonsCompleted: course.lessonsCompleted || 0,
+      totalLessons: course.totalLessons || (course.modules ? course.modules * 3 : 12),
+      enrolledAt: new Date().toISOString(),
+    }
+
+    const updated = [newItem, ...current]
+    localStorage.setItem(ENROLLMENTS_KEY, JSON.stringify(updated))
+    window.dispatchEvent(new CustomEvent("asci-enrollment-update", { detail: updated }))
+    return { success: true, enrollments: updated }
+  } catch (e) {
+    console.warn("Failed to enroll course:", e)
+    return { success: false, enrollments: getEnrollments() }
+  }
+}
+
+export function unenrollCourse(slugOrId: string): { success: boolean; enrollments: EnrollmentItem[] } {
+  if (typeof window === "undefined") return { success: false, enrollments: [] }
+  try {
+    const current = getEnrollments()
+    const s = slugOrId.toLowerCase()
+    const updated = current.filter((c) => c.slug?.toLowerCase() !== s && c.id?.toLowerCase() !== s)
+    localStorage.setItem(ENROLLMENTS_KEY, JSON.stringify(updated))
+    window.dispatchEvent(new CustomEvent("asci-enrollment-update", { detail: updated }))
+    return { success: true, enrollments: updated }
+  } catch (e) {
+    console.warn("Failed to unenroll course:", e)
+    return { success: false, enrollments: getEnrollments() }
+  }
+}
+
+export function updateCourseProgress(
+  slugOrId: string,
+  progressPercent: number,
+  lessonsCompleted?: number
+): { success: boolean; enrollments: EnrollmentItem[] } {
+  if (typeof window === "undefined") return { success: false, enrollments: [] }
+  try {
+    const current = getEnrollments()
+    const s = slugOrId.toLowerCase()
+    const updated = current.map((c) => {
+      if (c.slug?.toLowerCase() === s || c.id?.toLowerCase() === s) {
+        return {
+          ...c,
+          progressPercent,
+          ...(lessonsCompleted !== undefined ? { lessonsCompleted } : {}),
+        }
+      }
+      return c
+    })
+    localStorage.setItem(ENROLLMENTS_KEY, JSON.stringify(updated))
+    window.dispatchEvent(new CustomEvent("asci-enrollment-update", { detail: updated }))
+    return { success: true, enrollments: updated }
+  } catch (e) {
+    console.warn("Failed to update course progress:", e)
+    return { success: false, enrollments: getEnrollments() }
+  }
+}
+
+export function useEnrollments() {
+  const [enrollments, setEnrollments] = useState<EnrollmentItem[]>([])
+  const [isLoaded, setIsLoaded] = useState(false)
+
+  const refresh = useCallback(() => {
+    setEnrollments(getEnrollments())
+    setIsLoaded(true)
+  }, [])
+
+  useEffect(() => {
+    refresh()
+    const handleUpdate = (e: any) => {
+      if (e.detail && Array.isArray(e.detail)) setEnrollments(e.detail)
+      else refresh()
+    }
+    window.addEventListener("asci-enrollment-update", handleUpdate)
+    return () => window.removeEventListener("asci-enrollment-update", handleUpdate)
+  }, [refresh])
+
+  const isEnrolled = useCallback(
+    (slugOrId: string) => {
+      if (!slugOrId) return false
+      const s = slugOrId.toLowerCase()
+      return enrollments.some((item) => (item.slug && item.slug.toLowerCase() === s) || (item.id && item.id.toLowerCase() === s))
+    },
+    [enrollments]
+  )
+
+  const getEnrollment = useCallback(
+    (slugOrId: string) => {
+      if (!slugOrId) return undefined
+      const s = slugOrId.toLowerCase()
+      return enrollments.find((item) => (item.slug && item.slug.toLowerCase() === s) || (item.id && item.id.toLowerCase() === s))
+    },
+    [enrollments]
+  )
+
+  const enroll = useCallback((course: Partial<EnrollmentItem> & { slug: string; title: string }) => {
+    return enrollCourse(course)
+  }, [])
+
+  const unenroll = useCallback((slugOrId: string) => {
+    return unenrollCourse(slugOrId)
+  }, [])
+
+  const setProgress = useCallback((slugOrId: string, percent: number, lessonsCompleted?: number) => {
+    return updateCourseProgress(slugOrId, percent, lessonsCompleted)
+  }, [])
+
+  return {
+    enrollments,
+    count: enrollments.length,
+    isLoaded,
+    isEnrolled,
+    getEnrollment,
+    enroll,
+    unenroll,
+    setProgress,
+    refresh,
+  }
+}

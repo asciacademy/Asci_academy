@@ -102,7 +102,11 @@ export function Testimonials() {
   useEffect(() => {
     if (!cardsRef.current) return
     const cards = cardsRef.current.querySelectorAll(".testimonial-card")
+    gsap.killTweensOf(cards)
     gsap.fromTo(cards, { y: 15, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, stagger: 0.08, ease: "power2.out" })
+    return () => {
+      gsap.killTweensOf(cards)
+    }
   }, [activeIndex, liveTestimonials])
 
   const handleWriteReviewClick = async () => {
@@ -192,7 +196,7 @@ export function Testimonials() {
           {getVisible().map((t, i) => (
             <div
               key={`${t.name}-${activeIndex}`}
-              className={`testimonial-card group relative flex flex-col rounded-xl border border-hairline bg-card p-6 sm:p-8 transition-all duration-300 hover:border-foreground/20 hover:shadow-sm ${
+              className={`testimonial-card group relative flex flex-col rounded-2xl border border-hairline dark:border-white/[0.08] bg-card/85 dark:bg-[#181715]/85 p-6 sm:p-8 transition-all duration-200 hover:border-foreground/30 dark:hover:border-white/25 hover:-translate-y-0.5 shadow-2xs ${
                 i === 0 ? "" : i === 1 ? "hidden sm:flex" : "hidden lg:flex"
               }`}
             >

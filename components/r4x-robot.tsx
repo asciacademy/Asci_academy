@@ -90,6 +90,9 @@ export function R4XRobot({
       if (!iframe || !iframe.contentWindow) return
 
       const rect = iframe.getBoundingClientRect()
+      // Skip postMessage if robot is scrolled offscreen or hidden
+      if (rect.bottom < 0 || rect.top > window.innerHeight || rect.width === 0) return
+
       // Center of robot in viewport coordinates
       const cx = rect.left + rect.width / 2
       const cy = rect.top + rect.height / 2
@@ -108,6 +111,8 @@ export function R4XRobot({
     }
 
     const handlePointerMove = (e: PointerEvent) => {
+      // Ignore touch events to prevent touch-scroll lag and frame drops on mobile
+      if (e.pointerType === "touch") return
       latestE = e
       if (rafId === null) {
         rafId = requestAnimationFrame(processPointer)
@@ -141,7 +146,7 @@ export function R4XRobot({
   return (
     <div
       onClick={onClick}
-      className={`relative w-full max-w-[520px] h-[460px] sm:h-[500px] lg:h-[550px] flex items-center justify-center pointer-events-auto select-none ${className}`}
+      className={`relative w-full h-full flex items-center justify-center pointer-events-auto select-none ${className}`}
     >
       {/* Editorial Emerald & Soft Gold Cybernetic Loader with smooth crossfade exit */}
       <div

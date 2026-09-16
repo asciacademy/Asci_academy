@@ -139,10 +139,10 @@ export function Pricing() {
             return (
               <div
                 key={plan.name}
-                className={`group relative flex flex-col rounded-xl border transition-all duration-300 ${
+                className={`group relative flex flex-col rounded-2xl border transition-all duration-200 ${
                   isHighlighted
-                    ? "border-primary/60 bg-secondary shadow-md ring-1 ring-primary/20 md:-translate-y-2"
-                    : "border-hairline bg-card text-foreground hover:border-foreground/20 hover:shadow-sm"
+                    ? "border-foreground/40 dark:border-white/30 bg-secondary/80 dark:bg-[#1c1b18] md:-translate-y-2 shadow-sm"
+                    : "border-hairline dark:border-white/[0.08] bg-card/90 dark:bg-[#181715]/90 text-foreground hover:border-foreground/30 dark:hover:border-white/20 shadow-2xs"
                 }`}
               >
                 {/* Savings Badge */}

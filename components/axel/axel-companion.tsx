@@ -335,84 +335,119 @@ export function AxelCompanion() {
     }
   }, [pathname, refreshStations])
 
-  // Live Section Detection on Scroll (capture phase to support both window & nested elements)
+  // Live Section Detection with IntersectionObserver (zero scroll jank, runs off-main-thread)
   useEffect(() => {
-    let scrollRaf: number | null = null
+    const curStations = stationsRef.current
+    if (!curStations || curStations.length === 0) return
 
-    const handleScroll = () => {
-      if (scrollRaf !== null) return
-      scrollRaf = requestAnimationFrame(() => {
-        scrollRaf = null
-        const curStations = stationsRef.current
-        if (!curStations || curStations.length === 0) return
-
-        const scrollY = window.scrollY || window.pageYOffset || 0
-        const winH = window.innerHeight || 800
-
-        // 1. Top of page is always first section
-        if (scrollY < 120) {
-          const first = curStations[0]
-          if (lastActiveRef.current !== first.id) {
-            lastActiveRef.current = first.id
-            setActiveStationId(first.id)
-            setActiveSection(first.id)
-            setPopKey((k) => k + 1)
-            setExpression(first.emotion, 0)
-          }
-          updateAnchorPosition(first.id, curStations)
-          return
-        }
-
-        // 2. Section detection using live getBoundingClientRect against 45% viewport line
-        const focusLine = winH * 0.45
-        let detectedStationId = curStations[0].id
-
-        for (const st of curStations) {
-          const el = document.getElementById(st.sectionId) || document.getElementById(st.anchorId)
-          if (el) {
-            const rect = el.getBoundingClientRect()
-            if (rect.top <= focusLine && rect.bottom >= 0) {
-              detectedStationId = st.id
+    const observer = new IntersectionObserver(
+      (entries) => {
+        let bestCandidate: { id: string; ratio: number } | null = null
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            const targetId = entry.target.id
+            const found = stationsRef.current.find(
+              (s) => s.sectionId === targetId || s.anchorId === targetId
+            )
+            if (found) {
+              if (!bestCandidate || entry.intersectionRatio > bestCandidate.ratio) {
+                bestCandidate = { id: found.id, ratio: entry.intersectionRatio }
+              }
             }
           }
         }
 
-        if (detectedStationId !== lastActiveRef.current) {
-          lastActiveRef.current = detectedStationId
-          setActiveStationId(detectedStationId)
-          setActiveSection(detectedStationId)
-          setPopKey((k) => k + 1)
-          const stObj = curStations.find((s) => s.id === detectedStationId)
-          if (stObj) {
-            setExpression(stObj.emotion, 0)
+        if (bestCandidate && bestCandidate.id !== lastActiveRef.current) {
+          const targetStation = stationsRef.current.find((s) => s.id === bestCandidate!.id)
+          if (targetStation) {
+            lastActiveRef.current = targetStation.id
+            setActiveStationId(targetStation.id)
+            setActiveSection(targetStation.id)
+            setPopKey((k) => k + 1)
+            setExpression(targetStation.emotion, 0)
+            updateAnchorPosition(targetStation.id)
           }
         }
-        updateAnchorPosition(detectedStationId, curStations)
-      })
+      },
+      {
+        rootMargin: "-20% 0px -40% 0px",
+        threshold: [0.1, 0.4],
+      }
+    )
+
+    curStations.forEach((st) => {
+      const el = document.getElementById(st.sectionId) || document.getElementById(st.anchorId)
+      if (el) observer.observe(el)
+    })
+
+    // Fast-scroll top reset to hero section
+    let ticking = false
+    const handleScrollTop = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrollY = window.scrollY || window.pageYOffset || 0
+          if (scrollY < 80) {
+            const first = stationsRef.current[0]
+            if (first && lastActiveRef.current !== first.id) {
+              lastActiveRef.current = first.id
+              setActiveStationId(first.id)
+              setActiveSection(first.id)
+              setPopKey((k) => k + 1)
+              setExpression(first.emotion, 0)
+              updateAnchorPosition(first.id)
+            }
+          }
+          ticking = false
+        })
+        ticking = true
+      }
     }
 
-    window.addEventListener("scroll", handleScroll, { passive: true, capture: true })
-    handleScroll()
+    window.addEventListener("scroll", handleScrollTop, { passive: true })
 
     return () => {
-      if (scrollRaf !== null) cancelAnimationFrame(scrollRaf)
-      window.removeEventListener("scroll", handleScroll, true)
+      observer.disconnect()
+      window.removeEventListener("scroll", handleScrollTop)
     }
-  }, [setActiveSection, setExpression, updateAnchorPosition])
+  }, [stations, setActiveSection, setExpression, updateAnchorPosition])
 
   // Active station data and scaling
   const currentStation =
     stations.find((s) => s.id === activeStationId) || stations[0]
+  const isHero = activeStationId === "hero"
+  const isMobile = windowSize.w < 640
+  const isTablet = windowSize.w >= 640 && windowSize.w < 1024
+
+  // Match the anchor's actual reserved stage size so there is ZERO overlay and ZERO overflow
+  const stageW = isHero
+    ? isMobile
+      ? Math.min(windowSize.w - 32, 280)
+      : isTablet
+      ? 320
+      : 380
+    : isMobile
+    ? Math.min(windowSize.w - 32, 240)
+    : 256
+
+  const stageH = isHero
+    ? isMobile
+      ? 260
+      : isTablet
+      ? 300
+      : 380
+    : isMobile
+    ? 200
+    : 208
+
   const baseScale = currentStation?.scale || 0.46
   const restingEmotion = currentStation?.emotion || "normal"
 
   // Responsive scaling: comfortably sized across mobile, tablet, and desktop
-  const curScale =
-    windowSize.w < 640
-      ? baseScale * 0.65
-      : windowSize.w < 1024
-      ? baseScale * 0.8
-      : baseScale
+  const curScale = isMobile
+    ? baseScale * 0.68
+    : isTablet
+    ? baseScale * 0.82
+    : baseScale
 
   // GSAP: Buttery-smooth pop-up animation with tactile back overshoot
   useEffect(() => {
@@ -438,8 +473,11 @@ export function AxelCompanion() {
     )
   }, [popKey, curScale])
 
-  // 1. Leaving the website -> Axel cries; Returning -> Axel is happy & relieved
+  // 1. Leaving the website -> Axel cries; Returning -> Axel is happy & relieved (desktop only)
   useEffect(() => {
+    if (typeof window !== "undefined" && window.matchMedia("(hover: none)").matches) {
+      return
+    }
     const handleMouseLeave = (e: MouseEvent) => {
       if (
         e.clientY <= 0 ||
@@ -472,8 +510,11 @@ export function AxelCompanion() {
     }
   }, [setExpression, restingEmotion])
 
-  // 2. User interaction-based emotions: Hovering over CTAs triggers love (heart)
+  // 2. User interaction-based emotions: Hovering over CTAs triggers love (desktop only)
   useEffect(() => {
+    if (typeof window !== "undefined" && window.matchMedia("(hover: none)").matches) {
+      return
+    }
     const handleActionHover = (e: Event) => {
       const target = e.target as HTMLElement | null
       if (!target) return
@@ -604,9 +645,6 @@ export function AxelCompanion() {
     setExpression(restingEmotion, 0)
   }
 
-  const baseW = 500
-  const baseH = 560
-
   const docX = activeCoords.docX
   const docY = activeCoords.docY
 
@@ -623,23 +661,23 @@ export function AxelCompanion() {
         style={{
           left: `${docX}px`,
           top: `${docY}px`,
-          width: `${baseW}px`,
-          height: `${baseH}px`,
-          marginLeft: `-${baseW / 2}px`,
-          marginTop: `-${baseH / 2}px`,
+          width: `${stageW}px`,
+          height: `${stageH}px`,
+          marginLeft: `-${Math.round(stageW / 2)}px`,
+          marginTop: `-${Math.round(stageH / 2)}px`,
         }}
       >
         {/* Popping 3D Robot Container driven by GSAP hardware acceleration */}
         <div
           ref={robotWrapperRef}
-          className="w-full h-full relative"
+          className="w-full h-full relative flex items-center justify-center pointer-events-none"
           style={{
             transformOrigin: "center center",
             willChange: "transform, opacity",
           }}
         >
           <div
-            className="h-full w-full pointer-events-auto cursor-pointer relative shadow-none"
+            className="h-full w-full relative shadow-none flex items-center justify-center pointer-events-none"
             title={`Axel — ${currentStation?.label || "AI Companion"}`}
             aria-label="Axel 3D AI Mentor"
           >
@@ -648,13 +686,13 @@ export function AxelCompanion() {
               isCompact={currentStation?.scale < 0.8}
               className="!h-full !w-full !max-w-none pointer-events-none"
             />
-            {/* Interactive touch & click shield: intercepts all clicks and hovers cleanly in React space */}
+            {/* Interactive touch & click shield: tightly centered on Axel, NEVER overflowing or blocking surrounding text */}
             <div
-              className="absolute inset-0 z-30 cursor-pointer pointer-events-auto bg-transparent"
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-36 sm:w-40 sm:h-44 z-30 cursor-pointer pointer-events-auto rounded-full bg-transparent"
               onClick={handleRobotClick}
               onMouseEnter={handleRobotHover}
               onMouseLeave={handleRobotLeave}
-              aria-hidden="true"
+              aria-label="Interact with Axel 3D Companion"
             />
           </div>
         </div>

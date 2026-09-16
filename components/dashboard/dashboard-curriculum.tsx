@@ -1,12 +1,13 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useState, useMemo } from "react"
 import Link from "next/link"
 import {
   BookOpen, PlayCircle, CheckCircle2, ChevronRight, ChevronDown,
   Search, Filter, Layers, Award, Clock, ArrowRight, Check, Plus
 } from "lucide-react"
 import { AxelStage } from "@/components/axel/axel-stage"
+import { useEnrollments } from "@/lib/user-learning-store"
 
 interface DashboardCurriculumProps {
   enrollments: any[]
@@ -22,16 +23,39 @@ export function DashboardCurriculum({
   const [filter, setFilter] = useState<"all" | "in-progress" | "completed" | "catalog">("all")
   const [search, setSearch] = useState("")
   const [expandedCourseId, setExpandedCourseId] = useState<string | null>(null)
-  const [enrolledList, setEnrolledList] = useState(initialEnrollments || [])
   const [toastMessage, setToastMessage] = useState<string | null>(null)
+  const { enrollments: storeEnrollments, enroll: storeEnroll, isEnrolled: checkIsEnrolled } = useEnrollments()
 
-  React.useEffect(() => {
-    setEnrolledList(initialEnrollments || [])
-  }, [initialEnrollments])
+  // Merge server initialEnrollments + client storeEnrollments
+  const enrolledList = useMemo(() => {
+    const map = new Map<string, any>()
+    ;(initialEnrollments || []).forEach((item: any) => {
+      const key = (item.slug || item.id || "").toLowerCase()
+      if (key) map.set(key, item)
+    })
+    storeEnrollments.forEach((item) => {
+      const key = (item.slug || item.id || "").toLowerCase()
+      if (key) {
+        const existing = map.get(key)
+        map.set(key, { ...existing, ...item })
+      }
+    })
+    return Array.from(map.values())
+  }, [initialEnrollments, storeEnrollments])
 
   const totalEnrolledLessons = enrolledList.reduce((acc: number, c: any) => acc + (c.totalLessons ?? 0), 0)
   const totalCompletedLessons = enrolledList.reduce((acc: number, c: any) => acc + (c.completedLessons || c.lessonsCompleted || 0), 0)
   const capstoneReadiness = totalEnrolledLessons > 0 ? Math.round((totalCompletedLessons / totalEnrolledLessons) * 100) : 0
+
+  const getCourseImage = (idOrSlug: string, fallbackImg?: string) => {
+    if (fallbackImg) return fallbackImg
+    const s = (idOrSlug || "").toLowerCase()
+    if (s.includes("ai") || s.includes("agent")) return "/images/courses/course_agentic_ai.jpg"
+    if (s.includes("java")) return "/images/courses/course_java_systems.jpg"
+    if (s.includes("sys") || s.includes("design") || s.includes("scale")) return "/images/courses/course_system_design.jpg"
+    if (s.includes("cloud") || s.includes("k8s") || s.includes("devops")) return "/images/courses/course_cloud_k8s.jpg"
+    return "/images/courses/course_dsa_bootcamp.jpg"
+  }
 
   const syllabusMap: Record<string, { moduleTitle: string; lessons: { title: string; completed: boolean; duration: string }[] }[]> = {
     "dsa-custom": [
@@ -89,24 +113,27 @@ export function DashboardCurriculum({
   }
 
   const handleEnroll = (track: any) => {
-    if (enrolledList.some((e: any) => e.id === track.id || e.slug === track.id)) {
+    const trackSlug = track.slug || track.id
+    if (checkIsEnrolled(trackSlug) || enrolledList.some((e: any) => e.id === track.id || e.slug === track.id)) {
       setToastMessage(`You are already enrolled in "${track.title}"`)
       setTimeout(() => setToastMessage(null), 3000)
       return
     }
 
-    const newEnrollment = {
+    storeEnroll({
       id: track.id,
       title: track.title,
-      slug: track.id,
-      progressPercent: 0,
-      lessonsCompleted: 0,
-      totalLessons: track.modules * 3,
+      slug: trackSlug,
       category: track.category,
       difficulty: track.difficulty,
-    }
+      modules: track.modules || 4,
+      duration: track.duration,
+      thumbnail: track.image || getCourseImage(trackSlug),
+      progressPercent: 0,
+      lessonsCompleted: 0,
+      totalLessons: (track.modules || 4) * 3,
+    })
 
-    setEnrolledList([...enrolledList, newEnrollment])
     setToastMessage(`Successfully enrolled in "${track.title}"!`)
     setTimeout(() => setToastMessage(null), 3500)
     if (onEnrollTrack) onEnrollTrack(track)
@@ -126,8 +153,8 @@ export function DashboardCurriculum({
     <div className="space-y-8 animate-fadeIn">
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed top-20 right-8 z-50 rounded-xl border border-[#ea580c]/40 bg-card p-4 shadow-lg flex items-center gap-3 text-xs font-mono text-foreground animate-fadeIn">
-          <div className="w-2 h-2 rounded-full bg-[#ea580c] animate-pulse" />
+        <div className="fixed top-20 right-8 z-50 rounded-2xl border border-amber-500/40 bg-card p-4 shadow-xl flex items-center gap-3 text-xs font-mono text-foreground animate-fadeIn">
+          <div className="w-2 h-2 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 animate-pulse" />
           <span>{toastMessage}</span>
         </div>
       )}
@@ -137,8 +164,10 @@ export function DashboardCurriculum({
       ══════════════════════════════════════════════ */}
       <div id="dashboard-courses-header" className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-hairline">
         <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="badge-coral text-[10px]">Academic Directory</span>
+          <div className="flex items-center gap-2 mb-1.5">
+            <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20 font-semibold">
+              Academic Directory
+            </span>
             <span className="text-xs font-mono text-muted-foreground">{enrolledList.length} Active Tracks</span>
           </div>
           <h1 className="font-serif text-3xl font-normal tracking-tight text-foreground">
@@ -170,7 +199,7 @@ export function DashboardCurriculum({
               <button
                 key={f.id}
                 onClick={() => setFilter(f.id as any)}
-                className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer ${
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-medium transition-all cursor-pointer ${
                   filter === f.id
                     ? "bg-card text-foreground border border-hairline shadow-xs font-semibold"
                     : "text-muted-foreground hover:text-foreground hover:bg-card/50"
@@ -191,7 +220,7 @@ export function DashboardCurriculum({
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Filter by course title, language, or algorithm..."
-          className="w-full bg-card border border-hairline rounded-xl pl-10 pr-4 py-2 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors"
+          className="w-full bg-card border border-stone-200 dark:border-stone-800 rounded-2xl pl-10 pr-4 py-2.5 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/15 transition-all shadow-2xs"
         />
       </div>
 
@@ -202,7 +231,7 @@ export function DashboardCurriculum({
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <h2 className="font-serif text-xl font-normal text-foreground flex items-center gap-2">
-              <BookOpen className="w-4 h-4 text-primary" />
+              <BookOpen className="w-4 h-4 text-amber-500" />
               <span>Enrolled Curriculum Syllabi</span>
             </h2>
             <span className="text-xs font-mono text-muted-foreground">
@@ -211,15 +240,15 @@ export function DashboardCurriculum({
           </div>
 
           {filteredEnrollments.length === 0 ? (
-            <div className="rounded-2xl border border-hairline bg-card p-10 text-center space-y-4">
-              <div className="w-12 h-12 rounded-full bg-secondary border border-hairline flex items-center justify-center mx-auto text-muted-foreground">
+            <div className="rounded-3xl border border-dashed border-stone-300 dark:border-stone-800 bg-card/60 p-10 text-center space-y-4">
+              <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center mx-auto text-amber-600">
                 <BookOpen className="w-6 h-6" />
               </div>
               <div className="space-y-1">
                 <h3 className="font-serif text-lg font-normal text-foreground">
                   {search ? "No matching tracks found" : "No Tracks Enrolled Yet"}
                 </h3>
-                <p className="text-xs text-muted-foreground max-w-sm mx-auto">
+                <p className="text-xs text-muted-foreground max-w-sm mx-auto leading-relaxed">
                   {search 
                     ? "Try adjusting your search query or filter to view enrolled curriculum tracks."
                     : "You haven't enrolled in any curriculum tracks yet. Explore the course catalog below to enroll and begin your coursework."}
@@ -228,7 +257,7 @@ export function DashboardCurriculum({
               {(filter as string) !== "catalog" && enrolledList.length === 0 && (
                 <button
                   onClick={() => setFilter("catalog" as any)}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-white text-xs font-medium hover:bg-primary-active transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-xs font-semibold shadow-xs transition-all cursor-pointer"
                 >
                   <span>Explore Course Catalog</span>
                   <ChevronRight className="w-3.5 h-3.5" />
@@ -244,58 +273,64 @@ export function DashboardCurriculum({
                 return (
                   <div
                     key={course.id}
-                    className="rounded-2xl border border-hairline bg-card overflow-hidden shadow-xs hover:border-foreground/20 transition-all"
+                    className="rounded-3xl border border-stone-200/80 dark:border-stone-800/80 bg-card overflow-hidden shadow-xs hover:border-amber-500/30 transition-all"
                   >
-                  {/* Course Header Bar */}
-                  <div className="p-6 sm:p-7 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-                    <div className="space-y-3 flex-1 min-w-0">
-                      <div className="flex items-center gap-2.5 flex-wrap">
-                        <span className="badge-pill text-[10px] font-mono uppercase">
+                  {/* Course Header Bar with 3D Image */}
+                  <div className="p-5 sm:p-6 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 flex-1 min-w-0">
+                      {/* 3D Image Thumbnail */}
+                      <div className="w-full sm:w-36 sm:h-24 h-44 rounded-2xl overflow-hidden shrink-0 bg-stone-100 dark:bg-stone-900 border border-stone-200/60 dark:border-stone-800 relative">
+                        <img
+                          src={getCourseImage(course.slug || course.id)}
+                          alt={course.title}
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-xs text-[9px] font-bold px-2 py-0.5 rounded-full text-white uppercase tracking-wider">
                           {course.category || "Algorithms"}
-                        </span>
-                        <span className="text-xs font-mono text-muted-foreground">
-                          {course.difficulty || "Foundational"}
-                        </span>
-                        {course.progressPercent >= 100 ? (
-                          <span className="badge-gold text-xs px-2.5 py-0.5 font-mono flex items-center gap-1.5">
-                            <Award className="w-3 h-3" /> Track Graduate (+500 XP)
-                          </span>
-                        ) : (
-                          <>
-                            <span className="text-xs font-mono text-[#ea580c] bg-[#ea580c]/10 px-2 py-0.5 rounded-full border border-[#ea580c]/20">
-                              {course.progressPercent ?? 0}% Complete
-                            </span>
-                            <span className="text-xs font-mono text-primary bg-primary/10 px-2 py-0.5 rounded-full border border-primary/20">
-                              +100 XP / Lesson
-                            </span>
-                          </>
-                        )}
+                        </div>
                       </div>
 
-                      <h3 className="font-serif text-2xl font-normal text-foreground leading-snug">
-                        {course.title}
-                      </h3>
-
-                      {/* Progress Bar */}
-                      <div className="space-y-1.5 max-w-xl">
-                        <div className="flex justify-between text-xs font-mono text-muted-foreground">
-                          <span>Progress ({course.lessonsCompleted ?? course.completedLessons ?? 0} of {course.totalLessons ?? 0} Lessons)</span>
-                          <span className="text-primary font-semibold">{course.progressPercent ?? 0}%</span>
+                      <div className="space-y-2 flex-1 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="text-xs font-mono text-muted-foreground">
+                            {course.difficulty || "Foundational"}
+                          </span>
+                          {course.progressPercent >= 100 ? (
+                            <span className="text-xs px-2.5 py-0.5 font-mono flex items-center gap-1.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 font-semibold">
+                              <Award className="w-3 h-3" /> Track Graduate (+500 XP)
+                            </span>
+                          ) : (
+                            <span className="text-xs font-mono text-amber-700 dark:text-amber-400 bg-amber-500/10 px-2.5 py-0.5 rounded-full border border-amber-500/20 font-semibold">
+                              {course.progressPercent ?? 0}% Complete
+                            </span>
+                          )}
                         </div>
-                        <div className="w-full h-2 bg-hairline rounded-full overflow-hidden">
-                          <div
-                            className="h-full bg-primary rounded-full transition-all duration-700 ease-out"
-                            style={{ width: `${course.progressPercent ?? 0}%` }}
-                          />
+
+                        <h3 className="font-bold text-xl text-foreground leading-snug">
+                          {course.title}
+                        </h3>
+
+                        {/* Progress Bar */}
+                        <div className="space-y-1.5 max-w-md">
+                          <div className="flex justify-between text-xs font-mono text-muted-foreground">
+                            <span>{course.lessonsCompleted ?? course.completedLessons ?? 0} / {course.totalLessons ?? 0} Lessons</span>
+                            <span className="text-amber-700 dark:text-amber-400 font-bold">{course.progressPercent ?? 0}%</span>
+                          </div>
+                          <div className="w-full h-2 bg-stone-100 dark:bg-stone-800 rounded-full overflow-hidden">
+                            <div
+                              className="h-full bg-gradient-to-r from-amber-500 to-orange-500 rounded-full transition-all duration-700 ease-out"
+                              style={{ width: `${course.progressPercent ?? 0}%` }}
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
 
                     {/* Action Controls */}
-                    <div className="flex flex-wrap items-center gap-3 shrink-0">
+                    <div className="flex items-center gap-3 shrink-0 self-end lg:self-center">
                       <button
                         onClick={() => setExpandedCourseId(isExpanded ? null : (course.id || course.slug))}
-                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-hairline bg-secondary text-xs font-medium text-foreground hover:bg-card transition-colors cursor-pointer"
+                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-stone-200 dark:border-stone-800 bg-secondary text-xs font-medium text-foreground hover:bg-card transition-colors cursor-pointer"
                       >
                         <span>{isExpanded ? "Hide Syllabus" : "View Syllabus"}</span>
                         {isExpanded ? <ChevronDown className="w-3.5 h-3.5" /> : <ChevronRight className="w-3.5 h-3.5" />}
@@ -303,10 +338,10 @@ export function DashboardCurriculum({
 
                       <Link
                         href={`/programs/${course.slug || "dsa"}/course`}
-                        className="btn-primary inline-flex items-center gap-2 text-xs font-medium cursor-pointer shadow-sm"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-xs font-semibold shadow-xs transition-all cursor-pointer"
                       >
                         <PlayCircle className="w-4 h-4" />
-                        <span>Continue Lesson</span>
+                        <span>Continue</span>
                       </Link>
                     </div>
                   </div>
@@ -341,7 +376,7 @@ export function DashboardCurriculum({
                                   <div key={li} className="py-2.5 flex items-center justify-between gap-4 text-xs">
                                     <div className="flex items-center gap-3 min-w-0">
                                       {lesson.completed ? (
-                                        <CheckCircle2 className="w-4 h-4 text-[#ea580c] shrink-0" />
+                                        <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
                                       ) : (
                                         <div className="w-4 h-4 rounded-full border border-hairline bg-secondary shrink-0" />
                                       )}
@@ -404,41 +439,59 @@ export function DashboardCurriculum({
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {catalogTracks.map((track) => {
               const isEnrolled = enrolledList.some((e: any) => e.id === track.id || e.slug === track.id)
+              const trackImg = track.image || getCourseImage(track.id)
 
               return (
                 <div
                   key={track.id}
-                  className="rounded-2xl border border-hairline bg-card p-6 flex flex-col justify-between shadow-xs hover:border-foreground/20 transition-all card-interactive"
+                  className="rounded-3xl border border-stone-200/80 dark:border-stone-800/80 bg-card overflow-hidden shadow-xs hover:shadow-md transition-all group flex flex-col justify-between"
                 >
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="badge-pill text-[10px] font-mono uppercase">{track.difficulty}</span>
-                      <span className="text-xs font-mono text-muted-foreground">{track.modules} Modules · {track.duration}</span>
+                  <div>
+                    {/* 3D Image Cover */}
+                    <div className="relative aspect-[16/9] w-full overflow-hidden bg-stone-100 dark:bg-stone-900">
+                      <img
+                        src={trackImg}
+                        alt={track.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute top-3 left-3 bg-white/90 dark:bg-stone-900/90 backdrop-blur-xs text-[10px] font-bold px-2.5 py-0.5 rounded-full text-foreground border border-stone-200/60 dark:border-stone-700/60 uppercase tracking-wider shadow-2xs">
+                        {track.category}
+                      </div>
+                      <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-xs text-[10px] font-mono font-medium px-2 py-0.5 rounded-full text-white">
+                        {track.difficulty}
+                      </div>
                     </div>
 
-                    <h3 className="font-serif text-xl font-normal text-foreground">
-                      {track.title}
-                    </h3>
+                    {/* Card Details */}
+                    <div className="p-5 space-y-2.5">
+                      <div className="text-xs font-mono text-muted-foreground">
+                        {track.modules} Modules · {track.duration}
+                      </div>
 
-                    <p className="text-xs text-body leading-relaxed">
-                      {track.desc}
-                    </p>
+                      <h3 className="font-bold text-lg text-foreground leading-snug group-hover:text-amber-600 transition-colors line-clamp-1">
+                        {track.title}
+                      </h3>
+
+                      <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">
+                        {track.desc}
+                      </p>
+                    </div>
                   </div>
 
-                  <div className="mt-6 pt-4 border-t border-hairline flex items-center justify-between">
-                    <span className="text-[11px] font-mono text-muted-foreground">{track.category}</span>
+                  <div className="p-5 pt-0 flex items-center justify-between border-t border-stone-100 dark:border-stone-800 mt-2">
+                    <span className="text-[11px] font-mono text-muted-foreground">ASCI Track</span>
 
                     {isEnrolled ? (
-                      <span className="inline-flex items-center gap-1 text-xs font-mono text-[#ea580c] font-medium">
-                        <Check className="w-4 h-4" /> Enrolled
+                      <span className="inline-flex items-center gap-1 text-xs font-mono text-amber-700 dark:text-amber-400 font-semibold">
+                        <Check className="w-4 h-4 text-emerald-500" /> Enrolled
                       </span>
                     ) : (
                       <button
                         onClick={() => handleEnroll(track)}
-                        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-primary text-white hover:bg-primary-active transition-colors text-xs font-medium cursor-pointer"
+                        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white transition-all text-xs font-semibold cursor-pointer shadow-2xs"
                       >
                         <Plus className="w-3.5 h-3.5" />
                         <span>Enroll Track</span>
@@ -455,12 +508,12 @@ export function DashboardCurriculum({
       {/* ══════════════════════════════════════════════
           Certification & Capstone Readiness Banner
       ══════════════════════════════════════════════ */}
-      <div id="dashboard-courses-catalog" className="rounded-2xl border border-hairline bg-card p-6 sm:p-8 shadow-xs relative overflow-hidden">
+      <div id="dashboard-courses-catalog" className="rounded-3xl border border-stone-200/80 dark:border-stone-800/80 bg-card p-6 sm:p-8 shadow-xs relative overflow-hidden">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-2 max-w-2xl">
             <div className="flex items-center gap-2">
-              <Award className="w-4 h-4 text-primary" />
-              <span className="text-xs font-mono uppercase tracking-widest text-primary font-semibold">
+              <Award className="w-4 h-4 text-amber-500" />
+              <span className="text-xs font-mono uppercase tracking-widest text-amber-700 dark:text-amber-400 font-semibold">
                 ASCI Accreditation Track
               </span>
             </div>
@@ -483,12 +536,12 @@ export function DashboardCurriculum({
             />
             <div className="flex flex-col sm:items-end gap-2">
               <div className="text-right">
-                <span className="font-serif text-3xl font-normal text-[#ea580c]">{capstoneReadiness}%</span>
+                <span className="font-serif text-3xl font-normal text-amber-600 dark:text-amber-400">{capstoneReadiness}%</span>
                 <span className="text-xs text-muted-foreground block font-mono">Capstone Readiness</span>
               </div>
               <Link
                 href="/results"
-                className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+                className="inline-flex items-center gap-1 text-xs font-medium text-amber-700 dark:text-amber-400 hover:underline"
               >
                 <span>Inspect Credential Standards</span>
                 <ArrowRight className="w-3.5 h-3.5" />

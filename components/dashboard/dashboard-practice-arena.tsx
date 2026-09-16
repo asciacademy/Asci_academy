@@ -4,7 +4,8 @@ import React, { useState } from "react"
 import {
   Code, Play, CheckCircle2, XCircle, Flame, Trophy,
   HelpCircle, ChevronRight, ArrowRight, Clock,
-  Terminal, ShieldCheck, Check, RefreshCw
+  Terminal, ShieldCheck, Check, RefreshCw,
+  Layers, Cpu, Database, BrainCircuit, Sparkles, TrendingUp, GitBranch, Zap
 } from "lucide-react"
 import { useUnstopEcosystem } from "@/lib/unstop-store"
 import { AxelStage } from "@/components/axel/axel-stage"
@@ -15,7 +16,61 @@ export function DashboardPracticeArena() {
   const [userCode, setUserCode] = useState(potd.userCode || potd.starterCode.javascript)
   const [testResults, setTestResults] = useState<{ passed: boolean; output: string }[] | null>(null)
   const [isRunning, setIsRunning] = useState(false)
-  const [activeTab, setActiveTab] = useState<"potd" | "quizzes" | "streak">("potd")
+  const [activeTab, setActiveTab] = useState<"graph" | "potd" | "quizzes" | "streak">("graph")
+
+  // Skill Graph Competency Data
+  const competencies = [
+    {
+      id: "data-structures",
+      title: "Data Structures & Memory Layout",
+      icon: Cpu,
+      level: "Advanced",
+      mastery: 88,
+      modulesCompleted: 18,
+      totalModules: 20,
+      skills: ["Arrays & Slices", "Red-Black Trees", "Trie & Prefix", "Memory Locality", "Min/Max Heaps"],
+    },
+    {
+      id: "algorithms",
+      title: "Algorithms & Graph Theory",
+      icon: GitBranch,
+      level: "Proficient",
+      mastery: 75,
+      modulesCompleted: 15,
+      totalModules: 20,
+      skills: ["Binary Search", "Dynamic Programming", "Dijkstra & A*", "Sliding Window", "Topological Sort"],
+    },
+    {
+      id: "concurrency",
+      title: "High-Throughput Concurrency",
+      icon: Zap,
+      level: "Proficient",
+      mastery: 70,
+      modulesCompleted: 14,
+      totalModules: 20,
+      skills: ["Goroutines & Channels", "Thread Pools", "Atomics & CAS", "Deadlock Prevention", "Event Loops"],
+    },
+    {
+      id: "system-design",
+      title: "Distributed Architectures",
+      icon: Database,
+      level: "Intermediate",
+      mastery: 65,
+      modulesCompleted: 13,
+      totalModules: 20,
+      skills: ["Raft Consensus", "Consistent Hashing", "Message Queues", "Read Replicas", "Cache Aside"],
+    },
+    {
+      id: "agentic-ai",
+      title: "Agentic AI & Neural Systems",
+      icon: BrainCircuit,
+      level: "Intermediate",
+      mastery: 60,
+      modulesCompleted: 12,
+      totalModules: 20,
+      skills: ["Multi-Agent Swarms", "Tool Calling APIs", "Vector Indexing", "RAG Pipelines", "ReAct Loops"],
+    },
+  ]
 
   // Speed Quiz state
   const [quizIndex, setQuizIndex] = useState(0)
@@ -79,16 +134,18 @@ export function DashboardPracticeArena() {
       >
         <div className="space-y-2 max-w-2xl">
           <div className="flex items-center gap-2">
-            <span className="badge-coral text-[10px]">Unstop Daily Practice</span>
-            <span className="text-xs font-mono text-muted-foreground">100-Day Algorithmic Streak</span>
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase tracking-wider bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20">
+              <Sparkles className="w-3 h-3" />
+              Algorithmic &amp; Systems Competency
+            </span>
+            <span className="text-xs font-mono text-muted-foreground">100-Day Engineering Cadence</span>
           </div>
           <h1 className="font-serif text-2xl sm:text-3xl font-normal text-foreground flex items-center gap-2.5">
-            <Code className="w-6 h-6 text-primary" />
-            <span>Daily Problem of the Day &amp; Speed Quizzes</span>
+            <Layers className="w-6 h-6 text-amber-500" />
+            <span>Skill Graph &amp; Practice Arena</span>
           </h1>
           <p className="text-xs text-muted-foreground leading-relaxed">
-            Sharpen algorithmic intuition, solve daily interview problems, and climb the ASCI national leaderboard.
-            Every solved problem awards verified XP and reinforces high-concurrency memory layouts.
+            Track your multi-dimensional software engineering mastery across Data Structures, Distributed Systems, Concurrency, and Agentic AI.
           </p>
         </div>
 
@@ -105,13 +162,24 @@ export function DashboardPracticeArena() {
       </div>
 
       {/* Arena Navigation Tabs */}
-      <div className="flex items-center justify-between border-b border-hairline pb-3">
-        <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center justify-between border-b border-hairline pb-3 gap-3">
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            onClick={() => setActiveTab("graph")}
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5 ${
+              activeTab === "graph"
+                ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold shadow-xs"
+                : "bg-secondary text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            <Layers className="w-3.5 h-3.5" />
+            <span>Skill Graph Matrix</span>
+          </button>
           <button
             onClick={() => setActiveTab("potd")}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer flex items-center gap-1.5 ${
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5 ${
               activeTab === "potd"
-                ? "bg-primary text-primary-foreground font-semibold"
+                ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold shadow-xs"
                 : "bg-secondary text-muted-foreground hover:text-foreground"
             }`}
           >
@@ -123,9 +191,9 @@ export function DashboardPracticeArena() {
           </button>
           <button
             onClick={() => setActiveTab("quizzes")}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer flex items-center gap-1.5 ${
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5 ${
               activeTab === "quizzes"
-                ? "bg-primary text-primary-foreground font-semibold"
+                ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold shadow-xs"
                 : "bg-secondary text-muted-foreground hover:text-foreground"
             }`}
           >
@@ -134,22 +202,154 @@ export function DashboardPracticeArena() {
           </button>
           <button
             onClick={() => setActiveTab("streak")}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer flex items-center gap-1.5 ${
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5 ${
               activeTab === "streak"
-                ? "bg-primary text-primary-foreground font-semibold"
+                ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold shadow-xs"
                 : "bg-secondary text-muted-foreground hover:text-foreground"
             }`}
           >
-            <Flame className="w-3.5 h-3.5 text-[#ea580c]" />
+            <Flame className="w-3.5 h-3.5 text-amber-500" />
             <span>100-Day Streak Grid</span>
           </button>
         </div>
 
         <div className="hidden sm:flex items-center gap-2 text-xs font-mono text-muted-foreground">
           <span>Today&apos;s XP Reward:</span>
-          <span className="text-[#ea580c] font-semibold">+150 XP</span>
+          <span className="text-amber-600 dark:text-amber-400 font-semibold">+150 XP</span>
         </div>
       </div>
+
+      {/* TAB 0: SKILL GRAPH COMPETENCY MATRIX */}
+      {activeTab === "graph" && (
+        <div className="space-y-6">
+          {/* Overall Skill Summary Card */}
+          <div className="rounded-2xl border border-hairline bg-card p-6 shadow-2xs flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <div className="space-y-1 max-w-xl">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-mono px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20 font-bold">
+                  SDE-2 Benchmark: 74% Overall
+                </span>
+                <span className="text-xs font-mono text-muted-foreground">5 Domains Evaluated</span>
+              </div>
+              <h2 className="font-serif text-xl font-normal text-foreground">
+                Engineering Competency Radar
+              </h2>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Calculated dynamically from solved problems, curriculum assessments, code submissions, and speed quizzes.
+              </p>
+            </div>
+
+            <div className="flex items-center gap-3 shrink-0">
+              <button
+                onClick={() => setActiveTab("potd")}
+                className="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-xs font-medium shadow-xs transition-all cursor-pointer flex items-center gap-1.5"
+              >
+                <span>Solve Today&apos;s Challenge</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
+
+          {/* 5 Competency Pillars (Simple Cards) */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {competencies.map((comp) => {
+              const CompIcon = comp.icon
+              return (
+                <div
+                  key={comp.id}
+                  className="rounded-2xl border border-hairline bg-card p-5 flex flex-col justify-between shadow-2xs hover:border-foreground/20 transition-all space-y-4"
+                >
+                  <div className="space-y-3">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-secondary border border-hairline flex items-center justify-center text-amber-500">
+                        <CompIcon className="w-5 h-5" />
+                      </div>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20 font-medium">
+                        {comp.level}
+                      </span>
+                    </div>
+
+                    <div>
+                      <h3 className="font-serif text-base font-medium text-foreground">{comp.title}</h3>
+                      <div className="flex items-center justify-between text-xs text-muted-foreground mt-1">
+                        <span>Mastery</span>
+                        <span className="font-mono font-bold text-foreground">{comp.mastery}%</span>
+                      </div>
+                      <div className="h-1.5 w-full rounded-full bg-secondary overflow-hidden mt-1.5">
+                        <div
+                          className="h-full bg-gradient-to-r from-amber-500 to-orange-500 rounded-full"
+                          style={{ width: `${comp.mastery}%` }}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-1.5 pt-2 border-t border-hairline">
+                      <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground block">
+                        Core Competencies ({comp.modulesCompleted}/{comp.totalModules} Mastered)
+                      </span>
+                      <div className="flex flex-wrap gap-1">
+                        {comp.skills.map((skill, idx) => (
+                          <span
+                            key={idx}
+                            className="text-[10px] font-mono px-2 py-0.5 rounded bg-secondary border border-hairline text-foreground"
+                          >
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => setActiveTab("potd")}
+                    className="w-full py-2 rounded-xl bg-secondary hover:bg-secondary/80 border border-hairline text-foreground text-xs font-medium transition-colors cursor-pointer flex items-center justify-center gap-1.5"
+                  >
+                    <span>Practice Next Module</span>
+                    <ChevronRight className="w-3.5 h-3.5 text-muted-foreground" />
+                  </button>
+                </div>
+              )
+            })}
+
+            {/* Target Role Readiness Card */}
+            <div className="rounded-2xl border border-amber-500/30 bg-card p-5 flex flex-col justify-between shadow-2xs space-y-4 relative overflow-hidden">
+              <div className="absolute top-0 right-0 left-0 h-1 bg-gradient-to-r from-amber-500 to-orange-500" />
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-amber-600 dark:text-amber-400 font-bold">
+                    Target Role Benchmark
+                  </span>
+                  <span className="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400">82% Match</span>
+                </div>
+                <h3 className="font-serif text-lg font-medium text-foreground">
+                  Senior Systems Engineer (L5 / SDE-2)
+                </h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  Your concurrency and data structures exceed the target threshold. Focus on Raft consensus protocols to reach 90%+ interview readiness.
+                </p>
+
+                <div className="p-3 rounded-xl bg-secondary/50 border border-hairline space-y-1.5 text-xs">
+                  <div className="flex justify-between text-muted-foreground font-mono text-[11px]">
+                    <span>Target Interview Readiness</span>
+                    <span className="text-foreground font-bold">82 / 100</span>
+                  </div>
+                  <div className="h-1.5 w-full rounded-full bg-secondary overflow-hidden">
+                    <div className="h-full bg-gradient-to-r from-amber-500 to-orange-500 rounded-full" style={{ width: "82%" }} />
+                  </div>
+                </div>
+              </div>
+
+              <button
+                onClick={() => setActiveTab("quizzes")}
+                className="w-full py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-xs font-medium shadow-xs transition-all cursor-pointer flex items-center justify-center gap-1.5"
+              >
+                <span>Take System Design Quiz</span>
+                <ChevronRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* TAB 1: PROBLEM OF THE DAY */}
       {activeTab === "potd" && (
@@ -287,7 +487,7 @@ export function DashboardPracticeArena() {
               <button
                 onClick={handleSubmitPOTD}
                 disabled={isRunning || potd.solved}
-                className="btn-primary text-xs px-5 py-2 cursor-pointer inline-flex items-center gap-1.5 disabled:opacity-50"
+                className="px-5 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-xs font-medium shadow-xs transition-all cursor-pointer inline-flex items-center gap-1.5 disabled:opacity-50"
               >
                 <CheckCircle2 className="w-3.5 h-3.5" />
                 <span>{potd.solved ? "Submitted & Verified" : "Submit & Claim 150 XP"}</span>
@@ -361,7 +561,7 @@ export function DashboardPracticeArena() {
               <div className="pt-2 flex justify-end">
                 <button
                   onClick={handleNextQuiz}
-                  className="btn-primary text-xs px-4 py-1.5 cursor-pointer inline-flex items-center gap-1"
+                  className="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-xs font-medium shadow-xs transition-all cursor-pointer inline-flex items-center gap-1"
                 >
                   <span>{quizIndex < speedQuizzes.length - 1 ? "Next Question" : "Restart Quiz"}</span>
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -378,7 +578,7 @@ export function DashboardPracticeArena() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-hairline pb-4">
             <div>
               <h2 className="font-serif text-xl font-normal text-foreground flex items-center gap-2">
-                <Flame className="w-5 h-5 text-[#ea580c]" />
+                <Flame className="w-5 h-5 text-amber-500" />
                 <span>ASCI 100-Day Engineering Cadence</span>
               </h2>
               <p className="text-xs text-muted-foreground mt-0.5">
@@ -386,7 +586,9 @@ export function DashboardPracticeArena() {
               </p>
             </div>
             <div className="flex items-center gap-3">
-              <span className="badge-coral text-xs">Day 42 Active Streak</span>
+              <span className="text-xs font-mono px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20 font-bold">
+                Day 42 Active Streak
+              </span>
             </div>
           </div>
 
@@ -403,7 +605,7 @@ export function DashboardPracticeArena() {
                     key={i}
                     className={`w-3.5 h-3.5 rounded-xs transition-colors ${
                       isActive
-                        ? "bg-primary/80 hover:bg-primary"
+                        ? "bg-gradient-to-tr from-amber-500 to-orange-500 shadow-2xs"
                         : "bg-secondary border border-hairline/60"
                     }`}
                     title={`Day ${i + 1}: ${isActive ? "Solved POTD (+150 XP)" : "Rest day"}`}

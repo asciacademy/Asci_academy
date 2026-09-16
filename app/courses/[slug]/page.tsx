@@ -33,16 +33,20 @@ export default function CoursePage({ params }: { params: Promise<{ slug: string 
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null)
   const [showStickyBar, setShowStickyBar] = useState(false)
 
-  // Scroll listener for sticky header bar
+  // Throttled scroll listener for sticky header bar
   useEffect(() => {
+    let ticking = false
     const handleScroll = () => {
-      if (window.scrollY > 400) {
-        setShowStickyBar(true)
-      } else {
-        setShowStickyBar(false)
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const shouldShow = window.scrollY > 400
+          setShowStickyBar((prev) => (prev !== shouldShow ? shouldShow : prev))
+          ticking = false
+        })
+        ticking = true
       }
     }
-    window.addEventListener("scroll", handleScroll)
+    window.addEventListener("scroll", handleScroll, { passive: true })
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 

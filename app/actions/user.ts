@@ -396,11 +396,11 @@ export async function getDashboardBundle(passedUser?: any) {
         supabase
             .from('courses')
             .select(`
-                id, title, slug, category, difficulty, duration, description, is_premium,
+                id, title, slug, category, difficulty, duration_hours, description, is_premium, thumbnail_url,
                 modules (id, is_deleted)
             `)
             .eq('is_published', true)
-            .order('sort_order', { ascending: true })
+            .order('created_at', { ascending: false })
     ])
 
     const profile = profileRes.data
@@ -574,14 +574,18 @@ export async function getDashboardBundle(passedUser?: any) {
         const isEnrolled = (enrollmentsRes.data || []).some((e: any) => e.course?.id === c.id || e.course?.slug === c.slug)
         return {
             id: c.slug || c.id,
+            slug: c.slug || c.id,
             title: c.title,
             category: c.category || "Engineering",
             difficulty: c.difficulty || "Intermediate",
             modules: activeModules || 6,
-            duration: c.duration || "Self-Paced",
+            duration: c.duration_hours ? `${c.duration_hours}h` : "Self-Paced",
+            duration_hours: c.duration_hours,
             desc: c.description || "Production-grade engineering curriculum built for top-tier software engineers.",
             href: `/programs/${c.slug || c.id}/course`,
             enrolled: isEnrolled,
+            is_premium: c.is_premium,
+            thumbnail_url: c.thumbnail_url,
         }
     })
 

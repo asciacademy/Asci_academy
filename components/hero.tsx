@@ -345,22 +345,22 @@ export function Hero() {
                 <Link
                   key={p.code}
                   href={p.href}
-                  className={`group relative rounded-2xl border border-hairline dark:border-white/[0.06] bg-card/50 dark:bg-[#1a1917]/60 backdrop-blur-xs p-5 sm:p-6 flex flex-col justify-between transition-all duration-300 hover:border-primary/30 hover:bg-card/80 dark:hover:bg-[#1e1d1a]/80 hover:shadow-lg hover:shadow-primary/[0.03] ${
+                  className={`group relative rounded-2xl border border-hairline dark:border-white/[0.08] bg-card/70 dark:bg-[#181715]/70 p-5 sm:p-6 flex flex-col justify-between transition-all duration-200 hover:border-foreground/30 dark:hover:border-white/25 hover:bg-card dark:hover:bg-[#1e1d1a] hover:-translate-y-0.5 shadow-2xs ${
                     isFeature ? "lg:row-span-2" : ""
                   }`}
                 >
                   {/* Top row: number + category */}
                   <div>
                     <div className="flex items-center justify-between mb-4">
-                      <span className="font-mono text-[10px] font-semibold tracking-widest text-primary/80">
+                      <span className="font-mono text-[10px] font-semibold tracking-widest text-primary/90">
                         {p.code} / {p.label}
                       </span>
-                      <ArrowUpRight className="h-3.5 w-3.5 text-muted-foreground/30 group-hover:text-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200" />
+                      <ArrowUpRight className="h-3.5 w-3.5 text-muted-foreground/40 group-hover:text-foreground group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200" />
                     </div>
 
                     {/* Icon + Title */}
                     <div className="flex items-start gap-3 mb-3">
-                      <div className="w-9 h-9 rounded-xl bg-primary/[0.08] border border-primary/[0.12] flex items-center justify-center text-primary shrink-0 group-hover:scale-105 transition-transform">
+                      <div className="w-9 h-9 rounded-xl bg-secondary border border-hairline flex items-center justify-center text-primary shrink-0 group-hover:scale-105 group-hover:border-foreground/20 transition-all">
                         <IconComponent className="h-4 w-4" />
                       </div>
                       <div>
@@ -375,9 +375,9 @@ export function Hero() {
                   </div>
 
                   {/* Bottom metadata */}
-                  <div className="mt-4 pt-3 border-t border-hairline-soft dark:border-white/[0.04] flex items-center justify-between">
-                    <span className="text-[11px] font-mono font-medium text-primary/80">{p.meta}</span>
-                    <span className="text-[10px] font-mono text-muted-foreground/50 group-hover:text-foreground transition-colors flex items-center gap-0.5">
+                  <div className="mt-4 pt-3 border-t border-hairline-soft dark:border-white/[0.06] flex items-center justify-between">
+                    <span className="text-[11px] font-mono font-medium text-foreground/80">{p.meta}</span>
+                    <span className="text-[10px] font-mono text-muted-foreground/60 group-hover:text-foreground transition-colors flex items-center gap-0.5">
                       Explore <ArrowRight className="h-2.5 w-2.5" />
                     </span>
                   </div>

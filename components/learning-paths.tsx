@@ -239,10 +239,10 @@ export function LearningPaths() {
                   </div>
 
                   <div className={`flex lg:w-1/2 ${isLeft ? "lg:pr-12" : "lg:ml-auto lg:pl-12"}`}>
-                    <div className="group flex w-full flex-col overflow-hidden rounded-xl border border-hairline bg-card transition-all duration-300 hover:border-foreground/20 hover:shadow-sm">
+                    <div className="group flex w-full flex-col overflow-hidden rounded-2xl border border-hairline dark:border-white/[0.08] bg-card/90 dark:bg-[#181715]/90 transition-all duration-200 hover:border-foreground/30 dark:hover:border-white/25 hover:-translate-y-0.5 shadow-2xs">
                       {/* Header */}
                       <div className="flex items-center gap-3 border-b border-hairline/60 px-6 py-4">
-                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-hairline bg-secondary text-primary">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-hairline bg-secondary text-primary transition-all group-hover:scale-105 group-hover:border-foreground/20">
                           <IconComp className="h-5 w-5" />
                         </div>
                         <div className="min-w-0 flex-1">

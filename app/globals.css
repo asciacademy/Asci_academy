@@ -166,13 +166,26 @@
     @apply border-border outline-ring/50;
   }
 
-  html,
+  html {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip;
+    max-width: 100vw;
+  }
+
   body {
     background-color: var(--background);
     color: var(--foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip;
+    max-width: 100vw;
+    min-height: 100vh;
+    -webkit-overflow-scrolling: touch;
   }
 }
 
@@ -606,9 +619,10 @@ html {
 }
 
 /* ─────────────────────────────────────────────
-   ASCI LOADING & LASER SWEEP ANIMATIONS
+   ASCI LOADING ANIMATION
+   Clean linear progress indicator — zero laser glow
 ───────────────────────────────────────────── */
-@keyframes laser-sweep {
+@keyframes progress-sweep {
   0% {
     transform: translateX(-100%);
   }
@@ -617,15 +631,6 @@ html {
   }
   100% {
     transform: translateX(250%);
-  }
-}
-
-@keyframes laser-glow-pulse {
-  0%, 100% {
-    opacity: 0.7;
-  }
-  50% {
-    opacity: 1;
   }
 }
 
@@ -662,11 +667,7 @@ html {
 }
 
 .animate-laser-sweep {
-  animation: laser-sweep 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-}
-
-.animate-laser-glow {
-  animation: laser-glow-pulse 3.6s ease-in-out infinite;
+  animation: progress-sweep 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
 .animate-orbital-spin {
@@ -686,46 +687,49 @@ html {
 }
 
 /* ─────────────────────────────────────────────
-   DASHBOARD BENTO UTILITIES — Unstop-Inspired
-   Colorful cards, icon blocks, live pills,
-   gradient strips for ASCI Emerald & Pearl theme
+   ARCHITECTURAL & EDITORIAL CARD UTILITIES
+   Clean hairline borders, subtle micro-elevation, zero glowing halos
 ───────────────────────────────────────────── */
 
-/* Card hover glow variants */
-.card-glow-orange {
-  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+.card-tactile {
+  transition: border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s;
+}
+.card-tactile:hover {
+  border-color: rgba(20, 20, 19, 0.25);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.05);
+}
+.dark .card-tactile:hover {
+  border-color: rgba(253, 251, 247, 0.2);
+  box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.3);
+}
+
+/* Backward-compatible card styling without glowing box-shadows */
+.card-glow-orange,
+.card-glow-gold,
+.card-glow-green,
+.card-glow-violet {
+  transition: border-color 0.2s, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s;
 }
 .card-glow-orange:hover {
-  border-color: rgb(234 88 12 / 0.45);
-  box-shadow: 0 0 0 1px rgb(234 88 12 / 0.15), 0 8px 24px rgb(234 88 12 / 0.08);
+  border-color: rgba(234, 88, 12, 0.5);
   transform: translateY(-2px);
-}
-
-.card-glow-gold {
-  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.05);
 }
 .card-glow-gold:hover {
-  border-color: rgb(212 184 114 / 0.5);
-  box-shadow: 0 0 0 1px rgb(212 184 114 / 0.18), 0 8px 24px rgb(212 184 114 / 0.1);
+  border-color: rgba(212, 184, 114, 0.6);
   transform: translateY(-2px);
-}
-
-.card-glow-green {
-  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.05);
 }
 .card-glow-green:hover {
-  border-color: rgb(6 33 18 / 0.5);
-  box-shadow: 0 0 0 1px rgb(16 185 129 / 0.2), 0 8px 24px rgb(16 185 129 / 0.07);
+  border-color: rgba(16, 185, 129, 0.5);
   transform: translateY(-2px);
-}
-
-.card-glow-violet {
-  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.05);
 }
 .card-glow-violet:hover {
-  border-color: rgb(139 92 246 / 0.4);
-  box-shadow: 0 0 0 1px rgb(139 92 246 / 0.15), 0 8px 24px rgb(139 92 246 / 0.08);
+  border-color: rgba(139, 92, 246, 0.5);
   transform: translateY(-2px);
+  box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.05);
 }
 
 /* Colored icon container blocks — Unstop-style */

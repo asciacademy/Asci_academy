@@ -1,4 +1,5 @@
 import * as fs from 'fs'
+import * as path from 'path'
 import { CURRICULUM_COURSES } from '../lib/curriculum-data'
 import {
   INITIAL_HACKATHONS,
@@ -130,8 +131,9 @@ for (const course of CURRICULUM_COURSES) {
 }
 
 curSql += `COMMIT;\n`
-fs.writeFileSync('seed_curriculum.sql', curSql)
-console.log('Successfully generated seed_curriculum.sql!')
+const curOutPath = path.join(__dirname, '..', 'supabase', 'seeds', 'seed_curriculum.sql')
+fs.writeFileSync(curOutPath, curSql)
+console.log('Successfully generated supabase/seeds/seed_curriculum.sql!')
 
 // ==========================================
 // 2. GENERATE SEED_ECOSYSTEM.SQL
@@ -402,5 +404,6 @@ for (const t of realTestimonials) {
 }
 
 ecoSql += `COMMIT;\n`
-fs.writeFileSync('seed_ecosystem.sql', ecoSql)
-console.log('Successfully generated seed_ecosystem.sql!')
+const ecoOutPath = path.join(__dirname, '..', 'supabase', 'seeds', 'seed_ecosystem.sql')
+fs.writeFileSync(ecoOutPath, ecoSql)
+console.log('Successfully generated supabase/seeds/seed_ecosystem.sql!')

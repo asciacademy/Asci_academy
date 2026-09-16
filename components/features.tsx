@@ -166,16 +166,21 @@ export function Features({ stats }: { stats?: PlatformStats }) {
             return (
               <div
                 key={feature.id}
-                className={`feature-card group relative flex flex-col rounded-xl border border-hairline bg-card p-6 sm:p-8 transition-all duration-300 hover:border-foreground/20 hover:shadow-sm ${
+                className={`feature-card group relative flex flex-col rounded-2xl border border-hairline dark:border-white/[0.08] bg-card/80 dark:bg-[#181715]/80 p-6 sm:p-8 transition-all duration-200 hover:border-foreground/30 dark:hover:border-white/25 hover:-translate-y-0.5 shadow-2xs ${
                   isWide ? "lg:col-span-2" : ""
                 }`}
               >
-                {/* Top row: icon + metric */}
+                {/* Top row: icon + index + metric */}
                 <div className="flex items-start justify-between">
-                  <div className={`flex items-center justify-center rounded-lg border border-hairline bg-secondary text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground ${
-                    isWide ? "h-12 w-12" : "h-10 w-10"
-                  }`}>
-                    <feature.icon className={isWide ? "h-6 w-6" : "h-5 w-5"} />
+                  <div className="flex items-center gap-3">
+                    <div className={`flex items-center justify-center rounded-xl border border-hairline bg-secondary text-primary transition-all group-hover:scale-105 group-hover:border-foreground/20 ${
+                      isWide ? "h-12 w-12" : "h-10 w-10"
+                    }`}>
+                      <feature.icon className={isWide ? "h-6 w-6" : "h-5 w-5"} />
+                    </div>
+                    <span className="font-mono text-[10px] font-semibold tracking-widest text-muted-foreground/60 uppercase">
+                      {feature.id}
+                    </span>
                   </div>
                   <StatMetric value={feature.metric} label={feature.metricLabel} />
                 </div>

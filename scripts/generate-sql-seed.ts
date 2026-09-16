@@ -1,4 +1,5 @@
 import * as fs from 'fs'
+import * as path from 'path'
 import { CURRICULUM_COURSES } from '../lib/curriculum-data'
 
 function escapeSql(str: string): string {
@@ -90,5 +91,6 @@ for (const course of CURRICULUM_COURSES) {
 
 sql += `COMMIT;\n`
 
-fs.writeFileSync('seed_2026_curriculum.sql', sql)
-console.log('Successfully generated seed_2026_curriculum.sql!')
+const outputPath = path.join(__dirname, '..', 'supabase', 'seeds', 'seed_2026_curriculum.sql')
+fs.writeFileSync(outputPath, sql)
+console.log('Successfully generated supabase/seeds/seed_2026_curriculum.sql!')
