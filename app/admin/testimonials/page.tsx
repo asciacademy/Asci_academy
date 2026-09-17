@@ -182,7 +182,7 @@ export default function AdminTestimonialsPage() {
                         <div
                             key={t.id}
                             className={`bg-card/70 backdrop-blur-xl border rounded-2xl p-6 transition-all relative ${
-                                t.is_approved ? "border-border/80" : "border-amber-500/40 bg-card/90"
+                                t.is_approved ? "border-border/80" : "border-blue-500/40 bg-card/90"
                             }`}
                         >
                             {/* Status Tag */}
@@ -192,7 +192,7 @@ export default function AdminTestimonialsPage() {
                                         ✓ Approved Live
                                     </span>
                                 ) : (
-                                    <span className="text-[10px] font-mono font-semibold px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 uppercase tracking-wider flex items-center gap-1">
+                                    <span className="text-[10px] font-mono font-semibold px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 uppercase tracking-wider flex items-center gap-1">
                                         <Clock className="h-3 w-3" /> Pending Review
                                     </span>
                                 )}
@@ -211,7 +211,7 @@ export default function AdminTestimonialsPage() {
                                         {t.profiles?.email || "No email"} · {t.cohort || "Cohort Alpha"}
                                     </p>
                                 </div>
-                                <div className="flex items-center gap-0.5 ml-3 shrink-0 text-amber-500">
+                                <div className="flex items-center gap-0.5 ml-3 shrink-0 text-yellow-400">
                                     {Array.from({ length: 5 }).map((_, i) => (
                                         <Star key={i} className={`h-3.5 w-3.5 ${i < t.rating ? "fill-current" : "text-border"}`} />
                                     ))}
@@ -236,7 +236,7 @@ export default function AdminTestimonialsPage() {
                                         <button
                                             onClick={() => handleApprove(t.id, false)}
                                             disabled={actionId === t.id}
-                                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-mono border border-border/80 bg-card hover:bg-secondary text-muted-foreground hover:text-amber-600 transition-all uppercase tracking-wider font-semibold cursor-pointer"
+                                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-mono border border-border/80 bg-card hover:bg-secondary text-muted-foreground hover:text-blue-600 transition-all uppercase tracking-wider font-semibold cursor-pointer"
                                         >
                                             {actionId === t.id ? <Loader2 className="h-3 w-3 animate-spin" /> : <XCircle className="h-3.5 w-3.5" />}
                                             Unpublish

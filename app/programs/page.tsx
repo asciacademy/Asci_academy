@@ -1,11 +1,16 @@
+"use client"
+
+import { useState } from "react"
 import Link from "next/link"
 import { Navbar } from "@/components/navbar"
 import { Courses } from "@/components/courses"
 import { Footer } from "@/components/footer"
 import { AxelStage } from "@/components/axel/axel-stage"
 import { TechLogo } from "@/components/tech-logo"
-import { PlayCircle, ArrowRight, BookOpen, Code2 } from "lucide-react"
+import { PlayCircle, ArrowRight, BookOpen, Code2, Plus, Loader2 } from "lucide-react"
 import { WishlistButton } from "@/components/courses/wishlist-button"
+import { useEnrollments } from "@/lib/user-learning-store"
+import { enrollInCourse } from "@/app/actions/courses"
 
 const CORE_COURSES = [
   {
@@ -99,6 +104,9 @@ const CORE_COURSES = [
 ]
 
 export default function ProgramsPage() {
+    const { isEnrolled, enroll } = useEnrollments()
+    const [navigatingId, setNavigatingId] = useState<string | null>(null)
+
     return (
         <main className="min-h-screen bg-background text-foreground">
             <Navbar />
@@ -106,7 +114,7 @@ export default function ProgramsPage() {
 
             {/* 1. Hero Section */}
             <section id="programs-hero" className="pt-20 pb-12 px-6 border-b border-border/50 scroll-mt-24">
-                <div className="mx-auto max-w-7xl">
+                <div className="mx-auto max-w-[1400px]">
                     <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
                         <div className="max-w-3xl text-center lg:text-left">
                             <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3.5 py-1 text-xs font-medium text-primary mb-6">
@@ -134,7 +142,7 @@ export default function ProgramsPage() {
 
             {/* 2. Quick Access: Programming Languages & Web Development */}
             <section id="core-languages" className="py-12 px-6 border-b border-border/50 bg-secondary/20">
-                <div className="mx-auto max-w-7xl">
+                <div className="mx-auto max-w-[1400px]">
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
                         <div>
                             <div className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/10 px-3 py-0.5 text-xs font-mono font-medium text-primary mb-3">
@@ -154,66 +162,138 @@ export default function ProgramsPage() {
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-                        {CORE_COURSES.map((course) => (
-                            <div
-                                key={course.id}
-                                className="group relative flex flex-col justify-between rounded-2xl border border-hairline dark:border-white/[0.08] bg-card/90 dark:bg-[#181715]/90 p-5 transition-all duration-200 hover:border-foreground/30 dark:hover:border-white/25 hover:-translate-y-0.5 shadow-2xs"
-                            >
-                                <div>
-                                    {/* Header with Logo and Badge */}
-                                    <div className="flex items-center justify-between gap-2 mb-4">
-                                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-hairline bg-secondary text-primary p-2 shadow-2xs group-hover:scale-105 group-hover:border-foreground/20 transition-all duration-200">
-                                            <TechLogo slug={course.id} className="h-7 w-7 object-contain" />
-                                        </div>
-                                        <div className="flex items-center gap-1.5">
-                                            <WishlistButton
-                                                course={{
-                                                    id: course.id,
-                                                    slug: course.id,
-                                                    title: course.title,
-                                                    category: course.category,
-                                                    level: course.level,
-                                                    duration: course.duration,
-                                                    href: course.playerUrl,
-                                                }}
-                                                variant="icon"
-                                                className="h-7 w-7 bg-secondary/70 hover:bg-secondary border border-hairline hover:border-amber-400/40"
-                                            />
-                                            <span className="rounded-full bg-secondary px-2.5 py-1 text-[10px] font-mono text-muted-foreground border border-border/60">
-                                                {course.duration}
+                        {CORE_COURSES.map((course) => {
+                            const enrolled = isEnrolled(course.id)
+                            const playerUrl = course.playerUrl || `/courses/${course.id}/learn`
+                            const overviewUrl = course.overviewUrl || `/courses/${course.id}`
+                            const isSelected = navigatingId === course.id
+
+
+                            const handleEnroll = (e: React.MouseEvent) => {
+                                e.preventDefault()
+                                enroll({
+                                    id: course.id,
+                                    slug: course.id,
+                                    title: course.title,
+                                    category: course.category,
+                                    difficulty: course.level,
+                                    modules: 4,
+                                    duration: course.duration,
+                                    thumbnail: `/images/courses/course_${course.id}.jpg`,
+                                    progressPercent: 0,
+                                    lessonsCompleted: 0,
+                                    totalLessons: 12,
+                                })
+                                enrollInCourse(course.id).catch(() => {})
+                            }
+
+                            return (
+                                <div
+                                    key={course.id}
+                                    className={`group relative flex flex-col justify-between rounded-2xl border transition-all duration-200 hover:-translate-y-0.5 shadow-2xs p-5 ${
+                                        isSelected
+                                            ? "border-primary/60 ring-2 ring-primary/40 bg-card dark:bg-[#181715] shadow-lg shadow-primary/10"
+                                            : "border-hairline dark:border-white/[0.08] bg-card/90 dark:bg-[#181715]/90 hover:border-foreground/30 dark:hover:border-white/25"
+                                    }`}
+                                >
+                                    {/* Selection Launching Badge */}
+                                    {isSelected && (
+                                        <div className="absolute inset-x-0 -top-2.5 flex justify-center z-10 animate-in fade-in zoom-in-95 duration-150">
+                                            <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-primary text-primary-foreground text-[10px] font-mono font-medium shadow-md shadow-primary/20">
+                                                <Loader2 className="h-3 w-3 animate-spin" />
+                                                Launching Course...
                                             </span>
                                         </div>
+                                    )}
+
+                                    <div>
+                                        {/* Header with Logo and Badge */}
+                                        <div className="flex items-center justify-between gap-2 mb-4">
+                                            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-hairline bg-secondary text-primary p-2 shadow-2xs group-hover:scale-105 group-hover:border-foreground/20 transition-all duration-200">
+                                                <TechLogo slug={course.id} className="h-7 w-7 object-contain" />
+                                            </div>
+                                            <div className="flex items-center gap-1.5">
+                                                <WishlistButton
+                                                    course={{
+                                                        id: course.id,
+                                                        slug: course.id,
+                                                        title: course.title,
+                                                        category: course.category,
+                                                        level: course.level,
+                                                        duration: course.duration,
+                                                        href: overviewUrl,
+                                                    }}
+                                                    variant="icon"
+                                                    className="h-7 w-7 bg-secondary/70 hover:bg-secondary border border-hairline hover:border-amber-400/40"
+                                                />
+                                                {enrolled ? (
+                                                    <span className="rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-2.5 py-0.5 text-[10px] font-mono border border-emerald-500/20 font-semibold">
+                                                        Enrolled
+                                                    </span>
+                                                ) : (
+                                                    <span className="rounded-full bg-secondary px-2.5 py-1 text-[10px] font-mono text-muted-foreground border border-border/60">
+                                                        {course.duration}
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        <div className="text-[10px] font-mono uppercase tracking-wider text-primary font-semibold mb-1">
+                                            {course.category}
+                                        </div>
+                                        <Link
+                                            href={overviewUrl}
+                                            onClick={() => setNavigatingId(course.id)}
+                                            className="group-hover:text-primary transition-colors block"
+                                        >
+                                            <h3 className="font-serif text-lg font-medium text-foreground leading-snug">
+                                                {course.title}
+                                            </h3>
+                                        </Link>
+                                        <p className="mt-2 text-xs text-muted-foreground line-clamp-2 leading-relaxed">
+                                            {course.desc}
+                                        </p>
                                     </div>
 
-                                    <div className="text-[10px] font-mono uppercase tracking-wider text-primary font-semibold mb-1">
-                                        {course.category}
+                                    <div className="mt-5 pt-3 border-t border-hairline/60 flex items-center gap-2">
+                                        {enrolled ? (
+                                            <Link
+                                                href={playerUrl}
+                                                onClick={() => setNavigatingId(course.id)}
+                                                className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 text-white px-3 py-1.5 text-xs font-semibold shadow-md shadow-blue-500/20 transition-all cursor-pointer"
+                                            >
+                                                {isSelected ? (
+                                                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                                                ) : (
+                                                    <PlayCircle className="h-3.5 w-3.5" />
+                                                )}
+                                                <span>{isSelected ? "Loading..." : "Continue"}</span>
+                                            </Link>
+                                        ) : (
+                                            <button
+                                                onClick={handleEnroll}
+                                                className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-xs hover:bg-primary/90 transition-all cursor-pointer"
+                                            >
+                                                <Plus className="h-3.5 w-3.5" />
+                                                <span>Enroll Track</span>
+                                            </button>
+                                        )}
+                                        <Link
+                                            href={overviewUrl}
+                                            onClick={() => setNavigatingId(course.id)}
+                                            className="inline-flex items-center justify-center gap-1 rounded-xl border border-hairline bg-secondary px-3 py-1.5 text-xs font-medium text-foreground hover:bg-card transition-all cursor-pointer"
+                                        >
+                                            <span>Syllabus</span>
+                                            {isSelected ? (
+                                                <Loader2 className="h-3 w-3 animate-spin text-primary" />
+                                            ) : (
+                                                <ArrowRight className="h-3 w-3" />
+                                            )}
+                                        </Link>
                                     </div>
-                                    <h3 className="font-serif text-lg font-medium text-foreground group-hover:text-primary transition-colors leading-snug">
-                                        {course.title}
-                                    </h3>
-                                    <p className="mt-2 text-xs text-muted-foreground line-clamp-2 leading-relaxed">
-                                        {course.desc}
-                                    </p>
                                 </div>
-
-                                <div className="mt-5 pt-3 border-t border-hairline/60 flex items-center gap-2">
-                                    <Link
-                                        href={course.playerUrl}
-                                        className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-xs hover:bg-primary/90 transition-all cursor-pointer"
-                                    >
-                                        <PlayCircle className="h-3.5 w-3.5" />
-                                        <span>Learn</span>
-                                    </Link>
-                                    <Link
-                                        href={course.overviewUrl}
-                                        className="inline-flex items-center justify-center gap-1 rounded-xl border border-hairline bg-secondary px-3 py-1.5 text-xs font-medium text-foreground hover:bg-card transition-all cursor-pointer"
-                                    >
-                                        <span>Syllabus</span>
-                                        <ArrowRight className="h-3 w-3" />
-                                    </Link>
-                                </div>
-                            </div>
-                        ))}
+                            )
+                        })}
                     </div>
                 </div>
             </section>

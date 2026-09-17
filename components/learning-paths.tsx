@@ -256,7 +256,7 @@ export function LearningPaths() {
 
   return (
     <section id="learning-paths" className="relative py-20 lg:py-28 bg-background">
-      <div className="relative mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+      <div className="relative mx-auto max-w-[1400px] px-5 sm:px-6 lg:px-8">
         {/* Header with Dedicated Axel Stage */}
         <div ref={headerRef} className="relative mb-14 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
           <div className="max-w-2xl text-left">
@@ -307,7 +307,7 @@ export function LearningPaths() {
         </div>
 
         {/* Pathway Metadata Overview Banner */}
-        <div className="max-w-4xl mx-auto mb-12 p-6 rounded-2xl border border-hairline bg-card/80 space-y-4">
+        <div className="max-w-5xl mx-auto mb-12 p-6 rounded-2xl border border-hairline bg-card/80 space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-hairline/60 pb-3">
             <div className="flex items-center gap-2">
               <span className="text-xs font-mono font-semibold px-2.5 py-0.5 rounded bg-primary/10 text-primary border border-primary/20">
@@ -358,7 +358,7 @@ export function LearningPaths() {
         </div>
 
         {/* Timeline */}
-        <div ref={timelineRef} className="relative mt-8 max-w-5xl mx-auto">
+        <div ref={timelineRef} className="relative mt-8 max-w-6xl mx-auto">
           {/* Center line */}
           <div className="absolute left-1/2 top-0 hidden h-full w-px -translate-x-1/2 bg-hairline lg:block" aria-hidden="true" />
 

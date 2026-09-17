@@ -43,17 +43,17 @@ export function Systems3DIcon({
       <path d="M54 29 L70 38 L54 47 L38 38 Z" fill="#2d2a24" stroke="#D4B872" strokeWidth="0.75" />
 
       {/* Right Microservice Node Block */}
-      <path d="M66 36 L82 27 L98 36 L82 45 Z" fill="#24221e" stroke="#ea580c" strokeWidth="0.75" />
+      <path d="M66 36 L82 27 L98 36 L82 45 Z" fill="#24221e" stroke="#2563eb" strokeWidth="0.75" />
       <path d="M66 36 L82 45 L82 59 L66 50 Z" fill="url(#sys3d-face-left)" />
       <path d="M82 45 L98 36 L98 50 L82 59 Z" fill="url(#sys3d-face-right)" />
 
       {/* Interconnect High-Speed Bus Tracks */}
       <path d="M54 47 L66 54 L82 45" stroke="#D4B872" strokeWidth="1.5" strokeLinecap="round" fill="none" />
-      <path d="M46 58 L58 65 L74 56" stroke="#ea580c" strokeWidth="1.5" strokeLinecap="round" fill="none" />
+      <path d="M46 58 L58 65 L74 56" stroke="#2563eb" strokeWidth="1.5" strokeLinecap="round" fill="none" />
 
       {/* Status Indicators (Restrained server pings) */}
       <circle cx="54" cy="38" r="2" fill="#D4B872" />
-      <circle cx="82" cy="36" r="2" fill="#ea580c" />
+      <circle cx="82" cy="36" r="2" fill="#2563eb" />
       <circle cx="60" cy="74" r="2.5" fill="#fdfbf7" stroke="#10b981" strokeWidth="1" />
     </svg>
   )

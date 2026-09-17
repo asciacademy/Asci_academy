@@ -178,6 +178,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         saveUser(newSession.user)
         await fetchProfile(newSession.user.id)
         setIsLoading(false)
+
+        // Refresh server components so they re-render with the new session
+        // (critical for Google One Tap which signs in client-side via signInWithIdToken)
+        if (event === "SIGNED_IN") {
+          router.refresh()
+        }
       } else if (event === "USER_UPDATED" && newSession?.user) {
         setSession(newSession)
         saveUser(newSession.user)

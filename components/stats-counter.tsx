@@ -71,7 +71,7 @@ function StatCard({ stat }: { stat: typeof stats[0] }) {
 export function StatsCounter() {
   return (
     <section className="section-spacing overflow-hidden">
-      <div className="relative mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+      <div className="relative mx-auto max-w-[1400px] px-5 sm:px-6 lg:px-8">
         <div className="mb-10 text-center">
           <span className="text-caption-uppercase text-primary mb-3 inline-block">
             Proven Results

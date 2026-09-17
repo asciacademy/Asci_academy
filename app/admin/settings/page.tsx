@@ -142,7 +142,7 @@ export default function AdminSettingsPage() {
     const [guestPreview, setGuestPreview] = useState(false)
     const [maxFreeCourses, setMaxFreeCourses] = useState("3")
 
-    const [accentColor, setAccentColor] = useState("#ea580c")
+    const [accentColor, setAccentColor] = useState("#2563eb")
     const [platformTagline, setPlatformTagline] = useState("Rigorous systems engineering for the next era of computing.")
 
     const tabs = [
@@ -233,7 +233,7 @@ export default function AdminSettingsPage() {
                                 </SettingRow>
                             </div>
                             {maintenanceMode && (
-                                <div className="mt-4 p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-600 dark:text-amber-400 text-xs font-mono">
+                                <div className="mt-4 p-3.5 rounded-xl bg-blue-500/10 border border-blue-500/30 text-blue-600 dark:text-blue-400 text-xs font-mono">
                                     Notice: Maintenance mode is enabled. Non-admin students will receive a scheduled maintenance banner.
                                 </div>
                             )}
@@ -392,9 +392,9 @@ export default function AdminSettingsPage() {
                     {/* APPEARANCE */}
                     {activeTab === "appearance" && (
                         <div className="bg-card/70 border border-border/80 rounded-2xl p-6 sm:p-8 backdrop-blur-xl">
-                            <SectionHeader icon={Palette} title="Design System & Tokens" description="Warm Claude Orange editorial design system configurations." />
+                            <SectionHeader icon={Palette} title="Design System & Tokens" description="Electric Blue editorial design system configurations." />
                             <div className="space-y-4">
-                                <SettingRow label="Primary Accent Color" description="Warm orange primary accent token used across key interactions.">
+                                <SettingRow label="Primary Accent Color" description="Electric blue primary accent token used across key interactions.">
                                     <div className="flex items-center gap-3">
                                         <input
                                             type="color"
@@ -417,10 +417,10 @@ export default function AdminSettingsPage() {
                                 <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">Design Token Harmony</p>
                                 <div className="flex items-center gap-3 flex-wrap">
                                     <div className="px-3 py-1 rounded-full text-xs font-mono text-white font-semibold" style={{ backgroundColor: accentColor }}>
-                                        Vibrant Orange ({accentColor})
+                                        Primary Accent ({accentColor})
                                     </div>
-                                    <div className="px-3 py-1 rounded-full text-xs font-mono bg-[#ea580c] text-white border border-[#ea580c]/60">
-                                        Warm Orange (#ea580c)
+                                    <div className="px-3 py-1 rounded-full text-xs font-mono bg-[#2563eb] text-white border border-[#2563eb]/60">
+                                        Electric Blue (#2563eb)
                                     </div>
                                     <div className="px-3 py-1 rounded-full text-xs font-mono bg-[#181715] text-[#f5f0e8] border border-white/10">
                                         Obsidian Studio (#181715)

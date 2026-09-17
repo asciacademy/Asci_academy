@@ -21,11 +21,11 @@ export async function createModule(courseId: string, title: string, sequenceOrde
             is_deleted: false
         })
         .select('id')
-        .single()
+        .maybeSingle()
 
-    if (error) {
+    if (error || !data) {
         console.error("Error creating module:", error)
-        return { error: error.message }
+        return { error: error?.message || "Failed to create module" }
     }
 
     return { success: true, moduleId: data.id }
@@ -126,11 +126,11 @@ export async function createLesson(moduleId: string, payload: any) {
             is_deleted: false
         })
         .select('id')
-        .single()
+        .maybeSingle()
 
-    if (error) {
+    if (error || !data) {
         console.error("Error creating lesson:", error)
-        return { error: error.message }
+        return { error: error?.message || "Failed to create lesson" }
     }
 
     return { success: true, lessonId: data.id }

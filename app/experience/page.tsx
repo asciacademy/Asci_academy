@@ -129,7 +129,7 @@ export default function ExperiencePage() {
                     <div className="grid lg:grid-cols-12 gap-12 items-center">
                         <div className="lg:col-span-5 space-y-6">
                             <div className="flex items-center justify-between gap-4">
-                                <span className="text-xs font-mono uppercase tracking-widest text-[#ea580c] font-semibold">Clean Code Editor</span>
+                                <span className="text-xs font-mono uppercase tracking-widest text-blue-400 font-semibold">Clean Code Editor</span>
                                 <AxelStage
                                     id="experience-sandbox-robot-anchor"
                                     sectionId="experience-sandbox"
@@ -147,15 +147,15 @@ export default function ExperiencePage() {
                             </p>
                             <ul className="space-y-3 text-xs text-[#faf9f5]/80 font-mono">
                                 <li className="flex items-center gap-3">
-                                    <CheckCircle2 className="w-4 h-4 text-[#ea580c] shrink-0" />
+                                    <CheckCircle2 className="w-4 h-4 text-blue-400 shrink-0" />
                                     <span>No ads, banners, or annoying popups</span>
                                 </li>
                                 <li className="flex items-center gap-3">
-                                    <CheckCircle2 className="w-4 h-4 text-[#ea580c] shrink-0" />
+                                    <CheckCircle2 className="w-4 h-4 text-blue-400 shrink-0" />
                                     <span>Clean syntax highlighting and keyboard shortcuts</span>
                                 </li>
                                 <li className="flex items-center gap-3">
-                                    <CheckCircle2 className="w-4 h-4 text-[#ea580c] shrink-0" />
+                                    <CheckCircle2 className="w-4 h-4 text-blue-400 shrink-0" />
                                     <span>Instant automated tests check your code against real cases</span>
                                 </li>
                             </ul>
@@ -166,24 +166,24 @@ export default function ExperiencePage() {
                             <div className="px-4 py-3 bg-[#141413] border-b border-white/10 flex items-center justify-between text-xs font-mono text-zinc-400">
                                 <div className="flex items-center gap-2">
                                     <span className="w-2.5 h-2.5 rounded-full bg-rose-500/80 inline-block" />
-                                    <span className="w-2.5 h-2.5 rounded-full bg-amber-500/80 inline-block" />
-                                    <span className="w-2.5 h-2.5 rounded-full bg-[#ea580c]/80 inline-block" />
+                                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/50 inline-block" />
+                                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80 inline-block" />
                                     <span className="ml-3 text-slate-200">binary_search_tree.py</span>
                                 </div>
-                                <span className="text-[10px] text-[#ea580c] font-mono font-medium">Python 3.12 (Wasm)</span>
+                                <span className="text-[10px] text-blue-400 font-mono font-medium">Python 3.12 (Wasm)</span>
                             </div>
                             <div className="p-6 font-mono text-xs leading-relaxed space-y-2 text-slate-200 overflow-x-auto">
                                 <div className="text-zinc-500"># Validating AVL balancing invariants</div>
-                                <div><span className="text-[#ea580c] font-semibold">class</span> <span className="text-[#f5f0e8]">AVLNode</span>:</div>
+                                <div><span className="text-blue-400 font-semibold">class</span> <span className="text-[#f5f0e8]">AVLNode</span>:</div>
                                 <div className="pl-4">def __init__(self, key):</div>
                                 <div className="pl-8">self.key = key</div>
                                 <div className="pl-8">self.left = None</div>
                                 <div className="pl-8">self.right = None</div>
                                 <div className="pl-8">self.height = 1</div>
-                                <div className="pt-2"><span className="text-[#ea580c] font-semibold">def</span> <span className="text-[#f5f0e8]">get_balance_factor</span>(node):</div>
+                                <div className="pt-2"><span className="text-blue-400 font-semibold">def</span> <span className="text-[#f5f0e8]">get_balance_factor</span>(node):</div>
                                 <div className="pl-4">if not node: return 0</div>
                                 <div className="pl-4">return get_height(node.left) - get_height(node.right)</div>
-                                <div className="pt-3 p-3 rounded-xl bg-white/5 border border-white/10 text-[#ea580c] text-[11px] flex items-center gap-2">
+                                <div className="pt-3 p-3 rounded-xl bg-white/5 border border-white/10 text-emerald-400 text-[11px] flex items-center gap-2">
                                     <span>✓ All 12 test assertions passed in 1.4ms (O(log n) height verified)</span>
                                 </div>
                             </div>

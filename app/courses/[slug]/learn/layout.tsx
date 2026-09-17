@@ -8,6 +8,7 @@ import { getAllCourses, getCourseContent } from "@/app/actions/courses"
 import { getUserProfile } from "@/app/actions/user"
 import { Navbar } from "@/components/navbar"
 import { useState, useEffect, use } from "react"
+import { getCurriculumCourseBySlug } from "@/lib/curriculum-data"
 
 export default function CourseLayout({
     children,
@@ -18,34 +19,49 @@ export default function CourseLayout({
 }) {
     const { slug } = use(params)
     const pathname = usePathname()
-    const [openModule, setOpenModule] = useState<string>("")
-    const [courseModules, setCourseModules] = useState<any[] | null>(null)
+    const staticCourse = getCurriculumCourseBySlug(slug)
+
+    const [courseModules, setCourseModules] = useState<any[]>(() => staticCourse?.modules || [])
     const [userProfile, setUserProfile] = useState<any>(null)
     const [mobileSyllabusOpen, setMobileSyllabusOpen] = useState(false)
+    const [openModule, setOpenModule] = useState<string>(() => {
+        if (staticCourse?.modules?.length) {
+            const found = staticCourse.modules.find((m: any) => pathname.includes(m.id))
+            return found ? found.id : staticCourse.modules[0].id
+        }
+        return ""
+    })
 
+    // Sync active open accordion module when pathname changes without doing network requests
     useEffect(() => {
+        if (courseModules && courseModules.length > 0) {
+            const foundModule = courseModules.find((m: any) => pathname.includes(m.id))
+            if (foundModule) {
+                setOpenModule(foundModule.id)
+            }
+        }
+    }, [pathname, courseModules])
+
+    // Background sync from DB (runs once per slug, non-blocking)
+    useEffect(() => {
+        let isMounted = true
         async function loadLayoutData() {
             try {
-                const profile = await getUserProfile()
-                if (profile) setUserProfile(profile)
+                getUserProfile().then((profile) => {
+                    if (profile && isMounted) setUserProfile(profile)
+                }).catch(() => {})
 
-                const allCourses = await getAllCourses()
-                if (allCourses && allCourses.length > 0) {
-                    const course = allCourses.find((c: any) => c.slug === slug) || allCourses[0]
-                    const fullCourse = await getCourseContent(course.id)
-                    if (fullCourse && fullCourse.modules) {
-                        setCourseModules(fullCourse.modules)
-                        const foundModule = fullCourse.modules.find((m: any) => pathname.includes(m.id))
-                        if (foundModule) setOpenModule(foundModule.id)
-                        else if (fullCourse.modules.length > 0) setOpenModule(fullCourse.modules[0].id)
-                    }
+                const fullCourse = await getCourseContent(slug)
+                if (fullCourse && fullCourse.modules && fullCourse.modules.length > 0 && isMounted) {
+                    setCourseModules(fullCourse.modules)
                 }
             } catch (error) {
-                console.error("Failed to load layout tree", error)
+                // local curriculum already displayed
             }
         }
         loadLayoutData()
-    }, [pathname])
+        return () => { isMounted = false }
+    }, [slug])
 
     // Listen for live XP events from lesson completion and daily tasks
     useEffect(() => {
@@ -144,7 +160,7 @@ export default function CourseLayout({
 
                     {/* Accordion Curriculum List */}
                     <nav className="flex-1 overflow-y-auto p-3 space-y-2">
-                        {!courseModules ? (
+                        {courseModules.length === 0 ? (
                             <div className="flex justify-center p-6 text-muted-foreground"><Terminal className="h-4 w-4 animate-pulse text-primary" /></div>
                         ) : courseModules.map((module: any) => {
                             const isOpen = openModule === module.id;

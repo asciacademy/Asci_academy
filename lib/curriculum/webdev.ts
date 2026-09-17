@@ -1,4 +1,48 @@
-import { CurriculumCourse } from "../curriculum-data"
+import { CurriculumCourse, CurriculumModule } from "../curriculum-data"
+import { C_COURSE_PARTS, CoursePart } from "./c-course-data"
+import { CPP_COURSE_PARTS } from "./cpp-course-data"
+import { HTML_COURSE_PARTS } from "./html-course-data"
+import { CSS_COURSE_PARTS } from "./css-course-data"
+import { JAVASCRIPT_COURSE_PARTS } from "./javascript-course-data"
+import { TYPESCRIPT_COURSE_PARTS } from "./typescript-course-data"
+import { REACT_COURSE_PARTS } from "./react-course-data"
+import { SQL_COURSE_PARTS } from "./sql-course-data"
+import { GIT_DEVOPS_COURSE_PARTS } from "./git-devops-course-data"
+
+function partsToCurriculumModules(parts: CoursePart[], courseSlug: string): CurriculumModule[] {
+  let moduleSeq = 1
+  return parts.flatMap((part) =>
+    part.chapters.map((chapter) => ({
+      id: chapter.id || `${courseSlug}-mod-${moduleSeq}`,
+      title: chapter.title,
+      sequence_order: moduleSeq++,
+      description: part.description || `${chapter.lessons.length} interactive lessons with real code`,
+      lessons: chapter.lessons.map((lesson, lIdx) => ({
+        id: lesson.id || `${chapter.id}-les-${lIdx + 1}`,
+        title: lesson.title,
+        sequence_order: lIdx + 1,
+        content_type: "challenge" as const,
+        xp_reward: 50,
+        description: lesson.tldr || lesson.description || "",
+        content: `${lesson.description}\n\n${lesson.tldr ? `> **Key Takeaway:** ${lesson.tldr}` : ""}`,
+        challenge_data: {
+          initialCode: lesson.code || "",
+          expectedOutput: lesson.output || "",
+          instructions: lesson.tldr || lesson.description || "Run and test the code snippet in the editor."
+        }
+      }))
+    }))
+  )
+}
+
+const WEBDEV_PARTS: CoursePart[] = [
+  ...HTML_COURSE_PARTS,
+  ...CSS_COURSE_PARTS,
+  ...JAVASCRIPT_COURSE_PARTS
+]
+
+const countLessons = (parts: CoursePart[]) =>
+  parts.reduce((acc, p) => acc + p.chapters.reduce((cAcc, ch) => cAcc + ch.lessons.length, 0), 0)
 
 export const WEBDEV_AND_LANGUAGES_COURSES: CurriculumCourse[] = [
   // =========================================================================
@@ -13,7 +57,7 @@ export const WEBDEV_AND_LANGUAGES_COURSES: CurriculumCourse[] = [
     level: "Beginner",
     weeks: "6 Weeks",
     duration_hours: 30,
-    lessons: 10,
+    lessons: countLessons(C_COURSE_PARTS),
     projects: 3,
     certificate: "ASCI Certificate of Completion",
     is_premium: false,
@@ -24,30 +68,7 @@ export const WEBDEV_AND_LANGUAGES_COURSES: CurriculumCourse[] = [
       "Understanding stack memory, pointers, and memory layout",
       "Diagnostic quizzes with instant feedback on each topic"
     ],
-    modules: [
-      {
-        id: "c-mod-1",
-        title: "Module 1: C Basics & Syntax",
-        sequence_order: 1,
-        description: "Variables, format specifiers, and basic math operations.",
-        lessons: [
-          {
-            id: "c-les-1",
-            title: "1.1 Hello World & First C Program",
-            sequence_order: 1,
-            content_type: "challenge",
-            xp_reward: 50,
-            description: "Understand the structure of a C program.",
-            content: "Write and execute your first C program.",
-            challenge_data: {
-              initialCode: '#include <stdio.h>\n\nint main() {\n    printf("HELLO_C\\n");\n    return 0;\n}\n',
-              expectedOutput: "HELLO_C",
-              instructions: "Output 'HELLO_C'."
-            }
-          }
-        ]
-      }
-    ]
+    modules: partsToCurriculumModules(C_COURSE_PARTS, "c")
   },
 
   // =========================================================================
@@ -62,7 +83,7 @@ export const WEBDEV_AND_LANGUAGES_COURSES: CurriculumCourse[] = [
     level: "Beginner",
     weeks: "8 Weeks",
     duration_hours: 40,
-    lessons: 10,
+    lessons: countLessons(CPP_COURSE_PARTS),
     projects: 3,
     certificate: "ASCI Certificate of Completion",
     is_premium: false,
@@ -73,30 +94,7 @@ export const WEBDEV_AND_LANGUAGES_COURSES: CurriculumCourse[] = [
       "Pass-by-reference vs pass-by-value deep dive",
       "Class inheritance and method overriding explained simply"
     ],
-    modules: [
-      {
-        id: "cpp-mod-1",
-        title: "Module 1: Modern C++ Essentials",
-        sequence_order: 1,
-        description: "Standard I/O, strings, and references.",
-        lessons: [
-          {
-            id: "cpp-les-1",
-            title: "1.1 C++ Streams & First Program",
-            sequence_order: 1,
-            content_type: "challenge",
-            xp_reward: 50,
-            description: "Output data using cout and streams.",
-            content: "Write your first modern C++ program.",
-            challenge_data: {
-              initialCode: '#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "HELLO_CPP" << endl;\n    return 0;\n}\n',
-              expectedOutput: "HELLO_CPP",
-              instructions: "Output 'HELLO_CPP'."
-            }
-          }
-        ]
-      }
-    ]
+    modules: partsToCurriculumModules(CPP_COURSE_PARTS, "cpp")
   },
 
   // =========================================================================
@@ -111,7 +109,7 @@ export const WEBDEV_AND_LANGUAGES_COURSES: CurriculumCourse[] = [
     level: "Beginner",
     weeks: "12 Weeks",
     duration_hours: 60,
-    lessons: 10,
+    lessons: countLessons(WEBDEV_PARTS),
     projects: 5,
     certificate: "ASCI Full-Stack Frontend Certificate",
     is_premium: false,
@@ -122,30 +120,7 @@ export const WEBDEV_AND_LANGUAGES_COURSES: CurriculumCourse[] = [
       "Modern CSS Flexbox, Grid, Box Model, and typography",
       "JavaScript arrow functions, events, arrays, and DOM manipulation"
     ],
-    modules: [
-      {
-        id: "webdev-mod-1",
-        title: "Module 1: HTML5 & Web Structure",
-        sequence_order: 1,
-        description: "Learn tags, headings, paragraphs, and links.",
-        lessons: [
-          {
-            id: "webdev-les-1",
-            title: "1.1 The HTML Document Skeleton",
-            sequence_order: 1,
-            content_type: "challenge",
-            xp_reward: 50,
-            description: "Build a valid HTML5 page.",
-            content: "Structure a web page with headings and text.",
-            challenge_data: {
-              initialCode: 'console.log("HTML_READY");\n',
-              expectedOutput: "HTML_READY",
-              instructions: "Output 'HTML_READY'."
-            }
-          }
-        ]
-      }
-    ]
+    modules: partsToCurriculumModules(WEBDEV_PARTS, "webdev")
   },
 
   // =========================================================================
@@ -160,7 +135,7 @@ export const WEBDEV_AND_LANGUAGES_COURSES: CurriculumCourse[] = [
     level: "Beginner",
     weeks: "4 Weeks",
     duration_hours: 20,
-    lessons: 6,
+    lessons: countLessons(HTML_COURSE_PARTS),
     projects: 2,
     certificate: "ASCI Certificate of Completion",
     is_premium: false,
@@ -170,30 +145,7 @@ export const WEBDEV_AND_LANGUAGES_COURSES: CurriculumCourse[] = [
       "Live in-browser preview rendering",
       "Interactive quizzes on every tag"
     ],
-    modules: [
-      {
-        id: "html-mod-1",
-        title: "Module 1: HTML Basics",
-        sequence_order: 1,
-        description: "Headings, paragraphs, links, and forms.",
-        lessons: [
-          {
-            id: "html-les-1",
-            title: "1.1 HTML Document Structure",
-            sequence_order: 1,
-            content_type: "challenge",
-            xp_reward: 50,
-            description: "Understand HTML tags.",
-            content: "Create your first HTML element.",
-            challenge_data: {
-              initialCode: 'console.log("HTML5");\n',
-              expectedOutput: "HTML5",
-              instructions: "Output 'HTML5'."
-            }
-          }
-        ]
-      }
-    ]
+    modules: partsToCurriculumModules(HTML_COURSE_PARTS, "html")
   },
 
   // =========================================================================
@@ -208,7 +160,7 @@ export const WEBDEV_AND_LANGUAGES_COURSES: CurriculumCourse[] = [
     level: "Beginner",
     weeks: "4 Weeks",
     duration_hours: 25,
-    lessons: 6,
+    lessons: countLessons(CSS_COURSE_PARTS),
     projects: 2,
     certificate: "ASCI Certificate of Completion",
     is_premium: false,
@@ -218,30 +170,7 @@ export const WEBDEV_AND_LANGUAGES_COURSES: CurriculumCourse[] = [
       "Modern Flexbox alignment made simple",
       "Live styling sandbox"
     ],
-    modules: [
-      {
-        id: "css-mod-1",
-        title: "Module 1: CSS Basics & Box Model",
-        sequence_order: 1,
-        description: "Selectors, colors, and the box model.",
-        lessons: [
-          {
-            id: "css-les-1",
-            title: "1.1 CSS Selectors & Colors",
-            sequence_order: 1,
-            content_type: "challenge",
-            xp_reward: 50,
-            description: "Style an element using CSS.",
-            content: "Apply CSS rules.",
-            challenge_data: {
-              initialCode: 'console.log("CSS3");\n',
-              expectedOutput: "CSS3",
-              instructions: "Output 'CSS3'."
-            }
-          }
-        ]
-      }
-    ]
+    modules: partsToCurriculumModules(CSS_COURSE_PARTS, "css")
   },
 
   // =========================================================================
@@ -256,7 +185,7 @@ export const WEBDEV_AND_LANGUAGES_COURSES: CurriculumCourse[] = [
     level: "Beginner",
     weeks: "6 Weeks",
     duration_hours: 35,
-    lessons: 8,
+    lessons: countLessons(JAVASCRIPT_COURSE_PARTS),
     projects: 3,
     certificate: "ASCI Certificate of Completion",
     is_premium: false,
@@ -266,30 +195,7 @@ export const WEBDEV_AND_LANGUAGES_COURSES: CurriculumCourse[] = [
       "Interactive DOM events and button clicks",
       "Direct live console preview in browser"
     ],
-    modules: [
-      {
-        id: "js-mod-1",
-        title: "Module 1: JavaScript Fundamentals",
-        sequence_order: 1,
-        description: "Variables, functions, and DOM manipulation.",
-        lessons: [
-          {
-            id: "js-les-1",
-            title: "1.1 Variables & Output",
-            sequence_order: 1,
-            content_type: "challenge",
-            xp_reward: 50,
-            description: "Print output using console.log.",
-            content: "Execute your first JavaScript line.",
-            challenge_data: {
-              initialCode: 'console.log("JS_ES6");\n',
-              expectedOutput: "JS_ES6",
-              instructions: "Output 'JS_ES6'."
-            }
-          }
-        ]
-      }
-    ]
+    modules: partsToCurriculumModules(JAVASCRIPT_COURSE_PARTS, "javascript")
   },
 
   // =========================================================================
@@ -304,7 +210,7 @@ export const WEBDEV_AND_LANGUAGES_COURSES: CurriculumCourse[] = [
     level: "Intermediate",
     weeks: "6 Weeks",
     duration_hours: 32,
-    lessons: 12,
+    lessons: countLessons(TYPESCRIPT_COURSE_PARTS),
     projects: 3,
     certificate: "ASCI Certificate of Completion",
     is_premium: false,
@@ -315,30 +221,7 @@ export const WEBDEV_AND_LANGUAGES_COURSES: CurriculumCourse[] = [
       "Interactive code sandbox with real-time type inference preview",
       "Advanced utility types and generics mastery"
     ],
-    modules: [
-      {
-        id: "ts-mod-1",
-        title: "Module 1: TypeScript Foundations",
-        sequence_order: 1,
-        description: "Primitive types, inference, and interface contracts.",
-        lessons: [
-          {
-            id: "ts-les-1",
-            title: "1.1 Static Types & Functions",
-            sequence_order: 1,
-            content_type: "challenge",
-            xp_reward: 50,
-            description: "Declare typed variables and function signatures.",
-            content: "Write and execute your first typed function.",
-            challenge_data: {
-              initialCode: 'const greeting: string = "HELLO_TS";\nconsole.log(greeting);\n',
-              expectedOutput: "HELLO_TS",
-              instructions: "Output 'HELLO_TS'."
-            }
-          }
-        ]
-      }
-    ]
+    modules: partsToCurriculumModules(TYPESCRIPT_COURSE_PARTS, "typescript")
   },
 
   // =========================================================================
@@ -353,7 +236,7 @@ export const WEBDEV_AND_LANGUAGES_COURSES: CurriculumCourse[] = [
     level: "Intermediate",
     weeks: "8 Weeks",
     duration_hours: 45,
-    lessons: 14,
+    lessons: countLessons(REACT_COURSE_PARTS),
     projects: 4,
     certificate: "ASCI Certificate of Completion",
     is_premium: false,
@@ -364,30 +247,7 @@ export const WEBDEV_AND_LANGUAGES_COURSES: CurriculumCourse[] = [
       "React Server Components (RSC) vs Client Components",
       "Building production full-stack web applications"
     ],
-    modules: [
-      {
-        id: "react-mod-1",
-        title: "Module 1: React Component Essentials",
-        sequence_order: 1,
-        description: "JSX, props, and useState reactive hooks.",
-        lessons: [
-          {
-            id: "react-les-1",
-            title: "1.1 First React Component",
-            sequence_order: 1,
-            content_type: "challenge",
-            xp_reward: 50,
-            description: "Render a reactive component.",
-            content: "Create your first component.",
-            challenge_data: {
-              initialCode: 'console.log("REACT_19");\n',
-              expectedOutput: "REACT_19",
-              instructions: "Output 'REACT_19'."
-            }
-          }
-        ]
-      }
-    ]
+    modules: partsToCurriculumModules(REACT_COURSE_PARTS, "react")
   },
 
   // =========================================================================
@@ -402,7 +262,7 @@ export const WEBDEV_AND_LANGUAGES_COURSES: CurriculumCourse[] = [
     level: "Beginner",
     weeks: "6 Weeks",
     duration_hours: 30,
-    lessons: 12,
+    lessons: countLessons(SQL_COURSE_PARTS),
     projects: 3,
     certificate: "ASCI Certificate of Completion",
     is_premium: false,
@@ -413,30 +273,7 @@ export const WEBDEV_AND_LANGUAGES_COURSES: CurriculumCourse[] = [
       "B-Tree index optimization & EXPLAIN ANALYZE execution plans",
       "Atomic transactions & concurrency isolation levels"
     ],
-    modules: [
-      {
-        id: "sql-mod-1",
-        title: "Module 1: SQL Foundations",
-        sequence_order: 1,
-        description: "SELECT, WHERE, and sorting relational records.",
-        lessons: [
-          {
-            id: "sql-les-1",
-            title: "1.1 Basic SELECT Query",
-            sequence_order: 1,
-            content_type: "challenge",
-            xp_reward: 50,
-            description: "Query rows with column projections.",
-            content: "Write your first SQL SELECT statement.",
-            challenge_data: {
-              initialCode: 'SELECT "HELLO_SQL";\n',
-              expectedOutput: "HELLO_SQL",
-              instructions: "Output 'HELLO_SQL'."
-            }
-          }
-        ]
-      }
-    ]
+    modules: partsToCurriculumModules(SQL_COURSE_PARTS, "sql")
   },
 
   // =========================================================================
@@ -451,7 +288,7 @@ export const WEBDEV_AND_LANGUAGES_COURSES: CurriculumCourse[] = [
     level: "Beginner",
     weeks: "6 Weeks",
     duration_hours: 32,
-    lessons: 12,
+    lessons: countLessons(GIT_DEVOPS_COURSE_PARTS),
     projects: 3,
     certificate: "ASCI Certificate of Completion",
     is_premium: false,
@@ -462,30 +299,6 @@ export const WEBDEV_AND_LANGUAGES_COURSES: CurriculumCourse[] = [
       "Multi-stage Docker builds for minimal production images",
       "Automating deployment with GitHub Actions"
     ],
-    modules: [
-      {
-        id: "git-mod-1",
-        title: "Module 1: Version Control Basics",
-        sequence_order: 1,
-        description: "Repositories, commits, and staging area.",
-        lessons: [
-          {
-            id: "git-les-1",
-            title: "1.1 Initializing Repositories",
-            sequence_order: 1,
-            content_type: "challenge",
-            xp_reward: 50,
-            description: "Initialize a repository and stage changes.",
-            content: "Run your first git commands.",
-            challenge_data: {
-              initialCode: 'echo "GIT_DEVOPS"\n',
-              expectedOutput: "GIT_DEVOPS",
-              instructions: "Output 'GIT_DEVOPS'."
-            }
-          }
-        ]
-      }
-    ]
+    modules: partsToCurriculumModules(GIT_DEVOPS_COURSE_PARTS, "git")
   }
 ]
-

@@ -132,7 +132,7 @@ export function Features({ stats }: { stats?: PlatformStats }) {
 
   return (
     <section id="features" className="relative py-20 lg:py-28 bg-secondary/50 border-y border-hairline">
-      <div className="relative mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+      <div className="relative mx-auto max-w-[1400px] px-5 sm:px-6 lg:px-8">
         {/* Header */}
         {/* Header with Dedicated Axel Stage */}
         <div ref={headerRef} className="relative mb-14 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">

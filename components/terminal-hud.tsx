@@ -10,7 +10,7 @@ interface TerminalHudProps {
 export function TerminalHud({ status, title = "System Terminal" }: TerminalHudProps) {
     const getStatusColor = () => {
         switch (status) {
-            case "success": return "text-[#ea580c] border-[#ea580c]/30"
+            case "success": return "text-emerald-500 border-emerald-500/30"
             case "error": return "text-error border-error/30"
             case "running": return "text-info border-info/30"
             default: return "text-primary border-primary/20"
@@ -46,7 +46,7 @@ export function TerminalHud({ status, title = "System Terminal" }: TerminalHudPr
                     <div className="h-8 w-[1px] bg-border/30" />
                     <div className="flex flex-col items-end">
                         <span className="font-mono text-[9px] uppercase text-muted-foreground/40">Encryption</span>
-                        <ShieldCheck className={`h-3.5 w-3.5 mt-0.5 ${status === 'success' ? 'text-[#ea580c]' : 'text-muted-foreground/30'}`} />
+                        <ShieldCheck className={`h-3.5 w-3.5 mt-0.5 ${status === 'success' ? 'text-emerald-500' : 'text-muted-foreground/30'}`} />
                     </div>
                 </div>
 

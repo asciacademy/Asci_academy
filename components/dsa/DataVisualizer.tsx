@@ -55,7 +55,7 @@ export default function DataVisualizer({
                                 className={`
                                     w-14 h-14 sm:w-16 sm:h-16 rounded-2xl border-2 flex items-center justify-center
                                     transition-all duration-300 font-mono text-xl sm:text-2xl font-black
-                                    ${isComparing ? "border-amber-500 bg-amber-500/15 scale-105 z-10" : 
+                                    ${isComparing ? "border-blue-500 bg-blue-500/15 scale-105 z-10" : 
                                       isHighlighted ? "border-primary bg-primary/20 scale-105 z-10" : 
                                       "border-white/10 bg-white/5"}
                                 `}

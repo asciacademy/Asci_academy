@@ -106,7 +106,7 @@ export function RouteProgressBar() {
       {/* Progress track */}
       <div className="relative h-[2.5px] w-full bg-transparent overflow-hidden">
         <div
-          className="h-full bg-[#ea580c] transition-all duration-200 ease-out"
+          className="h-full bg-gradient-to-r from-blue-600 via-indigo-500 to-cyan-400 transition-all duration-200 ease-out shadow-xs shadow-blue-500/50"
           style={{ width: `${progress}%` }}
         />
       </div>

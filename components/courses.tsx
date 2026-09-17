@@ -7,7 +7,7 @@ import {
   ArrowRight, Code2, Server, Layers, Globe, Cloud, Zap, Braces, Clock,
   BarChart3, BookOpen, TerminalSquare, BrainCircuit, ShieldCheck, GitBranch,
   Award, Search, Star, Filter, LayoutGrid, List, Users, CheckCircle2,
-  X, ChevronDown, Check, ChevronLeft, ChevronRight, Rows3, Plus, PlayCircle
+  X, ChevronDown, Check, ChevronLeft, ChevronRight, Rows3, Plus, PlayCircle, Loader2
 } from "lucide-react"
 import { useAuth } from "@/context/auth-context"
 import { CURRICULUM_COURSES } from "@/lib/curriculum-data"
@@ -16,6 +16,7 @@ import { EnrollModal } from "@/components/enroll-modal"
 import { TechLogo } from "@/components/tech-logo"
 import { WishlistButton } from "@/components/courses/wishlist-button"
 import { useWishlist, useEnrollments } from "@/lib/user-learning-store"
+import { enrollInCourse } from "@/app/actions/courses"
 import { EmptyBook3DIcon } from "@/components/icons"
 import { CareerRoleShelf } from "@/components/courses/career-role-shelf"
 import { CAREER_ROLE_TRACKS, CareerRoleTrack } from "@/lib/career-roles-data"
@@ -123,10 +124,19 @@ export function Courses({ hideHeader = false, className = "" }: CoursesProps = {
   const [viewMode, setViewMode] = useState<"pathways" | "grid" | "list">("pathways")
   const [sortBy, setSortBy] = useState<"popular" | "rating" | "newest">("popular")
   const [courses, setCourses] = useState<CourseType[]>(BASE_COURSES)
+  const [navigatingSlug, setNavigatingSlug] = useState<string | null>(null)
+  const [isFilterPending, setIsFilterPending] = useState(false)
   const { profile } = useAuth()
   const userTier = profile?.subscription_tier || null
   const { isSaved, count: wishlistCount } = useWishlist()
   const { isEnrolled, getEnrollment, enroll, count: enrolledCount } = useEnrollments()
+
+  const handleFilterSelect = (cat: string) => {
+    if (filter === cat) return
+    setIsFilterPending(true)
+    setFilter(cat)
+    setTimeout(() => setIsFilterPending(false), 200)
+  }
 
   // Enrollment modal state
   const [activeEnrollCourse, setActiveEnrollCourse] = useState<{
@@ -249,17 +259,6 @@ export function Courses({ hideHeader = false, className = "" }: CoursesProps = {
   // Filter Career Role Tracks for horizontal shelf view
   const filteredTracks = useMemo(() => {
     return CAREER_ROLE_TRACKS.map((track) => {
-      // Role category match
-      if (filter === "AI & ML" && track.roleCategory !== "AI & ML") return null
-      if (filter === "Data Science" && track.roleCategory !== "Data Science") return null
-      if (filter === "Cybersecurity" && track.roleCategory !== "Cybersecurity") return null
-      if (
-        (filter === "Web Development" || filter === "Languages & Web" || filter === "Programming") &&
-        track.roleCategory !== "Web Development"
-      ) {
-        return null
-      }
-      if (filter === "DSA" && track.id !== "full-stack-web-architect") return null
       if (filter === "Enrolled") {
         const enrolledCourses = track.courses.filter((course) => isEnrolled(course.slug || course.id))
         if (enrolledCourses.length === 0) return null
@@ -273,6 +272,15 @@ export function Courses({ hideHeader = false, className = "" }: CoursesProps = {
 
       // Filter courses within this track
       const matchingCourses = track.courses.filter((course) => {
+        // Category filtering
+        if (filter !== "All") {
+          if (filter === "Languages & Web") {
+            if (course.category !== "Web Development" && course.category !== "Programming") return false
+          } else if (course.category !== filter) {
+            return false
+          }
+        }
+
         if (credentialFilter !== "All Types") {
           if (!course.credential.toLowerCase().includes(credentialFilter.toLowerCase())) return false
         }
@@ -307,7 +315,8 @@ export function Courses({ hideHeader = false, className = "" }: CoursesProps = {
   // Finite pagination & batch browsing (eliminates infinite scroll fatigue)
   const [currentPage, setCurrentPage] = useState(1)
   const [showAll, setShowAll] = useState(false)
-  const itemsPerPage = hideHeader ? (viewMode === "grid" ? 12 : 8) : (viewMode === "grid" ? 8 : 6)
+  // Strictly 2 rows per page in grid view (2 rows x 3 columns = 6 items); paginate if exceeded
+  const itemsPerPage = viewMode === "grid" ? 6 : 4
 
   // Reset pagination whenever filters, category tabs, or view modes change
   useEffect(() => {
@@ -356,7 +365,7 @@ export function Courses({ hideHeader = false, className = "" }: CoursesProps = {
 
   return (
     <section id="courses" className={`relative ${hideHeader ? "py-6 lg:py-10" : "py-16 lg:py-24"} bg-background ${className}`}>
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="relative mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         {/* Section Header with Dedicated Axel Stage */}
         {!hideHeader && (
@@ -499,9 +508,9 @@ export function Courses({ hideHeader = false, className = "" }: CoursesProps = {
                 return (
                   <button
                     key={cat}
-                    onClick={() => setFilter(cat)}
+                    onClick={() => handleFilterSelect(cat)}
                     suppressHydrationWarning
-                    className={`group inline-flex items-center gap-2 rounded-xl px-3.5 py-1.5 text-xs font-medium transition-[color,background-color,border-color,box-shadow] duration-150 active:scale-[0.98] cursor-pointer ${
+                    className={`group inline-flex items-center gap-2 rounded-xl px-3.5 py-1.5 text-xs font-medium transition-[color,background-color,border-color,box-shadow,transform] duration-150 active:scale-[0.98] cursor-pointer ${
                       isActive
                         ? "bg-card text-foreground border border-hairline shadow-xs font-semibold"
                         : "text-muted-foreground hover:text-foreground hover:bg-card/40"
@@ -556,8 +565,8 @@ export function Courses({ hideHeader = false, className = "" }: CoursesProps = {
             {/* Metric Status indicator */}
             <div className="flex items-center gap-2 text-muted-foreground font-mono text-[11px]">
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ea580c] opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#ea580c]"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-600 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
               </span>
               <span>
                 {viewMode === "pathways" ? (
@@ -604,12 +613,14 @@ export function Courses({ hideHeader = false, className = "" }: CoursesProps = {
               </button>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-8 lg:space-y-10">
               {filteredTracks.map((track) => (
                 <CareerRoleShelf
                   key={track.id}
                   track={track}
                   userTier={userTier}
+                  navigatingSlug={navigatingSlug}
+                  onSelectCourse={(slug) => setNavigatingSlug(slug)}
                   onQuickEnroll={(course) =>
                     setActiveEnrollCourse({
                       title: course.title,
@@ -642,39 +653,49 @@ export function Courses({ hideHeader = false, className = "" }: CoursesProps = {
           </div>
         ) : viewMode === "grid" ? (
           /* Course Grid View (Finite Paginated Batch) */
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {paginatedCourses.map((course) => (
-              <CourseGridCard
-                key={course.id || course.slug}
-                course={course}
-                userTier={userTier}
-                onQuickEnroll={() =>
-                  setActiveEnrollCourse({
-                    title: course.title,
-                    slug: course.slug || course.id,
-                    partner: course.courseraData.partner
-                  })
-                }
-              />
-            ))}
+          <div className={`grid gap-6 sm:grid-cols-2 lg:grid-cols-3 transition-opacity duration-200 ${isFilterPending ? "opacity-60 pointer-events-none" : "opacity-100"}`}>
+            {paginatedCourses.map((course) => {
+              const cSlug = course.slug || course.id
+              return (
+                <CourseGridCard
+                  key={course.id || course.slug}
+                  course={course}
+                  userTier={userTier}
+                  isSelected={navigatingSlug === cSlug}
+                  onSelect={() => setNavigatingSlug(cSlug)}
+                  onQuickEnroll={() =>
+                    setActiveEnrollCourse({
+                      title: course.title,
+                      slug: cSlug,
+                      partner: course.courseraData.partner
+                    })
+                  }
+                />
+              )
+            })}
           </div>
         ) : (
           /* Course Detailed List View (Finite Paginated Batch) */
-          <div className="space-y-4">
-            {paginatedCourses.map((course) => (
-              <CourseListCard
-                key={course.id || course.slug}
-                course={course}
-                userTier={userTier}
-                onQuickEnroll={() =>
-                  setActiveEnrollCourse({
-                    title: course.title,
-                    slug: course.slug || course.id,
-                    partner: course.courseraData.partner
-                  })
-                }
-              />
-            ))}
+          <div className={`space-y-4 transition-opacity duration-200 ${isFilterPending ? "opacity-60 pointer-events-none" : "opacity-100"}`}>
+            {paginatedCourses.map((course) => {
+              const cSlug = course.slug || course.id
+              return (
+                <CourseListCard
+                  key={course.id || course.slug}
+                  course={course}
+                  userTier={userTier}
+                  isSelected={navigatingSlug === cSlug}
+                  onSelect={() => setNavigatingSlug(cSlug)}
+                  onQuickEnroll={() =>
+                    setActiveEnrollCourse({
+                      title: course.title,
+                      slug: cSlug,
+                      partner: course.courseraData.partner
+                    })
+                  }
+                />
+              )
+            })}
           </div>
         )}
 
@@ -839,11 +860,15 @@ function getCourseHref(courseSlug: string, isPremiumLocked?: boolean): string {
 function CourseGridCard({
   course,
   userTier,
-  onQuickEnroll
+  onQuickEnroll,
+  isSelected = false,
+  onSelect,
 }: {
   course: CourseType
   userTier: string | null
   onQuickEnroll: () => void
+  isSelected?: boolean
+  onSelect?: () => void
 }) {
   const { isEnrolled, getEnrollment, enroll } = useEnrollments()
   const isPremiumLocked = course.is_premium && userTier !== "architect"
@@ -852,7 +877,7 @@ function CourseGridCard({
   const data = course.courseraData
   const enrolled = isEnrolled(courseSlug)
   const enrolledData = getEnrollment(courseSlug)
-  const lessonHref = `/programs/${courseSlug}/course`
+  const lessonHref = `/courses/${courseSlug}/learn`
 
   const handleEnrollClick = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -870,11 +895,24 @@ function CourseGridCard({
       lessonsCompleted: 0,
       totalLessons: (course.modules || 4) * 3,
     })
+    enrollInCourse(courseSlug).catch(() => {})
     onQuickEnroll()
   }
 
   return (
-    <div className="course-card group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-stone-200/80 dark:border-stone-800/80 bg-card hover:border-amber-500/40 dark:hover:border-amber-500/30 transition-[transform,border-color,box-shadow] duration-200 ease-out hover:-translate-y-0.5 shadow-xs hover:shadow-md will-change-[transform]">
+    <div className={`course-card group relative flex flex-col justify-between overflow-hidden rounded-3xl border bg-card transition-[transform,border-color,box-shadow] duration-200 ease-out hover:-translate-y-0.5 shadow-xs hover:shadow-md will-change-[transform] ${
+      isSelected
+        ? "border-primary ring-2 ring-primary/40 shadow-lg shadow-primary/10"
+        : "border-stone-200/80 dark:border-stone-800/80 hover:border-blue-500/40 dark:hover:border-blue-500/30"
+    }`}>
+      {isSelected && (
+        <div className="absolute inset-0 z-30 bg-background/60 dark:bg-black/60 backdrop-blur-[1.5px] flex items-center justify-center p-4 select-none">
+          <div className="flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-4 py-2 text-xs font-semibold shadow-lg shadow-primary/25 animate-pulse">
+            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+            <span>Launching {course.title.split(" ")[0]}...</span>
+          </div>
+        </div>
+      )}
       <div>
         {/* 16:9 Thumbnail Image Cover */}
         <div className="relative aspect-[16/9] w-full overflow-hidden bg-stone-100 dark:bg-stone-900">
@@ -911,7 +949,7 @@ function CourseGridCard({
                 thumbnail: data.thumbnail
               }}
               variant="icon"
-              className="h-6 w-6 bg-black/60 backdrop-blur-xs border border-white/20 text-white hover:text-amber-400 shadow-xs active:scale-95 transition-transform"
+              className="h-6 w-6 bg-black/60 backdrop-blur-xs border border-white/20 text-white hover:text-blue-400 shadow-xs active:scale-95 transition-transform"
             />
           </div>
         </div>
@@ -923,14 +961,18 @@ function CourseGridCard({
             <span className="truncate max-w-[200px] font-semibold text-primary text-[11px] tracking-wide uppercase">
               {data.partner || `${course.modules || 4} Modules`}
             </span>
-            <div className="flex items-center gap-1 text-amber-500 dark:text-amber-400 font-bold shrink-0">
+            <div className="flex items-center gap-1 text-yellow-400 dark:text-yellow-400 font-bold shrink-0">
               <Star className="h-3 w-3 fill-current" />
               <span>{data.rating.toFixed(1)}</span>
             </div>
           </div>
 
           {/* Title */}
-          <Link href={href} className="group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
+          <Link
+            href={href}
+            onClick={() => onSelect?.()}
+            className="group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
+          >
             <h3 className="font-serif text-lg font-medium text-foreground line-clamp-2 leading-snug">
               {course.title}
             </h3>
@@ -951,11 +993,11 @@ function CourseGridCard({
             <div className="pt-2 space-y-1.5">
               <div className="flex justify-between text-[11px] font-mono text-muted-foreground">
                 <span>{enrolledData?.lessonsCompleted ?? 0} / {enrolledData?.totalLessons ?? ((course.modules || 4) * 3)} Lessons</span>
-                <span className="text-amber-700 dark:text-amber-400 font-bold">{enrolledData?.progressPercent ?? 0}%</span>
+                <span className="text-blue-600 dark:text-blue-400 font-bold">{enrolledData?.progressPercent ?? 0}%</span>
               </div>
               <div className="w-full h-1.5 bg-stone-100 dark:bg-stone-800 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-gradient-to-r from-amber-500 to-orange-500 rounded-full transition-all duration-500"
+                  className="h-full bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full transition-all duration-500"
                   style={{ width: `${enrolledData?.progressPercent ?? 0}%` }}
                 />
               </div>
@@ -966,18 +1008,25 @@ function CourseGridCard({
 
       {/* Card Action Footer: Only Action Button and Explore */}
       <div className="p-4 pt-3 flex items-center justify-between border-t border-stone-100 dark:border-stone-800/80 mt-auto">
-        {enrolled ? (
+        {isSelected ? (
+          <div className="w-full inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-xl bg-primary text-white text-xs font-semibold shadow-xs">
+            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+            <span>Launching course...</span>
+          </div>
+        ) : enrolled ? (
           <div className="w-full flex items-center gap-2">
             <Link
               href={lessonHref}
-              className="flex-1 inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-xs font-semibold shadow-2xs transition-all active:scale-[0.98] cursor-pointer"
+              onClick={() => onSelect?.()}
+              className="flex-1 inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 text-white text-xs font-semibold shadow-md shadow-blue-500/20 transition-all active:scale-[0.98] cursor-pointer"
             >
               <PlayCircle className="w-3.5 h-3.5" />
               <span>Continue</span>
             </Link>
             <Link
               href={href}
-              className="inline-flex items-center justify-center gap-1 px-3 py-2 rounded-xl border border-stone-200 dark:border-stone-800 bg-secondary/50 hover:bg-secondary text-xs font-medium text-foreground hover:text-amber-600 dark:hover:text-amber-400 transition-colors cursor-pointer active:scale-[0.98] shrink-0"
+              onClick={() => onSelect?.()}
+              className="inline-flex items-center justify-center gap-1 px-3 py-2 rounded-xl border border-stone-200 dark:border-stone-800 bg-secondary/50 hover:bg-secondary text-xs font-medium text-foreground hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer active:scale-[0.98] shrink-0"
             >
               <span>Explore</span>
               <ArrowRight className="w-3 h-3" />
@@ -987,14 +1036,15 @@ function CourseGridCard({
           <div className="w-full flex items-center gap-2">
             <button
               onClick={handleEnrollClick}
-              className="flex-1 inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white transition-all text-xs font-semibold cursor-pointer shadow-2xs active:scale-[0.98]"
+              className="flex-1 inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 text-white transition-all text-xs font-semibold cursor-pointer shadow-md shadow-blue-500/20 active:scale-[0.98]"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Enroll Track</span>
             </button>
             <Link
               href={href}
-              className="inline-flex items-center justify-center gap-1 px-3 py-2 rounded-xl border border-stone-200 dark:border-stone-800 bg-secondary/50 hover:bg-secondary text-xs font-medium text-foreground hover:text-amber-600 dark:hover:text-amber-400 transition-colors cursor-pointer active:scale-[0.98] shrink-0"
+              onClick={() => onSelect?.()}
+              className="inline-flex items-center justify-center gap-1 px-3 py-2 rounded-xl border border-stone-200 dark:border-stone-800 bg-secondary/50 hover:bg-secondary text-xs font-medium text-foreground hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer active:scale-[0.98] shrink-0"
             >
               <span>Explore</span>
               <ArrowRight className="w-3 h-3" />
@@ -1012,11 +1062,15 @@ function CourseGridCard({
 function CourseListCard({
   course,
   userTier,
-  onQuickEnroll
+  onQuickEnroll,
+  isSelected = false,
+  onSelect,
 }: {
   course: CourseType
   userTier: string | null
   onQuickEnroll: () => void
+  isSelected?: boolean
+  onSelect?: () => void
 }) {
   const { isEnrolled, getEnrollment, enroll } = useEnrollments()
   const isPremiumLocked = course.is_premium && userTier !== "architect"
@@ -1025,7 +1079,7 @@ function CourseListCard({
   const data = course.courseraData
   const enrolled = isEnrolled(courseSlug)
   const enrolledData = getEnrollment(courseSlug)
-  const lessonHref = `/programs/${courseSlug}/course`
+  const lessonHref = `/courses/${courseSlug}/learn`
 
   const handleEnrollClick = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -1043,11 +1097,24 @@ function CourseListCard({
       lessonsCompleted: 0,
       totalLessons: (course.modules || 4) * 3,
     })
+    enrollInCourse(courseSlug).catch(() => {})
     onQuickEnroll()
   }
 
   return (
-    <div className="course-card group relative flex flex-col sm:flex-row overflow-hidden rounded-3xl border border-stone-200/80 dark:border-stone-800/80 bg-card hover:border-amber-500/40 dark:hover:border-amber-500/30 transition-[transform,border-color,box-shadow] duration-200 ease-out hover:-translate-y-0.5 shadow-xs hover:shadow-md will-change-[transform]">
+    <div className={`course-card group relative flex flex-col sm:flex-row overflow-hidden rounded-3xl border bg-card transition-[transform,border-color,box-shadow] duration-200 ease-out hover:-translate-y-0.5 shadow-xs hover:shadow-md will-change-[transform] ${
+      isSelected
+        ? "border-primary ring-2 ring-primary/40 shadow-lg shadow-primary/10"
+        : "border-stone-200/80 dark:border-stone-800/80 hover:border-blue-500/40 dark:hover:border-blue-500/30"
+    }`}>
+      {isSelected && (
+        <div className="absolute inset-0 z-30 bg-background/60 dark:bg-black/60 backdrop-blur-[1.5px] flex items-center justify-center p-4 select-none">
+          <div className="flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-4 py-2 text-xs font-semibold shadow-lg shadow-primary/25 animate-pulse">
+            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+            <span>Launching {course.title.split(" ")[0]}...</span>
+          </div>
+        </div>
+      )}
       {/* Left Thumbnail Cover */}
       <div className="relative aspect-video sm:aspect-square sm:w-60 md:w-64 shrink-0 overflow-hidden bg-stone-100 dark:bg-stone-900">
         <Image
@@ -1083,7 +1150,7 @@ function CourseListCard({
               thumbnail: data.thumbnail
             }}
             variant="icon"
-            className="h-6 w-6 bg-black/60 backdrop-blur-xs border border-white/20 text-white hover:text-amber-400 shadow-xs active:scale-95 transition-transform"
+            className="h-6 w-6 bg-black/60 backdrop-blur-xs border border-white/20 text-white hover:text-blue-400 shadow-xs active:scale-95 transition-transform"
           />
         </div>
       </div>
@@ -1102,7 +1169,11 @@ function CourseListCard({
           </div>
 
           {/* Title */}
-          <Link href={href} className="group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
+          <Link
+            href={href}
+            onClick={() => onSelect?.()}
+            className="group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
+          >
             <h3 className="font-serif text-lg sm:text-xl font-normal text-foreground leading-snug">
               {course.title}
             </h3>
@@ -1114,14 +1185,14 @@ function CourseListCard({
             <span>•</span>
             <span>{course.weeks || "6 Weeks"}</span>
             <span>•</span>
-            <div className="flex items-center gap-0.5 text-amber-500 dark:text-amber-400 font-bold">
+            <div className="flex items-center gap-0.5 text-yellow-400 dark:text-yellow-400 font-bold">
               <Star className="h-3.5 w-3.5 fill-current" />
               <span>{data.rating.toFixed(1)}</span>
             </div>
             {course.certificate && (
               <>
                 <span>•</span>
-                <span className="text-amber-600 dark:text-amber-400 font-medium">Certificate Included</span>
+                <span className="text-blue-600 dark:text-blue-400 font-medium">Certificate Included</span>
               </>
             )}
           </div>
@@ -1136,11 +1207,11 @@ function CourseListCard({
             <div className="mt-3.5 space-y-1.5 max-w-md">
               <div className="flex justify-between text-[11px] font-mono text-muted-foreground">
                 <span>{enrolledData?.lessonsCompleted ?? 0} / {enrolledData?.totalLessons ?? ((course.modules || 4) * 3)} Lessons</span>
-                <span className="text-amber-700 dark:text-amber-400 font-bold">{enrolledData?.progressPercent ?? 0}%</span>
+                <span className="text-blue-600 dark:text-blue-400 font-bold">{enrolledData?.progressPercent ?? 0}%</span>
               </div>
               <div className="w-full h-1.5 bg-stone-100 dark:bg-stone-800 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-gradient-to-r from-amber-500 to-orange-500 rounded-full transition-all duration-500"
+                  className="h-full bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full transition-all duration-500"
                   style={{ width: `${enrolledData?.progressPercent ?? 0}%` }}
                 />
               </div>
@@ -1175,14 +1246,20 @@ function CourseListCard({
           </div>
 
           <div className="flex items-center gap-2.5">
-            {enrolled ? (
+            {isSelected ? (
+              <div className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-4 py-2 text-xs font-semibold text-white shadow-xs">
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                <span>Launching course...</span>
+              </div>
+            ) : enrolled ? (
               <>
-                <span className="inline-flex items-center gap-1 text-xs font-mono text-amber-700 dark:text-amber-400 font-semibold">
+                <span className="inline-flex items-center gap-1 text-xs font-mono text-blue-600 dark:text-blue-400 font-semibold">
                   <Check className="w-3.5 h-3.5 text-emerald-500" /> Enrolled
                 </span>
                 <Link
                   href={lessonHref}
-                  className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 px-4 py-2 text-xs font-semibold text-white shadow-2xs transition-all active:scale-[0.98] cursor-pointer"
+                  onClick={() => onSelect?.()}
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 px-4 py-2 text-xs font-semibold text-white shadow-md shadow-blue-500/20 transition-all active:scale-[0.98] cursor-pointer"
                 >
                   <PlayCircle className="w-3.5 h-3.5" />
                   <span>Continue Lesson</span>
@@ -1192,13 +1269,14 @@ function CourseListCard({
               <>
                 <button
                   onClick={handleEnrollClick}
-                  className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 px-4 py-2 text-xs font-semibold text-white shadow-2xs transition-all cursor-pointer active:scale-[0.98]"
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 px-4 py-2 text-xs font-semibold text-white shadow-md shadow-blue-500/20 transition-all cursor-pointer active:scale-[0.98]"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>Enroll Track</span>
                 </button>
                 <Link
                   href={href}
+                  onClick={() => onSelect?.()}
                   className="inline-flex items-center gap-1.5 rounded-xl border border-hairline bg-card hover:bg-secondary px-4 py-2 text-xs font-medium text-foreground transition-colors shadow-2xs active:scale-[0.98]"
                 >
                   <span>Explore Syllabus</span>

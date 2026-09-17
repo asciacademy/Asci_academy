@@ -19,12 +19,27 @@ function toBinary(n: number): string {
 
 export default function RamInspector() {
   const [inputWord, setInputWord] = useState("DOG");
-  const [cells, setCells] = useState<MemoryCell[]>([]);
+  const [cells, setCells] = useState<MemoryCell[]>(() => {
+    return "DOG".split("").map((char, i) => ({
+      address: `0x${(i + 1).toString(16).padStart(2, "0").toUpperCase()}`,
+      char,
+      ascii: char.charCodeAt(0),
+      binary: toBinary(char.charCodeAt(0)),
+      revealed: false,
+    }));
+  });
   const [isRunning, setIsRunning] = useState(false);
   const [activeIdx, setActiveIdx] = useState(-1);
   const [phase, setPhase] = useState<"idle" | "ascii" | "binary" | "done">("idle");
   const [logs, setLogs] = useState<string[]>(["SYSTEM: RAM Byte-Inspector online."]);
   const logRef = useRef<HTMLDivElement>(null);
+  const abortRef = useRef(false);
+
+  useEffect(() => {
+    return () => {
+      abortRef.current = true;
+    };
+  }, []);
 
   useEffect(() => {
     if (logRef.current) logRef.current.scrollIntoView({ behavior: "smooth" });
@@ -32,8 +47,27 @@ export default function RamInspector() {
 
   const pushLog = (msg: string) => setLogs((p) => [...p, msg]);
 
+  const handleWordChange = (newWord: string) => {
+    abortRef.current = true;
+    setIsRunning(false);
+    setActiveIdx(-1);
+    setPhase("idle");
+    const cleaned = newWord.toUpperCase().replace(/[^A-Z]/g, "").slice(0, 8);
+    setInputWord(cleaned);
+    const newCells = cleaned.split("").map((char, i) => ({
+      address: `0x${(i + 1).toString(16).padStart(2, "0").toUpperCase()}`,
+      char,
+      ascii: char.charCodeAt(0),
+      binary: toBinary(char.charCodeAt(0)),
+      revealed: false,
+    }));
+    setCells(newCells);
+    setLogs([`SYSTEM: Buffer set to "${cleaned}". Click Inspect to write to RAM.`]);
+  };
+
   const runInspection = async () => {
     if (isRunning || inputWord.length === 0) return;
+    abortRef.current = false;
     setIsRunning(true);
 
     const word = inputWord.toUpperCase().slice(0, 8);
@@ -49,6 +83,7 @@ export default function RamInspector() {
     setLogs([`INIT: Processing "${word}" (${word.length} bytes)...`]);
 
     for (let i = 0; i < newCells.length; i++) {
+      if (abortRef.current) return;
       const cell = newCells[i];
 
       // Phase 1: Show ASCII
@@ -56,17 +91,20 @@ export default function RamInspector() {
       setPhase("ascii");
       pushLog(`LOOKUP: '${cell.char}' → ASCII ${cell.ascii}`);
       await new Promise((r) => setTimeout(r, 800));
+      if (abortRef.current) return;
 
       // Phase 2: Convert to binary
       setPhase("binary");
       pushLog(`ENCODE: ${cell.ascii} → ${cell.binary}`);
       await new Promise((r) => setTimeout(r, 800));
+      if (abortRef.current) return;
 
       // Phase 3: Store in memory
       newCells[i] = { ...newCells[i], revealed: true };
       setCells([...newCells]);
       pushLog(`STORE: ${cell.binary} → ${cell.address}`);
       await new Promise((r) => setTimeout(r, 500));
+      if (abortRef.current) return;
     }
 
     setActiveIdx(-1);
@@ -76,7 +114,15 @@ export default function RamInspector() {
   };
 
   const handleReset = () => {
-    setCells([]);
+    abortRef.current = true;
+    const resetCells = inputWord.split("").map((char, i) => ({
+      address: `0x${(i + 1).toString(16).padStart(2, "0").toUpperCase()}`,
+      char,
+      ascii: char.charCodeAt(0),
+      binary: toBinary(char.charCodeAt(0)),
+      revealed: false,
+    }));
+    setCells(resetCells);
     setActiveIdx(-1);
     setPhase("idle");
     setLogs(["SYSTEM: Memory cleared."]);
@@ -88,7 +134,7 @@ export default function RamInspector() {
       {/* Header */}
       <div className="p-4 border-b border-white/5 bg-[#050505]/95 backdrop-blur-xl flex items-center justify-between shrink-0">
         <div className="flex items-center gap-3">
-          <Cpu className="text-[#ea580c]" size={20} />
+          <Cpu className="text-blue-500" size={20} />
           <h2 className="font-mono text-sm uppercase tracking-widest font-black text-zinc-100">
             RAM Byte-Inspector
           </h2>
@@ -108,22 +154,22 @@ export default function RamInspector() {
               <input
                 type="text"
                 value={inputWord}
-                onChange={(e) => setInputWord(e.target.value.toUpperCase().replace(/[^A-Z]/g, ""))}
+                onChange={(e) => handleWordChange(e.target.value)}
                 disabled={isRunning}
                 maxLength={8}
-                className="px-3 py-2 bg-[#111113] border border-zinc-700 font-mono text-sm text-[#ea580c] focus:outline-none focus:border-[#ea580c] w-32 uppercase"
+                className="px-3 py-2 bg-[#111113] border border-zinc-700 font-mono text-sm text-blue-400 focus:outline-none focus:border-blue-500 w-32 uppercase"
               />
             </div>
             <div className="flex gap-1">
               {["DOG", "HELLO", "CODE", "RAM"].map((w) => (
                 <button
                   key={w}
-                  onClick={() => setInputWord(w)}
+                  onClick={() => handleWordChange(w)}
                   disabled={isRunning}
                   className={cn(
-                    "px-2 py-1 text-[10px] font-mono uppercase border transition-all",
+                    "px-2 py-1 text-[10px] font-mono uppercase border transition-all cursor-pointer",
                     inputWord === w
-                      ? "bg-[#ea580c]/20 border-[#ea580c]/50 text-[#ea580c]"
+                      ? "bg-blue-500/20 border-blue-500/50 text-blue-400 font-bold"
                       : "bg-zinc-900 border-zinc-800 text-zinc-500 hover:border-zinc-600"
                   )}
                 >
@@ -136,7 +182,7 @@ export default function RamInspector() {
               <button
                 onClick={runInspection}
                 disabled={isRunning || inputWord.length === 0}
-                className="flex items-center gap-2 px-5 py-2 bg-[#ea580c]/10 border border-[#ea580c]/30 text-[#ea580c] hover:bg-[#ea580c] hover:text-black disabled:opacity-50 transition-all uppercase font-mono text-xs font-bold tracking-widest"
+                className="flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 border border-blue-500/30 text-white disabled:opacity-50 transition-all uppercase font-mono text-xs font-bold tracking-widest cursor-pointer shadow-md shadow-blue-500/20 active:scale-95"
               >
                 <Play size={14} /> Inspect
               </button>
@@ -159,7 +205,7 @@ export default function RamInspector() {
                 animate={{ opacity: 1, y: 0 }}
                 className="text-center space-y-3"
               >
-                <div className="text-6xl font-mono font-black text-[#ea580c]">{`'${cells[activeIdx].char}'`}</div>
+                <div className="text-6xl font-mono font-black text-blue-400">{`'${cells[activeIdx].char}'`}</div>
                 {phase === "ascii" && (
                   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-1">
                     <div className="text-xs font-mono text-zinc-500 uppercase">ASCII Lookup</div>
@@ -179,7 +225,7 @@ export default function RamInspector() {
                           className={cn(
                             "w-8 h-10 flex items-center justify-center font-mono text-lg font-bold border rounded",
                             bit === "1"
-                              ? "bg-[#ea580c]/20 border-[#ea580c] text-[#ea580c]"
+                              ? "bg-blue-500/20 border-blue-500 text-blue-400"
                               : "bg-zinc-900 border-zinc-700 text-zinc-500"
                           )}
                         >
@@ -203,7 +249,7 @@ export default function RamInspector() {
                   className={cn(
                     "w-24 border-2 rounded-lg p-3 flex flex-col items-center gap-2 transition-all duration-300",
                     activeIdx === idx
-                      ? "border-[#ea580c] bg-[#ea580c]/15"
+                      ? "border-blue-500 bg-blue-500/15"
                       : cell.revealed
                       ? "border-zinc-700 bg-zinc-900/50"
                       : "border-zinc-800 bg-black/30"
@@ -214,7 +260,7 @@ export default function RamInspector() {
                   {cell.revealed && (
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-1 text-center">
                       <div className="text-[10px] font-mono text-yellow-500">{cell.ascii}</div>
-                      <div className="text-[8px] font-mono text-[#ea580c] tracking-wider">{cell.binary}</div>
+                      <div className="text-[8px] font-mono text-blue-400 tracking-wider">{cell.binary}</div>
                     </motion.div>
                   )}
                 </motion.div>
@@ -241,9 +287,9 @@ export default function RamInspector() {
             {logs.map((log, i) => {
               let color = "text-zinc-300 font-medium";
               if (log.includes("LOOKUP:")) color = "text-yellow-500";
-              if (log.includes("ENCODE:")) color = "text-[#ea580c]";
-              if (log.includes("STORE:")) color = "text-[#3b82f6]";
-              if (log.includes("COMPLETE:")) color = "text-[#ea580c] font-bold";
+              if (log.includes("ENCODE:")) color = "text-blue-400";
+              if (log.includes("STORE:")) color = "text-indigo-400";
+              if (log.includes("COMPLETE:")) color = "text-emerald-400 font-bold";
               return (
                 <div key={i} className={cn("leading-relaxed break-words", color)}>
                   <span className="opacity-30 mr-1">{">"}</span> {log}

@@ -37,7 +37,7 @@ export function CPythonPipelineFlowchart() {
       file: "Lexical Analyzer",
       badge: "Token Stream",
       icon: Layers,
-      color: "text-amber-500 border-amber-500/30 bg-amber-500/10",
+      color: "text-blue-500 border-blue-500/30 bg-blue-500/10",
       description: "Converts text stream into atomic lexical tokens (NAME, NUMBER, OP, INDENT, DEDENT, NEWLINE).",
       details: [
         "Tracks column offsets and indentation stack",
@@ -206,7 +206,7 @@ export function CPythonPipelineFlowchart() {
           </div>
 
           {/* Code Representation */}
-          <div className="space-y-2 p-4 rounded-xl bg-[#181715] border border-border text-[#ea580c] font-mono text-xs overflow-x-auto shadow-inner">
+          <div className="space-y-2 p-4 rounded-xl bg-[#181715] border border-border text-blue-400 font-mono text-xs overflow-x-auto shadow-inner">
             <span className="text-[10px] text-muted-foreground/80 uppercase block pb-1 border-b border-border">
               Runtime Representation Preview
             </span>
@@ -423,12 +423,12 @@ export function PythonGilAsyncioFlowchart() {
       </div>
 
       {mode === "gil" && (
-        <div className="p-6 rounded-2xl border border-amber-500/30 bg-amber-500/5 space-y-4">
+        <div className="p-6 rounded-2xl border border-indigo-500/30 bg-indigo-500/5 space-y-4">
           <div className="flex items-center justify-between">
-            <span className="font-mono text-xs font-bold text-amber-500 uppercase">
+            <span className="font-mono text-xs font-bold text-indigo-500 uppercase">
               CPython Multi-Threading with Global Interpreter Lock
             </span>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/10 text-amber-400">
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400">
               Shared Heap + Serialized Bytecode
             </span>
           </div>
@@ -749,7 +749,7 @@ export function FileSystemStreamFlowchart() {
             <div className={cn("p-2.5 rounded-xl border transition-all", activeStep === 0 || activeStep === 3 ? "border-primary bg-primary/10 text-primary font-bold" : "border-border text-muted-foreground")}>
               Userspace: Python PyTextIOWrapper (RAM)
             </div>
-            <div className={cn("p-2.5 rounded-xl border transition-all", activeStep === 2 ? "border-amber-500 bg-amber-500/10 text-amber-400 font-bold" : "border-border text-muted-foreground")}>
+            <div className={cn("p-2.5 rounded-xl border transition-all", activeStep === 2 ? "border-indigo-500 bg-indigo-500/10 text-indigo-400 font-bold" : "border-border text-muted-foreground")}>
               Intermediate: 8KB stdio Buffer
             </div>
             <div className={cn("p-2.5 rounded-xl border transition-all", activeStep === 1 ? "border-purple-500 bg-purple-500/10 text-purple-400 font-bold" : "border-border text-muted-foreground")}>
@@ -833,10 +833,10 @@ export function SqliteAcidPipelineFlowchart() {
       )}
 
       {stage === "wal" && (
-        <div className="p-5 rounded-2xl border border-amber-500/30 bg-amber-500/5 space-y-3 font-mono text-xs">
-          <div className="flex justify-between items-center text-amber-400 font-bold">
+        <div className="p-5 rounded-2xl border border-indigo-500/30 bg-indigo-500/5 space-y-3 font-mono text-xs">
+          <div className="flex justify-between items-center text-indigo-400 font-bold">
             <span>Write-Ahead Logging (WAL Mode)</span>
-            <span className="text-[10px] bg-amber-500/10 px-2 py-0.5 rounded">PRAGMA journal_mode = WAL</span>
+            <span className="text-[10px] bg-indigo-500/10 px-2 py-0.5 rounded">PRAGMA journal_mode = WAL</span>
           </div>
           <p className="text-muted-foreground font-sans text-xs">
             In WAL mode, writes do not alter the main database file directly. Instead, new transactions append sequentially to the <code className="text-primary">.db-wal</code> file. This allows readers to continue querying without being blocked by concurrent writers.
@@ -846,7 +846,7 @@ export function SqliteAcidPipelineFlowchart() {
               <span className="font-bold text-foreground">Main File (.db)</span>
               <p className="text-muted-foreground text-[10px]">Unmodified snapshot used by readers</p>
             </div>
-            <div className="p-3 rounded-xl bg-card border border-amber-500/40 text-amber-400 space-y-1 font-bold">
+            <div className="p-3 rounded-xl bg-card border border-indigo-500/40 text-indigo-400 space-y-1 font-bold">
               <span>WAL File (.db-wal)</span>
               <p className="text-muted-foreground text-[10px] font-normal">New transactions appended; flushed on checkpoint</p>
             </div>

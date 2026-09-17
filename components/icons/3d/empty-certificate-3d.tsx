@@ -60,8 +60,8 @@ export function EmptyCertificate3DIcon({
       <line x1="48" y1="70" x2="64" y2="65" stroke="#a09d96" strokeWidth="1.2" strokeOpacity="0.3" />
 
       {/* Official Gravit / ASCI Wax Seal Emblem (Bottom Left) */}
-      <circle cx="48" cy="80" r="9" fill="#ea580c" stroke="#9a3412" strokeWidth="1" />
-      <circle cx="48" cy="80" r="6" fill="#c2410c" stroke="#D4B872" strokeWidth="0.75" />
+      <circle cx="48" cy="80" r="9" fill="#2563eb" stroke="#1d4ed8" strokeWidth="1" />
+      <circle cx="48" cy="80" r="6" fill="#1e40af" stroke="#D4B872" strokeWidth="0.75" />
       {/* Star Insignia inside seal */}
       <path
         d="M48 76 L49.5 79 L53 79.5 L50 82 L51 85 L48 83.5 L45 85 L46 82 L43 79.5 L46.5 79 Z"
@@ -69,7 +69,7 @@ export function EmptyCertificate3DIcon({
       />
 
       {/* Seal Ribbon Tails */}
-      <path d="M46 88 L42 98 L48 95 L52 98 L50 88 Z" fill="#c2410c" stroke="#9a3412" strokeWidth="0.5" />
+      <path d="M46 88 L42 98 L48 95 L52 98 L50 88 Z" fill="#1e40af" stroke="#1d4ed8" strokeWidth="0.5" />
     </svg>
   )
 }

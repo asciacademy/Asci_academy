@@ -35,15 +35,15 @@ export function OfficialBadgeEmblem({
   // Color & Gradient Palette by Tier
   const tierConfig = {
     bronze: {
-      rimOuter: ["#92400e", "#d97706", "#78350f", "#b45309"],
-      rimInner: ["#f59e0b", "#78350f", "#b45309"],
-      enamelCore: ["#451a03", "#1c1917", "#0c0a09"],
-      accent: "#f59e0b",
-      glow: "rgba(217, 119, 6, 0.4)",
+      rimOuter: ["#1e3a8a", "#2563eb", "#172554", "#1d4ed8"],
+      rimInner: ["#3b82f6", "#172554", "#1d4ed8"],
+      enamelCore: ["#0f172a", "#1e1b4b", "#020617"],
+      accent: "#3b82f6",
+      glow: "rgba(37, 99, 235, 0.4)",
       stars: 1,
       bannerText: "BRONZE",
-      bannerBg: "#78350f",
-      bannerTextCol: "#fed7aa",
+      bannerBg: "#1e3a8a",
+      bannerTextCol: "#bfdbfe",
     },
     silver: {
       rimOuter: ["#64748b", "#cbd5e1", "#475569", "#94a3b8"],

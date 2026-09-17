@@ -131,8 +131,8 @@ export default function PythonMasterLandingPage() {
                 <div className="flex items-center justify-between border-b border-border pb-4 mb-5">
                   <div className="flex items-center gap-2.5">
                     <div className="w-3 h-3 rounded-full bg-rose-500/80" />
-                    <div className="w-3 h-3 rounded-full bg-amber-500/80" />
-                    <div className="w-3 h-3 rounded-full bg-[#ea580c]/80" />
+                    <div className="w-3 h-3 rounded-full bg-emerald-500/50" />
+                    <div className="w-3 h-3 rounded-full bg-emerald-500/80" />
                     <span className="ml-2 font-mono text-xs text-muted-foreground">
                       cpython_runtime.spec
                     </span>
@@ -265,7 +265,7 @@ export default function PythonMasterLandingPage() {
                     <span className={cn(
                       "px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider border",
                       chapter.level === "Beginner" && "text-blue-500 border-blue-500/30 bg-blue-500/10",
-                      chapter.level === "Intermediate" && "text-amber-500 border-amber-500/30 bg-amber-500/10",
+                      chapter.level === "Intermediate" && "text-indigo-500 border-indigo-500/30 bg-indigo-500/10",
                       chapter.level === "Hard" && "text-rose-500 border-rose-500/30 bg-rose-500/10"
                     )}>
                       {chapter.level}
@@ -377,7 +377,7 @@ export default function PythonMasterLandingPage() {
               <span className="text-xs font-mono text-muted-foreground uppercase tracking-wider block font-semibold">
                 Distributed Architecture Flow
               </span>
-              <div className="rounded-2xl border border-border/80 dark:border-white/10 bg-[#181715] dark:bg-[#141413] p-5 font-mono text-xs text-[#ea580c] overflow-x-auto shadow-inner leading-relaxed">
+              <div className="rounded-2xl border border-border/80 dark:border-white/10 bg-[#181715] dark:bg-[#141413] p-5 font-mono text-xs text-blue-400 overflow-x-auto shadow-inner leading-relaxed">
                 <pre>{activeProject.architectureFlow}</pre>
               </div>
             </div>
@@ -404,7 +404,7 @@ export default function PythonMasterLandingPage() {
                 </span>
                 <span className="text-[11px] font-mono text-primary font-bold">Python 3.12+</span>
               </div>
-              <div className="rounded-2xl border border-border/80 dark:border-white/10 bg-[#181715] dark:bg-[#141413] p-5 font-mono text-xs text-[#ea580c] overflow-x-auto shadow-inner leading-relaxed">
+              <div className="rounded-2xl border border-border/80 dark:border-white/10 bg-[#181715] dark:bg-[#141413] p-5 font-mono text-xs text-blue-400 overflow-x-auto shadow-inner leading-relaxed">
                 <pre><code>{activeProject.snippet.code}</code></pre>
               </div>
             </div>

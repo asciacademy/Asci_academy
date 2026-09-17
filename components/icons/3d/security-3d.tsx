@@ -59,7 +59,7 @@ export function Security3DIcon({
       />
 
       {/* Vault Core Hardware Keyhole (Faceted geometric lock) */}
-      <path d="M60 48 L68 53 L60 58 L52 53 Z" fill="#2d2b27" stroke="#ea580c" strokeWidth="1" />
+      <path d="M60 48 L68 53 L60 58 L52 53 Z" fill="#2d2b27" stroke="#2563eb" strokeWidth="1" />
       <path d="M52 53 L60 58 L60 72 L52 67 Z" fill="#181715" />
       <path d="M60 58 L68 53 L68 67 L60 72 Z" fill="#0f0f0e" />
 

@@ -176,7 +176,7 @@ export function AxelTutorDrawer({
           <div>
             <div className="flex items-center gap-1.5">
               <h3 className="text-xs font-bold text-foreground">Axel AI Tutor</h3>
-              <span className="h-1.5 w-1.5 rounded-full bg-[#ea580c] animate-pulse" />
+              <span className="h-1.5 w-1.5 rounded-full bg-blue-500 animate-pulse" />
             </div>
             <p className="text-[10px] text-muted-foreground truncate max-w-[200px]">
               Active Problem: {problem.title}
@@ -273,7 +273,7 @@ export function AxelTutorDrawer({
                   className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 p-1 rounded hover:bg-secondary text-muted-foreground transition-opacity"
                   title="Copy message"
                 >
-                  {copiedId === msg.id ? <Check className="h-3 w-3 text-[#ea580c]" /> : <Copy className="h-3 w-3" />}
+                  {copiedId === msg.id ? <Check className="h-3 w-3 text-emerald-500" /> : <Copy className="h-3 w-3" />}
                 </button>
               )}
             </div>

@@ -289,12 +289,12 @@ export default function DSACourseDocsLayout() {
                        <Terminal size={14} className="text-primary" />
                        <span>{activeLesson.type === 'concept' ? 'Reference Code / Pseudocode' : 'Starter Code'}</span>
                      </h3>
-                     <div className="rounded-2xl border border-border/80 dark:border-white/10 bg-[#181715] dark:bg-[#141413] overflow-hidden text-[#ea580c] font-mono text-xs shadow-inner">
+                     <div className="rounded-2xl border border-border/80 dark:border-white/10 bg-[#181715] dark:bg-[#141413] overflow-hidden text-blue-400 font-mono text-xs shadow-inner">
                        {/* Mac-style mock window header for code block */}
                        <div className="px-4 py-2.5 border-b border-border/80 dark:border-white/10 bg-[#141413]/80 flex items-center gap-2">
                             <div className="w-2.5 h-2.5 rounded-full bg-rose-500/70" />
-                            <div className="w-2.5 h-2.5 rounded-full bg-amber-500/70" />
-                            <div className="w-2.5 h-2.5 rounded-full bg-[#ea580c]/70" />
+                            <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/50" />
+                            <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/70" />
                             <span className="ml-3 font-mono text-[11px] text-muted-foreground">{activeLesson.id}.py</span>
                        </div>
 

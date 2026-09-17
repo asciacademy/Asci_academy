@@ -37,7 +37,7 @@ export function JvmPipelineFlowchart() {
       file: "Compiler Engine",
       badge: "Syntax & Type Check",
       icon: Cpu,
-      color: "text-amber-500 border-amber-500/30 bg-amber-500/10",
+      color: "text-blue-500 border-blue-500/30 bg-blue-500/10",
       description: "The javac tool validates lexical syntax, performs type checking, builds the Abstract Syntax Tree (AST), and lowers logic into bytecode.",
       details: [
         "Lexical & Grammatical analysis",
@@ -240,7 +240,7 @@ export function JvmPipelineFlowchart() {
               <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-semibold block">
                 Data Representation:
               </span>
-              <div className="rounded-xl border border-border bg-[#181715] p-3.5 font-mono text-xs text-[#ea580c] overflow-x-auto shadow-inner leading-relaxed">
+              <div className="rounded-xl border border-border bg-[#181715] p-3.5 font-mono text-xs text-blue-400 overflow-x-auto shadow-inner leading-relaxed">
                 <pre>{current.codeSnippet}</pre>
               </div>
             </div>
@@ -261,7 +261,7 @@ export function MemoryModelFlowchart() {
     <div className="rounded-3xl border border-border bg-card p-6 sm:p-8 space-y-6 shadow-sm">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <span className="text-xs font-mono uppercase tracking-wider text-amber-500 font-semibold block">
+          <span className="text-xs font-mono uppercase tracking-wider text-blue-500 font-semibold block">
             Visual Memory Layout
           </span>
           <h3 className="font-serif text-xl sm:text-2xl font-normal text-foreground">
@@ -280,10 +280,10 @@ export function MemoryModelFlowchart() {
       {/* Visual Memory Grid */}
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Left: Thread Call Stack */}
-        <div className="rounded-2xl border border-amber-500/30 bg-amber-500/5 p-5 space-y-4">
-          <div className="flex items-center justify-between pb-2 border-b border-amber-500/20">
+        <div className="rounded-2xl border border-blue-500/30 bg-blue-500/5 p-5 space-y-4">
+          <div className="flex items-center justify-between pb-2 border-b border-blue-500/20">
             <div className="flex items-center gap-2">
-              <Layers className="h-4 w-4 text-amber-500" />
+              <Layers className="h-4 w-4 text-blue-500" />
               <span className="font-mono text-xs font-semibold text-foreground">
                 THREAD CALL STACK (LIFO)
               </span>
@@ -295,12 +295,12 @@ export function MemoryModelFlowchart() {
 
           <div className="space-y-3">
             {/* Frame 2: Top of Stack (Current Method) */}
-            <div className="rounded-xl border border-amber-500/40 bg-card p-4 space-y-2.5 shadow-xs">
+            <div className="rounded-xl border border-blue-500/40 bg-card p-4 space-y-2.5 shadow-xs">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-mono font-bold text-amber-600 dark:text-amber-400">
+                <span className="text-xs font-mono font-bold text-blue-600 dark:text-blue-400">
                   Stack Frame: processOrder()
                 </span>
-                <span className="text-[10px] font-mono bg-amber-500/10 text-amber-500 px-2 py-0.5 rounded-md">
+                <span className="text-[10px] font-mono bg-blue-500/10 text-blue-500 px-2 py-0.5 rounded-md">
                   Active Frame
                 </span>
               </div>
@@ -521,7 +521,7 @@ export function HashMapTreeifyFlowchart() {
         <div className="rounded-2xl border border-border bg-secondary/30 p-3.5 space-y-1 text-center">
           <span className="text-[10px] font-mono text-muted-foreground uppercase block">Step 4</span>
           <span className="font-mono text-xs font-bold text-foreground">Collision Check</span>
-          <span className={cn("text-[10px] font-bold block", isTreeified ? "text-primary" : "text-amber-500")}>
+          <span className={cn("text-[10px] font-bold block", isTreeified ? "text-primary" : "text-indigo-500")}>
             {isTreeified ? "Red-Black Tree (O(log N))" : "Linked List (O(N))"}
           </span>
         </div>
@@ -538,7 +538,7 @@ export function HashMapTreeifyFlowchart() {
               "px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold uppercase border",
               isTreeified
                 ? "bg-primary/10 text-primary border-primary/30"
-                : "bg-amber-500/10 text-amber-500 border-amber-500/30"
+                : "bg-indigo-500/10 text-indigo-500 border-indigo-500/30"
             )}
           >
             {isTreeified ? "Red-Black Tree Active" : "Linked List Active"}
@@ -623,7 +623,7 @@ export function ThreadStateFlowchart() {
       id: "BLOCKED",
       title: "BLOCKED",
       badge: "Monitor Lock",
-      color: "border-amber-500/40 bg-amber-500/10 text-amber-500",
+      color: "border-indigo-500/40 bg-indigo-500/10 text-indigo-500",
       description: "Thread is suspended waiting to acquire an intrinsic monitor lock before entering a `synchronized` block/method.",
       transitions: "Automatically returns to RUNNABLE once the lock holding thread exits and releases the monitor."
     },
@@ -639,7 +639,7 @@ export function ThreadStateFlowchart() {
       id: "TIMED_WAITING",
       title: "TIMED_WAITING",
       badge: "Time-Bound Wait",
-      color: "border-orange-500/40 bg-orange-500/10 text-orange-500",
+      color: "border-blue-500/40 bg-blue-500/10 text-blue-400",
       description: "Thread is waiting with a specified timeout (`Thread.sleep(millis)`, `Object.wait(timeout)`, `LockSupport.parkNanos()`).",
       transitions: "Returns to RUNNABLE when the timeout expires or an interrupt is triggered."
     },
@@ -821,7 +821,7 @@ export function OsProcessLifecycleFlowchart() {
       id: "READY" as const,
       name: "Ready",
       badge: "In Runqueue",
-      color: "border-amber-500/40 bg-amber-500/10 text-amber-500",
+      color: "border-indigo-500/40 bg-indigo-500/10 text-indigo-500",
       description: "Process is loaded in RAM and waiting in the CPU scheduler runqueue for a core time slice.",
       registers: { rip: "0x00401A20", rsp: "0x7FFFFFE0", rax: "0x1" },
       transition: "Scheduler Dispatches to CPU"
@@ -921,7 +921,7 @@ export function OsProcessLifecycleFlowchart() {
         <div className="mt-4 pt-4 border-t border-border flex flex-wrap items-center justify-center gap-3 text-xs font-mono text-muted-foreground">
           <span className="text-blue-500 font-bold">New</span>
           <ArrowRight size={14} />
-          <span className="text-amber-500 font-bold">Ready</span>
+          <span className="text-indigo-500 font-bold">Ready</span>
           <span className="flex items-center gap-1 text-primary">
             <ArrowRight size={14} /> <span>dispatch</span> <ArrowRight size={14} />
           </span>
@@ -1050,7 +1050,7 @@ export function VirtualMemoryPagingFlowchart() {
               "px-3 py-1 rounded-xl text-xs font-mono border transition-all cursor-pointer",
               tlbHit
                 ? "border-primary/50 bg-primary/10 text-primary"
-                : "border-amber-500/50 bg-amber-500/10 text-amber-500"
+                : "border-indigo-500/50 bg-indigo-500/10 text-indigo-500"
             )}
           >
             {tlbHit ? "Simulate: TLB Hit (Fast)" : "Simulate: TLB Miss (Page Walker)"}
@@ -1144,7 +1144,7 @@ export function SyscallBoundaryFlowchart() {
       ring: "Hardware CPU Boundary",
       title: "2. syscall / sysenter Trap",
       actor: "x86-64 CPU Silicon",
-      color: "border-amber-500/40 bg-amber-500/10 text-amber-500",
+      color: "border-indigo-500/40 bg-indigo-500/10 text-indigo-500",
       desc: "CPU flips CPL (Current Privilege Level) from 3 to 0. CPU swaps to Kernel Stack (RSP0 in TSS)."
     },
     {
@@ -1313,8 +1313,8 @@ export function ConcurrencyMutexFlowchart() {
         {/* Thread B Lane */}
         <div className="p-5 rounded-2xl border border-border bg-secondary/20 space-y-3">
           <div className="flex items-center justify-between">
-            <span className="font-mono text-xs font-bold text-amber-500">Thread 2 (Core 1)</span>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/10 text-amber-500">
+            <span className="font-mono text-xs font-bold text-indigo-500">Thread 2 (Core 1)</span>
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-500">
               TID = 2002
             </span>
           </div>
@@ -1370,7 +1370,7 @@ export function SpringBootPipelineFlowchart() {
       name: "2. Security Filter Chain",
       tag: "Spring Security",
       icon: ShieldCheck,
-      color: "border-amber-500/40 text-amber-500",
+      color: "border-indigo-500/40 text-indigo-500",
       desc: "JwtAuthenticationFilter validates RSA signature, extracts user claims, and sets SecurityContextHolder."
     },
     {
@@ -1699,7 +1699,7 @@ export function SmartVisualDiagramRenderer({
           )}
         </div>
       ) : (
-        <div className="rounded-2xl border border-border bg-[#181715] p-5 font-mono text-xs text-[#ea580c] overflow-x-auto shadow-inner leading-relaxed">
+        <div className="rounded-2xl border border-border bg-[#181715] p-5 font-mono text-xs text-blue-400 overflow-x-auto shadow-inner leading-relaxed">
           <pre>{schematicText || "Schematic initializing..."}</pre>
         </div>
       )}

@@ -18,7 +18,7 @@ export interface AchievementIconProps {
 }
 
 const TIER_CONTAINER_CLASSES: Record<AchievementTier, string> = {
-  bronze: "bg-amber-950/20 border-amber-800/40 text-amber-600",
+  bronze: "bg-blue-950/20 border-blue-800/40 text-blue-500",
   silver: "bg-slate-900/20 border-slate-700/40 text-slate-300",
   gold: "bg-[#D4B872]/15 border-[#D4B872]/40 text-[#D4B872]",
   emerald: "bg-emerald-950/20 border-emerald-700/40 text-emerald-500",

@@ -7,6 +7,8 @@ import {
   calculateLevel,
   calculateRank
 } from "@/lib/gamification"
+import { CURRICULUM_COURSES } from "@/lib/curriculum-data"
+
 
 // ==========================================
 // USER PROFILE FETCHING LOGIC
@@ -22,10 +24,10 @@ export async function getUserProfile() {
         .from('profiles')
         .select('id, name, email, xp, streak, streak_count, last_active_date, avatar_url, bio, role, rank')
         .eq('id', user.id)
-        .single()
+        .maybeSingle()
 
-    if (error) {
-        console.error("Error fetching user profile:", error)
+    if (error || !profile) {
+        if (error) console.error("Error fetching user profile:", error)
         return null
     }
 
@@ -154,7 +156,7 @@ export async function getPublicProfile(username: string) {
         .select('id, name, bio, xp, avatar_url, is_public, streak_count, created_at')
         .eq('username', username)
         .eq('is_public', true)
-        .single()
+        .maybeSingle()
 
     if (error || !profile) {
         console.error("Public profile not found or private:", error)
@@ -206,7 +208,10 @@ export async function getUserWeeklyActivity(): Promise<{ day: string; minutes: n
     for (let i = 6; i >= 0; i--) {
         const d = new Date()
         d.setDate(now.getDate() - i)
-        const dateStr = d.toISOString().split("T")[0]
+        const year = d.getFullYear()
+        const month = String(d.getMonth() + 1).padStart(2, '0')
+        const day = String(d.getDate()).padStart(2, '0')
+        const dateStr = `${year}-${month}-${day}`
         days.push({
             dateStr,
             day: dayLabels[d.getDay()],
@@ -234,7 +239,8 @@ export async function getUserWeeklyActivity(): Promise<{ day: string; minutes: n
     if (progress && progress.length > 0) {
         progress.forEach((p: any) => {
             if (!p.completed_at) return
-            const pDate = new Date(p.completed_at).toISOString().split("T")[0]
+            const pD = new Date(p.completed_at)
+            const pDate = `${pD.getFullYear()}-${String(pD.getMonth() + 1).padStart(2, '0')}-${String(pD.getDate()).padStart(2, '0')}`
             const target = days.find(d => d.dateStr === pDate)
             if (target) {
                 target.minutes += p.time_spent ? Math.round(p.time_spent / 60) : 15
@@ -451,17 +457,39 @@ export async function getDashboardBundle(passedUser?: any) {
             })
         }
 
+        // Fallback to static curriculum courses if DB has no modules/lessons
+        const effectiveSlug = course?.slug || enr.course_slug
+        if (totalLessons === 0 && effectiveSlug) {
+            const staticCourse = CURRICULUM_COURSES.find(c => c.slug.toLowerCase() === String(effectiveSlug).toLowerCase())
+            if (staticCourse && Array.isArray(staticCourse.modules)) {
+                staticCourse.modules.forEach((module) => {
+                    if (Array.isArray(module.lessons)) {
+                        module.lessons.forEach((lesson) => {
+                            totalLessons++
+                            if (completedLessonIds.has(lesson.id)) {
+                                completedLessonsForCourse++
+                            }
+                        })
+                    }
+                })
+            }
+        }
+
+        const staticMatch = effectiveSlug ? CURRICULUM_COURSES.find(c => c.slug.toLowerCase() === String(effectiveSlug).toLowerCase()) : null
+        const courseTitle = course?.title || staticMatch?.title || enr.course_title || "Course Track"
+        const courseSlug = course?.slug || staticMatch?.slug || enr.course_slug || ""
+
         const progressPercent = totalLessons === 0 ? 0 : Math.round((completedLessonsForCourse / totalLessons) * 100)
         const isFullyCompleted = totalLessons > 0 && completedLessonsForCourse >= totalLessons
 
         return {
             enrollmentId: enr.id,
             status: isFullyCompleted ? "completed" : enr.status,
-            courseId: course?.id,
-            slug: course?.slug,
-            title: course?.title,
-            thumbnail: course?.thumbnail,
-            isPremium: course?.is_premium,
+            courseId: course?.id || staticMatch?.id || enr.course_id,
+            slug: courseSlug,
+            title: courseTitle,
+            thumbnail: course?.thumbnail || staticMatch?.thumbnail_url,
+            isPremium: course?.is_premium ?? staticMatch?.is_premium ?? false,
             totalLessons,
             completedLessons: completedLessonsForCourse,
             progressPercent: isFullyCompleted ? 100 : progressPercent
@@ -474,7 +502,10 @@ export async function getDashboardBundle(passedUser?: any) {
     for (let i = 6; i >= 0; i--) {
         const d = new Date()
         d.setDate(now.getDate() - i)
-        const dateStr = d.toISOString().split("T")[0]
+        const year = d.getFullYear()
+        const month = String(d.getMonth() + 1).padStart(2, '0')
+        const day = String(d.getDate()).padStart(2, '0')
+        const dateStr = `${year}-${month}-${day}`
         days.push({
             day: dayNames[d.getDay()],
             dateStr,
@@ -485,7 +516,8 @@ export async function getDashboardBundle(passedUser?: any) {
 
     progressList.forEach((p: any) => {
         if (!p.completed_at) return
-        const pDate = new Date(p.completed_at).toISOString().split("T")[0]
+        const pD = new Date(p.completed_at)
+        const pDate = `${pD.getFullYear()}-${String(pD.getMonth() + 1).padStart(2, '0')}-${String(pD.getDate()).padStart(2, '0')}`
         const target = days.find(d => d.dateStr === pDate)
         if (target) {
             target.minutes += p.time_spent ? Math.round(p.time_spent / 60) : 15
@@ -569,20 +601,45 @@ export async function getDashboardBundle(passedUser?: any) {
     }
 
     const rawCourses = coursesRes.data || []
-    const catalogTracks = rawCourses.map((c: any) => {
-        const activeModules = Array.isArray(c.modules) ? c.modules.filter((m: any) => !m.is_deleted).length : 6
-        const isEnrolled = (enrollmentsRes.data || []).some((e: any) => e.course?.id === c.id || e.course?.slug === c.slug)
+    const existingKeys = new Set(rawCourses.map((c: any) => (c.slug || c.id || "").toLowerCase()))
+
+    // Merge any courses from CURRICULUM_COURSES that aren't already fetched from DB
+    const missingCurriculum = CURRICULUM_COURSES.filter(
+        c => !existingKeys.has(c.slug.toLowerCase()) && !existingKeys.has(c.id.toLowerCase())
+    ).map(c => ({
+        id: c.id,
+        slug: c.slug,
+        title: c.title,
+        category: c.category,
+        difficulty: c.level,
+        duration_hours: c.duration_hours,
+        weeks: c.weeks,
+        description: c.description,
+        is_premium: c.is_premium,
+        thumbnail_url: c.thumbnail_url,
+        modules: c.modules.map(m => ({ id: m.id, is_deleted: false }))
+    }))
+
+    const allCoursesCombined = [...rawCourses, ...missingCurriculum]
+
+    const catalogTracks = allCoursesCombined.map((c: any) => {
+        const activeModules = Array.isArray(c.modules) ? c.modules.filter((m: any) => !m.is_deleted).length : 4
+        const isEnrolled = (enrollmentsRes.data || []).some((e: any) => 
+            (e.course?.id && (e.course.id === c.id || e.course.id === c.slug)) ||
+            (e.course?.slug && (e.course.slug === c.slug || e.course.slug === c.id))
+        )
         return {
             id: c.slug || c.id,
             slug: c.slug || c.id,
             title: c.title,
             category: c.category || "Engineering",
-            difficulty: c.difficulty || "Intermediate",
-            modules: activeModules || 6,
-            duration: c.duration_hours ? `${c.duration_hours}h` : "Self-Paced",
+            difficulty: c.difficulty || c.level || "Intermediate",
+            modules: activeModules || 4,
+            duration: c.duration_hours ? `${c.duration_hours}h` : (c.weeks || "Self-Paced"),
             duration_hours: c.duration_hours,
             desc: c.description || "Production-grade engineering curriculum built for top-tier software engineers.",
-            href: `/programs/${c.slug || c.id}/course`,
+            href: `/courses/${c.slug || c.id}/learn`,
+            exploreHref: `/courses/${c.slug || c.id}`,
             enrolled: isEnrolled,
             is_premium: c.is_premium,
             thumbnail_url: c.thumbnail_url,

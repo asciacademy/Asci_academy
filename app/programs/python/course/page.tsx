@@ -448,7 +448,7 @@ export default function PythonCourseDocsLayout() {
               onClick={() =>
                 setSimulationLesson({
                   lesson: activeLesson,
-                  color: "#ea580c"
+                  color: "#2563eb"
                 })
               }
               className="rounded-full bg-primary hover:bg-primary-active text-primary-foreground px-4 py-1.5 text-xs font-semibold font-mono flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs"
@@ -469,7 +469,7 @@ export default function PythonCourseDocsLayout() {
                 "px-2.5 py-0.5 rounded-full border text-[10px] font-bold uppercase",
                 activeLesson.level === "Beginner" && "text-primary border-primary/30 bg-primary/10",
                 activeLesson.level === "Intermediate" && "text-primary border-primary/30 bg-primary/10",
-                activeLesson.level === "Hard" && "text-amber-500 border-amber-500/30 bg-amber-500/10"
+                activeLesson.level === "Hard" && "text-rose-500 border-rose-500/30 bg-rose-500/10"
               )}>
                 {activeLesson.level}
               </span>
@@ -555,7 +555,7 @@ export default function PythonCourseDocsLayout() {
               <div className="px-4 py-2.5 border-b border-border/80 dark:border-white/10 bg-[#141413]/80 flex items-center justify-between text-[11px] text-muted-foreground">
                 <div className="flex items-center gap-2">
                   <div className="w-2.5 h-2.5 rounded-full bg-rose-500/70" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-amber-500/70" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/50" />
                   <div className="w-2.5 h-2.5 rounded-full bg-primary/70" />
                   <span className="ml-2 font-mono text-muted-foreground">{activeLesson.slug}.py</span>
                 </div>

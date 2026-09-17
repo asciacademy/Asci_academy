@@ -46,15 +46,15 @@ export function Database3DIcon({
 
       {/* Structured Data Partition Grooves (Gold & Terracotta indicators) */}
       <path d="M42 34 L42 42" stroke="#D4B872" strokeWidth="1.5" strokeLinecap="round" />
-      <path d="M60 36 L60 44" stroke="#ea580c" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M60 36 L60 44" stroke="#2563eb" strokeWidth="1.5" strokeLinecap="round" />
       <path d="M78 34 L78 42" stroke="#D4B872" strokeWidth="1.5" strokeLinecap="round" />
 
-      <path d="M42 54 L42 62" stroke="#ea580c" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M42 54 L42 62" stroke="#2563eb" strokeWidth="1.5" strokeLinecap="round" />
       <path d="M60 56 L60 64" stroke="#D4B872" strokeWidth="1.5" strokeLinecap="round" />
-      <path d="M78 54 L78 62" stroke="#ea580c" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M78 54 L78 62" stroke="#2563eb" strokeWidth="1.5" strokeLinecap="round" />
 
       {/* Top Shard Plate Inset */}
-      <ellipse cx="60" cy="28" rx="18" ry="4.5" fill="#141413" stroke="#ea580c" strokeWidth="0.75" />
+      <ellipse cx="60" cy="28" rx="18" ry="4.5" fill="#141413" stroke="#2563eb" strokeWidth="0.75" />
       <circle cx="60" cy="28" r="2" fill="#D4B872" />
     </svg>
   )

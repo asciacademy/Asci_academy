@@ -56,11 +56,11 @@ export function StudioLightingDefs({ prefix }: { prefix: string }) {
         <stop offset="100%" stopColor="#a3853f" />
       </linearGradient>
 
-      {/* ASCI Brand Terracotta Accent Material */}
+      {/* ASCI Brand Terracotta/Blue Accent Material */}
       <linearGradient id={`${prefix}-terracotta-accent`} x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#fb923c" />
-        <stop offset="50%" stopColor="#ea580c" />
-        <stop offset="100%" stopColor="#9a3412" />
+        <stop offset="0%" stopColor="#60a5fa" />
+        <stop offset="50%" stopColor="#2563eb" />
+        <stop offset="100%" stopColor="#1d4ed8" />
       </linearGradient>
 
       {/* Emerald Tone Accent Material */}

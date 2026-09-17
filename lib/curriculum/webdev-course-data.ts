@@ -80,7 +80,7 @@ export const WEBDEV_COURSE_PARTS: CoursePart[] = [
 </html>`,
             output: "Rendered page displaying an H1 heading and paragraph text.",
             livePreviewHtml: `<div style="font-family:sans-serif;padding:16px;">
-  <h1 style="color:#ea580c;margin:0 0 8px;">Welcome to My Website</h1>
+  <h1 style="color:#2563eb;margin:0 0 8px;">Welcome to My Website</h1>
   <p style="color:#555;font-size:14px;line-height:1.5;">This is my very first paragraph written in HTML!</p>
 </div>`,
             lineExplanations: [
@@ -118,7 +118,7 @@ export const WEBDEV_COURSE_PARTS: CoursePart[] = [
             output: "Visual hierarchy of headings from largest to smallest with paragraph.",
             livePreviewHtml: `<div style="font-family:sans-serif;padding:16px;">
   <h1 style="font-size:22px;margin:0 0 6px;">Main Heading (h1)</h1>
-  <h2 style="font-size:18px;color:#ea580c;margin:0 0 6px;">Section Title (h2)</h2>
+  <h2 style="font-size:18px;color:#2563eb;margin:0 0 6px;">Section Title (h2)</h2>
   <h3 style="font-size:15px;color:#666;margin:0 0 8px;">Sub-section (h3)</h3>
   <p style="font-size:13px;color:#444;line-height:1.4;">Paragraphs automatically start on a new line with vertical margin.</p>
 </div>`,
@@ -154,7 +154,7 @@ export const WEBDEV_COURSE_PARTS: CoursePart[] = [
 />`,
             output: "Clickable link and loaded image.",
             livePreviewHtml: `<div style="font-family:sans-serif;padding:16px;">
-  <p><a href="#" style="color:#ea580c;font-weight:600;text-decoration:none;">Visit Example Website &rarr;</a></p>
+  <p><a href="#" style="color:#2563eb;font-weight:600;text-decoration:none;">Visit Example Website &rarr;</a></p>
   <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400" alt="Code laptop" style="border-radius:8px;max-width:100%;height:auto;border:1px solid #ddd;" width="280" />
 </div>`,
             lineExplanations: [
@@ -197,7 +197,7 @@ export const WEBDEV_COURSE_PARTS: CoursePart[] = [
     <input type="text" placeholder="Ada" style="padding:6px 10px;border:1px solid #ccc;border-radius:6px;font-size:13px;" />
     <label style="font-size:12px;font-weight:600;color:#333;">Email Address:</label>
     <input type="email" placeholder="ada@example.com" style="padding:6px 10px;border:1px solid #ccc;border-radius:6px;font-size:13px;" />
-    <button type="button" style="margin-top:6px;background:#ea580c;color:#fff;border:none;padding:8px 14px;border-radius:6px;font-weight:600;cursor:pointer;">Sign Up</button>
+    <button type="button" style="margin-top:6px;background:#2563eb;color:#fff;border:none;padding:8px 14px;border-radius:6px;font-weight:600;cursor:pointer;">Sign Up</button>
   </form>
 </div>`,
             lineExplanations: [
@@ -251,18 +251,18 @@ p {
 
 /* Class Selector */
 .highlight {
-  color: #ea580c;
+  color: #2563eb;
   font-weight: bold;
 }
 
 /* ID Selector */
 #special-header {
-  border-bottom: 2px solid #ea580c;
+  border-bottom: 2px solid #2563eb;
 }`,
-            output: "Styled paragraph with orange highlight.",
+            output: "Styled paragraph with blue highlight.",
             livePreviewHtml: `<div style="font-family:sans-serif;padding:16px;">
-  <h2 style="border-bottom:2px solid #ea580c;padding-bottom:4px;color:#111;margin:0 0 10px;">#special-header</h2>
-  <p style="color:#333;font-size:15px;line-height:1.5;">This is a paragraph styled with <span style="color:#ea580c;font-weight:bold;">.highlight</span> text.</p>
+  <h2 style="border-bottom:2px solid #2563eb;padding-bottom:4px;color:#111;margin:0 0 10px;">#special-header</h2>
+  <p style="color:#333;font-size:15px;line-height:1.5;">This is a paragraph styled with <span style="color:#2563eb;font-weight:bold;">.highlight</span> text.</p>
 </div>`,
             lineExplanations: [
               { line: "p { ... }", explanation: "Element selector: styles every <p> tag on the page." },
@@ -293,20 +293,20 @@ p {
   width: 280px;
   background-color: #fdfbf7;
   padding: 20px;          /* Space inside */
-  border: 2px solid #ea580c; /* Border edge */
+  border: 2px solid #2563eb; /* Border edge */
   margin: 15px;           /* Space outside */
   border-radius: 12px;
 }`,
             output: "Card with distinct margin, border, and padding.",
             livePreviewHtml: `<div style="font-family:sans-serif;background:#eee;padding:20px;border-radius:8px;">
-  <div style="background:#fff;padding:16px;border:2px solid #ea580c;border-radius:10px;box-shadow:0 2px 4px rgba(0,0,0,0.05);max-width:240px;">
-    <div style="font-weight:bold;color:#ea580c;font-size:14px;">Card with Box Model</div>
+  <div style="background:#fff;padding:16px;border:2px solid #2563eb;border-radius:10px;box-shadow:0 2px 4px rgba(0,0,0,0.05);max-width:240px;">
+    <div style="font-weight:bold;color:#2563eb;font-size:14px;">Card with Box Model</div>
     <p style="font-size:12px;color:#555;margin:8px 0 0;">Content inside &rarr; Padding inside border &rarr; Margin outside.</p>
   </div>
 </div>`,
             lineExplanations: [
               { line: "padding: 20px;", explanation: "Pushes text away from the border on all 4 sides." },
-              { line: "border: 2px solid #ea580c;", explanation: "Draws a 2-pixel orange border." },
+              { line: "border: 2px solid #2563eb;", explanation: "Draws a 2-pixel blue border." },
               { line: "margin: 15px;", explanation: "Creates space between this card and surrounding elements." }
             ],
             keyPoints: [
@@ -339,11 +339,11 @@ p {
 }`,
             output: "Responsive navigation bar with logo on left and links on right.",
             livePreviewHtml: `<div style="font-family:sans-serif;display:flex;justify-content:space-between;align-items:center;background:#141413;color:#fff;padding:12px 18px;border-radius:8px;">
-  <span style="font-weight:bold;color:#ea580c;font-size:14px;">ASCI Brand</span>
+  <span style="font-weight:bold;color:#2563eb;font-size:14px;">ASCI Brand</span>
   <div style="display:flex;gap:12px;font-size:12px;">
     <span style="color:#aaa;cursor:pointer;">Courses</span>
     <span style="color:#aaa;cursor:pointer;">Projects</span>
-    <span style="color:#ea580c;font-weight:bold;cursor:pointer;">Join</span>
+    <span style="color:#2563eb;font-weight:bold;cursor:pointer;">Join</span>
   </div>
 </div>`,
             lineExplanations: [
@@ -466,14 +466,14 @@ const message = document.getElementById("output");
 // Listening for a click event
 button.addEventListener("click", () => {
   message.textContent = "Button clicked! JavaScript is working.";
-  message.style.color = "#ea580c";
+  message.style.color = "#2563eb";
 });`,
             output: "Interactive click action updating screen text and color.",
             livePreviewHtml: `<div style="font-family:sans-serif;padding:16px;">
   <p id="preview-text" style="font-size:14px;color:#333;margin:0 0 10px;">Click the button to change this text.</p>
   <button 
-    onclick="document.getElementById('preview-text').textContent = '🎉 Button Clicked! JavaScript updated the DOM!'; document.getElementById('preview-text').style.color = '#ea580c';"
-    style="background:#ea580c;color:#fff;border:none;padding:8px 14px;border-radius:6px;font-weight:600;cursor:pointer;"
+    onclick="document.getElementById('preview-text').textContent = '🎉 Button Clicked! JavaScript updated the DOM!'; document.getElementById('preview-text').style.color = '#2563eb';"
+    style="background:#2563eb;color:#fff;border:none;padding:8px 14px;border-radius:6px;font-weight:600;cursor:pointer;"
   >
     Test Interactive Button
   </button>

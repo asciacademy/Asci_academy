@@ -49,12 +49,12 @@ export function EmptyWorkspace3DIcon({
 
       {/* Screen Code Lines */}
       <line x1="45" y1="40" x2="55" y2="34" stroke="#D4B872" strokeWidth="1.5" strokeLinecap="round" />
-      <line x1="58" y1="32" x2="68" y2="26" stroke="#ea580c" strokeWidth="1.5" strokeLinecap="round" />
+      <line x1="58" y1="32" x2="68" y2="26" stroke="#2563eb" strokeWidth="1.5" strokeLinecap="round" />
       <line x1="48" y1="46" x2="65" y2="36" stroke="#fdfbf7" strokeWidth="1.2" strokeLinecap="round" strokeOpacity="0.7" />
       <line x1="52" y1="52" x2="72" y2="40" stroke="#fdfbf7" strokeWidth="1.2" strokeLinecap="round" strokeOpacity="0.5" />
 
       {/* Floating Isometric Folder/File Plate */}
-      <path d="M68 56 L86 46 L94 50 L76 60 Z" fill="#2d2b27" stroke="#ea580c" strokeWidth="0.75" />
+      <path d="M68 56 L86 46 L94 50 L76 60 Z" fill="#2d2b27" stroke="#2563eb" strokeWidth="0.75" />
       <path d="M68 56 L76 60 L76 66 L68 62 Z" fill="#141413" />
       <path d="M76 60 L94 50 L94 56 L76 66 Z" fill="#100f0e" />
     </svg>

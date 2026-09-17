@@ -164,7 +164,7 @@ export function BadgesShowcase({
                 <span className="text-muted-foreground/70 uppercase tracking-wider text-[10px]">
                   Bounty
                 </span>
-                <span className="text-[#ea580c] dark:text-[#f97316] font-bold bg-[#ea580c]/10 px-2 py-0.5 rounded border border-[#ea580c]/20">
+                <span className="text-blue-600 dark:text-blue-400 font-bold bg-blue-500/10 px-2 py-0.5 rounded border border-blue-500/20">
                   +{badge.xpReward} XP
                 </span>
               </div>
@@ -246,7 +246,7 @@ export function BadgesShowcase({
                     className={`font-semibold ${
                       unlockedSet.has(selectedBadge.id)
                         ? "text-emerald-500"
-                        : "text-amber-500"
+                        : "text-blue-500"
                     }`}
                   >
                     {unlockedSet.has(selectedBadge.id) ? "✓ Achieved" : "Pending Requirement"}

@@ -401,7 +401,7 @@ export function ProblemSolver({ initialProblem }: ProblemSolverProps) {
               className={cn(
                 "rounded px-2 py-0.5 text-[10px] font-mono font-medium uppercase shrink-0",
                 problem.difficulty === "Easy" && "bg-primary/10 text-primary border border-primary/20",
-                problem.difficulty === "Medium" && "bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20",
+                problem.difficulty === "Medium" && "bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20",
                 problem.difficulty === "Hard" && "bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20"
               )}
             >
@@ -511,7 +511,7 @@ export function ProblemSolver({ initialProblem }: ProblemSolverProps) {
                       : "text-muted-foreground hover:text-foreground"
                   )}
                 >
-                  <BookOpen className="h-3.5 w-3.5 text-amber-500" />
+                  <BookOpen className="h-3.5 w-3.5 text-blue-500" />
                   <span>Editorial & Hints</span>
                   {problem.hints.length > 0 && (
                     <span className="px-1.5 py-0.5 rounded-full bg-secondary text-[10px] font-mono leading-none">
@@ -557,7 +557,7 @@ export function ProblemSolver({ initialProblem }: ProblemSolverProps) {
                     href={problem.leetcodeUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-1.5 rounded-lg hover:bg-amber-500/10 hover:text-amber-500 text-muted-foreground transition-colors"
+                    className="p-1.5 rounded-lg hover:bg-blue-500/10 hover:text-blue-500 text-muted-foreground transition-colors"
                     title="View original problem on LeetCode"
                   >
                     <ExternalLink className="h-4 w-4" />
@@ -590,7 +590,7 @@ export function ProblemSolver({ initialProblem }: ProblemSolverProps) {
                         className={cn(
                           "rounded-md px-2.5 py-0.5 text-xs font-mono font-medium uppercase",
                           problem.difficulty === "Easy" && "bg-primary/10 text-primary border border-primary/20",
-                          problem.difficulty === "Medium" && "bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20",
+                          problem.difficulty === "Medium" && "bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20",
                           problem.difficulty === "Hard" && "bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20"
                         )}
                       >
@@ -837,7 +837,7 @@ export function ProblemSolver({ initialProblem }: ProblemSolverProps) {
                             className="w-full flex items-center justify-between p-3 text-left hover:bg-secondary/30 transition-colors text-xs font-medium text-foreground"
                           >
                             <div className="flex items-center gap-2">
-                              <Lightbulb className="h-3.5 w-3.5 text-amber-500" />
+                              <Lightbulb className="h-3.5 w-3.5 text-blue-500" />
                               <span>Hint {idx + 1}</span>
                             </div>
                             <span className="text-[11px] text-primary">

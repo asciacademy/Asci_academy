@@ -71,12 +71,12 @@ interface NavItem {
 
 const NAV_ITEMS: NavItem[] = [
   {
-    label: "Learn",
+    label: "Programs",
     href: "/programs",
     hasDropdown: true,
     icon: BookOpen,
     desc: "Curricula & Engineering Tracks",
-    dropdownWidth: "w-[380px]",
+    dropdownWidth: "w-[360px]",
     alignClass: "left-0",
     items: [
       {
@@ -88,48 +88,34 @@ const NAV_ITEMS: NavItem[] = [
       },
       {
         title: "Enterprise Backend & Java",
-        desc: "Spring Boot, Concurrency, and Microservices architecture",
+        desc: "Spring Boot, Concurrency, and Microservices",
         href: "/programs/java",
         icon: Server,
         badge: "Popular",
       },
       {
-        title: "Agentic AI & Neural Systems",
-        desc: "Autonomous LLM swarms, tool use, and reasoning models",
-        href: "/courses/agentic-ai",
-        icon: Sparkles,
-        badge: "New",
-      },
-      {
-        title: "Python for Engineers",
-        desc: "High-throughput APIs, algorithms, and data pipelines",
-        href: "/programs/python",
-        icon: Terminal,
-      },
-      {
-        title: "Modern Web & Distributed UI",
-        desc: "React 19, TypeScript, and server components architecture",
+        title: "Full-Stack Web & TypeScript",
+        desc: "React 19, Next.js, and distributed UI architecture",
         href: "/programs/react",
         icon: Layers,
       },
       {
-        title: "System Design & Distributed Scalability",
-        desc: "Event sourcing, database sharding, and consensus protocols",
-        href: "/programs/system-design",
-        icon: Network,
-        badge: "Advanced",
+        title: "Python for Engineers",
+        desc: "High-throughput APIs, algorithms, and data systems",
+        href: "/programs/python",
+        icon: Terminal,
       },
     ],
-    footerLink: { label: "Explore All 47 Curricula", href: "/programs" },
+    footerLink: { label: "Explore All Tracks & Curricula →", href: "/programs" },
   },
   {
-    label: "Practice",
+    label: "Practice DSA",
     href: "/dsa",
     hasDropdown: true,
     icon: Code2,
-    desc: "DSA Sheets, Problems & Quizzes",
+    desc: "Algorithmic Sheets & Visualizers",
     dropdownWidth: "w-[360px]",
-    alignClass: "left-[-30px]",
+    alignClass: "left-[-20px]",
     items: [
       {
         title: "Complete DSA Sheet",
@@ -139,100 +125,50 @@ const NAV_ITEMS: NavItem[] = [
         badge: "474 Problems",
       },
       {
-        title: "Problem of the Day (POTD)",
-        desc: "Daily competitive coding challenge with XP rewards",
-        href: "/dashboard?tab=practice-arena",
-        icon: Flame,
-        badge: "Live",
-      },
-      {
         title: "Interactive Visualizers",
-        desc: "Dynamic tree, graph, and sliding window canvas step-throughs",
-        href: "/dashboard?tab=practice",
+        desc: "Step-through visual animations for trees, graphs, and pointers",
+        href: "/dsa",
         icon: PlayCircle,
       },
       {
-        title: "Skill Competency Matrix",
-        desc: "Track mastery across arrays, graphs, trees, and concurrency",
-        href: "/dashboard?tab=practice-arena",
-        icon: Award,
+        title: "Algorithmic Problem Arena",
+        desc: "Search, filter, and practice coding challenges with test runner",
+        href: "/dsa",
+        icon: Flame,
       },
     ],
-    footerLink: { label: "Open Practice Arena", href: "/dsa" },
+    footerLink: { label: "Open Algorithmic Arena →", href: "/dsa" },
   },
   {
-    label: "Build",
-    href: "/dashboard?tab=projects",
+    label: "Degrees & Careers",
+    href: "/degrees",
     hasDropdown: true,
-    icon: Hammer,
-    desc: "Production Capstones & Showcase",
-    dropdownWidth: "w-[340px]",
-    alignClass: "left-[-20px]",
+    icon: Briefcase,
+    desc: "Industry Roles, Capstones & Verified Repos",
+    dropdownWidth: "w-[350px]",
+    alignClass: "left-[-40px]",
     items: [
       {
-        title: "Production Capstones",
-        desc: "End-to-end projects with architecture briefs & rubrics",
-        href: "/dashboard?tab=projects",
-        icon: Hammer,
-        badge: "Portfolio",
+        title: "Career Pathways & Degrees",
+        desc: "Structured paths for AI, DevOps, Backend & Full-Stack roles",
+        href: "/degrees",
+        icon: GraduationCap,
+        badge: "Industry",
       },
       {
-        title: "Distributed Storage Engine",
-        desc: "Implement a LSM-tree key-value store with WAL",
-        href: "/dashboard?tab=projects",
-        icon: Database,
-      },
-      {
-        title: "High-Speed HTTP Server",
-        desc: "Custom epoll/kqueue network event loop in C/Rust",
-        href: "/dashboard?tab=projects",
-        icon: Server,
-      },
-      {
-        title: "Student Showcase",
-        desc: "Verified student open-source repositories and demos",
+        title: "Student Capstone Showcase",
+        desc: "Verified student open-source repositories and production builds",
         href: "/portfolio",
         icon: FolderGit2,
       },
-    ],
-    footerLink: { label: "View Capstone Milestones", href: "/dashboard?tab=projects" },
-  },
-  {
-    label: "Career",
-    href: "/dashboard?tab=career",
-    hasDropdown: true,
-    icon: Briefcase,
-    desc: "Jobs, Hackathons & Mentorship",
-    dropdownWidth: "w-[350px]",
-    alignClass: "right-0",
-    items: [
       {
-        title: "Engineering Jobs & Roles",
-        desc: "Verified software engineering positions and internships",
-        href: "/dashboard?tab=jobs",
-        icon: Briefcase,
-        badge: "Hiring",
-      },
-      {
-        title: "Hackathons & Challenges",
-        desc: "Compete in live engineering hackathons with prize pools",
-        href: "/dashboard?tab=hackathons",
-        icon: Trophy,
-      },
-      {
-        title: "1:1 Mentorship",
-        desc: "Direct code reviews and mock interviews with tech leads",
-        href: "/dashboard?tab=mentorship",
+        title: "Mentorship & Placement",
+        desc: "Code reviews, mock technical interviews, and career guidance",
+        href: "/pricing",
         icon: Users,
       },
-      {
-        title: "ATS Resume Analyzer",
-        desc: "Real-time technical resume audit and keyword benchmarks",
-        href: "/dashboard?tab=resume-ats",
-        icon: Shield,
-      },
     ],
-    footerLink: { label: "Open Career Ecosystem", href: "/dashboard?tab=career" },
+    footerLink: { label: "Explore Career Pathways →", href: "/degrees" },
   },
   {
     label: "Pricing",
@@ -411,13 +347,13 @@ export function Navbar() {
         )}
       </AnimatePresence>
 
-      <div className="mx-auto flex h-16 sm:h-[68px] max-w-7xl items-center justify-between px-3.5 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-16 sm:h-[68px] max-w-[1400px] items-center justify-between px-3.5 sm:px-6 lg:px-8">
         {/* 1. Brand Logo (Pure & Minimalist) */}
         <Link
           href="/"
           className="group flex items-center gap-2.5 transition-transform duration-200 hover:scale-[1.01]"
         >
-          <AsciLogo size={36} showText showBadge badgeText="Academy" useVector={false} />
+          <AsciLogo size={46} showText showBadge={false} useVector={false} />
         </Link>
 
         {/* 2. Desktop Navigation with Clean, Minimal Dropdown Flyouts */}
@@ -525,7 +461,7 @@ export function Navbar() {
                               <ArrowUpRight className="h-3 w-3 transition-transform group-hover/fLink:translate-x-0.5 group-hover/fLink:-translate-y-0.5" />
                             </Link>
                             <span className="flex items-center gap-1 text-[10px] font-mono text-muted-foreground/70">
-                              <span className="h-1.5 w-1.5 rounded-full bg-[#ea580c]" />
+                              <span className="h-1.5 w-1.5 rounded-full bg-blue-600" />
                               Active
                             </span>
                           </div>
@@ -541,15 +477,16 @@ export function Navbar() {
 
         {/* 3. Right Action Gateway */}
         <div className="flex items-center gap-1.5 sm:gap-2.5">
-          {/* Search Icon Trigger (Minimalist & Snappy) */}
+          {/* Search Trigger (Clean Icon Button) */}
           <button
             type="button"
             onClick={() => setSearchOpen(true)}
-            aria-label="Search ASCI curriculum & problems"
-            className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full border border-border/80 dark:border-white/15 bg-secondary/30 text-muted-foreground transition-all hover:bg-secondary hover:text-foreground hover:border-primary/40 dark:hover:border-primary/50 shadow-2xs cursor-pointer"
-            title="Search curriculum & problems (⌘K)"
+            aria-label="Search curriculum, 474 problems (⌘K)"
+            className="relative flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full border border-border/80 dark:border-white/15 bg-secondary/30 text-muted-foreground transition-all hover:bg-secondary hover:text-foreground hover:border-primary/50 shadow-2xs cursor-pointer group"
+            title="Search curriculum, 474 problems... (⌘K)"
           >
-            <Search className="h-4 w-4 text-foreground/80 hover:text-primary transition-colors" />
+            <Search className="h-4 w-4 text-foreground/80 group-hover:text-primary transition-colors" />
+            <span className="sr-only">Search curriculum, 474 problems... (⌘K)</span>
           </button>
 
           {/* Saved Courses Wishlist Trigger (Hidden on < 420px screens to prevent header wrapping; accessible in mobile menu) */}
@@ -611,7 +548,7 @@ export function Navbar() {
               <Link
                 href="/signup"
                 suppressHydrationWarning
-                className="group relative flex items-center gap-2 rounded-full bg-primary hover:bg-primary-active px-5 py-2 text-xs sm:text-[13.5px] font-semibold text-primary-foreground shadow-sm hover:scale-[1.02] active:scale-[0.98] transition-all tracking-tight"
+                className="group relative flex items-center gap-2 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 px-5 py-2 text-xs sm:text-[13.5px] font-semibold text-white shadow-md shadow-blue-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all tracking-tight"
               >
                 <span>Get Started</span>
                 <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
@@ -679,7 +616,7 @@ export function Navbar() {
                   <div className="flex items-center justify-between gap-3">
                     {/* User Avatar / Logo + Active Status */}
                     <div className="flex items-center gap-3 min-w-0 flex-1">
-                      <div className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-orange-500/10 text-accent font-bold text-sm uppercase border border-orange-500/25 overflow-hidden shadow-xs">
+                      <div className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-500/10 text-blue-600 font-bold text-sm uppercase border border-blue-500/25 overflow-hidden shadow-xs">
                         {navAvatar ? (
                           <img
                             src={navAvatar}
@@ -702,7 +639,7 @@ export function Navbar() {
                             className={`shrink-0 text-[8.5px] font-mono uppercase px-1.5 py-0.5 rounded-md font-bold leading-none border ${
                               isAdmin
                                 ? "bg-destructive/15 text-destructive border-destructive/30"
-                                : "bg-orange-500/10 text-accent border-orange-500/20"
+                                : "bg-blue-500/10 text-blue-600 border-blue-500/20"
                             }`}
                           >
                             {userRoleBadge}
@@ -727,7 +664,7 @@ export function Navbar() {
                   <Link
                     href="/dashboard"
                     onClick={() => setMobileOpen(false)}
-                    className="w-full flex items-center justify-between rounded-xl bg-accent hover:bg-orange-700 text-white px-3.5 py-2.5 text-xs font-bold shadow-2xs transition-colors group"
+                    className="w-full flex items-center justify-between rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 text-white px-3.5 py-2.5 text-xs font-bold shadow-md shadow-blue-500/20 transition-all group"
                   >
                     <div className="flex items-center gap-2">
                       <LayoutDashboard className="h-3.5 w-3.5" />
@@ -740,7 +677,7 @@ export function Navbar() {
                 /* Guest Brand & Auth Card with Clean Stacked Layout to Prevent Overlapping */
                 <div className="rounded-2xl border border-stone-200 dark:border-stone-800 bg-secondary/50 dark:bg-[#121214] p-4 space-y-3 shadow-2xs">
                   <div className="flex items-center gap-2.5">
-                    <AsciLogo size={32} showText showBadge badgeText="Academy" useVector={false} />
+                    <AsciLogo size={38} showText showBadge={false} useVector={false} />
                   </div>
                   <p className="text-xs text-muted-foreground leading-relaxed">
                     Interactive engineering curriculum, algorithmic sandboxes &amp; verified career credentials.
@@ -756,7 +693,7 @@ export function Navbar() {
                     <Link
                       href="/signup"
                       onClick={() => setMobileOpen(false)}
-                      className="flex items-center justify-center gap-1.5 rounded-xl bg-accent hover:bg-orange-700 text-white px-3 py-2 text-xs font-semibold shadow-2xs transition-colors"
+                      className="flex items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 text-white px-3 py-2 text-xs font-semibold shadow-md shadow-blue-500/20 transition-all"
                     >
                       <span>Get Started</span>
                       <ArrowRight className="h-3.5 w-3.5" />
@@ -775,7 +712,7 @@ export function Navbar() {
                 className="w-full flex items-center justify-between rounded-xl border border-stone-200 dark:border-stone-800 bg-secondary/60 px-3.5 py-2.5 text-xs text-muted-foreground hover:text-foreground shadow-2xs cursor-pointer transition-colors"
               >
                 <div className="flex items-center gap-2.5">
-                  <Search className="h-4 w-4 text-accent" />
+                  <Search className="h-4 w-4 text-blue-600" />
                   <span>Search curriculum, code labs...</span>
                 </div>
                 <kbd className="rounded border border-stone-200 dark:border-stone-700 bg-background px-1.5 py-0.5 text-[9px] font-mono font-medium text-muted-foreground">
@@ -787,14 +724,14 @@ export function Navbar() {
               <Link
                 href="/dashboard?tab=practice-arena"
                 onClick={() => setMobileOpen(false)}
-                className="flex items-center justify-between p-3 rounded-xl border border-orange-500/25 bg-orange-500/5 hover:bg-orange-500/10 transition-colors group"
+                className="flex items-center justify-between p-3 rounded-xl border border-border/80 dark:border-white/10 bg-card hover:bg-secondary/60 shadow-2xs transition-colors group"
               >
                 <div className="flex items-center gap-2.5 min-w-0">
-                  <div className="w-7 h-7 rounded-lg bg-orange-500/15 text-accent flex items-center justify-center shrink-0">
+                  <div className="w-7 h-7 rounded-lg bg-blue-500/15 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
                     <Flame className="w-4 h-4 fill-current" />
                   </div>
                   <div className="min-w-0">
-                    <div className="text-[10px] font-mono uppercase tracking-wider font-bold text-accent">
+                    <div className="text-[10px] font-mono uppercase tracking-wider font-bold text-blue-600 dark:text-blue-400">
                       Problem of the Day
                     </div>
                     <div className="text-xs font-bold text-foreground truncate">
@@ -802,7 +739,7 @@ export function Navbar() {
                     </div>
                   </div>
                 </div>
-                <span className="shrink-0 text-[10px] font-mono font-bold text-accent bg-orange-500/15 px-2 py-0.5 rounded-md">
+                <span className="shrink-0 text-[10px] font-mono font-bold text-blue-600 dark:text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded-md">
                   +50 XP →
                 </span>
               </Link>
@@ -822,7 +759,7 @@ export function Navbar() {
                         className="flex items-center justify-between p-3 rounded-xl border border-stone-200 dark:border-stone-800 bg-card hover:bg-secondary transition-colors"
                       >
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-lg bg-orange-500/10 text-accent flex items-center justify-center shrink-0">
+                          <div className="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-600 flex items-center justify-center shrink-0">
                             <Icon className="w-4 h-4" />
                           </div>
                           <div>
@@ -848,7 +785,7 @@ export function Navbar() {
                         aria-expanded={isExpanded}
                       >
                         <div className="flex items-center gap-3 min-w-0 flex-1 pr-2">
-                          <div className="w-8 h-8 rounded-lg bg-orange-500/10 text-accent flex items-center justify-center shrink-0">
+                          <div className="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-600 flex items-center justify-center shrink-0">
                             <Icon className="w-4 h-4" />
                           </div>
                           <div className="min-w-0 flex-1">
@@ -891,7 +828,7 @@ export function Navbar() {
                                   className="flex items-center justify-between gap-2 p-2 rounded-lg text-xs text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
                                 >
                                   <div className="flex items-center gap-2.5 min-w-0 flex-1">
-                                    <SubIcon className="w-3.5 h-3.5 text-accent shrink-0" />
+                                    <SubIcon className="w-3.5 h-3.5 text-blue-600 shrink-0" />
                                     <span className="truncate font-medium">{item.title}</span>
                                   </div>
                                   {item.badge && (
@@ -907,7 +844,7 @@ export function Navbar() {
                               <Link
                                 href={section.href}
                                 onClick={() => setMobileOpen(false)}
-                                className="flex items-center justify-between px-2 py-1.5 text-xs font-semibold text-accent hover:underline"
+                                className="flex items-center justify-between px-2 py-1.5 text-xs font-semibold text-blue-600 hover:underline"
                               >
                                 <span>Explore all {section.label}</span>
                                 <ArrowRight className="w-3.5 h-3.5" />
@@ -932,10 +869,10 @@ export function Navbar() {
                   className="w-full flex items-center justify-between rounded-xl border border-stone-200 dark:border-stone-800 bg-secondary/50 px-3.5 py-2 text-xs font-semibold text-foreground hover:bg-secondary cursor-pointer transition-colors"
                 >
                   <div className="flex items-center gap-2">
-                    <Bookmark className="h-3.5 w-3.5 text-accent" />
+                    <Bookmark className="h-3.5 w-3.5 text-blue-600" />
                     <span>Saved Tracks</span>
                   </div>
-                  <span className="rounded-full bg-accent/15 px-2 py-0.5 text-[10px] font-mono font-bold text-accent">
+                  <span className="rounded-full bg-blue-500/15 px-2 py-0.5 text-[10px] font-mono font-bold text-blue-600">
                     {wishlistCount} saved
                   </span>
                 </button>
@@ -969,7 +906,7 @@ export function Navbar() {
                         onClick={() => setMobileOpen(false)}
                         className="w-full flex items-center justify-center gap-2 rounded-xl border border-stone-200 dark:border-stone-800 bg-secondary/60 hover:bg-secondary px-3 py-2 text-xs font-medium text-foreground transition-colors"
                       >
-                        <Shield className="h-3.5 w-3.5 text-accent" />
+                        <Shield className="h-3.5 w-3.5 text-blue-600" />
                         <span>Admin Command Center</span>
                       </Link>
                     )}

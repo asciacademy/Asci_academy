@@ -147,8 +147,8 @@ export function DashboardResumeAts() {
               <span className="text-[11px] uppercase tracking-wider text-muted-foreground font-medium">
                 Quantified Impact Rating
               </span>
-              <div className="w-7 h-7 rounded-lg bg-[#ea580c]/10 text-[#ea580c] flex items-center justify-center">
-                <Zap className="w-4 h-4" />
+              <div className="w-7 h-7 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center">
+                <Zap className="w-4 h-4 text-blue-500" />
               </div>
             </div>
             <div className="flex items-baseline gap-2">
@@ -163,7 +163,7 @@ export function DashboardResumeAts() {
           <div className="mt-4 pt-3 border-t border-hairline">
             <div className="w-full h-1.5 bg-secondary rounded-full overflow-hidden">
               <div
-                className="h-full bg-[#ea580c] rounded-full transition-all duration-700"
+                className="h-full bg-gradient-to-r from-blue-600 to-cyan-500 rounded-full transition-all duration-700"
                 style={{ width: `${resumeData.actionVerbsScore}%` }}
               />
             </div>
@@ -368,13 +368,13 @@ export function DashboardResumeAts() {
             {/* Recommendations */}
             <div className="rounded-xl border border-hairline bg-card p-5 space-y-4">
               <div className="flex items-center gap-2">
-                <Sliders className="w-4 h-4 text-[#ea580c]" />
+                <Sliders className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                 <h3 className="font-serif text-base font-normal text-foreground">ATS Optimization Insights</h3>
               </div>
               <div className="space-y-3">
                 {resumeData.suggestions.map((sug, i) => (
                   <div key={i} className="p-3 rounded-lg bg-secondary/70 border border-hairline text-xs text-muted-foreground flex items-start gap-2">
-                    <AlertCircle className="w-3.5 h-3.5 text-[#ea580c] shrink-0 mt-0.5" />
+                    <AlertCircle className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
                     <span className="leading-snug">{sug}</span>
                   </div>
                 ))}
@@ -401,7 +401,7 @@ export function DashboardResumeAts() {
                         saveAtsResume({ skills: updated })
                       }
                     }}
-                    className="text-[10px] font-mono px-2 py-1 rounded bg-[#ea580c]/10 text-[#ea580c] border border-[#ea580c]/30 hover:bg-[#ea580c]/20 transition-colors cursor-pointer flex items-center gap-1"
+                    className="text-[10px] font-mono px-2 py-1 rounded bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/25 hover:bg-blue-500/20 transition-colors cursor-pointer flex items-center gap-1"
                     title="Click to add to skills"
                   >
                     <span>+ {kw}</span>

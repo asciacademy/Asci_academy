@@ -359,7 +359,7 @@ export function CertificateCard({ certificate, isPrintMode = false }: Certificat
           <div className="space-y-1">
             <h1 className="font-certificate-title text-2xl sm:text-4xl md:text-[46px] lg:text-[50px] font-normal text-[#141413] tracking-tight leading-none flex items-baseline justify-center gap-1.5 sm:gap-2">
               <span>Certificate</span>
-              <span className="font-certificate-script text-2xl sm:text-4xl md:text-[48px] text-[#C2410C] italic lowercase font-normal">
+              <span className="font-certificate-script text-2xl sm:text-4xl md:text-[48px] text-[#2563EB] italic lowercase font-normal">
                 of
               </span>
               <span>Completion</span>

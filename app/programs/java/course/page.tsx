@@ -474,7 +474,7 @@ export default function JavaCourseDocsLayout() {
             </div>
 
             <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border bg-card text-xs font-mono">
-              <Zap size={13} className="text-amber-500" />
+              <Zap size={13} className="text-blue-500" />
               <span className="font-semibold text-foreground">4 Day Streak</span>
             </div>
 
@@ -640,7 +640,7 @@ export default function JavaCourseDocsLayout() {
                     <div className="px-4 py-2.5 border-b border-border bg-[#141413] flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <div className="w-2.5 h-2.5 rounded-full bg-rose-500/60" />
-                        <div className="w-2.5 h-2.5 rounded-full bg-amber-500/60" />
+                        <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/50" />
                         <div className="w-2.5 h-2.5 rounded-full bg-primary/60" />
                         <span className="ml-2 font-mono text-[11px] text-muted-foreground">
                           {activeLesson.id}.java

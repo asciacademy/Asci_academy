@@ -140,7 +140,7 @@ export function DashboardAmbassador() {
             unit: "Students",
             sub: `${50 - ambassador.joinedPeers} to Diamond Fellow`,
             icon: Users,
-            color: "text-[#ea580c]",
+            color: "text-blue-500",
           },
           {
             label: "Ambassador XP",
@@ -226,7 +226,7 @@ export function DashboardAmbassador() {
                     tier.status === "unlocked"
                       ? "text-emerald-600 dark:text-emerald-400 bg-emerald-500/10"
                       : tier.status === "in_progress"
-                      ? "text-[#ea580c] bg-[#ea580c]/10"
+                      ? "text-blue-600 dark:text-blue-400 bg-blue-500/10"
                       : "text-muted-foreground bg-secondary"
                   }`}>
                     {tier.status === "unlocked" ? "Unlocked" : tier.status === "in_progress" ? "Active Goal" : "Locked"}
@@ -254,7 +254,7 @@ export function DashboardAmbassador() {
           <div className="flex items-center justify-between border-b border-hairline pb-4">
             <div>
               <h2 className="font-serif text-xl font-normal text-foreground flex items-center gap-2">
-                <Trophy className="w-5 h-5 text-[#ea580c]" />
+                <Trophy className="w-5 h-5 text-blue-500" />
                 <span>Campus Leaderboard</span>
               </h2>
               <p className="text-xs text-muted-foreground mt-0.5">
@@ -276,7 +276,7 @@ export function DashboardAmbassador() {
                 <div className="flex items-center gap-3 min-w-0">
                   <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-mono font-semibold shrink-0 ${
                     item.rank === 1
-                      ? "bg-amber-500/20 text-amber-600 dark:text-amber-400"
+                      ? "bg-blue-500/20 text-blue-600 dark:text-blue-400"
                       : item.rank === 2
                       ? "bg-slate-300/30 text-foreground"
                       : item.rank === 3

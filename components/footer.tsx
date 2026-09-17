@@ -69,7 +69,7 @@ export function Footer({ showCTA = false }: { showCTA?: boolean }) {
       {/* Pre-footer coral CTA band */}
       {showCTA && (
         <div className="section-spacing">
-          <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-[1400px] px-5 sm:px-6 lg:px-8">
             <div className="rounded-2xl bg-primary px-8 py-16 text-center sm:px-16 sm:py-20 shadow-xs">
               <h2 className="font-serif text-3xl sm:text-4xl text-primary-foreground tracking-tight" style={{ letterSpacing: '-0.5px' }}>
                 Start learning to code today
@@ -99,12 +99,12 @@ export function Footer({ showCTA = false }: { showCTA?: boolean }) {
 
       {/* Creamy white editorial footer */}
       <div className="bg-secondary/60 border-t border-hairline text-foreground">
-        <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 py-16 sm:py-20">
+        <div className="mx-auto max-w-[1400px] px-5 sm:px-6 lg:px-8 py-16 sm:py-20">
           {/* Top — wordmark + newsletter */}
           <div className="flex flex-col gap-8 pb-12 border-b border-hairline md:flex-row md:items-start md:justify-between">
             <div>
               <div className="mb-3">
-                <AsciLogo size={36} showText showBadge badgeText="ACADEMY" />
+                <AsciLogo size={42} showText showBadge={false} />
               </div>
               <p className="mt-2 max-w-xs text-sm text-body leading-relaxed">
                 A comprehensive learning platform for mastering software engineering, from fundamentals to production-grade systems.

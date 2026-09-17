@@ -51,15 +51,15 @@ export function AI3DIcon({
       {/* Isometric Interconnected Matrix Nodes */}
       {/* Upper Nodes */}
       <circle cx="60" cy="30" r="3" fill="#D4B872" />
-      <circle cx="74" cy="38" r="2.5" fill="#ea580c" />
-      <circle cx="46" cy="38" r="2.5" fill="#ea580c" />
+      <circle cx="74" cy="38" r="2.5" fill="#2563eb" />
+      <circle cx="46" cy="38" r="2.5" fill="#2563eb" />
       <circle cx="60" cy="46" r="3.5" fill="#fdfbf7" stroke="#D4B872" strokeWidth="1" />
 
       {/* Interconnecting Geometric Logic Vectors */}
       <line x1="60" y1="30" x2="74" y2="38" stroke="#D4B872" strokeWidth="1.2" strokeDasharray="2 1" />
       <line x1="60" y1="30" x2="46" y2="38" stroke="#D4B872" strokeWidth="1.2" strokeDasharray="2 1" />
-      <line x1="46" y1="38" x2="60" y2="46" stroke="#ea580c" strokeWidth="1.2" />
-      <line x1="74" y1="38" x2="60" y2="46" stroke="#ea580c" strokeWidth="1.2" />
+      <line x1="46" y1="38" x2="60" y2="46" stroke="#2563eb" strokeWidth="1.2" />
+      <line x1="74" y1="38" x2="60" y2="46" stroke="#2563eb" strokeWidth="1.2" />
 
       {/* Vertical Data Tensor Pillars */}
       <line x1="46" y1="38" x2="46" y2="58" stroke="#a09d96" strokeWidth="1.2" strokeDasharray="2 2" />
@@ -67,7 +67,7 @@ export function AI3DIcon({
       <line x1="74" y1="38" x2="74" y2="58" stroke="#a09d96" strokeWidth="1.2" strokeDasharray="2 2" />
 
       {/* Mid Layer Core Logic Node */}
-      <circle cx="60" cy="68" r="3" fill="#ea580c" stroke="#141413" strokeWidth="1" />
+      <circle cx="60" cy="68" r="3" fill="#2563eb" stroke="#141413" strokeWidth="1" />
       <circle cx="46" cy="58" r="2" fill="#D4B872" />
       <circle cx="74" cy="58" r="2" fill="#D4B872" />
     </svg>

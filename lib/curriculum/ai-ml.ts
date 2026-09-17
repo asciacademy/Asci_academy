@@ -1113,6 +1113,75 @@ message = {
             }
           }
         ]
+      },
+      {
+        id: "aws-b-mod-2",
+        title: "Module 2: Enterprise Bedrock Guardrails & Security",
+        sequence_order: 2,
+        description: "Enforce automated PII redaction, topic denial, and hallucination prevention filters.",
+        lessons: [
+          {
+            id: "aws-b-2-1",
+            title: "2.1 Configuring Bedrock Guardrail Thresholds",
+            sequence_order: 1,
+            content_type: "challenge",
+            xp_reward: 50,
+            description: "Construct guardrail policies that block harmful content and mask sensitive tokens.",
+            content: `### Guardrail Policy Definition
+Amazon Bedrock Guardrails allow organizations to define programmatic boundaries across models:`,
+            challenge_data: {
+              initialCode: `def evaluate_guardrail(score, threshold=0.85):\n    return "BLOCKED" if score >= threshold else "PERMITTED"\n\nprint("DECISION:", evaluate_guardrail(0.92))\n`,
+              expectedOutput: "DECISION: BLOCKED",
+              instructions: "Verify the safety threshold and print 'DECISION: BLOCKED'."
+            }
+          }
+        ]
+      },
+      {
+        id: "aws-b-mod-3",
+        title: "Module 3: Serverless RAG with OpenSearch Serverless",
+        sequence_order: 3,
+        description: "Connect Amazon Bedrock Knowledge Bases to managed vector indexes.",
+        lessons: [
+          {
+            id: "aws-b-3-1",
+            title: "3.1 Vector Query Ingestion Pipeline",
+            sequence_order: 1,
+            content_type: "challenge",
+            xp_reward: 50,
+            description: "Execute k-nearest-neighbor search queries against embedded vector stores.",
+            content: `### KNN Query Construction
+Bedrock Knowledge Bases query OpenSearch Serverless vector indices via cosine distance:`,
+            challenge_data: {
+              initialCode: `def make_knn_query(field, vector, k=5):\n    return {"size": k, "query": {"knn": {field: {"vector": vector, "k": k}}}}\n\nq = make_knn_query("embedding", [0.1, 0.2], k=3)\nprint("KNN_K:", q["size"])\n`,
+              expectedOutput: "KNN_K: 3",
+              instructions: "Construct the KNN query dictionary and print 'KNN_K: 3'."
+            }
+          }
+        ]
+      },
+      {
+        id: "aws-b-mod-4",
+        title: "Module 4: SageMaker JumpStart Deployment",
+        sequence_order: 4,
+        description: "Deploy and host custom fine-tuned weights on dedicated serverless endpoints.",
+        lessons: [
+          {
+            id: "aws-b-4-1",
+            title: "4.1 SageMaker Predictor Endpoint Validation",
+            sequence_order: 1,
+            content_type: "challenge",
+            xp_reward: 50,
+            description: "Parse inference responses and latency telemetry from JumpStart endpoints.",
+            content: `### SageMaker Real-Time Endpoints
+Verify model responses returned over HTTPS from AWS SageMaker:`,
+            challenge_data: {
+              initialCode: `def parse_endpoint_resp(resp):\n    return resp.get("predictions", ["NO_DATA"])[0]\n\nprint("PRED:", parse_endpoint_resp({"predictions": ["SAGEMAKER_ACTIVE"]}))\n`,
+              expectedOutput: "PRED: SAGEMAKER_ACTIVE",
+              instructions: "Parse the endpoint output and print 'PRED: SAGEMAKER_ACTIVE'."
+            }
+          }
+        ]
       }
     ]
   },
@@ -1169,6 +1238,75 @@ contents = [
             }
           }
         ]
+      },
+      {
+        id: "gcp-ai-mod-2",
+        title: "Module 2: Vertex AI Studio Parameter Tuning",
+        sequence_order: 2,
+        description: "Tune temperature, top-p, and top-k sampling parameters for deterministic reasoning.",
+        lessons: [
+          {
+            id: "gcp-ai-2-1",
+            title: "2.1 Generation Config Parameters",
+            sequence_order: 1,
+            content_type: "challenge",
+            xp_reward: 50,
+            description: "Define temperature and nucleus sampling configurations.",
+            content: `### Generation Config
+Control model stochasticity with temperature and top-p:`,
+            challenge_data: {
+              initialCode: `def build_gen_config(temp=0.2, top_p=0.95):\n    return {"temperature": temp, "topP": top_p}\n\ncfg = build_gen_config(0.1, 0.9)\nprint(f"TEMP: {cfg['temperature']}, TOP_P: {cfg['topP']}")\n`,
+              expectedOutput: "TEMP: 0.1, TOP_P: 0.9",
+              instructions: "Build generation config and print 'TEMP: 0.1, TOP_P: 0.9'."
+            }
+          }
+        ]
+      },
+      {
+        id: "gcp-ai-mod-3",
+        title: "Module 3: Grounding with Google Search",
+        sequence_order: 3,
+        description: "Prevent hallucinations by dynamically attaching live Google Search web grounding.",
+        lessons: [
+          {
+            id: "gcp-ai-3-1",
+            title: "3.1 Verifying Grounding Metadata",
+            sequence_order: 1,
+            content_type: "challenge",
+            xp_reward: 50,
+            description: "Inspect search chunks and attribution web URIs returned by Vertex AI.",
+            content: `### Grounding Attribution
+Inspect search grounding metadata in model responses:`,
+            challenge_data: {
+              initialCode: `def extract_grounding_sources(meta):\n    return [chunk["web"]["uri"] for chunk in meta.get("groundingChunks", [])]\n\nsources = extract_grounding_sources({"groundingChunks": [{"web": {"uri": "https://cloud.google.com"}}]})\nprint("SOURCE:", sources[0])\n`,
+              expectedOutput: "SOURCE: https://cloud.google.com",
+              instructions: "Extract web citations and print 'SOURCE: https://cloud.google.com'."
+            }
+          }
+        ]
+      },
+      {
+        id: "gcp-ai-mod-4",
+        title: "Module 4: Vertex AI Vector Search",
+        sequence_order: 4,
+        description: "Deploy low-latency, billion-scale Approximate Nearest Neighbor vector indexes.",
+        lessons: [
+          {
+            id: "gcp-ai-4-1",
+            title: "4.1 Match Neighbor Result Parsing",
+            sequence_order: 1,
+            content_type: "challenge",
+            xp_reward: 50,
+            description: "Parse neighbor matches and distance scores from Vertex Vector Search index endpoints.",
+            content: `### Vector Search Result Parsing
+Process nearest neighbor queries in real time:`,
+            challenge_data: {
+              initialCode: `def top_match(neighbors):\n    return sorted(neighbors, key=lambda x: x["distance"])[0]["id"]\n\nres = top_match([{"id": "doc_a", "distance": 0.12}, {"id": "doc_b", "distance": 0.45}])\nprint("TOP_DOC:", res)\n`,
+              expectedOutput: "TOP_DOC: doc_a",
+              instructions: "Find closest neighbor and print 'TOP_DOC: doc_a'."
+            }
+          }
+        ]
       }
     ]
   },
@@ -1221,6 +1359,77 @@ $$\\frac{\\partial L}{\\partial w} = 2 \\cdot (\\hat{y} - y) \\cdot x$$`,
             }
           }
         ]
+      },
+      {
+        id: "meta-mod-2",
+        title: "Module 2: PyTorch 2.0 Compiler & TorchDynamo",
+        sequence_order: 2,
+        description: "Graph capture, Inductor codegen, and kernel fusion for maximum FLOPS.",
+        lessons: [
+          {
+            id: "meta-2-1",
+            title: "2.1 TorchDynamo Graph Capture Simulation",
+            sequence_order: 1,
+            content_type: "challenge",
+            xp_reward: 50,
+            description: "Identify Python frame guards and kernel fusion opportunities.",
+            content: `### Kernel Fusion Principle
+Combine separate element-wise operations into a single GPU kernel execution:`,
+            challenge_data: {
+              initialCode: `def fused_gelu_add(x, bias):\n    # Simulate fused activation\n    return [xi + b for xi, b in zip(x, bias)]\n\nres = fused_gelu_add([1.0, 2.0], [0.5, 0.5])\nprint("FUSED:", res)\n`,
+              expectedOutput: "FUSED: [1.5, 2.5]",
+              instructions: "Execute the fused tensor operation and print 'FUSED: [1.5, 2.5]'."
+            }
+          }
+        ]
+      },
+      {
+        id: "meta-mod-3",
+        title: "Module 3: Parameter-Efficient Fine-Tuning (LoRA)",
+        sequence_order: 3,
+        description: "Deconstruct low-rank decomposition matrices ($W = W_0 + B \\times A$) for Llama 3 8B.",
+        lessons: [
+          {
+            id: "meta-3-1",
+            title: "3.1 Low-Rank Parameter Matrix Computation",
+            sequence_order: 1,
+            content_type: "challenge",
+            xp_reward: 50,
+            description: "Compute parameter savings of rank-r factorization over full dense weight matrices.",
+            content: `### LoRA Parameter Savings
+Given $d_{in}=4096, d_{out}=4096$ and rank $r=16$:
+Dense weights: $4096 \\times 4096 = 16,777,216$
+LoRA weights: $(4096 \\times 16) + (16 \\times 4096) = 131,072$ (~99.2% reduction)`,
+            challenge_data: {
+              initialCode: `def calc_lora_params(d_in, d_out, rank):\n    dense = d_in * d_out\n    lora = (d_in * rank) + (rank * d_out)\n    return dense, lora\n\ndense, lora = calc_lora_params(4096, 4096, 16)\nprint(f"DENSE: {dense}, LORA: {lora}")\n`,
+              expectedOutput: "DENSE: 16777216, LORA: 131072",
+              instructions: "Calculate LoRA matrix parameters and print 'DENSE: 16777216, LORA: 131072'."
+            }
+          }
+        ]
+      },
+      {
+        id: "meta-mod-4",
+        title: "Module 4: Distributed Scaling with FSDP",
+        sequence_order: 4,
+        description: "Shard model parameters, gradients, and optimizer states across GPU nodes.",
+        lessons: [
+          {
+            id: "meta-4-1",
+            title: "4.1 Memory Sharding Calculation",
+            sequence_order: 1,
+            content_type: "challenge",
+            xp_reward: 50,
+            description: "Calculate per-GPU memory footprint when sharding 70B parameter models.",
+            content: `### ZeRO-3 / FSDP Sharding
+Across $N$ GPUs, parameters and optimizer states are divided by $N$:`,
+            challenge_data: {
+              initialCode: `def per_gpu_mem(total_gb, num_gpus):\n    return round(total_gb / num_gpus, 1)\n\nprint("PER_GPU_GB:", per_gpu_mem(140.0, 8))\n`,
+              expectedOutput: "PER_GPU_GB: 17.5",
+              instructions: "Calculate per-GPU memory allocation and print 'PER_GPU_GB: 17.5'."
+            }
+          }
+        ]
       }
     ]
   },
@@ -1270,6 +1479,75 @@ In enterprise AI deployments, drift measures performance degradation over time:
               initialCode: `def calc_drift(baseline, current):\n    drift = ((baseline - current) / baseline) * 100\n    return round(drift, 1)\n\nprint("DRIFT_PCT:", calc_drift(0.95, 0.88))\n`,
               expectedOutput: "DRIFT_PCT: 7.4",
               instructions: "Compute the percentage performance drift and print 'DRIFT_PCT: 7.4'."
+            }
+          }
+        ]
+      },
+      {
+        id: "ibm-w-mod-2",
+        title: "Module 2: Deploying IBM Granite Models",
+        sequence_order: 2,
+        description: "Integrate IBM Granite code and language models for enterprise backend automation.",
+        lessons: [
+          {
+            id: "ibm-w-2-1",
+            title: "2.1 Granite Prompt Payload Assembly",
+            sequence_order: 1,
+            content_type: "challenge",
+            xp_reward: 50,
+            description: "Construct watsonx.ai runtime payload for Granite 13B models.",
+            content: `### Watsonx Model Ingestion
+Assemble API payloads with temperature and decoding parameters:`,
+            challenge_data: {
+              initialCode: `def make_watsonx_req(model_id, prompt):\n    return {"model_id": model_id, "input": prompt, "parameters": {"decoding_method": "greedy"}}\n\nreq = make_watsonx_req("ibm/granite-13b-chat-v2", "Generate SQL")\nprint("MODEL:", req["model_id"])\n`,
+              expectedOutput: "MODEL: ibm/granite-13b-chat-v2",
+              instructions: "Assemble request and print 'MODEL: ibm/granite-13b-chat-v2'."
+            }
+          }
+        ]
+      },
+      {
+        id: "ibm-w-mod-3",
+        title: "Module 3: watsonx.governance Bias Mitigation",
+        sequence_order: 3,
+        description: "Implement disparate impact ratio checks and automated demographic parity monitoring.",
+        lessons: [
+          {
+            id: "ibm-w-3-1",
+            title: "3.1 Disparate Impact Ratio Analysis",
+            sequence_order: 1,
+            content_type: "challenge",
+            xp_reward: 50,
+            description: "Calculate disparate impact ratio for binary model decisions.",
+            content: `### Demographics Parity Check
+Disparate impact ratio compares favorable outcome rates between unprivileged and privileged groups:`,
+            challenge_data: {
+              initialCode: `def calc_disparate_impact(unprivileged_rate, privileged_rate):\n    ratio = unprivileged_rate / privileged_rate\n    return round(ratio, 2)\n\nprint("IMPACT_RATIO:", calc_disparate_impact(0.82, 0.95))\n`,
+              expectedOutput: "IMPACT_RATIO: 0.86",
+              instructions: "Calculate disparate impact ratio and print 'IMPACT_RATIO: 0.86'."
+            }
+          }
+        ]
+      },
+      {
+        id: "ibm-w-mod-4",
+        title: "Module 4: Regulatory Compliance & Audit Logs",
+        sequence_order: 4,
+        description: "Scaffold cryptographic tamper-evident model telemetry logs for compliance audits.",
+        lessons: [
+          {
+            id: "ibm-w-4-1",
+            title: "4.1 Cryptographic Audit Event Record",
+            sequence_order: 1,
+            content_type: "challenge",
+            xp_reward: 50,
+            description: "Format EU AI Act audit records with timestamps and prompt hashes.",
+            content: `### Audit Trail Schema
+Structure telemetry events for compliance verification:`,
+            challenge_data: {
+              initialCode: `def format_audit_log(model, user_hash, status="COMPLIANT"):\n    return f"LOG:{model}:{user_hash}:{status}"\n\nprint(format_audit_log("granite-13b", "usr_8829"))\n`,
+              expectedOutput: "LOG:granite-13b:usr_8829:COMPLIANT",
+              instructions: "Format the compliance record and print 'LOG:granite-13b:usr_8829:COMPLIANT'."
             }
           }
         ]

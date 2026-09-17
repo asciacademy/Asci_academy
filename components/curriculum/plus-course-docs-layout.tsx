@@ -371,7 +371,7 @@ export function PlusCourseDocsLayout({ subject }: PlusCourseDocsLayoutProps) {
           </div>
           <div className="flex items-center justify-between pt-1 text-[10px] font-mono text-muted-foreground/70">
             <div className="flex items-center gap-1.5">
-              <div className="h-1.5 w-1.5 rounded-full bg-[#ea580c] animate-pulse" />
+              <div className="h-1.5 w-1.5 rounded-full bg-blue-500 animate-pulse" />
               <span>POSIX.1 & Linux 6.x</span>
             </div>
             {totalCompleted > 0 && (
@@ -437,7 +437,7 @@ export function PlusCourseDocsLayout({ subject }: PlusCourseDocsLayoutProps) {
 
             {/* Streak Indicator */}
             <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border bg-card text-xs font-mono">
-              <Zap size={13} className="text-amber-500" />
+              <Zap size={13} className="text-blue-500" />
               <span className="font-semibold text-foreground">5 Day Streak</span>
             </div>
 
@@ -487,7 +487,7 @@ export function PlusCourseDocsLayout({ subject }: PlusCourseDocsLayoutProps) {
                       theory.difficulty === "Advanced"
                         ? "bg-destructive/10 text-destructive border-destructive/20"
                         : theory.difficulty === "Intermediate"
-                        ? "bg-[#ea580c]/15 text-[#ea580c] border-[#ea580c]/30"
+                        ? "bg-blue-500/15 text-blue-600 dark:text-blue-400 border-blue-500/30"
                         : "bg-primary/10 text-primary border-primary/20"
                     )}
                   >
@@ -602,7 +602,7 @@ export function PlusCourseDocsLayout({ subject }: PlusCourseDocsLayoutProps) {
                   <div className="rounded-2xl border border-border/80 bg-[#181715] overflow-hidden text-slate-100 font-mono text-xs shadow-md">
                     <div className="px-4 py-2.5 border-b border-border/80 bg-[#141413] flex items-center gap-2">
                       <div className="w-2.5 h-2.5 rounded-full bg-rose-500/70" />
-                      <div className="w-2.5 h-2.5 rounded-full bg-amber-500/70" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/50" />
                       <div className="w-2.5 h-2.5 rounded-full bg-primary/70" />
                       <span className="ml-2 font-mono text-[11px] text-muted-foreground">
                         {theory.codeSnippet.title.toLowerCase().replace(/\s+/g, "_")}.c

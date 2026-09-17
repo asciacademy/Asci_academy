@@ -268,7 +268,7 @@ export function DashboardHackathons() {
           onClick={() => setMainMode("leaderboard")}
           className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5 ${
             mainMode === "leaderboard"
-              ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold shadow-xs"
+              ? "bg-blue-600 text-white font-semibold shadow-xs shadow-blue-500/20"
               : "bg-secondary text-muted-foreground hover:text-foreground"
           }`}
         >
@@ -279,7 +279,7 @@ export function DashboardHackathons() {
           onClick={() => setMainMode("challenges")}
           className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5 ${
             mainMode === "challenges"
-              ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold shadow-xs"
+              ? "bg-blue-600 text-white font-semibold shadow-xs shadow-blue-500/20"
               : "bg-secondary text-muted-foreground hover:text-foreground"
           }`}
         >
@@ -290,7 +290,7 @@ export function DashboardHackathons() {
           onClick={() => setMainMode("teammates")}
           className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5 ${
             mainMode === "teammates"
-              ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold shadow-xs"
+              ? "bg-blue-600 text-white font-semibold shadow-xs shadow-blue-500/20"
               : "bg-secondary text-muted-foreground hover:text-foreground"
           }`}
         >
@@ -327,12 +327,12 @@ export function DashboardHackathons() {
                     key={entry.rank}
                     className={`rounded-2xl border p-5 flex flex-col justify-between transition-all relative overflow-hidden ${
                       isFirst
-                        ? "border-amber-500/40 bg-card shadow-sm"
+                        ? "border-blue-500/40 bg-card shadow-sm"
                         : "border-hairline bg-card shadow-2xs"
                     }`}
                   >
                     {isFirst && (
-                      <div className="absolute top-0 right-0 left-0 h-1 bg-gradient-to-r from-amber-500 via-orange-500 to-amber-500" />
+                      <div className="absolute top-0 right-0 left-0 h-1 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500" />
                     )}
 
                     <div>
@@ -340,10 +340,10 @@ export function DashboardHackathons() {
                         <span
                           className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold ${
                             isFirst
-                              ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-2xs"
+                              ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-2xs"
                               : entry.rank === 2
                               ? "bg-slate-500/15 text-slate-700 dark:text-slate-300 border border-slate-500/30"
-                              : "bg-amber-900/15 text-amber-800 dark:text-amber-200 border border-amber-900/30"
+                              : "bg-indigo-900/15 text-indigo-800 dark:text-indigo-200 border border-indigo-900/30"
                           }`}
                         >
                           {entry.badge}
@@ -356,7 +356,7 @@ export function DashboardHackathons() {
                       <div className="flex items-center gap-3 mb-3">
                         <div
                           className={`w-12 h-12 rounded-2xl flex items-center justify-center font-serif text-sm font-semibold text-foreground overflow-hidden border ${
-                            isFirst ? "border-amber-500/40" : "border-hairline"
+                            isFirst ? "border-blue-500/40" : "border-hairline"
                           }`}
                         >
                           <img
@@ -382,14 +382,14 @@ export function DashboardHackathons() {
                         </div>
                         <div>
                           <span className="text-[9px] font-mono uppercase text-muted-foreground block">Solved</span>
-                          <span className="text-xs font-semibold text-amber-600 dark:text-amber-400">{entry.solved}</span>
+                          <span className="text-xs font-semibold text-blue-600 dark:text-blue-400">{entry.solved}</span>
                         </div>
                       </div>
                     </div>
 
                     <div className="pt-2 flex items-center justify-between text-xs">
                       <span className="text-[11px] font-mono text-muted-foreground">{entry.xp}</span>
-                      <span className="text-[11px] font-mono text-amber-600 dark:text-amber-400 font-medium">Verified Profile</span>
+                      <span className="text-[11px] font-mono text-blue-600 dark:text-blue-400 font-medium">Verified Profile</span>
                     </div>
                   </div>
                 )
@@ -400,13 +400,13 @@ export function DashboardHackathons() {
           {/* Current User Standing Simple Card */}
           <div className="rounded-2xl border border-hairline bg-card p-5 shadow-2xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-500/20 to-orange-500/10 border border-amber-500/30 flex items-center justify-center font-serif text-base font-bold text-foreground">
+              <div className="w-12 h-12 rounded-2xl bg-blue-500/15 border border-blue-500/30 flex items-center justify-center font-serif text-base font-bold text-blue-600 dark:text-blue-400">
                 #42
               </div>
               <div>
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-serif font-medium text-foreground">Arjun Mehta (Your Standing)</span>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20">
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-700 dark:text-blue-300 border border-blue-500/20">
                     Division I
                   </span>
                 </div>
@@ -423,12 +423,12 @@ export function DashboardHackathons() {
                   <span>78%</span>
                 </div>
                 <div className="h-1.5 w-full rounded-full bg-secondary overflow-hidden">
-                  <div className="h-full bg-gradient-to-r from-amber-500 to-orange-500 rounded-full" style={{ width: "78%" }} />
+                  <div className="h-full bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full" style={{ width: "78%" }} />
                 </div>
               </div>
               <button
                 onClick={() => setMainMode("challenges")}
-                className="w-full sm:w-auto px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-xs font-medium shadow-xs transition-all cursor-pointer flex items-center justify-center gap-1.5 shrink-0"
+                className="w-full sm:w-auto px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs shadow-blue-500/20 transition-all cursor-pointer flex items-center justify-center gap-1.5 shrink-0"
               >
                 <span>Enter Weekly Contest</span>
                 <ChevronRight className="w-3.5 h-3.5" />
@@ -611,7 +611,7 @@ export function DashboardHackathons() {
                 <div>
                   {/* Top Badges */}
                   <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
-                    <span className="text-[10px] font-mono uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-amber-500/10 text-amber-700 dark:text-amber-300 font-semibold border border-amber-500/20 shrink-0 leading-none">
+                    <span className="text-[10px] font-mono uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-blue-500/10 text-blue-700 dark:text-blue-300 font-semibold border border-blue-500/20 shrink-0 leading-none">
                       {hackathon.bannerTag}
                     </span>
 
@@ -646,7 +646,7 @@ export function DashboardHackathons() {
                   <div className="grid grid-cols-3 gap-2 my-4 p-3 rounded-xl bg-secondary/50 border border-hairline text-center">
                     <div>
                       <span className="text-[9px] font-mono uppercase text-muted-foreground block">Prize Pool</span>
-                      <span className="text-sm font-serif font-bold text-amber-600 dark:text-amber-400">{hackathon.prizePool}</span>
+                      <span className="text-sm font-serif font-bold text-blue-600 dark:text-blue-400">{hackathon.prizePool}</span>
                     </div>
                     <div>
                       <span className="text-[9px] font-mono uppercase text-muted-foreground block">First Prize</span>
@@ -708,7 +708,7 @@ export function DashboardHackathons() {
                         className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-medium transition-colors cursor-pointer shrink-0 ${
                           hasSubmitted
                             ? "bg-secondary text-foreground border border-hairline hover:bg-secondary/80"
-                            : "bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white shadow-xs"
+                            : "bg-blue-600 hover:bg-blue-700 text-white shadow-xs shadow-blue-500/20"
                         }`}
                       >
                         <Send className="w-3.5 h-3.5" />
@@ -717,7 +717,7 @@ export function DashboardHackathons() {
                     ) : (
                       <button
                         onClick={() => setSelectedHackathonForReg(hackathon)}
-                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-xs font-medium shadow-xs transition-all cursor-pointer shrink-0"
+                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs shadow-blue-500/20 transition-all cursor-pointer shrink-0"
                       >
                         <span>Register Now</span>
                         <ChevronRight className="w-3.5 h-3.5" />
@@ -745,7 +745,7 @@ export function DashboardHackathons() {
                 <span className="text-xs font-mono text-muted-foreground">{activeTeammatesCount} Active Requests</span>
               </div>
               <h2 className="font-serif text-xl font-normal text-foreground flex items-center gap-2">
-                <Users className="w-5 h-5 text-amber-500" />
+                <Users className="w-5 h-5 text-blue-500" />
                 <span>Hackathon Teammate Matchmaker</span>
               </h2>
               <p className="text-xs text-muted-foreground mt-0.5">
@@ -755,7 +755,7 @@ export function DashboardHackathons() {
 
             <button
               onClick={() => setShowPostTeammateModal(true)}
-              className="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-xs font-medium shadow-xs transition-colors cursor-pointer inline-flex items-center gap-1.5 shrink-0"
+              className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs shadow-blue-500/20 transition-colors cursor-pointer inline-flex items-center gap-1.5 shrink-0"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Post Teammate Pitch</span>
@@ -810,10 +810,10 @@ export function DashboardHackathons() {
                   </div>
 
                   <div className="space-y-1">
-                    <div className="text-[10px] font-mono text-amber-600 dark:text-amber-400 uppercase">Looking For:</div>
+                    <div className="text-[10px] font-mono text-blue-600 dark:text-blue-400 uppercase">Looking For:</div>
                     <div className="flex flex-wrap gap-1">
                       {post.lookingFor.map((s, idx) => (
-                        <span key={idx} className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20">
+                        <span key={idx} className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-blue-500/10 text-blue-700 dark:text-blue-300 border border-blue-500/20">
                           {s}
                         </span>
                       ))}
@@ -832,7 +832,7 @@ export function DashboardHackathons() {
                     className={`text-xs px-3 py-1.5 rounded-lg font-medium transition-colors cursor-pointer flex items-center gap-1 ${
                       post.invited
                         ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30"
-                        : "bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white shadow-xs"
+                        : "bg-blue-600 hover:bg-blue-700 text-white shadow-xs shadow-blue-500/20 font-semibold"
                     }`}
                   >
                     {post.invited ? (
@@ -940,7 +940,7 @@ export function DashboardHackathons() {
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-xs font-medium shadow-xs cursor-pointer transition-all"
+                  className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs shadow-blue-500/20 cursor-pointer transition-all"
                 >
                   Confirm Registration
                 </button>
@@ -1021,7 +1021,7 @@ export function DashboardHackathons() {
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-xs font-medium shadow-xs cursor-pointer transition-all"
+                  className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs shadow-blue-500/20 cursor-pointer transition-all"
                 >
                   Save &amp; Submit Prototype
                 </button>
@@ -1039,7 +1039,7 @@ export function DashboardHackathons() {
           <div className="bg-card border border-hairline rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-5">
             <div className="flex items-center justify-between pb-3 border-b border-hairline">
               <div>
-                <span className="text-[10px] font-mono uppercase tracking-wider text-[#ea580c]">Matchmaker Broadcast</span>
+                <span className="text-[10px] font-mono uppercase tracking-wider text-blue-600 dark:text-blue-400">Matchmaker Broadcast</span>
                 <h3 className="font-serif text-lg font-normal text-foreground">Post Teammate Search Request</h3>
               </div>
               <button
@@ -1162,7 +1162,7 @@ export function DashboardHackathons() {
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-xs font-medium shadow-xs cursor-pointer transition-all"
+                  className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs shadow-blue-500/20 cursor-pointer transition-all"
                 >
                   Publish Pitch to Board
                 </button>

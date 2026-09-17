@@ -3,11 +3,13 @@
 import React, { useState, useMemo } from "react"
 import Link from "next/link"
 import {
-  BookOpen, PlayCircle, CheckCircle2, ChevronRight, ChevronDown,
+  BookOpen, PlayCircle, CheckCircle2, ChevronRight, ChevronDown, ChevronLeft,
   Search, Filter, Layers, Award, Clock, ArrowRight, Check, Plus
 } from "lucide-react"
 import { AxelStage } from "@/components/axel/axel-stage"
 import { useEnrollments } from "@/lib/user-learning-store"
+import { getCurriculumCourseBySlug } from "@/lib/curriculum-data"
+import { enrollInCourse } from "@/app/actions/courses"
 
 interface DashboardCurriculumProps {
   enrollments: any[]
@@ -22,9 +24,13 @@ export function DashboardCurriculum({
 }: DashboardCurriculumProps) {
   const [filter, setFilter] = useState<"all" | "in-progress" | "completed" | "catalog">("all")
   const [search, setSearch] = useState("")
+  const [catalogCategory, setCatalogCategory] = useState("All")
+  const [catalogPage, setCatalogPage] = useState(1)
+  const catalogItemsPerPage = 9 // Exactly 3 rows of 3 columns
   const [expandedCourseId, setExpandedCourseId] = useState<string | null>(null)
   const [toastMessage, setToastMessage] = useState<string | null>(null)
   const { enrollments: storeEnrollments, enroll: storeEnroll, isEnrolled: checkIsEnrolled } = useEnrollments()
+
 
   // Merge server initialEnrollments + client storeEnrollments
   const enrolledList = useMemo(() => {
@@ -113,8 +119,15 @@ export function DashboardCurriculum({
   }
 
   const handleEnroll = (track: any) => {
-    const trackSlug = track.slug || track.id
-    if (checkIsEnrolled(trackSlug) || enrolledList.some((e: any) => e.id === track.id || e.slug === track.id)) {
+    const trackSlug = (track.slug || track.id || "").toLowerCase()
+    const isAlreadyEnrolled = checkIsEnrolled(trackSlug) || enrolledList.some((e: any) => {
+      const eSlug = (e.slug || "").toLowerCase()
+      const eId = (e.id || "").toLowerCase()
+      const tId = (track.id || "").toLowerCase()
+      return (eSlug && (eSlug === trackSlug || eSlug === tId)) || (eId && (eId === trackSlug || eId === tId))
+    })
+
+    if (isAlreadyEnrolled) {
       setToastMessage(`You are already enrolled in "${track.title}"`)
       setTimeout(() => setToastMessage(null), 3000)
       return
@@ -134,6 +147,8 @@ export function DashboardCurriculum({
       totalLessons: (track.modules || 4) * 3,
     })
 
+    enrollInCourse(trackSlug).catch(() => {})
+
     setToastMessage(`Successfully enrolled in "${track.title}"!`)
     setTimeout(() => setToastMessage(null), 3500)
     if (onEnrollTrack) onEnrollTrack(track)
@@ -149,12 +164,80 @@ export function DashboardCurriculum({
     return true
   })
 
+  // Catalog filtering & pagination (3 rows of 3 columns = 9 items per page)
+  const filteredCatalogTracks = useMemo(() => {
+    return (catalogTracks || []).filter((track: any) => {
+      // Category filter
+      if (catalogCategory !== "All") {
+        if (catalogCategory === "Languages & Web") {
+          const s = (track.slug || track.id || "").toLowerCase()
+          const isLangOrWeb =
+            s === "c" || s === "cpp" || s === "webdev" || s === "html" || s === "css" ||
+            s === "javascript" || s === "java" || s === "python" || s === "typescript" ||
+            s === "react" || s === "sql" || s === "git" ||
+            track.category === "Web Development" || track.category === "Programming"
+          if (!isLangOrWeb) return false
+        } else if (track.category !== catalogCategory) {
+          return false
+        }
+      }
+
+      // Search filter
+      if (search.trim()) {
+        const q = search.toLowerCase().trim()
+        const tSlug = (track.slug || track.id || "").toLowerCase()
+        const tTitle = (track.title || "").toLowerCase()
+        const tDesc = (track.desc || "").toLowerCase()
+        const tCat = (track.category || "").toLowerCase()
+        if (!tSlug.includes(q) && !tTitle.includes(q) && !tDesc.includes(q) && !tCat.includes(q)) {
+          return false
+        }
+      }
+
+      return true
+    })
+  }, [catalogTracks, catalogCategory, search])
+
+  const totalCatalogPages = Math.max(1, Math.ceil(filteredCatalogTracks.length / catalogItemsPerPage))
+
+  // Auto-reset catalog page on category/search change
+  React.useEffect(() => {
+    setCatalogPage(1)
+  }, [catalogCategory, search])
+
+  const paginatedCatalogTracks = useMemo(() => {
+    const start = (catalogPage - 1) * catalogItemsPerPage
+    return filteredCatalogTracks.slice(start, start + catalogItemsPerPage)
+  }, [filteredCatalogTracks, catalogPage, catalogItemsPerPage])
+
+  const catalogPageNumbers = useMemo(() => {
+    if (totalCatalogPages <= 5) {
+      return Array.from({ length: totalCatalogPages }, (_, i) => i + 1)
+    }
+    if (catalogPage <= 3) {
+      return [1, 2, 3, 4, "...", totalCatalogPages]
+    }
+    if (catalogPage >= totalCatalogPages - 2) {
+      return [1, "...", totalCatalogPages - 3, totalCatalogPages - 2, totalCatalogPages - 1, totalCatalogPages]
+    }
+    return [1, "...", catalogPage - 1, catalogPage, catalogPage + 1, "...", totalCatalogPages]
+  }, [catalogPage, totalCatalogPages])
+
+  const handleCatalogPageChange = (newPage: number) => {
+    if (newPage < 1 || newPage > totalCatalogPages) return
+    setCatalogPage(newPage)
+    const el = document.getElementById("available-catalog-tracks")
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" })
+    }
+  }
+
   return (
     <div className="space-y-8 animate-fadeIn">
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed top-20 right-8 z-50 rounded-2xl border border-amber-500/40 bg-card p-4 shadow-xl flex items-center gap-3 text-xs font-mono text-foreground animate-fadeIn">
-          <div className="w-2 h-2 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 animate-pulse" />
+        <div className="fixed top-20 right-8 z-50 rounded-2xl border border-blue-500/40 bg-card p-4 shadow-xl flex items-center gap-3 text-xs font-mono text-foreground animate-fadeIn">
+          <div className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
           <span>{toastMessage}</span>
         </div>
       )}
@@ -165,7 +248,7 @@ export function DashboardCurriculum({
       <div id="dashboard-courses-header" className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-hairline">
         <div className="space-y-1.5 min-w-0">
           <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
-            <span className="text-[10px] sm:text-[11px] font-mono px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20 font-semibold shrink-0 leading-none">
+            <span className="text-[10px] sm:text-[11px] font-mono px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-700 dark:text-blue-300 border border-blue-500/20 font-semibold shrink-0 leading-none">
               Academic Directory
             </span>
             <span className="text-xs font-mono text-muted-foreground shrink-0 flex items-center gap-1.5">
@@ -204,8 +287,8 @@ export function DashboardCurriculum({
                 onClick={() => setFilter(f.id as any)}
                 className={`px-3.5 py-1.5 rounded-xl text-xs font-medium transition-all cursor-pointer ${
                   filter === f.id
-                    ? "bg-card text-foreground border border-hairline shadow-xs font-semibold"
-                    : "text-muted-foreground hover:text-foreground hover:bg-card/50"
+                    ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm shadow-blue-500/20 font-semibold"
+                    : "text-muted-foreground hover:text-foreground hover:bg-secondary/60"
                 }`}
               >
                 {f.label}
@@ -223,7 +306,7 @@ export function DashboardCurriculum({
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Filter by course title, language, or algorithm..."
-          className="w-full bg-card border border-stone-200 dark:border-stone-800 rounded-2xl pl-10 pr-4 py-2.5 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/15 transition-all shadow-2xs"
+          className="w-full bg-card border border-stone-200 dark:border-stone-800 rounded-2xl pl-10 pr-4 py-2.5 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/15 transition-all shadow-2xs"
         />
       </div>
 
@@ -234,7 +317,7 @@ export function DashboardCurriculum({
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <h2 className="font-serif text-xl font-normal text-foreground flex items-center gap-2">
-              <BookOpen className="w-4 h-4 text-amber-500" />
+              <BookOpen className="w-4 h-4 text-blue-600" />
               <span>Enrolled Curriculum Syllabi</span>
             </h2>
             <span className="text-xs font-mono text-muted-foreground">
@@ -244,7 +327,7 @@ export function DashboardCurriculum({
 
           {filteredEnrollments.length === 0 ? (
             <div className="rounded-3xl border border-dashed border-stone-300 dark:border-stone-800 bg-card/60 p-10 text-center space-y-4">
-              <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center mx-auto text-amber-600">
+              <div className="w-12 h-12 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mx-auto text-blue-600">
                 <BookOpen className="w-6 h-6" />
               </div>
               <div className="space-y-1">
@@ -260,7 +343,7 @@ export function DashboardCurriculum({
               {(filter as string) !== "catalog" && enrolledList.length === 0 && (
                 <button
                   onClick={() => setFilter("catalog" as any)}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-xs font-semibold shadow-xs transition-all cursor-pointer"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs shadow-blue-500/20 transition-all cursor-pointer"
                 >
                   <span>Explore Course Catalog</span>
                   <ChevronRight className="w-3.5 h-3.5" />
@@ -271,12 +354,26 @@ export function DashboardCurriculum({
             <div className="space-y-6">
               {filteredEnrollments.map((course: any) => {
                 const isExpanded = expandedCourseId === course.id || expandedCourseId === course.slug
-                const syllabus = syllabusMap[course.id] || syllabusMap[course.slug] || []
+                const currCourse = getCurriculumCourseBySlug(course.slug || course.id)
+                const fallbackSyllabus = currCourse?.modules?.map((m: any) => ({
+                  moduleTitle: m.title,
+                  lessons: m.lessons?.map((l: any) => ({
+                    title: l.title,
+                    completed: false,
+                    duration: "25m",
+                    id: l.id
+                  })) || []
+                })) || []
+                const syllabus = (syllabusMap[course.id] && syllabusMap[course.id].length > 0)
+                  ? syllabusMap[course.id]
+                  : (syllabusMap[course.slug] && syllabusMap[course.slug].length > 0)
+                  ? syllabusMap[course.slug]
+                  : fallbackSyllabus
 
                 return (
                   <div
                     key={course.id}
-                    className="rounded-3xl border border-stone-200/80 dark:border-stone-800/80 bg-card overflow-hidden shadow-xs hover:border-amber-500/30 transition-all"
+                    className="rounded-3xl border border-stone-200/80 dark:border-stone-800/80 bg-card overflow-hidden shadow-xs hover:border-blue-500/30 transition-all"
                   >
                   {/* Course Header Bar with 3D Image */}
                   <div className="p-5 sm:p-6 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
@@ -303,7 +400,7 @@ export function DashboardCurriculum({
                               <Award className="w-3 h-3" /> Track Graduate (+500 XP)
                             </span>
                           ) : (
-                            <span className="text-xs font-mono text-amber-700 dark:text-amber-400 bg-amber-500/10 px-2.5 py-0.5 rounded-full border border-amber-500/20 font-semibold">
+                            <span className="text-xs font-mono text-blue-700 dark:text-blue-300 bg-blue-500/10 px-2.5 py-0.5 rounded-full border border-blue-500/20 font-semibold">
                               {course.progressPercent ?? 0}% Complete
                             </span>
                           )}
@@ -317,11 +414,11 @@ export function DashboardCurriculum({
                         <div className="space-y-1.5 max-w-md">
                           <div className="flex justify-between text-xs font-mono text-muted-foreground">
                             <span>{course.lessonsCompleted ?? course.completedLessons ?? 0} / {course.totalLessons ?? 0} Lessons</span>
-                            <span className="text-amber-700 dark:text-amber-400 font-bold">{course.progressPercent ?? 0}%</span>
+                            <span className="text-blue-600 dark:text-blue-400 font-bold">{course.progressPercent ?? 0}%</span>
                           </div>
                           <div className="w-full h-2 bg-stone-100 dark:bg-stone-800 rounded-full overflow-hidden">
                             <div
-                              className="h-full bg-gradient-to-r from-amber-500 to-orange-500 rounded-full transition-all duration-700 ease-out"
+                              className="h-full bg-gradient-to-r from-blue-600 via-indigo-500 to-cyan-400 rounded-full transition-all duration-700 ease-out"
                               style={{ width: `${course.progressPercent ?? 0}%` }}
                             />
                           </div>
@@ -340,8 +437,8 @@ export function DashboardCurriculum({
                       </button>
 
                       <Link
-                        href={`/programs/${course.slug || "dsa"}/course`}
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-xs font-semibold shadow-xs transition-all cursor-pointer"
+                        href={`/courses/${course.slug || course.id || "dsa"}/learn`}
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs shadow-blue-500/20 transition-all cursor-pointer"
                       >
                         <PlayCircle className="w-4 h-4" />
                         <span>Continue</span>
@@ -363,19 +460,19 @@ export function DashboardCurriculum({
 
                       {syllabus.length > 0 ? (
                         <div className="space-y-5">
-                          {syllabus.map((mod, mi) => (
+                          {syllabus.map((mod: any, mi: number) => (
                             <div key={mi} className="rounded-xl border border-hairline bg-card p-5 space-y-3">
                               <div className="flex items-center justify-between">
                                 <h5 className="font-serif text-base font-normal text-foreground">
                                   {mod.moduleTitle}
                                 </h5>
                                 <span className="text-[11px] font-mono text-muted-foreground">
-                                  {mod.lessons.filter(l => l.completed).length} / {mod.lessons.length} Completed
+                                  {mod.lessons.filter((l: any) => l.completed).length} / {mod.lessons.length} Completed
                                 </span>
                               </div>
 
                               <div className="divide-y divide-hairline/60">
-                                {mod.lessons.map((lesson, li) => (
+                                {mod.lessons.map((lesson: any, li: number) => (
                                   <div key={li} className="py-2.5 flex items-center justify-between gap-4 text-xs">
                                     <div className="flex items-center gap-3 min-w-0">
                                       {lesson.completed ? (
@@ -390,7 +487,7 @@ export function DashboardCurriculum({
                                     <div className="flex items-center gap-3 shrink-0">
                                       <span className="text-[11px] font-mono text-muted-foreground">{lesson.duration}</span>
                                       <Link
-                                        href={`/programs/${course.slug || "dsa"}/course`}
+                                        href={`/courses/${course.slug || course.id || "dsa"}/learn`}
                                         className="text-primary hover:underline font-medium inline-flex items-center gap-1"
                                       >
                                         <span>Launch</span>
@@ -422,8 +519,8 @@ export function DashboardCurriculum({
           Catalog Exploration & One-Click Enrollment
       ══════════════════════════════════════════════ */}
       {(filter === "catalog" || filter === "all") && (
-        <div className="space-y-6 pt-4 border-t border-hairline">
-          <div className="flex items-center justify-between">
+        <div id="available-catalog-tracks" className="space-y-6 pt-6 border-t border-hairline scroll-mt-24">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
               <div className="inline-flex items-center gap-1 text-[10px] font-mono text-primary uppercase tracking-widest font-semibold mb-1">
                 <Layers className="w-3.5 h-3.5" />
@@ -432,79 +529,213 @@ export function DashboardCurriculum({
               <h2 className="font-serif text-2xl font-normal text-foreground">
                 Available Specialization Tracks
               </h2>
+              <p className="text-xs text-muted-foreground mt-1">
+                Showing {filteredCatalogTracks.length === 0 ? 0 : (catalogPage - 1) * catalogItemsPerPage + 1}–{Math.min(catalogPage * catalogItemsPerPage, filteredCatalogTracks.length)} of {filteredCatalogTracks.length} tracks across the academy
+              </p>
             </div>
-            <Link
-              href="/programs"
-              className="text-xs font-medium text-primary hover:underline inline-flex items-center gap-1"
-            >
-              <span>View Full Academic Catalog</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
+            <div className="flex items-center gap-3">
+              <Link
+                href="/programs"
+                className="text-xs font-medium text-primary hover:underline inline-flex items-center gap-1"
+              >
+                <span>View Full Academic Catalog</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {catalogTracks.map((track) => {
-              const isEnrolled = enrolledList.some((e: any) => e.id === track.id || e.slug === track.id)
-              const trackImg = track.image || getCourseImage(track.id)
-
+          {/* Catalog Category Pills */}
+          <div className="flex overflow-x-auto no-scrollbar gap-1.5 pb-1 -mx-2 px-2">
+            {[
+              "All",
+              "AI & ML",
+              "Data Science",
+              "Cybersecurity",
+              "Languages & Web",
+              "Programming",
+              "Web Development",
+              "Git & DevOps",
+              "Cloud & Infra",
+              "DSA",
+              "Backend",
+            ].map((cat) => {
+              const isActive = catalogCategory === cat
               return (
-                <div
-                  key={track.id}
-                  className="rounded-3xl border border-stone-200/80 dark:border-stone-800/80 bg-card overflow-hidden shadow-xs hover:shadow-md transition-all group flex flex-col justify-between"
+                <button
+                  key={cat}
+                  onClick={() => setCatalogCategory(cat)}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-mono whitespace-nowrap transition-all cursor-pointer ${
+                    isActive
+                      ? "bg-primary text-primary-foreground font-semibold shadow-2xs"
+                      : "bg-secondary text-muted-foreground hover:text-foreground hover:bg-secondary/80 border border-hairline"
+                  }`}
                 >
-                  <div>
-                    {/* 3D Image Cover */}
-                    <div className="relative aspect-[16/9] w-full overflow-hidden bg-stone-100 dark:bg-stone-900">
-                      <img
-                        src={trackImg}
-                        alt={track.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                      <div className="absolute top-3 left-3 bg-white/90 dark:bg-stone-900/90 backdrop-blur-xs text-[10px] font-bold px-2.5 py-0.5 rounded-full text-foreground border border-stone-200/60 dark:border-stone-700/60 uppercase tracking-wider shadow-2xs">
-                        {track.category}
-                      </div>
-                      <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-xs text-[10px] font-mono font-medium px-2 py-0.5 rounded-full text-white">
-                        {track.difficulty}
-                      </div>
-                    </div>
-
-                    {/* Card Details */}
-                    <div className="p-5 space-y-2.5">
-                      <div className="text-xs font-mono text-muted-foreground">
-                        {track.modules} Modules · {track.duration}
-                      </div>
-
-                      <h3 className="font-bold text-lg text-foreground leading-snug group-hover:text-amber-600 transition-colors line-clamp-1">
-                        {track.title}
-                      </h3>
-
-                      <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">
-                        {track.desc}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="p-5 pt-0 flex items-center justify-between border-t border-stone-100 dark:border-stone-800 mt-2">
-                    <span className="text-[11px] font-mono text-muted-foreground">ASCI Track</span>
-
-                    {isEnrolled ? (
-                      <span className="inline-flex items-center gap-1 text-xs font-mono text-amber-700 dark:text-amber-400 font-semibold">
-                        <Check className="w-4 h-4 text-emerald-500" /> Enrolled
-                      </span>
-                    ) : (
-                      <button
-                        onClick={() => handleEnroll(track)}
-                        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white transition-all text-xs font-semibold cursor-pointer shadow-2xs"
-                      >
-                        <Plus className="w-3.5 h-3.5" />
-                        <span>Enroll Track</span>
-                      </button>
-                    )}
-                  </div>
-                </div>
+                  {cat}
+                </button>
               )
             })}
           </div>
+
+          {paginatedCatalogTracks.length === 0 ? (
+            <div className="rounded-3xl border border-dashed border-stone-300 dark:border-stone-800 bg-card/60 p-10 text-center space-y-2">
+              <h3 className="font-serif text-lg font-normal text-foreground">No tracks match your filter</h3>
+              <p className="text-xs text-muted-foreground">Try selecting a different category or clearing the search bar.</p>
+              <button
+                onClick={() => { setCatalogCategory("All"); setSearch(""); }}
+                className="mt-2 text-xs font-semibold text-primary hover:underline cursor-pointer"
+              >
+                Reset Filters
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {paginatedCatalogTracks.map((track) => {
+                const trackSlug = track.slug || track.id
+                const isEnrolled = enrolledList.some((e: any) => e.id === track.id || e.slug === track.id || e.slug === trackSlug || e.id === trackSlug)
+                const trackImg = track.image || getCourseImage(trackSlug)
+
+                return (
+                  <div
+                    key={track.id}
+                    className="rounded-3xl border border-stone-200/80 dark:border-stone-800/80 bg-card overflow-hidden shadow-xs hover:shadow-md transition-all group flex flex-col justify-between"
+                  >
+                    <div>
+                      {/* 3D Image Cover */}
+                      <div className="relative aspect-[16/9] w-full overflow-hidden bg-stone-100 dark:bg-stone-900">
+                        <img
+                          src={trackImg}
+                          alt={track.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                        <div className="absolute top-3 left-3 bg-white/90 dark:bg-stone-900/90 backdrop-blur-xs text-[10px] font-bold px-2.5 py-0.5 rounded-full text-foreground border border-stone-200/60 dark:border-stone-700/60 uppercase tracking-wider shadow-2xs">
+                          {track.category}
+                        </div>
+                        <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-xs text-[10px] font-mono font-medium px-2 py-0.5 rounded-full text-white">
+                          {track.difficulty}
+                        </div>
+                      </div>
+
+                      {/* Card Details */}
+                      <div className="p-5 space-y-2.5">
+                        <div className="text-xs font-mono text-muted-foreground">
+                          {track.modules} Modules · {track.duration}
+                        </div>
+
+                        <Link href={`/courses/${trackSlug}`} className="block group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                          <h3 className="font-bold text-lg text-foreground leading-snug line-clamp-1">
+                            {track.title}
+                          </h3>
+                        </Link>
+
+                        <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">
+                          {track.desc}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="p-5 pt-0 flex items-center justify-between border-t border-stone-100 dark:border-stone-800 mt-2">
+                      <span className="text-[11px] font-mono text-muted-foreground">ASCI Track</span>
+
+                      {isEnrolled ? (
+                        <div className="flex items-center gap-2">
+                          <Link
+                            href={`/courses/${trackSlug}/learn`}
+                            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 text-white transition-all text-xs font-semibold cursor-pointer shadow-md shadow-blue-500/20"
+                          >
+                            <PlayCircle className="w-3.5 h-3.5" />
+                            <span>Continue</span>
+                          </Link>
+                          <Link
+                            href={`/courses/${trackSlug}`}
+                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl border border-stone-200 dark:border-stone-800 bg-card hover:bg-secondary text-xs font-medium text-foreground hover:text-blue-600 transition-colors"
+                          >
+                            <span>Explore</span>
+                          </Link>
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => handleEnroll(track)}
+                            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 text-white transition-all text-xs font-semibold cursor-pointer shadow-md shadow-blue-500/20"
+                          >
+                            <Plus className="w-3.5 h-3.5" />
+                            <span>Enroll Track</span>
+                          </button>
+                          <Link
+                            href={`/courses/${trackSlug}`}
+                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl border border-stone-200 dark:border-stone-800 bg-card hover:bg-secondary text-xs font-medium text-foreground hover:text-blue-600 transition-colors"
+                          >
+                            <span>Explore</span>
+                          </Link>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          )}
+
+          {/* Catalog Pagination Controls (When exceeding 3 rows / 9 courses) */}
+          {totalCatalogPages > 1 && (
+            <div className="pt-6 pb-2 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-hairline">
+              <div className="text-xs font-mono text-muted-foreground">
+                Page {catalogPage} of {totalCatalogPages} ({filteredCatalogTracks.length} total tracks)
+              </div>
+
+              <div className="flex items-center gap-1.5">
+                <button
+                  onClick={() => handleCatalogPageChange(catalogPage - 1)}
+                  disabled={catalogPage <= 1}
+                  className={`inline-flex items-center justify-center p-2 rounded-xl border border-stone-200 dark:border-stone-800 text-xs font-medium transition-all ${
+                    catalogPage <= 1
+                      ? "opacity-30 cursor-not-allowed text-muted-foreground"
+                      : "hover:bg-secondary text-foreground cursor-pointer shadow-2xs"
+                  }`}
+                  aria-label="Previous catalog page"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </button>
+
+                {catalogPageNumbers.map((page, idx) => {
+                  if (typeof page === "string") {
+                    return (
+                      <span key={`ellipsis-${idx}`} className="px-2 text-xs font-mono text-muted-foreground">
+                        {page}
+                      </span>
+                    )
+                  }
+                  const isCurrent = page === catalogPage
+                  return (
+                    <button
+                      key={`page-${page}`}
+                      onClick={() => handleCatalogPageChange(page)}
+                      className={`min-w-9 h-9 px-2.5 rounded-xl text-xs font-mono transition-all cursor-pointer ${
+                        isCurrent
+                          ? "bg-primary text-primary-foreground font-bold shadow-xs"
+                          : "border border-stone-200 dark:border-stone-800 hover:bg-secondary text-foreground"
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  )
+                })}
+
+                <button
+                  onClick={() => handleCatalogPageChange(catalogPage + 1)}
+                  disabled={catalogPage >= totalCatalogPages}
+                  className={`inline-flex items-center justify-center p-2 rounded-xl border border-stone-200 dark:border-stone-800 text-xs font-medium transition-all ${
+                    catalogPage >= totalCatalogPages
+                      ? "opacity-30 cursor-not-allowed text-muted-foreground"
+                      : "hover:bg-secondary text-foreground cursor-pointer shadow-2xs"
+                  }`}
+                  aria-label="Next catalog page"
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
@@ -515,8 +746,8 @@ export function DashboardCurriculum({
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-2 max-w-2xl">
             <div className="flex items-center gap-2">
-              <Award className="w-4 h-4 text-amber-500" />
-              <span className="text-xs font-mono uppercase tracking-widest text-amber-700 dark:text-amber-400 font-semibold">
+              <Award className="w-4 h-4 text-blue-600" />
+              <span className="text-xs font-mono uppercase tracking-widest text-blue-700 dark:text-blue-400 font-semibold">
                 ASCI Accreditation Track
               </span>
             </div>
@@ -539,12 +770,12 @@ export function DashboardCurriculum({
             />
             <div className="flex flex-col sm:items-end gap-2">
               <div className="text-right">
-                <span className="font-serif text-3xl font-normal text-amber-600 dark:text-amber-400">{capstoneReadiness}%</span>
+                <span className="font-serif text-3xl font-normal text-blue-600 dark:text-blue-400">{capstoneReadiness}%</span>
                 <span className="text-xs text-muted-foreground block font-mono">Capstone Readiness</span>
               </div>
               <Link
                 href="/results"
-                className="inline-flex items-center gap-1 text-xs font-medium text-amber-700 dark:text-amber-400 hover:underline"
+                className="inline-flex items-center gap-1 text-xs font-medium text-blue-700 dark:text-blue-400 hover:underline"
               >
                 <span>Inspect Credential Standards</span>
                 <ArrowRight className="w-3.5 h-3.5" />

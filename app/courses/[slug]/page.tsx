@@ -83,7 +83,7 @@ export default function CoursePage({ params }: { params: Promise<{ slug: string 
               {formattedTitle}
             </span>
             <div className="hidden sm:flex items-center gap-1 text-xs font-mono text-muted-foreground">
-              <Star className="h-3.5 w-3.5 text-amber-500 fill-current" />
+              <Star className="h-3.5 w-3.5 text-yellow-400 fill-current" />
               <span>{courseraData.rating}</span>
             </div>
           </div>
@@ -123,7 +123,7 @@ export default function CoursePage({ params }: { params: Promise<{ slug: string 
                     {courseraData.credentialType}
                   </span>
                   {curriculumCourse?.certificate && (
-                    <span className="hidden sm:inline-flex items-center gap-1 text-xs text-amber-600 dark:text-amber-400 font-medium">
+                    <span className="hidden sm:inline-flex items-center gap-1 text-xs text-blue-600 dark:text-blue-400 font-medium">
                       <Award className="h-3.5 w-3.5" />
                       <span>Accredited</span>
                     </span>
@@ -153,7 +153,7 @@ export default function CoursePage({ params }: { params: Promise<{ slug: string 
               {/* Social Proof Bar */}
               <div className="flex flex-wrap items-center gap-4 text-xs">
                 <div className="flex items-center gap-1.5 font-bold text-foreground">
-                  <div className="flex text-amber-500">
+                  <div className="flex text-yellow-400">
                     <Star className="h-4 w-4 fill-current" />
                   </div>
                   <span>{courseraData.rating}</span>
@@ -197,7 +197,7 @@ export default function CoursePage({ params }: { params: Promise<{ slug: string 
               <div className="pt-4 flex flex-wrap items-center gap-4">
                 <button
                   onClick={() => setIsEnrollModalOpen(true)}
-                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-8 py-3.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-all shadow-md hover:shadow-lg cursor-pointer"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 text-white px-8 py-3.5 text-sm font-medium transition-all shadow-md shadow-blue-500/20 hover:shadow-lg cursor-pointer"
                 >
                   <span>Enroll for Free</span>
                   <ArrowRight className="h-4 w-4" />
@@ -306,7 +306,7 @@ export default function CoursePage({ params }: { params: Promise<{ slug: string 
                   <div className="pt-4 border-t border-hairline">
                     <button
                       onClick={() => setIsEnrollModalOpen(true)}
-                      className="w-full rounded-xl bg-primary py-3 text-center text-xs font-semibold text-primary-foreground hover:bg-primary/90 transition-colors cursor-pointer"
+                      className="w-full rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 text-white py-3 text-center text-xs font-semibold transition-all shadow-md shadow-blue-500/20 cursor-pointer"
                     >
                       Start Free Course Audit
                     </button>
@@ -431,7 +431,7 @@ export default function CoursePage({ params }: { params: Promise<{ slug: string 
         {/* Section 2: Details To Know Bar */}
         <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div className="rounded-xl border border-hairline bg-card p-5">
-            <Award className="h-5 w-5 text-amber-500 mb-2" />
+            <Award className="h-5 w-5 text-blue-500 mb-2" />
             <h4 className="text-xs font-semibold text-foreground">Shareable Certificate</h4>
             <p className="mt-1 text-[11px] text-muted-foreground">
               Earn a certificate upon completion backed by {courseraData.partner}.
@@ -468,8 +468,9 @@ export default function CoursePage({ params }: { params: Promise<{ slug: string 
                 Syllabus: What is in this {courseraData.credentialType}
               </h2>
               <p className="mt-1 text-xs text-muted-foreground">
-                {curriculumCourse?.modules?.length || 0} Modules · {curriculumCourse?.lessons || 0} Lessons · {curriculumCourse?.projects || 0} Capstone Projects
+                {curriculumCourse?.modules?.length || 0} Modules · {curriculumCourse?.modules?.reduce((acc, m) => acc + m.lessons.length, 0) || curriculumCourse?.lessons || 0} Lessons · {curriculumCourse?.projects || 3} Capstone Projects
               </p>
+
             </div>
             <div className="flex items-center gap-4">
               <AxelStage
@@ -703,7 +704,7 @@ export default function CoursePage({ params }: { params: Promise<{ slug: string 
                 Learner Reviews
               </h2>
               <div className="mt-1 flex items-center gap-2 text-xs">
-                <div className="flex text-amber-500">
+                <div className="flex text-yellow-400">
                   <Star className="h-4 w-4 fill-current" />
                 </div>
                 <span className="font-bold text-foreground text-sm">{courseraData.rating} out of 5</span>
@@ -727,7 +728,7 @@ export default function CoursePage({ params }: { params: Promise<{ slug: string 
                 className="rounded-xl border border-hairline bg-card p-6 space-y-3"
               >
                 <div className="flex items-center justify-between">
-                  <div className="flex text-amber-500">
+                  <div className="flex text-yellow-400">
                     {[...Array(rev.rating)].map((_, i) => (
                       <Star key={i} className="h-3.5 w-3.5 fill-current" />
                     ))}

@@ -127,13 +127,13 @@ export default function CallStackDive() {
       {/* Top Header Bar */}
       <div className="px-6 py-4 border-b border-white/10 bg-[#141413] flex items-center justify-between shrink-0">
          <div className="flex items-center gap-3">
-            <Layers className="text-[#ea580c]" size={18} />
+            <Layers className="text-blue-500" size={18} />
             <h2 className="font-mono text-xs uppercase tracking-widest font-semibold text-[#faf9f5]">
               Call Stack Visualizer
             </h2>
          </div>
          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-[#ea580c]"></div>
+            <div className="w-2 h-2 rounded-full bg-blue-500"></div>
             <span className="font-mono text-[10px] text-zinc-400 uppercase tracking-wider">Step {currentStep + 1} of {trace.length}</span>
          </div>
       </div>
@@ -143,7 +143,7 @@ export default function CallStackDive() {
         {/* PANEL 1: Code Viewer (30%) */}
         <div className="lg:col-span-3 bg-[#181715] p-6 flex flex-col">
           <h3 className="text-xs font-mono uppercase tracking-widest text-zinc-400 mb-4 flex items-center gap-2">
-            <Terminal size={14} className="text-[#ea580c]" />
+            <Terminal size={14} className="text-blue-500" />
             Code
           </h3>
           <div className="bg-[#100f0e] border border-white/10 rounded-xl p-4 font-mono text-xs overflow-x-auto relative">
@@ -155,7 +155,7 @@ export default function CallStackDive() {
                   key={lineNum} 
                   className={cn(
                     "flex items-center px-2 py-1 transition-colors duration-200 rounded",
-                    isActive ? "bg-[#ea580c]/15 text-white font-medium border-l-2 border-[#ea580c]" : "border-l-2 border-transparent text-zinc-200"
+                    isActive ? "bg-blue-500/15 text-white font-medium border-l-2 border-blue-500" : "border-l-2 border-transparent text-zinc-200"
                   )}
                 >
                   <span className="w-6 shrink-0 text-zinc-400 text-[11px] select-none">{lineNum}</span>
@@ -163,7 +163,7 @@ export default function CallStackDive() {
                   {isActive && (
                     <motion.div 
                       layoutId="active-line-indicator"
-                      className="ml-auto text-[#ea580c]"
+                      className="ml-auto text-blue-500"
                       transition={{ type: "spring", stiffness: 300, damping: 30 }}
                     >
                       <ChevronLeft size={14} />
@@ -202,11 +202,11 @@ export default function CallStackDive() {
                 let textAccent = "text-zinc-200";
 
                 if (frame.phase === "resolving") {
-                    borderClass = "border-[#ea580c]/50 bg-[#ea580c]/10";
-                    textAccent = "text-[#ea580c]";
+                    borderClass = "border-blue-500/50 bg-blue-500/10";
+                    textAccent = "text-blue-400";
                 } else if (isTop) {
-                    borderClass = "border-[#ea580c] bg-[#ea580c]/10";
-                    textAccent = "text-[#ea580c]";
+                    borderClass = "border-blue-500 bg-blue-500/10";
+                    textAccent = "text-blue-400";
                 }
 
                 return (
@@ -236,7 +236,7 @@ export default function CallStackDive() {
                         {frame.phase === "resolving" && (
                             <div className="flex items-center gap-2">
                                 <span className="text-zinc-400">Return value:</span>
-                                <span className="text-[#ea580c] font-bold text-sm">{frame.returnValue}</span>
+                                <span className="text-blue-400 font-bold text-sm">{frame.returnValue}</span>
                             </div>
                         )}
                      </div>
@@ -266,7 +266,7 @@ export default function CallStackDive() {
                         const v = parseInt(e.target.value);
                         if(v >= 1 && v <= 5) setNInput(v);
                     }}
-                    className="w-16 bg-[#100f0e] border border-white/15 rounded-lg py-1.5 px-2 font-mono text-center text-[#ea580c] text-sm focus:outline-none focus:border-[#ea580c]"
+                    className="w-16 bg-[#100f0e] border border-white/15 rounded-lg py-1.5 px-2 font-mono text-center text-blue-400 text-sm focus:outline-none focus:border-blue-500"
                 />
                 <span className="text-[10px] font-mono text-zinc-500">(1 to 5)</span>
             </div>
@@ -283,7 +283,7 @@ export default function CallStackDive() {
                 <button 
                   onClick={handleNext}
                   disabled={currentStep === trace.length - 1}
-                  className="flex items-center justify-center gap-1.5 p-2.5 bg-[#ea580c] text-white font-mono text-xs uppercase tracking-wider font-semibold rounded-xl hover:bg-[#c2410c] disabled:opacity-40 transition-all shadow-xs cursor-pointer"
+                  className="flex items-center justify-center gap-1.5 p-2.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 text-white font-mono text-xs uppercase tracking-wider font-semibold rounded-xl disabled:opacity-40 transition-all shadow-md shadow-blue-500/20 cursor-pointer active:scale-95"
                 >
                   <span>Step</span>
                   <ChevronRight size={14} />
@@ -301,7 +301,7 @@ export default function CallStackDive() {
           {/* Syslog Output */}
           <div className="flex-1 p-6 flex flex-col min-h-[220px]">
              <h3 className="text-xs font-mono uppercase tracking-widest text-zinc-400 mb-3 flex items-center gap-2">
-               <span className="w-1.5 h-1.5 bg-[#ea580c] rounded-full" />
+               <span className="w-1.5 h-1.5 bg-blue-500 rounded-full" />
                Activity Log
              </h3>
              <div className="bg-[#100f0e] border border-white/10 rounded-xl flex-1 overflow-y-auto p-4 font-mono text-[11px] text-zinc-400 space-y-1.5 shadow-inner">
@@ -313,7 +313,7 @@ export default function CallStackDive() {
                     return (
                         <div key={i} className={cn(
                             "leading-relaxed transition-colors duration-200",
-                            isLatest ? "text-emerald-400 font-semibold" : (isHighlight ? "text-[#ea580c]" : (isReturn ? "text-amber-400" : "text-zinc-300 font-normal"))
+                            isLatest ? "text-emerald-400 font-semibold" : (isHighlight ? "text-blue-400" : (isReturn ? "text-indigo-400" : "text-zinc-300 font-normal"))
                         )}>
                             › {log.logMsg}
                         </div>

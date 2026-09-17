@@ -18,7 +18,7 @@ async function requireAdmin() {
         .from("profiles")
         .select("role")
         .eq("id", user.id)
-        .single()
+        .maybeSingle()
 
     if (profileErr || !profile) throw new Error("Unauthorized: Profile not found")
     if (profile.role !== "admin" && profile.role !== "super_admin") {
@@ -200,9 +200,9 @@ export async function createCourse(values: {
             duration_hours: values.duration_hours,
             is_premium: values.is_premium,
             is_published: false
-        }).select("id").single()
+        }).select("id").maybeSingle()
 
-        if (fullInsert.error) {
+        if (fullInsert.error || !fullInsert.data) {
             // Fallback: insert only base columns (without slug/difficulty/duration_hours)
             const { error } = await supabase.from("courses").insert({
                 title: values.title,

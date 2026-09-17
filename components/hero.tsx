@@ -123,13 +123,13 @@ export function Hero() {
         />
       </div>
 
-      <div className="relative mx-auto max-w-6xl px-5 sm:px-6 lg:px-8 w-full flex-1 flex flex-col justify-between">
+      <div className="relative mx-auto max-w-[1400px] px-5 sm:px-6 lg:px-8 w-full flex-1 flex flex-col justify-between">
         <div>
           {/* ═══════════════════════════════════════════
               HEADLINE BLOCK & AXEL STAGE
           ═══════════════════════════════════════════ */}
           <div className="relative">
-            <div className="max-w-3xl lg:max-w-xl xl:max-w-2xl">
+            <div className="max-w-3xl lg:max-w-2xl xl:max-w-3xl">
               {/* Main headline — kinetic editorial reveal */}
               <h1 className="font-serif text-[clamp(2.3rem,6vw,4.5rem)] leading-[1.04] tracking-[-0.035em] text-foreground font-normal select-none">
                 <span className="block font-normal">
@@ -205,14 +205,14 @@ export function Hero() {
                       href="/dashboard"
                       onMouseEnter={() => setCtaHovered(true)}
                       onMouseLeave={() => setCtaHovered(false)}
-                      className="group inline-flex items-center justify-center gap-2 rounded-lg bg-primary hover:bg-primary-active text-primary-foreground px-6 py-3 text-sm font-semibold tracking-tight shadow-sm transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer w-full sm:w-auto text-center"
+                      className="group inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 text-white px-6 py-3 text-sm font-semibold tracking-tight shadow-lg shadow-blue-500/25 transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer w-full sm:w-auto text-center"
                     >
                       <span>Go to Dashboard</span>
                       <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                     </Link>
                     <Link
                       href="/programs"
-                      className="inline-flex items-center justify-center gap-2 rounded-lg border border-hairline hover:border-primary/30 bg-card/70 hover:bg-card px-5 py-3 text-sm font-medium text-foreground transition-all cursor-pointer w-full sm:w-auto text-center"
+                      className="inline-flex items-center justify-center gap-2 rounded-xl border border-hairline hover:border-primary/30 bg-card/70 hover:bg-card px-5 py-3 text-sm font-medium text-foreground transition-all cursor-pointer w-full sm:w-auto text-center"
                     >
                       <Compass className="h-4 w-4 text-muted-foreground" />
                       <span>Explore Curriculum</span>
@@ -225,7 +225,7 @@ export function Hero() {
                         href="/signup"
                         onMouseEnter={() => setCtaHovered(true)}
                         onMouseLeave={() => setCtaHovered(false)}
-                        className="group inline-flex items-center justify-center gap-2 rounded-lg bg-primary hover:bg-primary-active text-primary-foreground px-6 py-3 text-sm font-semibold tracking-tight shadow-sm transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer w-full sm:w-auto text-center"
+                        className="group inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 text-white px-6 py-3 text-sm font-semibold tracking-tight shadow-lg shadow-blue-500/25 transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer w-full sm:w-auto text-center"
                       >
                         <span>Start Learning</span>
                         <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
@@ -337,10 +337,10 @@ export function Hero() {
             <div className="flex -space-x-2.5">
               {["A", "S", "M", "R"].map((letter, i) => {
                 const colors = [
-                  "bg-primary/15 text-primary",
-                  "bg-amber-500/15 text-amber-600 dark:text-amber-400",
-                  "bg-stone-400/15 text-stone-600 dark:text-stone-400",
-                  "bg-orange-500/15 text-orange-600 dark:text-orange-400",
+                  "bg-blue-600/15 text-blue-600 dark:text-blue-400",
+                  "bg-indigo-600/15 text-indigo-600 dark:text-indigo-400",
+                  "bg-cyan-600/15 text-cyan-600 dark:text-cyan-400",
+                  "bg-blue-500/15 text-blue-700 dark:text-blue-300",
                 ]
                 return (
                   <div
@@ -359,7 +359,7 @@ export function Hero() {
             <div className="flex items-center gap-2">
               <div className="flex">
                 {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} className="h-3 w-3 fill-amber-500 text-amber-500" />
+                  <Star key={i} className="h-3 w-3 fill-yellow-400 text-yellow-400" />
                 ))}
               </div>
               <span className="text-xs font-semibold text-foreground">4.9</span>

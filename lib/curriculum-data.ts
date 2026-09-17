@@ -60,9 +60,16 @@ export const CURRICULUM_COURSES: CurriculumCourse[] = [
 ]
 
 export function getCurriculumCourseBySlug(slug: string): CurriculumCourse | undefined {
-  return CURRICULUM_COURSES.find(c => c.slug === slug || c.id === slug)
+  if (!slug) return undefined
+  const s = slug.toLowerCase().replace(/_/g, "-")
+  return CURRICULUM_COURSES.find(c => {
+    const cSlug = c.slug?.toLowerCase().replace(/_/g, "-")
+    const cId = c.id?.toLowerCase().replace(/_/g, "-")
+    return cSlug === s || cId === s
+  })
 }
 
 export function getAllCurriculumCourses(): CurriculumCourse[] {
   return CURRICULUM_COURSES
 }
+

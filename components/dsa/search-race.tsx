@@ -132,12 +132,12 @@ export default function SearchRace() {
       
       {/* Header HUD */}
       <div className="p-4 border-b border-white/5 bg-[#050505]/95 backdrop-blur-xl flex items-center justify-between shrink-0">
-          <div className="flex items-center gap-3">
-            <Search className="text-[#ea580c]" size={20} />
+           <div className="flex items-center gap-3">
+            <Search className="text-blue-500" size={20} />
             <h2 className="font-mono text-sm uppercase tracking-widest font-bold text-zinc-100">Search Comparison: Linear vs Binary</h2>
          </div>
          <div className="flex items-center gap-3 hidden sm:flex">
-            <div className="w-2 h-2 rounded-full bg-[#ea580c]"></div>
+            <div className="w-2 h-2 rounded-full bg-blue-500"></div>
             <span className="font-mono text-[10px] text-zinc-400 uppercase tracking-widest">Search Engine Active</span>
          </div>
       </div>
@@ -157,7 +157,7 @@ export default function SearchRace() {
                         value={targetVal}
                         onChange={(e) => setTargetVal(Number(e.target.value))}
                         disabled={race.status === "racing"}
-                        className="pl-8 pr-4 py-2 bg-[#111113] border border-zinc-700 font-mono text-sm text-[#ea580c] focus:outline-none focus:border-[#ea580c] appearance-none cursor-pointer"
+                        className="pl-8 pr-4 py-2 bg-[#111113] border border-zinc-700 font-mono text-sm text-blue-400 focus:outline-none focus:border-blue-500 appearance-none cursor-pointer"
                     >
                         {DEFAULT_ARRAY.map(v => (
                             <option key={v} value={v}>{v}</option>
@@ -172,7 +172,7 @@ export default function SearchRace() {
                  <button 
                    onClick={executeRace}
                    disabled={race.status === "racing"}
-                   className="flex items-center gap-2 px-6 py-2 bg-[#ea580c] border border-[#ea580c] text-white hover:bg-[#ea580c]/90 disabled:opacity-50 transition-all uppercase font-mono text-xs font-bold tracking-widest cursor-pointer"
+                   className="flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 border border-blue-500/30 text-white disabled:opacity-50 transition-all uppercase font-mono text-xs font-bold tracking-widest cursor-pointer shadow-md shadow-blue-500/20 active:scale-95"
                  >
                    <Play size={16} />
                    Start Search
@@ -208,7 +208,7 @@ export default function SearchRace() {
                         const isPassed = linear.activeIndex > idx;
 
                         let style = "bg-zinc-900 border-zinc-800 text-zinc-500";
-                        if (isFound) style = "bg-[#ea580c]/20 border-[#ea580c] text-[#ea580c] scale-110 z-10";
+                        if (isFound) style = "bg-emerald-500/20 border-emerald-500 text-emerald-400 scale-110 z-10 font-bold";
                         else if (isCurrent) style = "bg-red-500/20 border-red-500 text-red-400 scale-110 z-10";
                         else if (isPassed) style = "bg-black border-zinc-900 text-zinc-700 opacity-50";
 
@@ -233,11 +233,11 @@ export default function SearchRace() {
              <div className="space-y-4 pt-8">
                 <div className="flex justify-between items-end border-b border-white/10 pb-2">
                     <div className="flex items-center gap-2">
-                        <span className="px-2 py-0.5 bg-[#ea580c]/20 text-[#ea580c] text-[10px] font-mono font-bold uppercase tracking-widest border border-[#ea580c]/30">O(log n)</span>
+                        <span className="px-2 py-0.5 bg-blue-500/20 text-blue-400 text-[10px] font-mono font-bold uppercase tracking-widest border border-blue-500/30">O(log n)</span>
                         <h3 className="text-sm font-bold uppercase tracking-tight text-white/80">Binary Search</h3>
                     </div>
                     <div className="font-mono text-xs text-zinc-400 uppercase">
-                        Operations: <span className="text-[#ea580c] font-bold ml-1">{binary.ops}</span>
+                        Operations: <span className="text-blue-400 font-bold ml-1">{binary.ops}</span>
                     </div>
                 </div>
 
@@ -253,13 +253,13 @@ export default function SearchRace() {
                         if (race.status !== "idle" && !inRange && !binary.found) {
                             style = "bg-black border-zinc-900 text-zinc-800 opacity-20 scale-95"; // discarded
                         } else if (isFound) {
-                            style = "bg-[#ea580c]/20 border-[#ea580c] text-[#ea580c] scale-110 z-10";
+                            style = "bg-emerald-500/20 border-emerald-500 text-emerald-400 scale-110 z-10 font-bold";
                         } else if (isMid) {
-                            style = "bg-[#ea580c]/20 border-[#ea580c] text-[#ea580c] scale-110 z-10";
+                            style = "bg-blue-500/20 border-blue-500 text-blue-400 scale-110 z-10";
                         } else if (inRange && race.status !== "idle") {
                             style = "bg-zinc-800 border-zinc-700 text-zinc-300"; // active search area
-                            if (idx === binary.left) style += " border-l-2 border-l-[#ea580c]";
-                            if (idx === binary.right) style += " border-r-2 border-r-[#ea580c]";
+                            if (idx === binary.left) style += " border-l-2 border-l-blue-500";
+                            if (idx === binary.right) style += " border-r-2 border-r-blue-500";
                         }
 
                         return (
@@ -303,7 +303,7 @@ export default function SearchRace() {
                     let color = "text-zinc-300 font-medium";
                     if (log.includes("LINEAR:")) color = "text-red-400";
                     if (log.includes("BINARY:")) color = "text-[#06b6d4]";
-                    if (log.includes("found")) color = "text-[#ea580c]";
+                    if (log.includes("found")) color = "text-emerald-400 font-bold";
                     if (log.includes("superior")) color = "text-accent font-bold";
                     
                     return (

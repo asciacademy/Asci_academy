@@ -35,6 +35,13 @@ export default function TwoPointerString() {
   const [logs, setLogs] = useState<string[]>(["SYSTEM: Two-pointer analyzer ready."]);
   const [isRunning, setIsRunning] = useState(false);
   const terminalRef = useRef<HTMLDivElement>(null);
+  const abortRef = useRef(false);
+
+  useEffect(() => {
+    return () => {
+      abortRef.current = true;
+    };
+  }, []);
 
   useEffect(() => {
     if (terminalRef.current) {
@@ -45,12 +52,14 @@ export default function TwoPointerString() {
   const pushLog = (msg: string) => setLogs((prev) => [...prev, msg]);
 
   const handleSetWord = (w: string) => {
+    abortRef.current = true;
+    setIsRunning(false);
     const cleaned = w.toUpperCase().replace(/[^A-Z]/g, "");
     setInputVal(cleaned);
     setWord(cleaned);
     setPointers({
       left: 0,
-      right: cleaned.length - 1,
+      right: Math.max(0, cleaned.length - 1),
       status: "idle",
       matchedPairs: [],
       result: "pending",
@@ -59,7 +68,8 @@ export default function TwoPointerString() {
   };
 
   const runScan = async () => {
-    if (isRunning || word.length < 2) return;
+    if (isRunning || word.length < 1) return;
+    abortRef.current = false;
     setIsRunning(true);
 
     const chars = word.split("");
@@ -72,17 +82,20 @@ export default function TwoPointerString() {
     pushLog(`INIT: L=0 (${chars[0]}), R=${r} (${chars[r]})`);
 
     await new Promise((res) => setTimeout(res, 800));
+    if (abortRef.current) return;
 
     while (l < r) {
       setPointers((prev) => ({ ...prev, left: l, right: r, status: "scanning" }));
       pushLog(`CHECK: Comparing [${l}]="${chars[l]}" with [${r}]="${chars[r]}"`);
       await new Promise((res) => setTimeout(res, 900));
+      if (abortRef.current) return;
 
       if (chars[l] === chars[r]) {
         pairs.push([l, r]);
         setPointers((prev) => ({ ...prev, status: "match", matchedPairs: [...pairs] }));
         pushLog(`MATCH: "${chars[l]}" === "${chars[r]}" ✓`);
         await new Promise((res) => setTimeout(res, 700));
+        if (abortRef.current) return;
         l++;
         r--;
       } else {
@@ -100,6 +113,8 @@ export default function TwoPointerString() {
       pushLog(`CENTER: Character [${l}]="${chars[l]}" is the middle. Auto-pass.`);
     }
 
+    if (abortRef.current) return;
+
     setPointers((prev) => ({
       ...prev,
       left: l,
@@ -113,9 +128,10 @@ export default function TwoPointerString() {
   };
 
   const handleReset = () => {
+    abortRef.current = true;
     setPointers({
       left: 0,
-      right: word.length - 1,
+      right: Math.max(0, word.length - 1),
       status: "idle",
       matchedPairs: [],
       result: "pending",
@@ -141,7 +157,7 @@ export default function TwoPointerString() {
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              className="flex items-center gap-1 px-3 py-1 bg-[#ea580c]/20 border border-[#ea580c]/40 text-[#ea580c] text-xs font-mono uppercase"
+              className="flex items-center gap-1 px-3 py-1 bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 text-xs font-mono uppercase"
             >
               <CheckCircle2 size={14} /> Palindrome
             </motion.div>
@@ -198,15 +214,15 @@ export default function TwoPointerString() {
             <div className="flex gap-2">
               <button
                 onClick={runScan}
-                disabled={isRunning || word.length < 2}
-                className="flex items-center gap-2 px-5 py-2 bg-[#a855f7]/10 border border-[#a855f7]/30 text-[#a855f7] hover:bg-[#a855f7] hover:text-white disabled:opacity-50 transition-all uppercase font-mono text-xs font-bold tracking-widest"
+                disabled={isRunning || word.length < 1}
+                className="flex items-center gap-2 px-5 py-2 bg-[#a855f7]/10 border border-[#a855f7]/30 text-[#a855f7] hover:bg-[#a855f7] hover:text-white disabled:opacity-50 transition-all uppercase font-mono text-xs font-bold tracking-widest cursor-pointer"
               >
                 <Play size={14} /> Scan
               </button>
               <button
                 onClick={handleReset}
                 disabled={isRunning}
-                className="p-2 bg-zinc-900 border border-zinc-700 text-zinc-400 hover:text-white transition-all"
+                className="p-2 bg-zinc-900 border border-zinc-700 text-zinc-400 hover:text-white transition-all cursor-pointer"
               >
                 <RotateCcw size={14} />
               </button>
@@ -217,8 +233,8 @@ export default function TwoPointerString() {
           <div className="flex-1 flex items-center justify-center p-8 relative overflow-hidden">
             <div className="flex gap-3 sm:gap-4 items-center relative">
               {chars.map((char, idx) => {
-                const isLeft = pointers.status !== "idle" && idx === pointers.left;
-                const isRight = pointers.status !== "idle" && idx === pointers.right;
+                const isLeft = (pointers.status === "scanning" || pointers.status === "match") && idx === pointers.left;
+                const isRight = (pointers.status === "scanning" || pointers.status === "match") && idx === pointers.right;
                 const isMatched = pointers.matchedPairs.some(
                   ([a, b]) => idx === a || idx === b
                 );
@@ -231,9 +247,9 @@ export default function TwoPointerString() {
                 if (isMismatchChar) {
                   charStyle = "bg-red-500/20 border-red-500 text-red-400";
                 } else if (isMatched) {
-                  charStyle = "bg-[#ea580c]/15 border-[#ea580c] text-[#ea580c]";
+                  charStyle = "bg-emerald-500/15 border-emerald-500 text-emerald-400 font-bold";
                 } else if (isLeft || isRight) {
-                  charStyle = "bg-[#ea580c]/20 border-[#ea580c] text-[#ea580c]";
+                  charStyle = "bg-blue-500/20 border-blue-500 text-blue-400 font-bold";
                 }
 
                 return (
@@ -253,7 +269,7 @@ export default function TwoPointerString() {
                       <motion.div
                         initial={{ y: -20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
-                        className="absolute -top-8 text-[10px] font-bold text-[#ea580c] uppercase tracking-widest"
+                        className="absolute -top-8 text-[10px] font-bold text-blue-400 uppercase tracking-widest"
                       >
                         ▼ L
                       </motion.div>
@@ -262,7 +278,7 @@ export default function TwoPointerString() {
                       <motion.div
                         initial={{ y: -20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
-                        className="absolute -top-8 text-[10px] font-bold text-[#ea580c] uppercase tracking-widest"
+                        className="absolute -top-8 text-[10px] font-bold text-blue-400 uppercase tracking-widest"
                       >
                         ▼ R
                       </motion.div>
@@ -273,7 +289,7 @@ export default function TwoPointerString() {
                       <motion.div
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
-                        className="absolute -bottom-6 w-2 h-2 rounded-full bg-[#ea580c]"
+                        className="absolute -bottom-6 w-2 h-2 rounded-full bg-emerald-400"
                       />
                     )}
                   </motion.div>
@@ -310,9 +326,9 @@ export default function TwoPointerString() {
           <div className="flex-1 overflow-y-auto p-4 font-mono text-[10px] text-zinc-300 space-y-2">
             {logs.map((log, i) => {
               let color = "text-zinc-300 font-medium";
-              if (log.includes("MATCH:")) color = "text-[#ea580c]";
+              if (log.includes("MATCH:")) color = "text-emerald-400 font-semibold";
               if (log.includes("FAIL:")) color = "text-red-400";
-              if (log.includes("RESULT:") && log.includes("IS")) color = "text-[#ea580c] font-bold";
+              if (log.includes("RESULT:") && log.includes("IS")) color = "text-emerald-400 font-bold";
               if (log.includes("NOT")) color = "text-red-400 font-bold";
               if (log.includes("CHECK:")) color = "text-[#a855f7]";
               if (log.includes("CENTER:")) color = "text-yellow-500";

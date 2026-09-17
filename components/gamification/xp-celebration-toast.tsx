@@ -52,7 +52,7 @@ export function XpCelebrationToast() {
               {toastData.badgeTitle ? (
                 <Trophy className="h-5 w-5 text-[#D4B872]" />
               ) : (
-                <Award className="h-5 w-5 text-[#ea580c]" />
+                <Award className="h-5 w-5 text-blue-500" />
               )}
             </div>
 

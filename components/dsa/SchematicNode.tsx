@@ -34,7 +34,7 @@ export default function SchematicNode({ mission, index, onSelect }: SchematicNod
                     {isLocked ? (
                         <Lock size={16} className="text-white/20" />
                     ) : (
-                        <Icon size={24} style={{ color: mission.color || "#ea580c" }} />
+                        <Icon size={24} style={{ color: mission.color || "#2563eb" }} />
                     )}
                 </div>
             </div>

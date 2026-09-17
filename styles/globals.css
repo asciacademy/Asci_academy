@@ -4,54 +4,54 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: #fdfbf7;
-  --foreground: #141413;
-  --card: #f5f0e8;
-  --card-foreground: #141413;
-  --popover: #fdfbf7;
-  --popover-foreground: #141413;
-  --primary: #ea580c;
+  --background: #ffffff;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+  --primary: #2563eb;
   --primary-foreground: #ffffff;
-  --secondary: #f3ede2;
-  --secondary-foreground: #141413;
-  --muted: #e8e2d8;
-  --muted-foreground: #6c6a64;
-  --accent: #ea580c;
+  --secondary: #f8fafc;
+  --secondary-foreground: #334155;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --accent: #3b82f6;
   --accent-foreground: #ffffff;
-  --destructive: #FF3131;
-  --destructive-foreground: #EDEDED;
-  --border: #e8e2d8;
-  --input: #e8e2d8;
-  --ring: #ea580c;
-  --success: #ea580c;
-  --warning: #eab308;
-  --info: #ea580c;
-  --radius: 0.5rem;
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #2563eb;
+  --success: #16a34a;
+  --warning: #d97706;
+  --info: #0284c7;
+  --radius: 0.625rem;
 }
 
 .dark {
-  --background: #141413;
-  --foreground: #fdfbf7;
-  --card: #1e1d1a;
-  --card-foreground: #fdfbf7;
-  --popover: #141413;
-  --popover-foreground: #fdfbf7;
-  --primary: #ea580c;
+  --background: #0b0f19;
+  --foreground: #f8fafc;
+  --card: #111827;
+  --card-foreground: #f8fafc;
+  --popover: #0b0f19;
+  --popover-foreground: #f8fafc;
+  --primary: #3b82f6;
   --primary-foreground: #ffffff;
-  --secondary: #1f1e1b;
-  --secondary-foreground: #fdfbf7;
-  --muted: #1f1e1b;
-  --muted-foreground: #a09d96;
-  --accent: #ea580c;
+  --secondary: #1e293b;
+  --secondary-foreground: #cbd5e1;
+  --muted: #1e293b;
+  --muted-foreground: #94a3b8;
+  --accent: #60a5fa;
   --accent-foreground: #ffffff;
-  --destructive: #FF3131;
-  --destructive-foreground: #EDEDED;
-  --border: #252320;
-  --input: #252320;
-  --ring: #ea580c;
-  --success: #ea580c;
-  --warning: #eab308;
-  --info: #ea580c;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: rgba(255, 255, 255, 0.08);
+  --input: rgba(255, 255, 255, 0.12);
+  --ring: #3b82f6;
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --info: #38bdf8;
 }
 
 @theme inline {

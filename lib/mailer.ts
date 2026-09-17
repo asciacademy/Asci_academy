@@ -153,9 +153,9 @@ export function signupWelcomeEmail(opts: { email: string; name: string }): MailP
       <p>Welcome, <strong style="color:#fff;">${opts.name}</strong>. Your operative profile has been created and access to the ASCI network has been granted.</p>
       <div class="info-box">
         <div class="info-row"><span class="label">IDENTITY: </span><span class="value">${opts.email}</span></div>
-        <div class="info-row"><span class="label">STATUS:   </span><span class="value" style="color:#ea580c;">ACTIVE</span></div>
+        <div class="info-row"><span class="label">STATUS:   </span><span class="value" style="color:#2563eb;">ACTIVE</span></div>
       </div>
-      <p>Start your journey at your <a href="${getSiteUrl()}/dashboard" style="color:#ea580c;">dashboard</a>. Choose a learning path and begin your mission.</p>
+      <p>Start your journey at your <a href="${getSiteUrl()}/dashboard" style="color:#2563eb;">dashboard</a>. Choose a learning path and begin your mission.</p>
     `),
     }
 }

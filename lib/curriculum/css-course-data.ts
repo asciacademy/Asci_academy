@@ -232,7 +232,7 @@ p {
       <div style="font-size: 11px; color: #94a3b8; text-transform: uppercase;">API Latency</div>
       <div style="font-size: 20px; font-weight: bold; color: white; margin-top: 4px;">14ms</div>
     </div>
-    <div style="background: #1e293b; padding: 14px; border-radius: 8px; border-left: 3px solid #f59e0b;">
+    <div style="background: #1e293b; padding: 14px; border-radius: 8px; border-left: 3px solid #6366f1;">
       <div style="font-size: 11px; color: #94a3b8; text-transform: uppercase;">Throughput</div>
       <div style="font-size: 20px; font-weight: bold; color: white; margin-top: 4px;">48.2k/s</div>
     </div>

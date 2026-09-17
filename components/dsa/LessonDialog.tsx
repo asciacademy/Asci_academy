@@ -268,7 +268,7 @@ export default function SimulationChamber({ lesson, partColor, onClose }: Lesson
                                         <div className="flex gap-2">
                                             <div className="w-2 h-2 rounded-full bg-red-500/50" />
                                             <div className="w-2 h-2 rounded-full bg-yellow-500/50" />
-                                            <div className="w-2 h-2 rounded-full bg-[#ea580c]/50" />
+                                            <div className="w-2 h-2 rounded-full bg-emerald-500/50" />
                                         </div>
                                         <span className="font-mono text-[10px] uppercase font-black text-white/30 tracking-widest">mission_control.sh</span>
                                         <div className="w-12" />

@@ -52,12 +52,12 @@ export function Programming3DIcon({
 
       {/* Isometric Code Lines (Clean gold & terracotta syntax highlights) */}
       {/* Line 1: Keyword + Identifier */}
-      <path d="M44 40 L52 35.5" stroke="#ea580c" strokeWidth="2" strokeLinecap="round" />
+      <path d="M44 40 L52 35.5" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" />
       <path d="M55 33.8 L68 26.5" stroke="#D4B872" strokeWidth="2" strokeLinecap="round" />
 
       {/* Line 2: Indented Function Call */}
       <path d="M48 44.5 L58 39" stroke="#e8e2d8" strokeWidth="1.75" strokeLinecap="round" strokeOpacity="0.7" />
-      <path d="M61 37.2 L72 31" stroke="#ea580c" strokeWidth="1.75" strokeLinecap="round" />
+      <path d="M61 37.2 L72 31" stroke="#2563eb" strokeWidth="1.75" strokeLinecap="round" />
 
       {/* Line 3: Return Statement & Bracket */}
       <path d="M48 48.5 L54 45" stroke="#D4B872" strokeWidth="1.75" strokeLinecap="round" />
@@ -65,7 +65,7 @@ export function Programming3DIcon({
 
       {/* Front Isometric Bracket Accent */}
       <path d="M60 58 L70 52 L60 46" stroke="#D4B872" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none" opacity="0.9" />
-      <path d="M50 64 L40 58 L50 52" stroke="#ea580c" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none" opacity="0.9" />
+      <path d="M50 64 L40 58 L50 52" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none" opacity="0.9" />
     </svg>
   )
 }

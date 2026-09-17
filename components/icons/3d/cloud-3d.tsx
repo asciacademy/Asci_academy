@@ -51,7 +51,7 @@ export function Cloud3DIcon({
       {/* Blade 2 */}
       <path d="M38 56 L56 66 L56 71 L38 61 Z" fill="#181715" stroke="#33312c" strokeWidth="0.5" />
       <circle cx="43" cy="59" r="1.25" fill="#10b981" />
-      <circle cx="48" cy="62" r="1.25" fill="#ea580c" />
+      <circle cx="48" cy="62" r="1.25" fill="#2563eb" />
 
       {/* Blade 3 */}
       <path d="M38 64 L56 74 L56 79 L38 69 Z" fill="#181715" stroke="#33312c" strokeWidth="0.5" />
@@ -60,7 +60,7 @@ export function Cloud3DIcon({
 
       {/* Right Face Deployment Pipeline Indicator */}
       <path d="M64 56 L82 46" stroke="#D4B872" strokeWidth="1.75" strokeDasharray="3 2" />
-      <path d="M64 64 L82 54" stroke="#ea580c" strokeWidth="1.75" />
+      <path d="M64 64 L82 54" stroke="#2563eb" strokeWidth="1.75" />
       <path d="M64 72 L82 62" stroke="#e8e2d8" strokeWidth="1.25" strokeOpacity="0.6" />
 
       {/* Cloud Boundary Crest (Restrained matte arch on top) */}

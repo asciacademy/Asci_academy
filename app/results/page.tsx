@@ -129,7 +129,7 @@ export default function ResultsPage() {
                                     <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-primary/10 text-primary uppercase font-semibold">
                                         {story.cohort}
                                     </span>
-                                    <div className="flex text-amber-500 gap-0.5">
+                                    <div className="flex text-yellow-400 gap-0.5">
                                         {[...Array(5)].map((_, starI) => (
                                             <Star key={starI} className="w-3.5 h-3.5 fill-current" />
                                         ))}

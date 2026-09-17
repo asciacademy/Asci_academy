@@ -55,25 +55,25 @@ export function AxelQuickActions({
     if (pathname.includes("dsa")) {
       actions = [
         {
-          icon: <Brain className="w-3.5 h-3.5 text-[#ea580c]" />,
+          icon: <Brain className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />,
           label: "Why queues in BFS?",
           prompt: "Why are queues used in Breadth-First Search instead of stacks?",
           tag: "Algorithm",
         },
         {
-          icon: <Clock className="w-3.5 h-3.5 text-amber-400" />,
+          icon: <Clock className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />,
           label: "Plan 30-min Sprint",
           prompt: "I have 30 minutes to study DSA today. Plan a targeted session for me.",
           tag: "Sprint",
         },
         {
-          icon: <Lightbulb className="w-3.5 h-3.5 text-[#ea580c]" />,
+          icon: <Lightbulb className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />,
           label: "Big-O Intuition",
           prompt: "Can you explain Big-O Time and Space Complexity with intuitive examples?",
           tag: "Complexity",
         },
         {
-          icon: <Compass className="w-3.5 h-3.5 text-sky-400" />,
+          icon: <Compass className="w-3.5 h-3.5 text-sky-500" />,
           label: "DP Knapsack Pattern",
           prompt: "Show me the Dynamic Programming 0/1 Knapsack pattern step by step.",
           tag: "Pattern",
@@ -82,19 +82,19 @@ export function AxelQuickActions({
     } else if (pathname.includes("courses")) {
       actions = [
         {
-          icon: <Compass className="w-3.5 h-3.5 text-[#ea580c]" />,
+          icon: <Compass className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />,
           label: "Which course first?",
           prompt: "Which course should I take first based on my goal to get interview ready?",
           tag: "Guidance",
         },
         {
-          icon: <BookOpen className="w-3.5 h-3.5 text-[#ea580c]" />,
+          icon: <BookOpen className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />,
           label: "System Design Path",
           prompt: "Explain ASCI's Full Stack and System Design roadmap in detail.",
           tag: "Roadmap",
         },
         {
-          icon: <Brain className="w-3.5 h-3.5 text-purple-400" />,
+          icon: <Brain className="w-3.5 h-3.5 text-indigo-500" />,
           label: "Java vs Python Interviews",
           prompt: "Should I focus on Java or Python for coding interviews?",
           tag: "Strategy",
@@ -103,19 +103,19 @@ export function AxelQuickActions({
     } else if (pathname.includes("dashboard")) {
       actions = [
         {
-          icon: <Clock className="w-3.5 h-3.5 text-[#ea580c]" />,
+          icon: <Clock className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />,
           label: "Plan today's session",
           prompt: "Plan a focused 30-minute study session for my dashboard progress today.",
           tag: "Sprint",
         },
         {
-          icon: <Flame className="w-3.5 h-3.5 text-orange-400" />,
+          icon: <Flame className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />,
           label: "Analyze my streak",
           prompt: "How am I progressing on my learning streak and what should I tackle next?",
           tag: "Progress",
         },
         {
-          icon: <Lightbulb className="w-3.5 h-3.5 text-[#ea580c]" />,
+          icon: <Lightbulb className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />,
           label: "Warmup coding quiz",
           prompt: "Give me a quick 3-question conceptual quiz on algorithms to warm up.",
           tag: "Quiz",
@@ -125,25 +125,25 @@ export function AxelQuickActions({
       // General defaults
       actions = [
         {
-          icon: <Compass className="w-3.5 h-3.5 text-[#ea580c]" />,
+          icon: <Compass className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />,
           label: "Recommend my roadmap",
           prompt: "Recommend the best ASCI learning path for me to reach Senior Engineer level.",
           tag: "Roadmap",
         },
         {
-          icon: <Clock className="w-3.5 h-3.5 text-amber-400" />,
+          icon: <Clock className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />,
           label: "I have 30 minutes today",
           prompt: "I have 30 minutes to study right now. Set up a quick sprint plan.",
           tag: "Sprint",
         },
         {
-          icon: <Brain className="w-3.5 h-3.5 text-[#ea580c]" />,
+          icon: <Brain className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />,
           label: "Why queues in BFS?",
           prompt: "Why are queues used in Breadth-First Search instead of stacks?",
           tag: "Concept",
         },
         {
-          icon: <Users className="w-3.5 h-3.5 text-[#ea580c]" />,
+          icon: <Users className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />,
           label: "1-on-1 Mentorship",
           prompt: "How does 1-on-1 engineering mentorship work at ASCI?",
           tag: "Mentorship",
@@ -174,15 +174,15 @@ export function AxelQuickActions({
       style={positionStyle}
     >
       {/* Header bar with section indicator & collapse toggle */}
-      <div className="flex items-center gap-2 px-2 py-0.5 mb-0.5 text-[10px] font-mono tracking-wider text-[#ea580c]/85 uppercase">
-        <Bot className="w-3 h-3 text-[#ea580c]" />
+      <div className="flex items-center gap-2 px-2 py-0.5 mb-0.5 text-[10px] font-mono tracking-wider text-blue-600 dark:text-blue-400 uppercase">
+        <Bot className="w-3 h-3 text-blue-600 dark:text-blue-400" />
         <span>{sectionLabel ? `Ask Axel · ${sectionLabel}` : "Ask Axel"}</span>
         <button
           onClick={(e) => {
             e.stopPropagation()
             setCollapsed(!collapsed)
           }}
-          className="ml-1 p-0.5 rounded-md hover:bg-[#ea580c]/15 text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+          className="ml-1 p-0.5 rounded-md hover:bg-blue-500/15 text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
           title={collapsed ? "Show quick actions" : "Hide quick actions"}
           aria-label={collapsed ? "Expand quick questions" : "Collapse quick questions"}
         >
@@ -209,13 +209,13 @@ export function AxelQuickActions({
                 whileHover={{ scale: 1.03, x: isRightSide ? -3 : 3 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={(e) => handleActionClick(e, action.prompt)}
-                className={`flex items-center gap-2.5 px-3.5 py-2 rounded-full text-xs font-medium bg-[#FDFBF7]/95 dark:bg-[#141414]/95 hover:bg-[#FDFBF7] dark:hover:bg-[#1a1a1a] backdrop-blur-3xl border border-hairline hover:border-[#ea580c] shadow-sm hover:shadow-md text-foreground/90 hover:text-[#ea580c] transition-all duration-200 group whitespace-nowrap cursor-pointer ${
+                className={`flex items-center gap-2.5 px-3.5 py-2 rounded-full text-xs font-medium bg-white/95 dark:bg-card/95 hover:bg-white dark:hover:bg-card backdrop-blur-3xl border border-hairline hover:border-blue-500/50 shadow-sm hover:shadow-md text-foreground/90 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 group whitespace-nowrap cursor-pointer ${
                   isRightSide ? "text-right" : "text-left"
                 }`}
                 title={`Ask Axel: "${action.prompt}"`}
               >
                 {action.tag && (
-                  <span className="text-[9.5px] font-mono uppercase px-2 py-0.5 rounded-full bg-[#ea580c]/15 text-[#ea580c] group-hover:bg-[#ea580c]/25 font-semibold">
+                  <span className="text-[9.5px] font-mono uppercase px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 group-hover:bg-blue-500/20 font-semibold">
                     {action.tag}
                   </span>
                 )}

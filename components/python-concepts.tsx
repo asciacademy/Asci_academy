@@ -153,7 +153,7 @@ export function PythonConcepts() {
                                     <div className="flex gap-1.5">
                                         <div className="h-3 w-3 rounded-full bg-[#ff5f56]" />
                                         <div className="h-3 w-3 rounded-full bg-[#ffbd2e]" />
-                                        <div className="h-3 w-3 rounded-full bg-[#ea580c]" />
+                                        <div className="h-3 w-3 rounded-full bg-[#27c93f]" />
                                     </div>
                                     <span className="font-mono text-[10px] uppercase text-muted-foreground tracking-widest flex items-center gap-2">
                                         <Code2 className="h-3 w-3" />

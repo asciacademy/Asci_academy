@@ -17,8 +17,11 @@ import {
   ChevronDown,
   ChevronUp,
   Sparkles,
+  Plus,
 } from "lucide-react"
 import { TechLogo } from "@/components/tech-logo"
+import { useEnrollments } from "@/lib/user-learning-store"
+import { enrollInCourse } from "@/app/actions/courses"
 
 interface FeaturedCourse {
   id: string
@@ -244,6 +247,7 @@ const FEATURED_COURSES: FeaturedCourse[] = [
 const DEFAULT_VISIBLE_LIMIT = 6
 
 export function FeaturedMasterTracks() {
+  const { isEnrolled } = useEnrollments()
   const [selectedFilter, setSelectedFilter] = useState<
     "All" | "Web Development" | "Systems & Languages"
   >("All")
@@ -292,7 +296,7 @@ export function FeaturedMasterTracks() {
 
   return (
     <section id="interactive-courses" className="relative py-12 sm:py-16 lg:py-20 border-b border-border/60 bg-background/50 scroll-mt-20">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 sm:mb-10">
           <div className="max-w-2xl text-left">
@@ -343,74 +347,91 @@ export function FeaturedMasterTracks() {
 
         {/* Course Cards Grid: Uniform, Clean, Scannable */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          {displayedCourses.map((course) => (
-            <div
-              key={course.id}
-              className="group relative flex flex-col justify-between rounded-2xl border border-hairline dark:border-white/[0.08] bg-card/95 dark:bg-[#181715]/95 p-4 sm:p-6 transition-all duration-200 hover:border-foreground/30 dark:hover:border-white/25 hover:-translate-y-0.5 shadow-2xs"
-            >
-              <div>
-                {/* Top Header: TechLogo + Badge + Tag */}
-                <div className="flex items-center justify-between gap-3 mb-3.5">
-                  <div className="flex items-center gap-2.5">
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-hairline bg-secondary/80 p-1.5 shadow-xs group-hover:scale-105 group-hover:border-primary/50 transition-all duration-200">
-                      <TechLogo slug={course.id} className="h-6 w-6 object-contain" />
+          {displayedCourses.map((course) => {
+            const enrolled = isEnrolled(course.id)
+            const playerUrl = course.courseUrl || `/courses/${course.id}/learn`
+            const overviewUrl = course.overviewUrl || `/courses/${course.id}`
+
+
+            return (
+              <div
+                key={course.id}
+                className="group relative flex flex-col justify-between rounded-2xl border border-hairline dark:border-white/[0.08] bg-card/95 dark:bg-[#181715]/95 p-4 sm:p-6 transition-all duration-200 hover:border-foreground/30 dark:hover:border-white/25 hover:-translate-y-0.5 shadow-2xs"
+              >
+                <div>
+                  {/* Top Header: TechLogo + Badge + Tag */}
+                  <div className="flex items-center justify-between gap-3 mb-3.5">
+                    <div className="flex items-center gap-2.5">
+                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-hairline bg-secondary/80 p-1.5 shadow-xs group-hover:scale-105 group-hover:border-primary/50 transition-all duration-200">
+                        <TechLogo slug={course.id} className="h-6 w-6 object-contain" />
+                      </div>
+                      {enrolled ? (
+                        <span className="inline-flex items-center rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-2 py-0.5 text-[10px] font-mono font-semibold uppercase tracking-wider border border-emerald-500/20">
+                          Enrolled
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center rounded-md bg-primary/10 px-2 py-0.5 text-[10px] font-mono font-semibold text-primary uppercase tracking-wider">
+                          {course.badge}
+                        </span>
+                      )}
                     </div>
-                    <span className="inline-flex items-center rounded-md bg-primary/10 px-2 py-0.5 text-[10px] font-mono font-semibold text-primary uppercase tracking-wider">
-                      {course.badge}
+
+                    <span className="text-[10px] font-mono text-muted-foreground border border-hairline rounded-md px-2 py-0.5 bg-secondary/60">
+                      {course.tag}
                     </span>
                   </div>
 
-                  <span className="text-[10px] font-mono text-muted-foreground border border-hairline rounded-md px-2 py-0.5 bg-secondary/60">
-                    {course.tag}
-                  </span>
+                  {/* Title & Description */}
+                  <Link href={overviewUrl} className="group-hover:text-primary transition-colors">
+                    <h3 className="font-serif text-lg sm:text-xl font-medium text-foreground tracking-tight leading-snug">
+                      {course.title}
+                    </h3>
+                  </Link>
+                  <p className="mt-2 text-xs sm:text-sm text-muted-foreground leading-relaxed line-clamp-2">
+                    {course.desc}
+                  </p>
+
+                  {/* Interactive Capability Pill */}
+                  <div className="mt-3.5 inline-flex items-center gap-1.5 rounded-lg border border-hairline bg-secondary/60 px-2.5 py-1 text-[11px] font-mono text-foreground/85">
+                    <Sparkles className="h-3 w-3 text-primary" />
+                    <span>{course.interactiveBadge}</span>
+                  </div>
+
+                  {/* 2 Key Feature Highlights (Clean & Essential Only) */}
+                  <div className="mt-3.5 space-y-1.5 pt-3 border-t border-hairline/60">
+                    {course.features.slice(0, 2).map((feat, fIdx) => (
+                      <div key={fIdx} className="flex items-start gap-2 text-xs text-foreground/85">
+                        <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-primary mt-0.5" />
+                        <span className="leading-snug line-clamp-1">{feat}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
 
-                {/* Title & Description */}
-                <Link href={course.courseUrl} className="group-hover:text-primary transition-colors">
-                  <h3 className="font-serif text-lg sm:text-xl font-medium text-foreground tracking-tight leading-snug">
-                    {course.title}
-                  </h3>
-                </Link>
-                <p className="mt-2 text-xs sm:text-sm text-muted-foreground leading-relaxed line-clamp-2">
-                  {course.desc}
-                </p>
-
-                {/* Interactive Capability Pill */}
-                <div className="mt-3.5 inline-flex items-center gap-1.5 rounded-lg border border-hairline bg-secondary/60 px-2.5 py-1 text-[11px] font-mono text-foreground/85">
-                  <Sparkles className="h-3 w-3 text-primary" />
-                  <span>{course.interactiveBadge}</span>
-                </div>
-
-                {/* 2 Key Feature Highlights (Clean & Essential Only) */}
-                <div className="mt-3.5 space-y-1.5 pt-3 border-t border-hairline/60">
-                  {course.features.slice(0, 2).map((feat, fIdx) => (
-                    <div key={fIdx} className="flex items-start gap-2 text-xs text-foreground/85">
-                      <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-primary mt-0.5" />
-                      <span className="leading-snug line-clamp-1">{feat}</span>
-                    </div>
-                  ))}
+                {/* Actions Footer */}
+                <div className="mt-5 pt-3.5 border-t border-hairline/60 flex items-center justify-between gap-3">
+                  <Link
+                    href={playerUrl}
+                    className={`flex-1 inline-flex items-center justify-center gap-2 rounded-xl px-3.5 py-2 text-xs font-semibold shadow-xs transition-all cursor-pointer ${
+                      enrolled
+                        ? "bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 text-white hover:from-blue-700 hover:to-blue-600 shadow-blue-500/20"
+                        : "bg-primary text-primary-foreground hover:bg-primary-active"
+                    }`}
+                  >
+                    <PlayCircle className="h-3.5 w-3.5" />
+                    <span>{enrolled ? "Continue" : "Start Learning"}</span>
+                  </Link>
+                  <Link
+                    href={overviewUrl}
+                    className="inline-flex items-center justify-center gap-1 rounded-xl border border-hairline bg-secondary/50 hover:bg-secondary px-3 py-2 text-xs font-medium text-foreground transition-all cursor-pointer"
+                  >
+                    <span>Syllabus</span>
+                    <ArrowRight className="h-3 w-3 group-hover:translate-x-0.5 transition-transform" />
+                  </Link>
                 </div>
               </div>
-
-              {/* Actions Footer */}
-              <div className="mt-5 pt-3.5 border-t border-hairline/60 flex items-center justify-between gap-3">
-                <Link
-                  href={course.courseUrl}
-                  className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-3.5 py-2 text-xs font-semibold text-primary-foreground shadow-xs hover:bg-primary-active transition-all cursor-pointer"
-                >
-                  <PlayCircle className="h-3.5 w-3.5" />
-                  <span>Start Learning</span>
-                </Link>
-                <Link
-                  href={course.overviewUrl}
-                  className="inline-flex items-center justify-center gap-1 rounded-xl border border-hairline bg-secondary/50 hover:bg-secondary px-3 py-2 text-xs font-medium text-foreground transition-all cursor-pointer"
-                >
-                  <span>Syllabus</span>
-                  <ArrowRight className="h-3 w-3 group-hover:translate-x-0.5 transition-transform" />
-                </Link>
-              </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
 
         {/* Cut off Scrolling: Expand / Collapse Toggle Button */}

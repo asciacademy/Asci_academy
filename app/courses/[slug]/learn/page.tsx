@@ -73,7 +73,7 @@ export default function LearnDashboard({ params }: { params: Promise<{ slug: str
                         </p>
                     </div>
                     <div className="p-5 border border-border bg-card rounded-xl shadow-sm">
-                        <div className="h-9 w-9 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center mb-3">
+                        <div className="h-9 w-9 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-3">
                             <ShieldCheck className="h-4 w-4" />
                         </div>
                         <h3 className="font-serif text-base font-normal text-foreground mb-1">Automated Test Suites</h3>
@@ -85,7 +85,7 @@ export default function LearnDashboard({ params }: { params: Promise<{ slug: str
 
                 <div className="flex items-center gap-6 text-xs text-muted-foreground pt-4 border-t border-border">
                     <div className="flex items-center gap-2">
-                        <span className="h-2 w-2 rounded-full bg-[#ea580c] animate-pulse" />
+                        <span className="h-2 w-2 rounded-full bg-blue-500 animate-pulse" />
                         <span>Environment Active</span>
                     </div>
                     <div className="flex items-center gap-2">

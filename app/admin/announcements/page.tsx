@@ -10,7 +10,7 @@ import {
 
 const TYPES = [
     { value: "info", label: "Information", color: "#3b82f6", icon: Info },
-    { value: "warning", label: "Notice", color: "#f59e0b", icon: AlertTriangle },
+    { value: "warning", label: "Notice", color: "#6366f1", icon: AlertTriangle },
     { value: "success", label: "Update", color: "#10b981", icon: Check },
     { value: "promo", label: "Special", color: "#d4b872", icon: Star },
 ]

@@ -108,8 +108,8 @@ export function UserMenu({
         {/* Avatar */}
         <span className="relative flex h-7 w-7 items-center justify-center rounded-full bg-primary/15 text-primary font-bold text-[11px] uppercase border border-primary/25 overflow-hidden shrink-0">
           <span className="absolute -top-0.5 -right-0.5 flex h-2 w-2 z-10">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ea580c] opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#ea580c] border border-background" />
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-75" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500 border border-background" />
           </span>
           {navAvatar ? (
             <img

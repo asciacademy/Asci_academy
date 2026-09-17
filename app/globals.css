@@ -10,104 +10,104 @@
 ───────────────────────────────────────────── */
 
 :root {
-  /* Core palette — Warm Editorial Cream & Ink */
-  --background: #fdfbf7;
-  --foreground: #141413;
-  --card: #f5f0e8;
-  --card-foreground: #141413;
-  --popover: #fdfbf7;
-  --popover-foreground: #141413;
-  --primary: #ea580c;
+  /* Core palette — Crisp Pure White Canvas & Modern Slate Ink · Electric Gradient Blue */
+  --background: #ffffff;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+  --primary: #2563eb;
   --primary-foreground: #ffffff;
-  --primary-active: #c2410c;
-  --secondary: #efe9de;
-  --secondary-foreground: #57534e;
-  --muted: #e7e1d8;
-  --muted-foreground: #6c6a64;
-  --accent: #ea580c;
+  --primary-active: #1d4ed8;
+  --secondary: #f8fafc;
+  --secondary-foreground: #334155;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --accent: #3b82f6;
   --accent-foreground: #ffffff;
   --destructive: #dc2626;
   --destructive-foreground: #ffffff;
-  --border: #e7e1d8;
-  --input: #e7e1d8;
-  --ring: #ea580c;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #2563eb;
 
   /* Extended surfaces */
-  --surface: #f5f0e8;
-  --surface-2: #efe9de;
-  --surface-card: #f5f0e8;
+  --surface: #ffffff;
+  --surface-2: #f8fafc;
+  --surface-card: #ffffff;
   --surface-elevated: #ffffff;
-  --surface-cream-strong: #e7e1d8;
-  --surface-dark: #11110f;
-  --surface-dark-elevated: #22211e;
-  --surface-dark-soft: #1a1917;
-  --on-dark: #f5f2ea;
-  --on-dark-soft: #a8a29e;
+  --surface-cream-strong: #f1f5f9;
+  --surface-dark: #0b0f19;
+  --surface-dark-elevated: #111827;
+  --surface-dark-soft: #0f172a;
+  --on-dark: #f8fafc;
+  --on-dark-soft: #94a3b8;
 
   /* Semantic */
-  --success: #15803d;
-  --warning: #b45309;
+  --success: #16a34a;
+  --warning: #eab308;
   --info: #0284c7;
   --error: #dc2626;
 
   /* Ink hierarchy */
-  --ink: #141413;
-  --body: #3d3d3a;
-  --body-strong: #141413;
-  --muted-soft: #8e8b82;
-  --hairline: #e7e1d8;
-  --hairline-soft: #efe9de;
+  --ink: #0f172a;
+  --body: #334155;
+  --body-strong: #0f172a;
+  --muted-soft: #94a3b8;
+  --hairline: #e2e8f0;
+  --hairline-soft: #f1f5f9;
 
   /* Shape & Elevation */
-  --radius: 0.5rem;
+  --radius: 0.625rem;
 }
 
 .dark {
-  /* Core palette — Obsidian Technical Warmth */
-  --background: #11110f;
-  --foreground: #f5f2ea;
-  --card: #1a1917;
-  --card-foreground: #f5f2ea;
-  --popover: #11110f;
-  --popover-foreground: #f5f2ea;
-  --primary: #f97316;
+  /* Core palette — Midnight Technical Obsidian */
+  --background: #0b0f19;
+  --foreground: #f8fafc;
+  --card: #111827;
+  --card-foreground: #f8fafc;
+  --popover: #0b0f19;
+  --popover-foreground: #f8fafc;
+  --primary: #3b82f6;
   --primary-foreground: #ffffff;
-  --primary-active: #ea580c;
-  --secondary: #161513;
-  --secondary-foreground: #a8a29e;
-  --muted: #22211e;
-  --muted-foreground: #a8a29e;
-  --accent: #f97316;
+  --primary-active: #2563eb;
+  --secondary: #1e293b;
+  --secondary-foreground: #cbd5e1;
+  --muted: #1e293b;
+  --muted-foreground: #94a3b8;
+  --accent: #60a5fa;
   --accent-foreground: #ffffff;
   --destructive: #ef4444;
   --destructive-foreground: #ffffff;
-  --border: rgba(255, 255, 255, 0.09);
+  --border: rgba(255, 255, 255, 0.08);
   --input: rgba(255, 255, 255, 0.12);
-  --ring: #f97316;
+  --ring: #3b82f6;
 
   /* Extended surfaces */
-  --surface: #1a1917;
-  --surface-2: #161513;
-  --surface-card: #1a1917;
-  --surface-elevated: #22211e;
-  --surface-cream-strong: #22211e;
-  --surface-dark: #0d0c0b;
-  --surface-dark-elevated: #22211e;
-  --surface-dark-soft: #161513;
-  --on-dark: #f5f2ea;
-  --on-dark-soft: #a8a29e;
+  --surface: #111827;
+  --surface-2: #1e293b;
+  --surface-card: #111827;
+  --surface-elevated: #1f293d;
+  --surface-cream-strong: #1e293b;
+  --surface-dark: #070b12;
+  --surface-dark-elevated: #1e293b;
+  --surface-dark-soft: #111827;
+  --on-dark: #f8fafc;
+  --on-dark-soft: #94a3b8;
 
   /* Semantic */
   --success: #22c55e;
-  --warning: #f59e0b;
+  --warning: #facc15;
   --info: #38bdf8;
   --error: #ef4444;
 
   /* Ink hierarchy */
-  --ink: #f5f2ea;
-  --body: #d4d4d8;
+  --ink: #f8fafc;
+  --body: #cbd5e1;
   --body-strong: #ffffff;
-  --muted-soft: #a8a29e;
+  --muted-soft: #94a3b8;
   --hairline: rgba(255, 255, 255, 0.08);
   --hairline-soft: rgba(255, 255, 255, 0.05);
 }
@@ -527,7 +527,7 @@
 }
 
 .btn-orange {
-  background-color: #ea580c;
+  background: linear-gradient(135deg, #2563eb, #4f46e5);
   color: #ffffff;
   padding: 8px 18px;
   border-radius: var(--radius-md);
@@ -539,12 +539,12 @@
   justify-content: center;
   gap: 8px;
   cursor: pointer;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
 }
 
 .btn-orange:hover {
-  background-color: #c2410c;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  background: linear-gradient(135deg, #1d4ed8, #4338ca);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
 }
 
 /* ─────────────────────────────────────────────
@@ -714,7 +714,7 @@ html {
   transition: border-color 0.2s, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s;
 }
 .card-glow-orange:hover {
-  border-color: rgba(234, 88, 12, 0.5);
+  border-color: rgba(37, 99, 235, 0.5);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.05);
 }
@@ -739,9 +739,9 @@ html {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, rgb(234 88 12 / 0.15) 0%, rgb(234 88 12 / 0.08) 100%);
-  border: 1px solid rgb(234 88 12 / 0.2);
-  color: #ea580c;
+  background: linear-gradient(135deg, rgb(37 99 235 / 0.15) 0%, rgb(37 99 235 / 0.08) 100%);
+  border: 1px solid rgb(37 99 235 / 0.25);
+  color: #2563eb;
   border-radius: 12px;
   flex-shrink: 0;
 }
@@ -783,23 +783,23 @@ html {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, rgb(245 158 11 / 0.15) 0%, rgb(245 158 11 / 0.06) 100%);
-  border: 1px solid rgb(245 158 11 / 0.22);
-  color: #f59e0b;
+  background: linear-gradient(135deg, rgb(37 99 235 / 0.15) 0%, rgb(37 99 235 / 0.06) 100%);
+  border: 1px solid rgb(37 99 235 / 0.22);
+  color: #2563eb;
   border-radius: 12px;
   flex-shrink: 0;
 }
 
 /* Gradient colored top strip — for pillar bento cards */
 .gradient-strip-orange {
-  background: linear-gradient(90deg, #ea580c 0%, #fb923c 100%);
+  background: linear-gradient(90deg, #2563eb 0%, #60a5fa 100%);
   height: 3px;
   border-radius: 3px 3px 0 0;
   width: 100%;
 }
 
 .gradient-strip-gold {
-  background: linear-gradient(90deg, #b45309 0%, #D4B872 100%);
+  background: linear-gradient(90deg, #2563eb 0%, #60a5fa 100%);
   height: 3px;
   border-radius: 3px 3px 0 0;
   width: 100%;
@@ -838,9 +838,9 @@ html {
 }
 
 .live-pill-orange {
-  background: linear-gradient(135deg, rgb(234 88 12 / 0.12) 0%, rgb(234 88 12 / 0.06) 100%);
-  border: 1px solid rgb(234 88 12 / 0.3);
-  color: #ea580c;
+  background: linear-gradient(135deg, rgb(37 99 235 / 0.12) 0%, rgb(37 99 235 / 0.06) 100%);
+  border: 1px solid rgb(37 99 235 / 0.3);
+  color: #2563eb;
 }
 
 .live-pill-gold {
@@ -872,9 +872,9 @@ html {
 
 /* Sidebar active item — colored gradient pill treatment */
 .sidebar-active-item {
-  background: linear-gradient(135deg, rgb(234 88 12 / 0.1) 0%, rgb(234 88 12 / 0.04) 100%);
-  border: 1px solid rgb(234 88 12 / 0.2);
-  color: #ea580c;
+  background: linear-gradient(135deg, rgb(37 99 235 / 0.12) 0%, rgb(37 99 235 / 0.04) 100%);
+  border: 1px solid rgb(37 99 235 / 0.25);
+  color: #2563eb;
 }
 
 .sidebar-active-item-gold {

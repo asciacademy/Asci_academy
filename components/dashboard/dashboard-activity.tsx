@@ -107,7 +107,7 @@ export function DashboardActivity({ totalXP, streak, userName, events = [] }: Da
             onClick={handleExport}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-hairline bg-card hover:bg-secondary text-xs font-medium text-foreground transition-all cursor-pointer shadow-xs"
           >
-            {downloadSuccess ? <Check className="w-4 h-4 text-[#ea580c]" /> : <Download className="w-4 h-4 text-primary" />}
+            {downloadSuccess ? <Check className="w-4 h-4 text-emerald-500" /> : <Download className="w-4 h-4 text-primary" />}
             <span>{downloadSuccess ? "Transcript Exported" : "Export Activity Audit"}</span>
           </button>
         </div>
@@ -151,9 +151,9 @@ export function DashboardActivity({ totalXP, streak, userName, events = [] }: Da
           <div className="flex items-center gap-2 text-xs font-mono text-muted-foreground">
             <span>Less</span>
             <div className="w-3 h-3 rounded-sm bg-secondary border border-hairline" />
-            <div className="w-3 h-3 rounded-sm bg-[#ea580c]/20" />
-            <div className="w-3 h-3 rounded-sm bg-[#ea580c]/50" />
-            <div className="w-3 h-3 rounded-sm bg-[#ea580c]" />
+            <div className="w-3 h-3 rounded-sm bg-blue-500/20" />
+            <div className="w-3 h-3 rounded-sm bg-blue-500/50" />
+            <div className="w-3 h-3 rounded-sm bg-blue-600" />
             <span>More</span>
           </div>
         </div>
@@ -163,9 +163,9 @@ export function DashboardActivity({ totalXP, streak, userName, events = [] }: Da
           <div className="grid grid-cols-7 sm:grid-cols-7 md:grid-cols-12 lg:grid-cols-18 gap-2">
             {heatmapDays.map((day, idx) => {
               let bg = "bg-secondary border-hairline"
-              if (day.intensity === "low") bg = "bg-[#ea580c]/20 border-[#ea580c]/30 text-[#141413]"
-              if (day.intensity === "med") bg = "bg-[#ea580c]/50 border-[#ea580c]/60 text-white"
-              if (day.intensity === "high") bg = "bg-[#ea580c] border-[#ea580c] text-white"
+              if (day.intensity === "low") bg = "bg-blue-500/20 border-blue-500/30 text-blue-700 dark:text-blue-300"
+              if (day.intensity === "med") bg = "bg-blue-500/50 border-blue-500/60 text-white"
+              if (day.intensity === "high") bg = "bg-gradient-to-br from-blue-600 to-indigo-600 border-blue-500 text-white shadow-sm shadow-blue-500/30"
 
               return (
                 <div
@@ -268,7 +268,7 @@ export function DashboardActivity({ totalXP, streak, userName, events = [] }: Da
                         <span
                           className={`inline-flex items-center gap-1 text-[10px] font-mono font-semibold px-2.5 py-0.5 rounded-full border uppercase tracking-wider ${
                             event.status === "Verified Pass" || event.status === "Completed"
-                              ? "bg-[#ea580c]/10 text-[#ea580c] border-[#ea580c]/30"
+                              ? "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/30"
                               : "bg-primary/10 text-primary border-primary/20"
                           }`}
                         >

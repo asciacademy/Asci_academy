@@ -112,7 +112,7 @@ export default function QuizComponent({ questions, onComplete }: QuizComponentPr
                                 className={`
                                     w-full p-4 rounded-xl border text-left transition-all duration-200 group relative overflow-hidden
                                     ${isSelected && !isSubmitted ? "bg-accent/10 border-accent/50 text-accent ring-1 ring-accent/20" : 
-                                      isCorrect ? "bg-[#ea580c]/15 border-[#ea580c]/50 text-[#ea580c]" :
+                                      isCorrect ? "bg-emerald-500/15 border-emerald-500/50 text-emerald-400 font-semibold" :
                                       isWrong ? "bg-rose-500/10 border-rose-500/50 text-rose-400" :
                                       "bg-white/5 border-white/10 text-white/60 hover:bg-white/10 hover:border-white/20"}
                                 `}
@@ -152,7 +152,7 @@ export default function QuizComponent({ questions, onComplete }: QuizComponentPr
                         </p>
                         <button
                             onClick={handleNext}
-                            className="mt-4 w-full py-3 rounded-xl bg-white text-black font-bold flex items-center justify-center gap-2 hover:bg-[#ea580c] hover:text-white transition-colors cursor-pointer"
+                            className="mt-4 w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 text-white font-bold flex items-center justify-center gap-2 shadow-md shadow-blue-500/20 transition-all cursor-pointer active:scale-95"
                         >
                             {currentStep === questions.length - 1 ? "Finish Quiz" : "Next Question"}
                             <ArrowRight size={18} />

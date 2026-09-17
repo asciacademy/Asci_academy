@@ -41,7 +41,7 @@ export function FAQ() {
 
   return (
     <section id="faq" className="relative py-20 lg:py-28 bg-background border-t border-hairline">
-      <div className="relative mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+      <div className="relative mx-auto max-w-[1400px] px-5 sm:px-6 lg:px-8">
         {/* Header with Dedicated Axel Stage */}
         <div className="relative mb-14 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
           <div className="max-w-2xl text-left">
@@ -83,7 +83,7 @@ export function FAQ() {
           </div>
         </div>
 
-        <div className="max-w-4xl mx-auto space-y-3">
+        <div className="max-w-5xl mx-auto space-y-3">
           {filtered.length === 0 && (
             <div className="text-center py-12 text-muted-foreground text-sm font-mono">
               No questions matched your search term.{" "}

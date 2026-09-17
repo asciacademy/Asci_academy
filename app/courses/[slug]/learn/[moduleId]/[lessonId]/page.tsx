@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, useMemo } from "react"
 import { getLessonContent } from "@/app/actions/courses"
 import { createClient } from "@/utils/supabase/client"
 import { recordLessonCompletion } from "@/app/actions/gamification"
@@ -40,8 +40,55 @@ import { useParams } from "next/navigation"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { generateCertificateAction } from "@/app/actions/certificates"
 import { saveLocalCertificate } from "@/lib/certificate-store"
-import { getCurriculumCourseBySlug } from "@/lib/curriculum-data"
+import { getCurriculumCourseBySlug, CURRICULUM_COURSES } from "@/lib/curriculum-data"
 import { AxelTutorDrawer } from "@/components/dsa/axel-tutor-drawer"
+
+function getInitialLessonData(slug?: string, moduleId?: string, lessonId?: string) {
+    if (!lessonId) return null
+    if (slug) {
+        const course = getCurriculumCourseBySlug(slug)
+        if (course) {
+            const mod = course.modules?.find(m => m.id === moduleId) || course.modules?.find(m => m.lessons.some(l => l.id === lessonId))
+            const found = mod?.lessons.find(l => l.id === lessonId)
+            if (found) {
+                return {
+                    lesson: {
+                        ...found,
+                        modules: {
+                            id: mod?.id || moduleId,
+                            title: mod?.title || "",
+                            sequence_order: mod?.sequence_order || 1,
+                            courses: { id: course.id, title: course.title, slug: course.slug }
+                        }
+                    },
+                    moduleInfo: mod,
+                    code: found.challenge_data?.initialCode || ""
+                }
+            }
+        }
+    }
+    for (const course of CURRICULUM_COURSES) {
+        for (const mod of course.modules) {
+            const found = mod.lessons.find(l => l.id === lessonId)
+            if (found) {
+                return {
+                    lesson: {
+                        ...found,
+                        modules: {
+                            id: mod.id,
+                            title: mod.title,
+                            sequence_order: mod.sequence_order,
+                            courses: { id: course.id, title: course.title, slug: course.slug }
+                        }
+                    },
+                    moduleInfo: mod,
+                    code: found.challenge_data?.initialCode || ""
+                }
+            }
+        }
+    }
+    return null
+}
 
 interface RunState {
     status: "idle" | "compiling" | "executing" | "completed" | "error"
@@ -63,7 +110,12 @@ export default function LessonPage() {
     const moduleId = params.moduleId as string
     const lessonId = params.lessonId as string
 
-    const [code, setCode] = useState("")
+
+    const initialData = useMemo(() => {
+        return getInitialLessonData(slug, moduleId, lessonId)
+    }, [slug, moduleId, lessonId])
+
+    const [code, setCode] = useState(() => initialData?.code || "")
     const [isClient, setIsClient] = useState(false)
     const [copiedCode, setCopiedCode] = useState(false)
     const [copiedExpected, setCopiedExpected] = useState(false)
@@ -88,33 +140,47 @@ export default function LessonPage() {
     const { isReady: pythonReady, runPython, engineName: pyEngineName, isWasmLoaded } = usePython()
     const { isReady: javaReady, runJava, isLoading: javaLoading, engineName: javaEngineName } = useJava()
 
-    const isJavaCourse = slug.startsWith("java")
+    const isJavaCourse = Boolean(slug?.startsWith("java"))
     const languageReady = isJavaCourse ? javaReady : pythonReady
     const activeEngineName = isJavaCourse ? javaEngineName : pyEngineName
 
-    const [lesson, setLesson] = useState<any>(null)
-    const [moduleInfo, setModuleInfo] = useState<any>(null)
-    const [isLoading, setIsLoading] = useState(true)
+    const [lesson, setLesson] = useState<any>(() => initialData?.lesson || null)
+    const [moduleInfo, setModuleInfo] = useState<any>(() => initialData?.moduleInfo || null)
+    const [isLoading, setIsLoading] = useState(!initialData)
     const [isSubmittingProgress, setIsSubmittingProgress] = useState(false)
 
     useEffect(() => {
         setIsClient(true)
-        const fetchContent = async () => {
-            setIsLoading(true)
-            const data = await getLessonContent(lessonId)
-            if (data) {
-                setLesson(data)
-                setModuleInfo(data.modules)
-                if (data.challenge_data?.initialCode) {
-                    setCode(data.challenge_data.initialCode)
-                }
+        const local = getInitialLessonData(slug, moduleId, lessonId)
+        if (local) {
+            setLesson(local.lesson)
+            setModuleInfo(local.moduleInfo)
+            if (local.code) {
+                setCode(local.code)
             }
             setIsLoading(false)
         }
-        if (lessonId) {
-            fetchContent()
+
+        const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(lessonId)
+        if (!local || isUuid) {
+            let isMounted = true
+            if (!local) setIsLoading(true)
+            getLessonContent(lessonId).then((data) => {
+                if (!isMounted) return
+                if (data) {
+                    setLesson(data)
+                    setModuleInfo(data.modules)
+                    if (data.challenge_data?.initialCode) {
+                        setCode(data.challenge_data.initialCode)
+                    }
+                }
+                setIsLoading(false)
+            }).catch(() => {
+                if (isMounted) setIsLoading(false)
+            })
+            return () => { isMounted = false }
         }
-    }, [lessonId])
+    }, [lessonId, slug, moduleId])
 
     const handleRunCode = useCallback(async () => {
         if (!lesson?.challenge_data) return
@@ -312,9 +378,93 @@ export default function LessonPage() {
 
     if (isLoading) {
         return (
-            <div className="flex h-full items-center justify-center p-8 text-primary text-sm bg-background">
-                <Loader2 className="h-5 w-5 animate-spin mr-2" />
-                <span>Loading lesson workspace & compiler environment...</span>
+            <div className="flex h-full flex-col lg:flex-row divide-y lg:divide-y-0 lg:divide-x divide-border bg-background animate-pulse select-none">
+                {/* Left Column: Editorial Curriculum & Lesson Guide Skeleton */}
+                <div className="flex-1 overflow-y-auto p-6 lg:p-10 space-y-6 max-w-2xl mx-auto w-full">
+                    {/* Eyebrow & Sequence skeleton */}
+                    <div className="flex items-center gap-2">
+                        <div className="h-4 w-28 rounded bg-primary/20" />
+                        <span className="text-muted-foreground">•</span>
+                        <div className="h-4 w-16 rounded bg-muted/60" />
+                    </div>
+
+                    {/* Lesson Title Skeleton */}
+                    <div className="space-y-2">
+                        <div className="h-9 sm:h-10 w-4/5 rounded-xl bg-muted/80" />
+                        <div className="h-0.5 w-12 bg-primary/40 mt-3" />
+                    </div>
+
+                    {/* Lesson Content Paragraph Skeletons */}
+                    <div className="space-y-3 pt-2">
+                        <div className="h-4 w-full rounded bg-muted/60" />
+                        <div className="h-4 w-11/12 rounded bg-muted/60" />
+                        <div className="h-4 w-5/6 rounded bg-muted/50" />
+                        <div className="h-4 w-4/5 rounded bg-muted/50" />
+                    </div>
+
+                    {/* Code Example Callout Block Skeleton */}
+                    <div className="rounded-xl border border-stone-800 bg-[#0a0a0a] p-4 space-y-2.5 shadow-md">
+                        <div className="flex items-center justify-between pb-2 border-b border-stone-800 text-[11px] font-mono text-zinc-500">
+                            <div className="h-3.5 w-24 rounded bg-zinc-800" />
+                            <div className="h-3.5 w-16 rounded bg-zinc-800" />
+                        </div>
+                        <div className="space-y-1.5 pt-1">
+                            <div className="h-3 w-3/4 rounded bg-zinc-800/80" />
+                            <div className="h-3 w-1/2 rounded bg-zinc-800/60" />
+                            <div className="h-3 w-2/3 rounded bg-zinc-800/70" />
+                        </div>
+                    </div>
+
+                    {/* Challenge Instructions Skeleton */}
+                    <div className="rounded-2xl border border-border/80 bg-card p-5 space-y-3 shadow-xs">
+                        <div className="h-4 w-36 rounded bg-primary/25" />
+                        <div className="h-3.5 w-full rounded bg-muted/60" />
+                        <div className="h-3.5 w-4/5 rounded bg-muted/50" />
+                    </div>
+                </div>
+
+                {/* Right Column: Code Editor & Execution Console Skeleton */}
+                <div className="flex-1 flex flex-col bg-[#070b12] min-h-[500px] border-t lg:border-t-0 border-border">
+                    {/* Top Editor Bar Skeleton */}
+                    <div className="h-11 border-b border-white/10 bg-[#0d131f] flex items-center justify-between px-4">
+                        <div className="flex items-center gap-2">
+                            <div className="h-6 w-24 rounded-lg bg-white/10" />
+                            <div className="h-5 w-28 rounded-full bg-blue-500/20 border border-blue-500/30" />
+                        </div>
+                        <div className="h-7 w-24 rounded-lg bg-primary/30" />
+                    </div>
+
+                    {/* Code Area Skeleton */}
+                    <div className="flex-1 p-5 font-mono space-y-2.5 bg-[#0b0f19]">
+                        {[
+                            "w-2/5", "w-3/5", "w-1/3", "w-4/5", "w-1/2",
+                            "w-2/3", "w-1/4", "w-3/4", "w-2/5", "w-1/2"
+                        ].map((width, idx) => (
+                            <div key={idx} className="flex items-center gap-4">
+                                <span className="text-[11px] text-zinc-600 select-none w-5 text-right">{idx + 1}</span>
+                                <div className={`h-3.5 ${width} rounded bg-white/10`} />
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Terminal / Console Bar Skeleton */}
+                    <div className="h-40 border-t border-white/10 bg-[#090d16] p-4 flex flex-col justify-between">
+                        <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                            <div className="flex items-center gap-2">
+                                <Terminal className="h-3.5 w-3.5 text-zinc-500" />
+                                <div className="h-3.5 w-20 rounded bg-white/10" />
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <Loader2 className="h-3.5 w-3.5 animate-spin text-primary" />
+                                <span className="text-xs font-mono text-zinc-400">Loading compiler & WASM sandbox...</span>
+                            </div>
+                        </div>
+                        <div className="space-y-1.5 py-2 font-mono">
+                            <div className="h-3 w-56 rounded bg-white/10" />
+                            <div className="h-3 w-36 rounded bg-white/5" />
+                        </div>
+                    </div>
+                </div>
             </div>
         )
     }
@@ -369,11 +519,11 @@ export default function LessonPage() {
                                 .replace(/\n/g, "<br/>")
                                 .replace(
                                     /```python<br\/>([\s\S]*?)<br\/>```/g,
-                                    '<div class="rounded-xl border border-[#222222] bg-[#0a0a0a] overflow-hidden my-6 text-[#ffffff] shadow-md"><div class="px-4 py-2 border-b border-[#222222] bg-[#000000] flex items-center justify-between text-[11px] font-mono text-[#a1a1aa]"><span>example.py</span><span class="text-[#ea580c]">Python 3.11</span></div><pre class="p-4 font-mono text-xs text-[#f4f4f5] overflow-x-auto leading-relaxed"><code>$1</code></pre></div>'
+                                    '<div class="rounded-xl border border-[#222222] bg-[#0a0a0a] overflow-hidden my-6 text-[#ffffff] shadow-md"><div class="px-4 py-2 border-b border-[#222222] bg-[#000000] flex items-center justify-between text-[11px] font-mono text-[#a1a1aa]"><span>example.py</span><span class="text-blue-400">Python 3.11</span></div><pre class="p-4 font-mono text-xs text-[#f4f4f5] overflow-x-auto leading-relaxed"><code>$1</code></pre></div>'
                                 )
                                 .replace(
                                     /```java<br\/>([\s\S]*?)<br\/>```/g,
-                                    '<div class="rounded-xl border border-[#222222] bg-[#0a0a0a] overflow-hidden my-6 text-[#ffffff] shadow-md"><div class="px-4 py-2 border-b border-[#222222] bg-[#000000] flex items-center justify-between text-[11px] font-mono text-[#a1a1aa]"><span>Main.java</span><span class="text-[#ea580c]">Java 15</span></div><pre class="p-4 font-mono text-xs text-[#f4f4f5] overflow-x-auto leading-relaxed"><code>$1</code></pre></div>'
+                                    '<div class="rounded-xl border border-[#222222] bg-[#0a0a0a] overflow-hidden my-6 text-[#ffffff] shadow-md"><div class="px-4 py-2 border-b border-[#222222] bg-[#000000] flex items-center justify-between text-[11px] font-mono text-[#a1a1aa]"><span>Main.java</span><span class="text-blue-400">Java 15</span></div><pre class="p-4 font-mono text-xs text-[#f4f4f5] overflow-x-auto leading-relaxed"><code>$1</code></pre></div>'
                                 )
                                 .replace(/`([^`]+)`/g, "<code>$1</code>")
                                 .replace(/\[FLOWCHART: (.*?)\]/g, () => '<div id="flowchart-root"></div>')
@@ -407,8 +557,8 @@ export default function LessonPage() {
                                 {/* Language and Runtime indicator */}
                                 <div className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-[#112117] border border-[#1f3829] text-xs font-mono">
                                     <span className="relative flex h-2 w-2">
-                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ea580c] opacity-75"></span>
-                                        <span className="relative inline-flex rounded-full h-2 w-2 bg-[#ea580c]"></span>
+                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-75"></span>
+                                        <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
                                     </span>
                                     <span className="text-[#f5f0e8] font-medium">
                                         {isJavaCourse ? "Java 15" : "Python 3.11"}
@@ -422,7 +572,7 @@ export default function LessonPage() {
                                 </div>
 
                                 {/* XP Badge */}
-                                <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#ea580c]/15 border border-[#ea580c]/30 text-[11px] font-mono text-[#ea580c]">
+                                <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-blue-500/15 border border-blue-500/30 text-[11px] font-mono text-blue-400">
                                     <Award className="h-3 w-3" />
                                     <span>+{lesson.xp_reward || 100} XP</span>
                                 </div>
@@ -444,7 +594,7 @@ export default function LessonPage() {
                                     title="Copy code to clipboard"
                                     className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-[#222222] bg-[#0a0a0a] text-[11px] font-mono text-[#a1a1aa] hover:text-[#ffffff] hover:bg-[#141414] transition-colors"
                                 >
-                                    {copiedCode ? <Check className="h-3 w-3 text-[#ea580c]" /> : <Copy className="h-3 w-3" />}
+                                    {copiedCode ? <Check className="h-3 w-3 text-emerald-400" /> : <Copy className="h-3 w-3" />}
                                     <span className="hidden md:inline">{copiedCode ? "Copied" : "Copy"}</span>
                                 </button>
 
@@ -454,7 +604,7 @@ export default function LessonPage() {
                                 <button
                                     onClick={() => setIsAxelOpen(true)}
                                     title="Open Axel AI Engineering Mentor"
-                                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-orange-500/40 bg-orange-500/10 hover:bg-orange-500/20 text-[11px] font-mono font-medium text-orange-400 hover:text-orange-300 transition-colors cursor-pointer shadow-2xs"
+                                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-blue-500/40 bg-blue-500/10 hover:bg-blue-500/20 text-[11px] font-mono font-medium text-blue-400 hover:text-blue-300 transition-colors cursor-pointer shadow-2xs"
                                 >
                                     <Bot className="h-3.5 w-3.5" />
                                     <span className="hidden sm:inline">Axel AI</span>
@@ -464,10 +614,10 @@ export default function LessonPage() {
                                 <button
                                     onClick={handleRunCode}
                                     disabled={!languageReady || isRunning}
-                                    className={`inline-flex items-center gap-2 rounded-lg px-4 py-1.5 text-xs font-medium transition-all shadow-md active:scale-95 cursor-pointer ${
+                                    className={`inline-flex items-center gap-2 rounded-lg px-4 py-1.5 text-xs font-semibold transition-all shadow-md active:scale-95 cursor-pointer ${
                                         isRunning
                                             ? "bg-[#1c1c1c] text-[#a1a1aa] cursor-not-allowed border border-[#2e2e2e]"
-                                            : "bg-primary hover:bg-primary-active text-primary-foreground border border-primary/30 shadow-xs"
+                                            : "bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 text-white border border-blue-500/30 shadow-md shadow-blue-500/20"
                                     }`}
                                 >
                                     {isRunning ? (
@@ -490,8 +640,8 @@ export default function LessonPage() {
                         {/* Challenge Objective Bento Card */}
                         <div className="mx-5 mt-4 p-4 rounded-xl border border-[#222222] bg-[#0a0a0a] shadow-sm relative overflow-hidden">
                             <div className="flex items-center justify-between mb-1.5">
-                                <span className="text-[11px] font-mono text-[#ea580c] uppercase tracking-wider font-medium flex items-center gap-1.5">
-                                    <ShieldCheck className="h-3.5 w-3.5 text-[#ea580c]" />
+                                <span className="text-[11px] font-mono text-blue-400 uppercase tracking-wider font-medium flex items-center gap-1.5">
+                                    <ShieldCheck className="h-3.5 w-3.5 text-blue-400" />
                                     Challenge Objective
                                 </span>
                                 {lesson.challenge_data.expectedOutput && (
@@ -499,8 +649,8 @@ export default function LessonPage() {
                                         onClick={handleCopyExpected}
                                         className="text-[10px] font-mono text-[#a1a1aa] hover:text-[#ffffff] flex items-center gap-1 transition-colors"
                                     >
-                                        {copiedExpected ? <Check className="h-2.5 w-2.5 text-[#ea580c]" /> : <Copy className="h-2.5 w-2.5" />}
-                                        <span>Target: <code className="text-[#ea580c] px-1 py-0.5 rounded bg-[#141414] border border-[#262626]">{lesson.challenge_data.expectedOutput}</code></span>
+                                        {copiedExpected ? <Check className="h-2.5 w-2.5 text-emerald-400" /> : <Copy className="h-2.5 w-2.5" />}
+                                        <span>Target: <code className="text-blue-400 px-1 py-0.5 rounded bg-[#141414] border border-[#262626]">{lesson.challenge_data.expectedOutput}</code></span>
                                     </button>
                                 )}
                             </div>
@@ -522,7 +672,7 @@ export default function LessonPage() {
                                 <div className="flex items-center gap-3 text-[10px] text-[#71717a]">
                                     <span className="hidden sm:inline">UTF-8</span>
                                     <span>4 Spaces</span>
-                                    <span className="text-[#ea580c]/70">Auto-saved</span>
+                                    <span className="text-blue-400/80">Auto-saved</span>
                                 </div>
                             </div>
 
@@ -664,8 +814,8 @@ export default function LessonPage() {
                                             </span>
                                         </div>
 
-                                        {isRunning && (
-                                            <div className="flex items-center gap-2 text-[#ea580c] py-2">
+                                         {isRunning && (
+                                            <div className="flex items-center gap-2 text-blue-400 py-2">
                                                 <Loader2 className="h-3.5 w-3.5 animate-spin" />
                                                 <span>{runState.statusMessage}</span>
                                             </div>
@@ -748,10 +898,10 @@ export default function LessonPage() {
                                             {/* Side-by-side comparison */}
                                             <div className="grid sm:grid-cols-2 gap-3">
                                                 <div className="p-3 rounded-lg border border-[#222222] bg-[#0a0a0a]">
-                                                    <span className="text-[10px] text-[#ea580c] uppercase tracking-wider block mb-1">
+                                                    <span className="text-[10px] text-blue-400 uppercase tracking-wider block mb-1">
                                                         Expected Target Output
                                                     </span>
-                                                    <pre className="p-2.5 rounded bg-black text-[#ea580c] font-mono text-xs whitespace-pre-wrap break-all border border-[#1c1c1c]">
+                                                    <pre className="p-2.5 rounded bg-black text-blue-400 font-mono text-xs whitespace-pre-wrap break-all border border-[#1c1c1c]">
                                                         {lesson.challenge_data.expectedOutput || "(no expected string specified)"}
                                                     </pre>
                                                 </div>
@@ -779,7 +929,7 @@ export default function LessonPage() {
                                 <div className="flex-1 overflow-y-auto p-4 space-y-3 font-mono text-xs">
                                     <div className="grid sm:grid-cols-2 gap-3">
                                         <div className="p-3 rounded-lg border border-[#222222] bg-[#0a0a0a]">
-                                            <span className="text-[10px] text-[#ea580c] uppercase block mb-1">Runtime Engine</span>
+                                            <span className="text-[10px] text-blue-400 uppercase block mb-1">Runtime Engine</span>
                                             <p className="text-xs text-white font-semibold">{runState.engine}</p>
                                             <p className="text-[10px] text-[#71717a] mt-1">
                                                 {isJavaCourse ? "Remote OpenJDK 15 Isolation Worker" : "In-Browser WebAssembly Virtual Machine"}
@@ -787,14 +937,14 @@ export default function LessonPage() {
                                         </div>
 
                                         <div className="p-3 rounded-lg border border-[#222222] bg-[#0a0a0a]">
-                                            <span className="text-[10px] text-[#ea580c] uppercase block mb-1">Compilation Metrics</span>
-                                            <p className="text-xs text-white">AST / Syntax Time: <span className="text-amber-400">{runState.compileMs}ms</span></p>
-                                            <p className="text-xs text-white mt-0.5">Total Exec Time: <span className="text-amber-400">{runState.executionMs}ms</span></p>
+                                            <span className="text-[10px] text-blue-400 uppercase block mb-1">Compilation Metrics</span>
+                                            <p className="text-xs text-white">AST / Syntax Time: <span className="text-blue-400">{runState.compileMs}ms</span></p>
+                                            <p className="text-xs text-white mt-0.5">Total Exec Time: <span className="text-blue-400">{runState.executionMs}ms</span></p>
                                         </div>
                                     </div>
 
                                     <div className="p-3 rounded-lg border border-[#222222] bg-[#0a0a0a]">
-                                        <span className="text-[10px] text-[#ea580c] uppercase block mb-1">Pre-Loaded Modules & Capabilities</span>
+                                        <span className="text-[10px] text-blue-400 uppercase block mb-1">Pre-Loaded Modules & Capabilities</span>
                                         <div className="flex flex-wrap gap-1.5 mt-2">
                                             {(isJavaCourse ? ["java.util.*", "java.io.*", "java.math.*", "java.lang.*"] : ["sys", "math", "collections", "itertools", "heapq", "json", "re", "random"]).map(m => (
                                                 <span key={m} className="px-2 py-0.5 rounded bg-[#141414] border border-[#262626] text-[10px] text-[#d4d4d8]">
@@ -819,7 +969,7 @@ export default function LessonPage() {
                                     <button
                                         onClick={handleComplete}
                                         disabled={isSubmittingProgress}
-                                        className="inline-flex items-center gap-2 rounded-full bg-[#ea580c] hover:bg-[#c2410c] text-white px-5 py-2 text-xs font-medium transition-all shadow-md active:scale-95"
+                                        className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 text-white px-5 py-2 text-xs font-medium transition-all shadow-md shadow-blue-500/20 active:scale-95 cursor-pointer"
                                     >
                                         {isSubmittingProgress ? (
                                             <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -847,7 +997,7 @@ export default function LessonPage() {
                         <button
                             onClick={handleComplete}
                             disabled={isSubmittingProgress}
-                            className="inline-flex items-center gap-2 rounded-full bg-primary hover:bg-primary-active text-white px-6 py-2.5 text-xs font-medium transition-all shadow-md active:scale-95 cursor-pointer"
+                            className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 text-white px-6 py-2.5 text-xs font-medium transition-all shadow-md shadow-blue-500/20 active:scale-95 cursor-pointer"
                         >
                             {isSubmittingProgress ? (
                                 <Loader2 className="h-3.5 w-3.5 animate-spin" />

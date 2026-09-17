@@ -11,6 +11,7 @@ import {
   calculateStreakDailyBonus,
   checkStreakMilestone,
 } from "@/lib/gamification"
+import { getCurriculumCourseBySlug } from "@/lib/curriculum-data"
 
 export interface GamificationActionResult {
   success: boolean
@@ -69,7 +70,7 @@ export async function recordLessonCompletion(
       .from("profiles")
       .select("id, xp, streak_count, last_active_date")
       .eq("id", user.id)
-      .single()
+      .maybeSingle()
 
     const currentXp = profile?.xp || 0
     let currentStreak = profile?.streak_count || 1
@@ -99,7 +100,7 @@ export async function recordLessonCompletion(
       .select("id, status")
       .eq("user_id", user.id)
       .eq("lesson_id", lessonId)
-      .single()
+      .maybeSingle()
 
     if (existingProgress?.status === "completed") {
       alreadyCompleted = true
@@ -145,8 +146,8 @@ export async function recordLessonCompletion(
         courseQuery = isUuid ? courseQuery.eq("id", courseSlug) : courseQuery.eq("slug", courseSlug)
         const { data: course } = await courseQuery.maybeSingle()
 
+        const courseLessonIds: string[] = []
         if (course && Array.isArray(course.modules)) {
-          const courseLessonIds: string[] = []
           course.modules.filter((m: any) => !m.is_deleted).forEach((m: any) => {
             if (Array.isArray(m.lessons)) {
               m.lessons.filter((l: any) => !l.is_deleted).forEach((l: any) => {
@@ -154,29 +155,55 @@ export async function recordLessonCompletion(
               })
             }
           })
+        }
 
-          if (courseLessonIds.length > 0) {
-            const { data: courseCompletedLessons } = await supabase
-              .from("lesson_progress")
-              .select("lesson_id")
-              .eq("user_id", user.id)
-              .eq("status", "completed")
-              .in("lesson_id", courseLessonIds)
+        // Fallback to static curriculum courses if DB has no modules/lessons
+        let courseDbId: string | null = course?.id || null
+        if (courseLessonIds.length === 0) {
+          const staticCourse = getCurriculumCourseBySlug(courseSlug)
+          if (staticCourse && Array.isArray(staticCourse.modules)) {
+            staticCourse.modules.forEach((m) => {
+              if (Array.isArray(m.lessons)) {
+                m.lessons.forEach((l) => {
+                  courseLessonIds.push(l.id)
+                })
+              }
+            })
+            if (!courseDbId) {
+              courseDbId = staticCourse.id
+            }
+          }
+        }
 
-            const completedInCourse = courseCompletedLessons?.length || 0
-            if (completedInCourse >= courseLessonIds.length) {
-              courseCompleted = true
-              xpToAward += (XP_RULES as any).COURSE_COMPLETE || 1000
+        if (courseLessonIds.length > 0) {
+          const { data: courseCompletedLessons } = await supabase
+            .from("lesson_progress")
+            .select("lesson_id")
+            .eq("user_id", user.id)
+            .eq("status", "completed")
+            .in("lesson_id", courseLessonIds)
 
-              // Update enrollment status to completed
-              await supabase
+          const completedInCourse = courseCompletedLessons?.length || 0
+          if (completedInCourse >= courseLessonIds.length) {
+            courseCompleted = true
+            xpToAward += (XP_RULES as any).COURSE_COMPLETE || 1000
+
+            // Update enrollment status to completed
+            if (courseDbId) {
+              const isDbUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(courseDbId)
+              const updateQuery = supabase
                 .from("enrollments")
                 .update({
                   status: "completed",
                   updated_at: new Date().toISOString(),
                 })
                 .eq("user_id", user.id)
-                .eq("course_id", course.id)
+
+              if (isDbUuid) {
+                await updateQuery.eq("course_id", courseDbId)
+              } else {
+                await updateQuery.eq("course_slug", courseSlug)
+              }
             }
           }
         }
@@ -276,7 +303,7 @@ export async function claimDailyTaskServer(
       .from("profiles")
       .select("id, xp, streak_count, last_active_date")
       .eq("id", user.id)
-      .single()
+      .maybeSingle()
 
     const todayStr = new Date().toISOString().split("T")[0]
     const lastActiveStr = profile?.last_active_date ? String(profile.last_active_date).split("T")[0] : null
@@ -349,7 +376,7 @@ export async function recordDailyCheckinServer(): Promise<{
       .from("profiles")
       .select("id, xp, streak_count, last_active_date")
       .eq("id", user.id)
-      .single()
+      .maybeSingle()
 
     const lastActiveStr = profile?.last_active_date ? String(profile.last_active_date).split("T")[0] : null
     let currentStreak = profile?.streak_count || 1
@@ -459,7 +486,7 @@ export async function getUserGamificationStats(providedUserId?: string): Promise
       .from("profiles")
       .select("xp, streak, streak_count, rank")
       .eq("id", targetUserId)
-      .single()
+      .maybeSingle()
 
     const { count: completedLessonsCount } = await supabase
       .from("lesson_progress")
@@ -512,3 +539,107 @@ export async function getUserGamificationStats(providedUserId?: string): Promise
     }
   }
 }
+
+/**
+ * Server Action: Award XP, update calendar streak, recalculate rank, and check badge unlocks in Supabase
+ */
+export async function awardUserXpServer(
+  amount: number,
+  reason: string = "Platform Activity"
+): Promise<{
+  success: boolean
+  newTotalXp: number
+  newLevel: number
+  newRank: string
+  newStreak: number
+  levelUp: boolean
+  message: string
+}> {
+  if (!amount || amount <= 0) {
+    return { success: false, newTotalXp: 0, newLevel: 1, newRank: "Initiate", newStreak: 0, levelUp: false, message: "Invalid XP amount" }
+  }
+
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) {
+    const levelInfo = calculateLevel(amount)
+    const rankInfo = calculateRank(amount)
+    return {
+      success: true,
+      newTotalXp: amount,
+      newLevel: levelInfo.level,
+      newRank: rankInfo.title,
+      newStreak: 1,
+      levelUp: false,
+      message: `Earned +${amount} XP (${reason})`,
+    }
+  }
+
+  try {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("id, xp, streak_count, last_active_date, rank")
+      .eq("id", user.id)
+      .maybeSingle()
+
+    const oldXp = profile?.xp ?? 0
+    const newXp = oldXp + amount
+    const oldLevel = calculateLevel(oldXp).level
+    const newLevelInfo = calculateLevel(newXp)
+    const rankInfo = calculateRank(newXp)
+    const levelUp = newLevelInfo.level > oldLevel
+
+    const todayStr = new Date().toISOString().split("T")[0]
+    const lastActiveStr = profile?.last_active_date ? String(profile.last_active_date).split("T")[0] : null
+    let currentStreak = profile?.streak_count || 1
+
+    if (!lastActiveStr) {
+      currentStreak = 1
+    } else {
+      const diffDays = getCalendarDayDifference(todayStr, lastActiveStr)
+      if (diffDays === 1) {
+        currentStreak += 1
+      } else if (diffDays > 1) {
+        currentStreak = 1
+      }
+    }
+
+    const { error: updateErr } = await supabase
+      .from("profiles")
+      .update({
+        xp: newXp,
+        streak_count: currentStreak,
+        last_active_date: todayStr,
+        rank: rankInfo.title,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", user.id)
+
+    if (updateErr) {
+      console.warn("Error persisting XP in Supabase:", updateErr)
+    }
+
+    return {
+      success: true,
+      newTotalXp: newXp,
+      newLevel: newLevelInfo.level,
+      newRank: rankInfo.title,
+      newStreak: currentStreak,
+      levelUp,
+      message: `Earned +${amount} XP: ${reason}`,
+    }
+  } catch (err: any) {
+    console.warn("Exception in awardUserXpServer:", err)
+    return {
+      success: false,
+      newTotalXp: 0,
+      newLevel: 1,
+      newRank: "Initiate",
+      newStreak: 0,
+      levelUp: false,
+      message: err?.message || "Failed to award XP",
+    }
+  }
+}
+

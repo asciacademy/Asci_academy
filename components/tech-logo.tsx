@@ -203,14 +203,14 @@ export function TechLogo({ slug = "", className = "h-6 w-6", size }: TechLogoPro
         style={inlineStyle}
         aria-label="Web Development"
       >
-        <rect width="128" height="128" rx="26" fill="#1C1917" stroke="#EA580C" strokeWidth="3" />
+        <rect width="128" height="128" rx="26" fill="#1C1917" stroke="#2563EB" strokeWidth="3" />
         <rect x="14" y="16" width="100" height="20" rx="6" fill="#292524" />
         <circle cx="26" cy="26" r="3.5" fill="#EF4444" />
-        <circle cx="36" cy="26" r="3.5" fill="#F59E0B" />
+        <circle cx="36" cy="26" r="3.5" fill="#3B82F6" />
         <circle cx="46" cy="26" r="3.5" fill="#10B981" />
         <path
           d="M44 60L28 76l16 16M84 60l16 16-16 16M70 52l-14 50"
-          stroke="#EA580C"
+          stroke="#2563EB"
           strokeWidth="6"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -358,12 +358,12 @@ export function TechLogo({ slug = "", className = "h-6 w-6", size }: TechLogoPro
         style={inlineStyle}
         aria-label="Artificial Intelligence"
       >
-        <rect width="128" height="128" rx="26" fill="#1C1917" stroke="#D97706" strokeWidth="3" />
-        <circle cx="64" cy="64" r="20" fill="#D97706" fillOpacity="0.2" stroke="#D97706" strokeWidth="4" />
+        <rect width="128" height="128" rx="26" fill="#1C1917" stroke="#2563EB" strokeWidth="3" />
+        <circle cx="64" cy="64" r="20" fill="#2563EB" fillOpacity="0.2" stroke="#2563EB" strokeWidth="4" />
         <circle cx="64" cy="64" r="8" fill="#FDFBF7" />
         <path
           d="M64 24v16M64 88v16M24 64h16M88 64h16M36 36l12 12M80 80l12 12M36 92l12-12M80 48l12-12"
-          stroke="#D97706"
+          stroke="#2563EB"
           strokeWidth="4"
           strokeLinecap="round"
         />
@@ -385,7 +385,7 @@ export function TechLogo({ slug = "", className = "h-6 w-6", size }: TechLogoPro
       <rect width="128" height="128" rx="26" fill="#292524" stroke="#78716C" strokeWidth="2" />
       <path
         d="M48 48L32 64l16 16M80 48l16 16-16 16M68 40l-8 48"
-        stroke="#EA580C"
+        stroke="#2563EB"
         strokeWidth="6"
         strokeLinecap="round"
         strokeLinejoin="round"

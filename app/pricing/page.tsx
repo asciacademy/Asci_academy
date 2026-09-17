@@ -42,7 +42,7 @@ export default function PricingPage() {
                     contact: ""
                 },
                 theme: {
-                    color: "#ea580c"
+                    color: "#2563eb"
                 }
             }
 

@@ -127,7 +127,7 @@ export default function JavaMasterLandingPage() {
                   21 Structured Chapters
                 </span>
                 <span className="inline-flex items-center gap-1.5 rounded-md border border-border bg-card px-2.5 py-1">
-                  <Award className="h-3.5 w-3.5 text-amber-500" />
+                  <Award className="h-3.5 w-3.5 text-blue-500" />
                   Zero Pop-up Cards
                 </span>
               </div>
@@ -156,7 +156,7 @@ export default function JavaMasterLandingPage() {
                     {
                       name: "2. Intermediate (OOPs & Concurrency)",
                       desc: "4 Pillars of OOP, Exception Safety, Generics, Collections & HashMap Internals, Virtual Threads.",
-                      color: "border-l-amber-500"
+                      color: "border-l-indigo-500"
                     },
                     {
                       name: "3. Hard (JVM Internals & Projects)",
@@ -249,7 +249,7 @@ export default function JavaMasterLandingPage() {
               const levelColor = chapter.level === "Beginner" 
                 ? "text-primary border-primary/30 bg-primary/10" 
                 : chapter.level === "Intermediate"
-                ? "text-amber-500 border-amber-500/30 bg-amber-500/10"
+                ? "text-indigo-500 border-indigo-500/30 bg-indigo-500/10"
                 : "text-rose-500 border-rose-500/30 bg-rose-500/10"
 
               return (
@@ -388,7 +388,7 @@ export default function JavaMasterLandingPage() {
                 <Binary size={14} className="text-primary" />
                 <span>Distributed Architecture Flow</span>
               </h4>
-              <div className="rounded-2xl border border-border bg-[#181715] p-5 font-mono text-xs text-[#ea580c] overflow-x-auto shadow-inner leading-relaxed">
+              <div className="rounded-2xl border border-border bg-[#181715] p-5 font-mono text-xs text-blue-400 overflow-x-auto shadow-inner leading-relaxed">
                 <pre>{activeProject.architectureFlow}</pre>
               </div>
             </div>
@@ -420,8 +420,8 @@ export default function JavaMasterLandingPage() {
                 <div className="px-4 py-2.5 border-b border-border/70 dark:border-white/10 bg-[#141413]/80 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <div className="w-2.5 h-2.5 rounded-full bg-rose-500/70" />
-                    <div className="w-2.5 h-2.5 rounded-full bg-amber-500/70" />
-                    <div className="w-2.5 h-2.5 rounded-full bg-[#ea580c]/70" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/50" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/70" />
                     <span className="ml-2 font-mono text-[11px] text-muted-foreground">production_blueprint.java</span>
                   </div>
                   <span className="text-[10px] font-mono text-primary font-semibold">Java 21 LTS</span>

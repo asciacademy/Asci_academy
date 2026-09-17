@@ -244,8 +244,8 @@ export default function AdminUsersPage() {
                                                 title={u.is_banned ? "Reinstate User" : "Suspend User"}
                                                 className={`p-1.5 rounded-lg border transition-all cursor-pointer ${
                                                     u.is_banned
-                                                        ? "border-amber-500/30 text-amber-500 bg-amber-500/10 hover:bg-amber-500/20"
-                                                        : "border-border bg-card text-muted-foreground hover:text-amber-500 hover:border-amber-500/40"
+                                                        ? "border-rose-500/30 text-rose-500 bg-rose-500/10 hover:bg-rose-500/20"
+                                                        : "border-border bg-card text-muted-foreground hover:text-rose-500 hover:border-rose-500/40"
                                                 }`}
                                             >
                                                 {u.is_banned ? <UserCheck className="h-3.5 w-3.5" /> : <UserX className="h-3.5 w-3.5" />}

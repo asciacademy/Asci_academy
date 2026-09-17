@@ -110,7 +110,7 @@ export const RANKS: RankInfo[] = [
     title: "Operative",
     minXp: 500,
     tierLevel: 2,
-    badgeColor: "bg-amber-500/15 text-amber-500 border-amber-500/30",
+    badgeColor: "bg-blue-500/15 text-blue-500 border-blue-500/30",
     description: "Active practitioner solving real-world code structures.",
   },
   {
@@ -398,8 +398,8 @@ export const BADGES_REGISTRY: Badge[] = [
 
 export const BADGE_TIER_STYLES = {
   bronze: {
-    badge: "border-amber-700/40 bg-amber-950/20 text-amber-500",
-    glow: "rgba(180, 83, 9, 0.2)",
+    badge: "border-blue-700/40 bg-blue-950/20 text-blue-400",
+    glow: "rgba(37, 99, 235, 0.2)",
     label: "Bronze",
   },
   silver: {

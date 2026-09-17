@@ -223,9 +223,9 @@ export default function SortingMatrix() {
               let barColor = "bg-zinc-700";
 
               if (isSwapping) {
-                barColor = "bg-[#ea580c]";
+                barColor = "bg-blue-500";
               } else if (isComparing) {
-                barColor = "bg-amber-500";
+                barColor = "bg-indigo-500";
               } else if (isSorted) {
                 barColor = "bg-primary";
               }
@@ -255,10 +255,10 @@ export default function SortingMatrix() {
           {/* Legend */}
           <div className="p-4 border-t border-white/5 bg-black/40 flex gap-6 shrink-0 flex-wrap">
             <div className="flex items-center gap-2 text-[10px] font-mono text-zinc-500 uppercase">
-              <div className="w-3 h-3 rounded-sm bg-yellow-500" /> Comparing
+              <div className="w-3 h-3 rounded-sm bg-indigo-500" /> Comparing
             </div>
             <div className="flex items-center gap-2 text-[10px] font-mono text-zinc-500 uppercase">
-              <div className="w-3 h-3 rounded-sm bg-[#ea580c]" /> Swapping
+              <div className="w-3 h-3 rounded-sm bg-blue-500" /> Swapping
             </div>
             <div className="flex items-center gap-2 text-[10px] font-mono text-zinc-500 uppercase">
               <div className="w-3 h-3 rounded-sm bg-primary" /> Sorted
@@ -278,8 +278,8 @@ export default function SortingMatrix() {
           <div className="flex-1 overflow-y-auto p-4 font-mono text-[10px] text-zinc-300 space-y-1">
             {steps.slice(0, stepIdx + 1).map((s, i) => {
               let color = "text-zinc-300 font-medium";
-              if (s.swapping) color = "text-[#ea580c]";
-              else if (s.comparing) color = "text-yellow-500/80";
+              if (s.swapping) color = "text-blue-400 font-semibold";
+              else if (s.comparing) color = "text-indigo-400";
               if (s.message.includes("complete") || s.message.includes("locked")) color = "text-primary";
               if (s.message.includes("Sort complete")) color = "text-primary font-bold";
 

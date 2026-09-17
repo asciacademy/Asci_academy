@@ -71,7 +71,7 @@ export function Pricing() {
 
   return (
     <section id="pricing" className="relative py-20 lg:py-28 bg-background">
-      <div className="relative mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+      <div className="relative mx-auto max-w-[1400px] px-5 sm:px-6 lg:px-8">
         {/* Header */}
         {/* Header with Dedicated Axel Stage */}
         <div className="relative mb-14 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
@@ -131,7 +131,7 @@ export function Pricing() {
         </div>
 
         {/* 3-Tier Grid: Featured is Dark Navy Surface (#181715) */}
-        <div className="grid gap-6 md:grid-cols-3 max-w-6xl mx-auto">
+        <div className="grid gap-6 md:grid-cols-3 w-full">
           {plans.map((plan) => {
             const price = isYearly ? plan.priceYearly : plan.priceMonthly
             const isHighlighted = plan.highlight

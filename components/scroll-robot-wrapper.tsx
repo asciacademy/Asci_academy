@@ -1,7 +1,16 @@
 "use client"
 
-import { AxelCompanion } from "@/components/axel/axel-companion"
-import { AIAssistantWidget } from "@/components/ai-assistant-widget"
+import dynamic from "next/dynamic"
+
+const AxelCompanion = dynamic(
+  () => import("@/components/axel/axel-companion").then((mod) => mod.AxelCompanion),
+  { ssr: false }
+)
+
+const AIAssistantWidget = dynamic(
+  () => import("@/components/ai-assistant-widget").then((mod) => mod.AIAssistantWidget),
+  { ssr: false }
+)
 
 export function ScrollRobotWrapper() {
   return (
@@ -11,3 +20,4 @@ export function ScrollRobotWrapper() {
     </>
   )
 }
+

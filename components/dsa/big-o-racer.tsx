@@ -6,9 +6,9 @@ import { Activity, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const COLORS = {
-  o1: "#ea580c",
+  o1: "#10b981",
   ologn: "#3b82f6",
-  on: "#f59e0b",
+  on: "#6366f1",
   on2: "#ef4444",
 };
 
@@ -77,13 +77,13 @@ export default function BigORacer() {
       {/* Header */}
       <div className="p-4 border-b border-white/5 bg-[#050505]/95 backdrop-blur-xl flex items-center justify-between shrink-0">
         <div className="flex items-center gap-3">
-          <Activity className="text-[#f59e0b]" size={20} />
+          <Activity className="text-blue-500" size={20} />
           <h2 className="font-mono text-sm uppercase tracking-widest font-black text-zinc-100">
             Big-O Graph Racer
           </h2>
         </div>
         <div className="font-mono text-xs text-zinc-500 uppercase tracking-widest flex items-center gap-2">
-          Input Size: <span className="text-[#f59e0b] font-bold text-lg">{n}</span>
+          Input Size: <span className="text-blue-500 font-bold text-lg">{n}</span>
         </div>
       </div>
 
@@ -103,7 +103,7 @@ export default function BigORacer() {
                 max={500}
                 value={n}
                 onChange={(e) => setN(Number(e.target.value))}
-                className="flex-1 h-2 bg-zinc-800 rounded-full appearance-none cursor-pointer accent-[#f59e0b]"
+                className="flex-1 h-2 bg-zinc-800 rounded-full appearance-none cursor-pointer accent-blue-600"
               />
               <span className="text-xs font-mono text-zinc-600">500</span>
             </div>

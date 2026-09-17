@@ -121,22 +121,16 @@ export function AxelCompanion() {
   const discoverStations = useCallback((): SectionStation[] => {
     if (typeof window === "undefined") return HOME_STATIONS
 
-    const isMobileDesign = window.innerWidth < 1024
-
-    // In responsive design (mobile/tablet < 1024px):
-    // Place Axel ONLY in the hero section of the home page, with NO other stops across the entire website
-    if (isMobileDesign) {
-      if (pathname === "/") {
-        return [HOME_STATIONS[0]] // only the hero station
-      }
-      return [] // no stations on subpages in mobile viewports
-    }
-
+    // On home page: on mobile devices (<768px), keep Axel cleanly in hero section; on tablet/desktop, enable all stations
     if (pathname === "/") {
+      const isMobile = window.innerWidth < 768
+      if (isMobile) {
+        return [HOME_STATIONS[0]]
+      }
       return HOME_STATIONS
     }
 
-    // Query all registered Axel stages on this subpage (desktop viewports)
+    // Query all registered Axel stages on this page (subpages & dashboard)
     const anchorEls = document.querySelectorAll<HTMLElement>(
       '[data-axel-anchor="true"], [id$="-robot-anchor"]'
     )

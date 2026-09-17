@@ -134,7 +134,7 @@ export default function ArrayShifter() {
              <button 
                onClick={handleInsertFront}
                disabled={isSimulating || array.length >= MAX_SLOTS}
-               className="flexItems-center gap-2 px-6 py-3 bg-red-500/10 border border-red-500/30 text-red-500 hover:bg-red-500 hover:text-white disabled:opacity-50 transition-all uppercase font-mono text-xs font-bold tracking-widest cyber-corner"
+               className="flex items-center gap-2 px-6 py-3 bg-red-500/10 border border-red-500/30 text-red-500 hover:bg-red-500 hover:text-white disabled:opacity-50 transition-all uppercase font-mono text-xs font-bold tracking-widest cyber-corner"
              >
                <SkipForward size={16} />
                Insert Front O(n)
@@ -142,7 +142,7 @@ export default function ArrayShifter() {
              <button 
                onClick={handleAppendEnd}
                disabled={isSimulating || array.length >= MAX_SLOTS}
-               className="flex items-center gap-2 px-6 py-3 bg-[#ea580c]/10 border border-[#ea580c]/30 text-[#ea580c] hover:bg-[#ea580c] hover:text-black disabled:opacity-50 transition-all uppercase font-mono text-xs font-bold tracking-widest cyber-corner"
+               className="flex items-center gap-2 px-6 py-3 bg-blue-500/10 border border-blue-500/30 text-blue-400 hover:bg-gradient-to-r hover:from-blue-600 hover:to-indigo-600 hover:text-white disabled:opacity-50 transition-all uppercase font-mono text-xs font-bold tracking-widest cyber-corner cursor-pointer shadow-xs"
              >
                <FastForward size={16} />
                Append End O(1)
@@ -151,7 +151,7 @@ export default function ArrayShifter() {
              <button 
                onClick={handleReset}
                disabled={isSimulating}
-               className="p-3 bg-zinc-900 border border-zinc-700 text-zinc-400 hover:text-white transition-all cyber-corner"
+               className="p-3 bg-zinc-900 border border-zinc-700 text-zinc-400 hover:text-white transition-all cyber-corner cursor-pointer"
              >
                <RefreshCw size={16} />
              </button>
@@ -185,11 +185,11 @@ export default function ArrayShifter() {
                             let blockStyle = "bg-[#111113] border-zinc-700";
                             
                             if (isShifting) {
-                                blockStyle = "bg-amber-500/20 border-amber-500 text-amber-500";
+                                blockStyle = "bg-blue-500/20 border-blue-500 text-blue-400";
                             } else if (isNewlyInserted) {
-                                blockStyle = "bg-[#ea580c]/20 border-[#ea580c] text-[#ea580c] border-2";
+                                blockStyle = "bg-emerald-500/20 border-emerald-500 text-emerald-400 border-2";
                             } else if (index === array.length - 1 && operationCount === 1) { // Appended End
-                                blockStyle = "bg-[#ea580c]/20 border-[#ea580c] text-[#ea580c] border-2";
+                                blockStyle = "bg-emerald-500/20 border-emerald-500 text-emerald-400 border-2";
                             }
 
                             // Calculate fake X offset based on shift state for the active block
@@ -241,13 +241,13 @@ export default function ArrayShifter() {
 
             {/* Explanation Overlay */}
             <div className="absolute bottom-8 left-8 right-8 bg-black/60 backdrop-blur-xl border border-white/10 p-6 cyber-corner">
-                <h3 className="font-mono text-xs uppercase tracking-widest text-[#ea580c] mb-2 font-black">Performance Analysis</h3>
+                <h3 className="font-mono text-xs uppercase tracking-widest text-blue-400 mb-2 font-black">Performance Analysis</h3>
                 <p className="text-zinc-400 text-sm leading-relaxed">
                    When inserting at <span className="text-white font-mono">Index 0</span> (the front), the computer must individually physically shift 
                    every single existing element one slot to the right to make room. This takes <span className="text-red-400 font-mono font-bold font-italic">O(n) Linear Time</span>.
                    <br/><br/>
                    When appending to the <span className="text-white font-mono">End</span>, the computer simply drops the item into the next available empty continuous address.
-                   This takes <span className="text-[#ea580c] font-mono font-bold font-italic">O(1) Constant Time</span>.
+                   This takes <span className="text-emerald-400 font-mono font-bold font-italic">O(1) Constant Time</span>.
                 </p>
             </div>
           </div>
@@ -258,7 +258,7 @@ export default function ArrayShifter() {
            <div className="p-4 border-b border-white/5 bg-black/40 flex items-center gap-3">
               <div className="w-2 h-2 rounded-full bg-red-500/50" />
               <div className="w-2 h-2 rounded-full bg-yellow-500/50" />
-              <div className="w-2 h-2 rounded-full bg-[#ea580c]/50" />
+              <div className="w-2 h-2 rounded-full bg-blue-500/50" />
               <span className="font-mono text-[10px] uppercase font-black tracking-widest text-zinc-500 ml-4">Terminal.log</span>
            </div>
            
@@ -274,7 +274,7 @@ export default function ArrayShifter() {
                     const isFocus = i === logs.length - 1;
                     let color = isFocus ? "text-zinc-200" : "text-zinc-600";
                     if (log.includes("OP:")) color = "text-yellow-500/80";
-                    if (log.includes("SUCCESS:")) color = "text-[#ea580c]";
+                    if (log.includes("SUCCESS:")) color = "text-emerald-400 font-semibold";
                     if (log.includes("ERROR:")) color = "text-red-500";
                     
                     return (

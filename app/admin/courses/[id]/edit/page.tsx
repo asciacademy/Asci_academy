@@ -634,7 +634,7 @@ export default function EditCourseDashboard() {
                                                 ...lessonEditForm,
                                                 challenge_data: { ...(lessonEditForm.challenge_data || {}), initialCode: e.target.value }
                                             })}
-                                            className="w-full bg-[#181715] text-[#ea580c] border border-border/80 rounded-xl p-3 text-xs font-mono focus:outline-none min-h-[140px] shadow-inner"
+                                            className="w-full bg-[#181715] text-blue-400 border border-border/80 rounded-xl p-3 text-xs font-mono focus:outline-none min-h-[140px] shadow-inner"
                                         />
                                     </div>
                                     <div>

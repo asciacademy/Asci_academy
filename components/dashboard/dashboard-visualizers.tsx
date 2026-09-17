@@ -6,7 +6,6 @@ import {
   Code, Play, RotateCcw, Copy, Check, Terminal,
   Cpu, Layers, Search, GitBranch, ArrowRightLeft, Activity
 } from "lucide-react"
-import { AxelStage } from "@/components/axel/axel-stage"
 
 // Dynamically import DSA visualizer components for client-side rendering performance
 const CallStackDive = dynamic(() => import("@/components/dsa/call-stack-dive"), { ssr: false })
@@ -288,17 +287,9 @@ public class QuickSort {
         </div>
 
         <div className="flex items-center gap-4 shrink-0 self-start md:self-auto">
-          <AxelStage
-            id="dashboard-practice-robot-anchor"
-            sectionId="dashboard-practice-header"
-            label="Algorithm Engine"
-            emotion="shocked"
-            scale={0.44}
-            size="sm"
-          />
           {/* Quick status */}
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border border-hairline bg-card text-xs font-mono">
-            <span className="w-2 h-2 rounded-full bg-[#ea580c] animate-pulse" />
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-hairline bg-secondary text-xs font-mono">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             <span className="text-foreground">Wasm Engine Ready</span>
           </div>
         </div>
@@ -445,7 +436,7 @@ public class QuickSort {
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-hairline bg-card text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
                   title="Copy snippet"
                 >
-                  {codeCopied ? <Check className="w-3.5 h-3.5 text-[#ea580c]" /> : <Copy className="w-3.5 h-3.5" />}
+                  {codeCopied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
                   <span>{codeCopied ? "Copied" : "Copy"}</span>
                 </button>
 
@@ -461,7 +452,7 @@ public class QuickSort {
                 <button
                   onClick={handleRunCode}
                   disabled={isRunningCode}
-                  className="btn-primary inline-flex items-center gap-2 text-xs px-4 py-1.5 font-medium cursor-pointer shadow-sm"
+                  className="inline-flex items-center gap-2 text-xs px-4 py-1.5 font-semibold rounded-lg bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 text-white shadow-md shadow-blue-500/20 cursor-pointer active:scale-95 transition-all disabled:opacity-50"
                 >
                   <Play className="w-3.5 h-3.5" />
                   <span>{isRunningCode ? "Executing..." : "Run Code"}</span>
@@ -492,7 +483,7 @@ public class QuickSort {
                     <Terminal className="w-3.5 h-3.5 text-primary" />
                     <span>stdout terminal</span>
                   </div>
-                  <span className="text-[10px] text-[#ea580c]">Status: Clean</span>
+                  <span className="text-[10px] text-blue-400">Status: Clean</span>
                 </div>
 
                 <div className="flex-1 overflow-y-auto space-y-1.5 custom-scrollbar text-zinc-300 font-mono text-xs pr-2">
@@ -501,7 +492,7 @@ public class QuickSort {
                       key={idx}
                       className={
                         log.startsWith("✓")
-                          ? "text-[#ea580c] font-semibold"
+                          ? "text-emerald-400 font-semibold"
                           : log.startsWith("Step")
                           ? "text-zinc-200"
                           : "text-zinc-400"

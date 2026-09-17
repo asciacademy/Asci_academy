@@ -15,6 +15,8 @@ interface GoogleSignInButtonProps {
   className?: string
   /** Callback on error */
   onError?: (message: string) => void
+  /** Optional relative path to redirect after successful sign-in (e.g. /courses/dsa) */
+  next?: string
 }
 
 const GoogleLogo = ({ className = "w-[18px] h-[18px]" }: { className?: string }) => (
@@ -54,6 +56,7 @@ export function GoogleSignInButton({
   fullWidth = false,
   className = "",
   onError,
+  next,
 }: GoogleSignInButtonProps) {
   const [isLoading, setIsLoading] = useState(false)
 
@@ -63,10 +66,12 @@ export function GoogleSignInButton({
 
     try {
       const supabase = createClient()
+      const nextParam = next ? `?next=${encodeURIComponent(next)}` : ""
+      const callbackUrl = `${window.location.origin}/auth/callback${nextParam}`
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: callbackUrl,
           queryParams: {
             prompt: "select_account",
             access_type: "offline",
@@ -132,11 +137,11 @@ export function GoogleSignInButton({
       className={`
         group flex items-center justify-center gap-2.5
         rounded-full
-        bg-white dark:bg-[#FDFBF7]
-        hover:bg-gray-50 dark:hover:bg-[#f5f3ef]
-        active:bg-gray-100 dark:active:bg-[#ede9e3]
+        bg-white dark:bg-card
+        hover:bg-gray-50 dark:hover:bg-secondary
+        active:bg-gray-100 dark:active:bg-muted
         px-5 py-2.5 text-[13.5px] font-semibold
-        text-[#1f1f1f] tracking-[-0.01em]
+        text-[#1f1f1f] dark:text-foreground tracking-[-0.01em]
         transition-all cursor-pointer
         shadow-[0_1px_3px_rgba(0,0,0,0.08),0_2px_8px_rgba(0,0,0,0.04)]
         hover:shadow-[0_2px_6px_rgba(0,0,0,0.12),0_4px_12px_rgba(0,0,0,0.06)]

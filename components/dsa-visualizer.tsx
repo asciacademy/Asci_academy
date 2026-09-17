@@ -235,7 +235,7 @@ export function DSAVisualizer() {
 
   return (
     <section id="dsa-visualizer" className="relative py-20 lg:py-28 bg-background">
-      <div className="relative mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+      <div className="relative mx-auto max-w-[1400px] px-5 sm:px-6 lg:px-8">
         {/* Header */}
         {/* Header with Dedicated Axel Stage */}
         <div ref={headerRef} className="relative mb-12 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
@@ -355,7 +355,7 @@ export function DSAVisualizer() {
                   key={i}
                   className={`flex-1 rounded-t-sm transition-all duration-100 ${
                     isActive
-                      ? "bg-amber-600 dark:bg-amber-500"
+                      ? "bg-blue-600 dark:bg-blue-500"
                       : isSorted
                       ? "bg-primary"
                       : "bg-muted-foreground/25"

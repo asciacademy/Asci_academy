@@ -38,8 +38,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#fdfbf7' },
-    { media: '(prefers-color-scheme: dark)', color: '#000000' },
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#0b0f19' },
   ],
 }
 
@@ -48,11 +48,11 @@ import { AuthProvider } from "@/context/auth-context"
 import { AdminProvider } from "@/context/admin-context"
 import { UserSettingsProvider } from "@/context/user-settings-context"
 import { AxelProvider } from "@/context/axel-context"
-import { ScrollRobotWrapper } from "@/components/scroll-robot-wrapper"
 import { RouteProgressBar } from "@/components/route-progress-bar"
-import { SplashScreen } from "@/components/splash-screen"
 import { XpCelebrationToast } from "@/components/gamification/xp-celebration-toast"
 import { GoogleOneTap } from "@/components/auth/google-one-tap"
+
+import { ScrollRobotWrapper } from "@/components/scroll-robot-wrapper"
 
 export default function RootLayout({
   children,
@@ -74,7 +74,6 @@ export default function RootLayout({
                     <RouteProgressBar />
                   </Suspense>
                   <GoogleOneTap />
-                  <SplashScreen />
                   <XpCelebrationToast />
                   {children}
                   <ScrollRobotWrapper />

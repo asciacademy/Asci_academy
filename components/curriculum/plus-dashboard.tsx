@@ -58,7 +58,7 @@ export function PlusDashboard() {
       case "Network":
         return <Network className="h-5 w-5 text-blue-600 dark:text-blue-400" />
       case "Database":
-        return <Database className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+        return <Database className="h-5 w-5 text-cyan-600 dark:text-cyan-400" />
       case "Layers":
         return <Layers className="h-5 w-5 text-purple-600 dark:text-purple-400" />
       case "Code2":

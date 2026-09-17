@@ -110,11 +110,11 @@ export interface DiagnosticQuestion {
   explanation: string
 }
 
-const CORAL = "#ea580c"
-const TERRACOTTA = "#ea580c"
-const PURPLE = "#ea580c"
-const GOLD = "#ea580c"
-const EMERALD = "#ea580c"
+const CORAL = "#2563eb"
+const TERRACOTTA = "#3b82f6"
+const PURPLE = "#6366f1"
+const GOLD = "#D4B872"
+const EMERALD = "#10b981"
 
 /* ═══════════════════════════════════════════════════════════════════════════
    CURATED REFERENCE BOOKS & OFFICIAL PDF SPECIFICATIONS
@@ -125,7 +125,7 @@ export const JAVA_BOOKS_AND_PDFS: JavaBook[] = [
     title: "Effective Java (3rd Edition)",
     subtitle: "The Definitive Guide to Best Practices in Modern Java",
     author: "Joshua Bloch (Former Chief Java Architect at Google)",
-    coverColor: "from-amber-600/20 via-card to-background",
+    coverColor: "from-blue-600/20 via-card to-background",
     level: "Intermediate",
     type: "Book",
     description: "The gold standard for production Java engineering. Contains 90 actionable items covering Object creation, defensive copying, immutability, generics, enums, lambdas, streams, and concurrency invariants.",
@@ -163,7 +163,7 @@ export const JAVA_BOOKS_AND_PDFS: JavaBook[] = [
     title: "The Java® Virtual Machine Specification (Java SE 21 Edition)",
     subtitle: "Official Oracle Hardware Architecture & Bytecode Specification",
     author: "Tim Lindholm, Frank Yellin, Gilad Bracha, Alex Buckley",
-    coverColor: "from-orange-600/20 via-card to-background",
+    coverColor: "from-blue-600/20 via-card to-background",
     level: "Hard",
     type: "PDF Specification",
     description: "The authoritative engineering specification of the JVM machine architecture. Details class file structure (.class format), bytecode instruction set, verification pipeline, runtime data areas, and frame mechanics.",
@@ -199,7 +199,7 @@ export const JAVA_BOOKS_AND_PDFS: JavaBook[] = [
     title: "Designing Data-Intensive Applications",
     subtitle: "Reliability, Scalability, and Maintainability in Backend Systems",
     author: "Martin Kleppmann (University of Cambridge)",
-    coverColor: "from-amber-700/20 via-card to-background",
+    coverColor: "from-indigo-600/20 via-card to-background",
     level: "Hard",
     type: "Book",
     description: "While language-agnostic, this is the definitive systems architecture guide for Java backend engineers building microservices, transactional databases, stream processing engines (Kafka/Flink), and consensus systems.",
@@ -217,7 +217,7 @@ export const JAVA_BOOKS_AND_PDFS: JavaBook[] = [
     title: "Optimizing Java: A Practical Guide to High Performance",
     subtitle: "JVM Architecture, Garbage Collection, JIT & Microbenchmarks",
     author: "Benjamin J. Evans, James Gough, Chris Newland",
-    coverColor: "from-amber-600/20 via-card to-background",
+    coverColor: "from-blue-600/20 via-card to-background",
     level: "Hard",
     type: "Book",
     description: "A hands-on manual for dissecting JVM performance under production loads. Deep-dives into bytecode, tiered JIT compilation (C1/C2), G1GC and ZGC tuning, memory leaks, JMH benchmarks, and hardware mechanical sympathy.",

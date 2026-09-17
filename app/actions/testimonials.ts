@@ -101,8 +101,8 @@ export async function getAllTestimonialsAdmin() {
     if (!user) return { error: 'Unauthorized' }
 
     const { data: profile } = await supabase
-        .from('profiles').select('role').eq('id', user.id).single()
-    if (!profile || profile.role !== 'admin') return { error: 'Forbidden' }
+        .from('profiles').select('role').eq('id', user.id).maybeSingle()
+    if (!profile || (profile.role !== 'admin' && profile.role !== 'super_admin')) return { error: 'Forbidden' }
 
     const { data, error } = await supabase
         .from('testimonials')
@@ -123,8 +123,8 @@ export async function approveTestimonial(id: string, approved: boolean) {
     if (!user) return { error: 'Unauthorized' }
 
     const { data: profile } = await supabase
-        .from('profiles').select('role').eq('id', user.id).single()
-    if (!profile || profile.role !== 'admin') return { error: 'Forbidden' }
+        .from('profiles').select('role').eq('id', user.id).maybeSingle()
+    if (!profile || (profile.role !== 'admin' && profile.role !== 'super_admin')) return { error: 'Forbidden' }
 
     const { error } = await supabase
         .from('testimonials')
@@ -145,8 +145,8 @@ export async function deleteTestimonial(id: string) {
     if (!user) return { error: 'Unauthorized' }
 
     const { data: profile } = await supabase
-        .from('profiles').select('role').eq('id', user.id).single()
-    if (!profile || profile.role !== 'admin') return { error: 'Forbidden' }
+        .from('profiles').select('role').eq('id', user.id).maybeSingle()
+    if (!profile || (profile.role !== 'admin' && profile.role !== 'super_admin')) return { error: 'Forbidden' }
 
     const { error } = await supabase
         .from('testimonials')

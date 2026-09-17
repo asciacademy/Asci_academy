@@ -15,7 +15,12 @@ export async function GET(request: Request) {
     const code = searchParams.get('code')
     const token_hash = searchParams.get('token_hash')
     const type = searchParams.get('type') // e.g. "recovery", "invite", "email_change", "signup", "magiclink"
-    const next = searchParams.get('next') ?? '/dashboard'
+    const rawNext = searchParams.get('next') ?? '/dashboard'
+    // Ensure relative redirect and prevent open redirect
+    let safeNext = '/dashboard'
+    if (rawNext.startsWith('/') && !rawNext.startsWith('//')) {
+        safeNext = rawNext
+    }
 
     // Accurately resolve public origin behind proxies (e.g. Vercel, Docker, custom domains)
     const forwardedHost = request.headers.get('x-forwarded-host')
@@ -98,7 +103,7 @@ export async function GET(request: Request) {
 
         const redirectUrl = (profile?.role === 'admin' || profile?.role === 'super_admin')
             ? '/dashboard'
-            : next
+            : safeNext
 
         return NextResponse.redirect(`${siteOrigin}${redirectUrl}`)
     }
@@ -115,7 +120,7 @@ export async function GET(request: Request) {
         if (type === 'invite') return NextResponse.redirect(`${siteOrigin}/auth/invite`)
         if (type === 'email_change') return NextResponse.redirect(`${siteOrigin}/auth/confirm-email`)
 
-        return NextResponse.redirect(`${siteOrigin}${next}`)
+        return NextResponse.redirect(`${siteOrigin}${safeNext}`)
     }
 
     // Fallback

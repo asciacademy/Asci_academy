@@ -248,7 +248,7 @@ export function DashboardProjects() {
                 ~{selectedProject.estimatedHours} Hours
               </span>
               <span className="text-xs font-mono text-muted-foreground flex items-center gap-1">
-                <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                <Sparkles className="w-3.5 h-3.5 text-blue-500" />
                 +{selectedProject.xpReward} XP
               </span>
               <span className={`text-[10px] font-mono font-semibold px-2 py-0.5 rounded ml-auto ${

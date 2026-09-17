@@ -62,7 +62,7 @@ export function EmptyBook3DIcon({
       <line x1="72" y1="70" x2="90" y2="58" stroke="#a09d96" strokeWidth="1.2" strokeOpacity="0.3" />
 
       {/* Centered ASCI Floating Insignia */}
-      <circle cx="60" cy="42" r="3.5" fill="#ea580c" />
+      <circle cx="60" cy="42" r="3.5" fill="#2563eb" />
     </svg>
   )
 }

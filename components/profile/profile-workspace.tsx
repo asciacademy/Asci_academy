@@ -239,8 +239,8 @@ export function ProfileWorkspace({
               </div>
               <div className="w-px bg-hairline" />
               <div className="text-center">
-                <div className="font-serif text-2xl sm:text-3xl font-normal text-amber-500 flex items-center justify-center gap-1.5">
-                  <Flame className="w-5 h-5 fill-amber-500 text-amber-500" />
+                <div className="font-serif text-2xl sm:text-3xl font-normal text-blue-500 flex items-center justify-center gap-1.5">
+                  <Flame className="w-5 h-5 fill-blue-500 text-blue-500" />
                   <span>{profile?.streak_count ?? profile?.streak ?? 0}</span>
                 </div>
                 <div className="text-[11px] uppercase tracking-wider text-muted-foreground font-medium">Day Streak</div>

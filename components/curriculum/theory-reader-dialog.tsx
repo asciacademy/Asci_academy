@@ -153,7 +153,7 @@ export function TheoryReaderDialog({
                     theory.difficulty === "Advanced"
                       ? "bg-destructive/10 text-destructive border-destructive/20"
                       : theory.difficulty === "Intermediate"
-                      ? "bg-[#ea580c]/15 text-[#ea580c] border-[#ea580c]/30"
+                      ? "bg-blue-500/15 text-blue-600 dark:text-blue-400 border-blue-500/30"
                       : "bg-primary/10 text-primary border-primary/20"
                   }`}
                 >

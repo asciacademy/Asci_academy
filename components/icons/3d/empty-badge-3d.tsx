@@ -67,8 +67,8 @@ export function EmptyBadge3DIcon({
         strokeWidth="0.5"
       />
 
-      {/* Center Ruby/Coral Accent Dot */}
-      <circle cx="60" cy="54" r="2" fill="#ea580c" />
+      {/* Center Ruby/Sapphire Accent Dot */}
+      <circle cx="60" cy="54" r="2" fill="#2563eb" />
     </svg>
   )
 }

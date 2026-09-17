@@ -4,6 +4,7 @@ import { createClient } from "@/utils/supabase/server"
 import { cookies } from "next/headers"
 import crypto from "crypto"
 import { Certificate, CertificateGenerationPayload } from "@/lib/certificate-types"
+import { getCurriculumCourseBySlug } from "@/lib/curriculum-data"
 
 function generateCertificateId(): string {
   const num = Math.floor(1000 + Math.random() * 9000)
@@ -24,6 +25,7 @@ export async function generateCertificateAction(
     const supabase = await createClient()
     const cookieStore = await cookies()
     const isDemoBypass = Boolean(cookieStore.get("demo_bypass")?.value)
+    const isCourseUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(payload.courseId)
 
     let userId: string | undefined
     let userName: string = payload.recipientName || "Distinguished Scholar"
@@ -42,7 +44,7 @@ export async function generateCertificateAction(
         .from("profiles")
         .select("name, email")
         .eq("id", user.id)
-        .single()
+        .maybeSingle()
 
       if (profile?.name) {
         userName = payload.recipientName || profile.name
@@ -60,15 +62,20 @@ export async function generateCertificateAction(
 
     // Check if certificate already exists for this user and course
     if (userId && userId !== "demo-user-id") {
-      const isCourseUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(payload.courseId)
       const targetSlug = payload.courseSlug || payload.courseId
 
-      const { data: existing } = await supabase
+      let certQuery = supabase
         .from("certificates")
         .select("*")
         .eq("user_id", userId)
-        .or(`course_id.eq.${payload.courseId},course_slug.eq.${targetSlug}`)
-        .maybeSingle()
+
+      if (isCourseUuid) {
+        certQuery = certQuery.or(`course_id.eq.${payload.courseId},course_slug.eq.${targetSlug}`)
+      } else {
+        certQuery = certQuery.eq("course_slug", targetSlug)
+      }
+
+      const { data: existing } = await certQuery.maybeSingle()
 
       if (existing) {
         return { success: true, certificate: existing as Certificate }
@@ -132,12 +139,46 @@ export async function generateCertificateAction(
             }
           }
         } else {
-          // Fallback check if course row is unavailable
-          const fallbackPercent = payload.progressPercent ?? 0
-          if (fallbackPercent < 100 && !payload.isCompleted) {
-            return {
-              success: false,
-              error: `Course incomplete (${fallbackPercent}%). Certificates are strictly awarded upon 100% course completion.`
+          // Fallback check: look up in static CURRICULUM_COURSES
+          const staticCourse = getCurriculumCourseBySlug(targetSlug)
+          if (staticCourse && Array.isArray(staticCourse.modules)) {
+            let totalLessons = 0
+            const lessonIds: string[] = []
+            staticCourse.modules.forEach((m) => {
+              if (Array.isArray(m.lessons)) {
+                m.lessons.forEach((l) => {
+                  totalLessons++
+                  lessonIds.push(l.id)
+                })
+              }
+            })
+
+            if (totalLessons > 0) {
+              const { data: userProgress } = await supabase
+                .from("lesson_progress")
+                .select("lesson_id")
+                .eq("user_id", userId)
+                .eq("status", "completed")
+                .in("lesson_id", lessonIds)
+
+              const completedCount = userProgress?.length || 0
+              const percent = Math.round((completedCount / totalLessons) * 100)
+
+              if (percent < 100 && !payload.isCompleted) {
+                return {
+                  success: false,
+                  error: `Course incomplete (${completedCount}/${totalLessons} lessons completed, ${percent}%). Certificates are strictly awarded upon 100% course completion.`
+                }
+              }
+            }
+          } else {
+            // General fallback check if course definition is unavailable
+            const fallbackPercent = payload.progressPercent ?? 0
+            if (fallbackPercent < 100 && !payload.isCompleted) {
+              return {
+                success: false,
+                error: `Course incomplete (${fallbackPercent}%). Certificates are strictly awarded upon 100% course completion.`
+              }
             }
           }
         }
@@ -203,7 +244,7 @@ export async function generateCertificateAction(
           user_id: newCertificate.user_id,
           recipient_name: newCertificate.recipient_name,
           recipient_email: newCertificate.recipient_email,
-          course_id: newCertificate.course_id,
+          course_id: isCourseUuid ? newCertificate.course_id : null,
           course_title: newCertificate.course_title,
           course_slug: newCertificate.course_slug,
           issuer_name: newCertificate.issuer_name,
@@ -214,7 +255,7 @@ export async function generateCertificateAction(
           metadata: newCertificate.metadata,
         })
         .select()
-        .single()
+        .maybeSingle()
 
       if (error) {
         console.warn("Supabase certificate insert notice (using memory/fallback):", error.message)

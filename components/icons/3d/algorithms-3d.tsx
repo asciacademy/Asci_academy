@@ -43,14 +43,14 @@ export function Algorithms3DIcon({
 
       {/* Branch Connectors (Isometric depth) */}
       <line x1="55" y1="34" x2="42" y2="48" stroke="#D4B872" strokeWidth="1.75" />
-      <line x1="65" y1="34" x2="78" y2="48" stroke="#ea580c" strokeWidth="1.75" />
+      <line x1="65" y1="34" x2="78" y2="48" stroke="#2563eb" strokeWidth="1.75" />
 
       {/* Left Child Node (Level 1) */}
       <ellipse cx="42" cy="50" rx="8" ry="5" fill="#24221f" stroke="#D4B872" strokeWidth="1" />
-      <circle cx="42" cy="50" r="2.5" fill="#ea580c" />
+      <circle cx="42" cy="50" r="2.5" fill="#2563eb" />
 
       {/* Right Child Node (Level 1) */}
-      <ellipse cx="78" cy="50" rx="8" ry="5" fill="#24221f" stroke="#ea580c" strokeWidth="1" />
+      <ellipse cx="78" cy="50" rx="8" ry="5" fill="#24221f" stroke="#2563eb" strokeWidth="1" />
       <circle cx="78" cy="50" r="2.5" fill="#D4B872" />
 
       {/* Leaf Branch Connectors (Level 2) */}
@@ -62,7 +62,7 @@ export function Algorithms3DIcon({
       {/* Leaf Nodes */}
       <circle cx="32" cy="70" r="3" fill="#fdfbf7" stroke="#10b981" strokeWidth="1" />
       <circle cx="52" cy="70" r="3" fill="#141413" stroke="#D4B872" strokeWidth="1" />
-      <circle cx="68" cy="70" r="3" fill="#141413" stroke="#ea580c" strokeWidth="1" />
+      <circle cx="68" cy="70" r="3" fill="#141413" stroke="#2563eb" strokeWidth="1" />
       <circle cx="88" cy="70" r="3" fill="#fdfbf7" stroke="#D4B872" strokeWidth="1" />
     </svg>
   )

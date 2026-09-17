@@ -41,17 +41,17 @@ export function AxelSpeechBubble({
 
   // Determine state badge
   let badgeLabel = sectionLabel ? `Axel · ${sectionLabel}` : "Axel Guide"
-  let badgeIcon = <Bot className="w-3 h-3 text-[#ea580c]" />
+  let badgeIcon = <Bot className="w-3 h-3 text-blue-600 dark:text-blue-400" />
 
   if (isListening) {
     badgeLabel = "Listening..."
     badgeIcon = <Mic className="w-3 h-3 text-red-400 animate-bounce" />
   } else if (isThinking) {
     badgeLabel = "Synthesizing..."
-    badgeIcon = <Brain className="w-3 h-3 text-[#ea580c] animate-spin" />
+    badgeIcon = <Brain className="w-3 h-3 text-blue-600 dark:text-blue-400 animate-spin" />
   } else if (isSpeaking) {
     badgeLabel = "Speaking..."
-    badgeIcon = <Volume2 className="w-3 h-3 text-[#ea580c] animate-pulse" />
+    badgeIcon = <Volume2 className="w-3 h-3 text-blue-600 dark:text-blue-400 animate-pulse" />
   }
 
   const { posX, posY, curW, curH, winW, winH } = anchorCoords
@@ -96,7 +96,7 @@ export function AxelSpeechBubble({
           className={`z-50 pointer-events-auto cursor-pointer select-none ${className}`}
           style={positionStyle}
         >
-          <div className="relative rounded-2xl p-3.5 bg-[#FDFBF7]/95 dark:bg-[#141414]/95 backdrop-blur-3xl border border-hairline hover:border-[#ea580c] shadow-md text-foreground text-xs leading-relaxed group transition-all duration-200">
+          <div className="relative rounded-2xl p-3.5 bg-white/95 dark:bg-card/95 backdrop-blur-3xl border border-hairline hover:border-blue-500/50 shadow-md text-foreground text-xs leading-relaxed group transition-all duration-200">
 
             {/* Header */}
             <div className="relative flex items-center gap-1.5 mb-1.5 text-[10px] font-mono tracking-wider uppercase">
@@ -104,7 +104,7 @@ export function AxelSpeechBubble({
               <span className="font-semibold text-foreground/90 font-ui tracking-wide truncate max-w-[170px]">
                 {badgeLabel}
               </span>
-              <span className="ml-auto text-[9px] text-muted-foreground/70 group-hover:text-[#ea580c] transition-colors whitespace-nowrap">
+              <span className="ml-auto text-[9px] text-muted-foreground/70 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors whitespace-nowrap">
                 Click to talk
               </span>
             </div>
@@ -115,9 +115,9 @@ export function AxelSpeechBubble({
                 <span className="flex items-center gap-1.5 text-muted-foreground italic">
                   <span>Synthesizing engineering concept</span>
                   <span className="flex gap-0.5">
-                    <span className="w-1 h-1 rounded-full bg-[#ea580c] animate-bounce [animation-delay:-0.3s]" />
-                    <span className="w-1 h-1 rounded-full bg-[#ea580c] animate-bounce [animation-delay:-0.15s]" />
-                    <span className="w-1 h-1 rounded-full bg-[#ea580c] animate-bounce" />
+                    <span className="w-1 h-1 rounded-full bg-blue-600 animate-bounce [animation-delay:-0.3s]" />
+                    <span className="w-1 h-1 rounded-full bg-blue-600 animate-bounce [animation-delay:-0.15s]" />
+                    <span className="w-1 h-1 rounded-full bg-blue-600 animate-bounce" />
                   </span>
                 </span>
               ) : (
@@ -127,7 +127,7 @@ export function AxelSpeechBubble({
 
             {/* Pointer Tail */}
             <div
-              className={`absolute w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[8px] border-t-[#FDFBF7]/95 dark:border-t-[#141414]/95 -bottom-2 ${
+              className={`absolute w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[8px] border-t-white/95 dark:border-t-card/95 -bottom-2 ${
                 isRightSide ? "right-10" : "left-10"
               }`}
             />

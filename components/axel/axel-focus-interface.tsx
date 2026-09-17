@@ -167,17 +167,17 @@ export function AxelFocusInterface({
             }
       }
     >
-      <div className="flex flex-col h-full w-full rounded-3xl bg-[#FDFBF7]/96 dark:bg-[#141414]/96 backdrop-blur-3xl border border-hairline shadow-2xl overflow-hidden">
-        {/* Warm Claude Orange Top Accent */}
-        <div className="h-0.5 w-full bg-[#ea580c]" />
+      <div className="flex flex-col h-full w-full rounded-3xl bg-white/96 dark:bg-card/96 backdrop-blur-3xl border border-hairline shadow-2xl overflow-hidden">
+        {/* Vibrant Gradient Blue Top Accent */}
+        <div className="h-1 w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500" />
 
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-hairline bg-muted/20">
           <div className="flex items-center gap-2.5">
-            <div className="relative flex items-center justify-center w-8 h-8 rounded-xl bg-primary/10 border border-primary/20 text-primary shadow-xs">
+            <div className="relative flex items-center justify-center w-8 h-8 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:text-blue-400 shadow-xs">
               <Bot className="w-4 h-4" />
               {isSpeaking && (
-                <span className="absolute -top-1 -right-1 flex h-2 w-2 rounded-full bg-[#ea580c]" />
+                <span className="absolute -top-1 -right-1 flex h-2 w-2 rounded-full bg-blue-600" />
               )}
             </div>
             <div>
@@ -185,7 +185,7 @@ export function AxelFocusInterface({
                 <span className="font-semibold text-sm tracking-tight text-foreground font-ui">
                   Axel
                 </span>
-                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[9.5px] font-mono font-medium bg-primary/10 text-primary border border-primary/20">
+                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[9.5px] font-mono font-medium bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
                   AI Mentor
                 </span>
               </div>
@@ -205,11 +205,11 @@ export function AxelFocusInterface({
             {/* Voice toggle */}
             <button
               onClick={toggleSpeech}
-              className="p-1.5 rounded-lg text-muted-foreground hover:text-[#ea580c] hover:bg-[#ea580c]/10 transition-colors cursor-pointer"
+              className="p-1.5 rounded-lg text-muted-foreground hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-500/10 transition-colors cursor-pointer"
               title={speechEnabled ? "Mute Axel's voice" : "Enable Axel's voice"}
             >
               {speechEnabled ? (
-                <Volume2 className="w-4 h-4 text-[#ea580c]" />
+                <Volume2 className="w-4 h-4 text-blue-600 dark:text-blue-400" />
               ) : (
                 <VolumeX className="w-4 h-4 text-muted-foreground" />
               )}
@@ -218,7 +218,7 @@ export function AxelFocusInterface({
             {/* Clear chat */}
             <button
               onClick={clearChat}
-              className="p-1.5 rounded-lg text-muted-foreground hover:text-[#ea580c] hover:bg-[#ea580c]/10 transition-colors cursor-pointer"
+              className="p-1.5 rounded-lg text-muted-foreground hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-500/10 transition-colors cursor-pointer"
               title="Clear conversation"
             >
               <RotateCcw className="w-4 h-4" />
@@ -227,7 +227,7 @@ export function AxelFocusInterface({
             {/* Close */}
             <button
               onClick={closeFocus}
-              className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-[#ea580c]/10 transition-colors cursor-pointer"
+              className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-blue-500/10 transition-colors cursor-pointer"
               title="Minimize Axel (Esc)"
             >
               <X className="w-4 h-4" />
@@ -250,16 +250,16 @@ export function AxelFocusInterface({
               <div
                 className={`max-w-[88%] rounded-2xl px-3.5 py-2.5 leading-relaxed ${
                   m.role === "user"
-                    ? "bg-[#181818] text-[#FDFBF7] dark:bg-[#181818] dark:text-[#FDFBF7] border border-[#ea580c]/30 rounded-tr-sm shadow-md font-ui font-medium"
-                    : "bg-[#FDFBF7]/80 dark:bg-zinc-900/80 border border-[#ea580c]/20 rounded-tl-sm text-foreground shadow-sm font-ui"
+                    ? "bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 text-white rounded-tr-sm shadow-md font-ui font-medium"
+                    : "bg-secondary/70 dark:bg-zinc-900/80 border border-hairline rounded-tl-sm text-foreground shadow-xs font-ui"
                 }`}
               >
                 <p className="whitespace-pre-wrap">{m.content}</p>
 
                 {/* Structured Study Plan Bento Box */}
                 {m.plan && (
-                  <div className="mt-3 pt-2.5 border-t border-[#ea580c]/25">
-                    <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#ea580c] mb-2 font-display">
+                  <div className="mt-3 pt-2.5 border-t border-border/60">
+                    <div className="flex items-center gap-1.5 text-[11px] font-semibold text-blue-600 dark:text-blue-400 mb-2 font-display">
                       <Clock className="w-3.5 h-3.5" />
                       <span>{m.plan.title}</span>
                     </div>
@@ -267,16 +267,16 @@ export function AxelFocusInterface({
                       {m.plan.items.map((item, i) => (
                         <div
                           key={i}
-                          className="flex items-center justify-between gap-2 p-2 rounded-xl bg-background/80 dark:bg-zinc-950/80 border border-[#ea580c]/20 text-[11px]"
+                          className="flex items-center justify-between gap-2 p-2 rounded-xl bg-background/80 dark:bg-zinc-950/80 border border-border/60 text-[11px]"
                         >
-                          <span className="font-mono text-[10px] text-[#ea580c] font-semibold px-1.5 py-0.5 rounded bg-[#ea580c]/10">
+                          <span className="font-mono text-[10px] text-blue-600 dark:text-blue-400 font-semibold px-1.5 py-0.5 rounded bg-blue-500/10">
                             {item.duration}
                           </span>
                           <span className="flex-1 font-medium font-ui">{item.label}</span>
                           {item.actionTarget && (
                             <button
                               onClick={() => handleActionClick(item.actionTarget)}
-                              className="px-2 py-0.5 rounded-lg text-[10px] font-semibold bg-[#ea580c]/20 hover:bg-[#ea580c]/30 text-[#ea580c] transition-colors cursor-pointer"
+                              className="px-2 py-0.5 rounded-lg text-[10px] font-semibold bg-blue-500/15 hover:bg-blue-500/25 text-blue-600 dark:text-blue-400 transition-colors cursor-pointer"
                             >
                               Go
                             </button>
@@ -289,10 +289,10 @@ export function AxelFocusInterface({
 
                 {/* Action CTA Button */}
                 {m.action && (
-                  <div className="mt-2.5 pt-2 border-t border-[#ea580c]/20">
+                  <div className="mt-2.5 pt-2 border-t border-border/60">
                     <button
                       onClick={() => handleActionClick(m.action?.target)}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[11px] font-semibold bg-primary text-primary-foreground hover:bg-primary-active shadow-xs transition-all cursor-pointer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[11px] font-semibold bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 text-white shadow-md shadow-blue-500/20 transition-all cursor-pointer"
                     >
                       <span>{m.action.label || "Explore"}</span>
                       <ArrowRight className="w-3 h-3" />
@@ -305,11 +305,11 @@ export function AxelFocusInterface({
 
           {/* Thinking Indicator */}
           {isThinking && (
-            <div className="flex items-center gap-2.5 p-2.5 rounded-2xl bg-primary/10 border border-primary/20 w-fit">
+            <div className="flex items-center gap-2.5 p-2.5 rounded-2xl bg-blue-500/10 border border-blue-500/20 w-fit">
               <div className="flex gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-bounce [animation-delay:-0.3s]" />
-                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-bounce [animation-delay:-0.15s]" />
-                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-bounce" />
+                <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-bounce [animation-delay:-0.3s]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-bounce [animation-delay:-0.15s]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-bounce" />
               </div>
               <span className="text-[11px] font-medium text-foreground/80 font-ui">
                 Axel is thinking...
@@ -325,7 +325,7 @@ export function AxelFocusInterface({
               <button
                 key={idx}
                 onClick={() => sendMessage(s)}
-                className="px-2.5 py-1 rounded-full text-[10px] font-medium bg-card border border-border hover:border-primary hover:text-primary text-muted-foreground whitespace-nowrap transition-colors cursor-pointer shadow-2xs"
+                className="px-2.5 py-1 rounded-full text-[10px] font-medium bg-card border border-border hover:border-blue-500/50 hover:text-blue-600 dark:hover:text-blue-400 text-muted-foreground whitespace-nowrap transition-colors cursor-pointer shadow-2xs"
               >
                 {s}
               </button>
@@ -341,7 +341,7 @@ export function AxelFocusInterface({
             className={`p-2 rounded-xl border transition-all cursor-pointer ${
               isListening
                 ? "bg-destructive text-destructive-foreground border-destructive"
-                : "bg-muted/40 hover:bg-primary/10 text-muted-foreground hover:text-primary border-border"
+                : "bg-muted/40 hover:bg-blue-500/10 text-muted-foreground hover:text-blue-600 border-border"
             }`}
             title={isListening ? "Stop listening" : "Speak to Axel"}
           >
@@ -360,14 +360,14 @@ export function AxelFocusInterface({
             onChange={(e) => setInputVal(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder={isListening ? "Listening to your voice..." : "Ask Axel a question about coding or algorithms..."}
-            className="flex-1 h-9 px-3 text-xs rounded-xl bg-background border border-hairline focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all text-foreground placeholder:text-muted-foreground font-ui"
+            className="flex-1 h-9 px-3 text-xs rounded-xl bg-background border border-hairline focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all text-foreground placeholder:text-muted-foreground font-ui"
           />
 
           {/* Send Button */}
           <button
             onClick={handleSend}
             disabled={!inputVal.trim() || isThinking}
-            className="p-2 rounded-xl bg-primary text-primary-foreground hover:bg-primary-active disabled:opacity-40 transition-opacity cursor-pointer disabled:cursor-not-allowed shadow-xs"
+            className="p-2 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 text-white disabled:opacity-40 transition-opacity cursor-pointer disabled:cursor-not-allowed shadow-md shadow-blue-500/20"
             title="Send (Enter)"
           >
             <Send className="w-4 h-4" />

@@ -49,7 +49,7 @@ export function DevOps3DIcon({
       <line x1="63" y1="53" x2="63" y2="67" stroke="#3d3a33" strokeWidth="1" />
 
       {/* Container Box 2 (Deploy / Production Stacked) */}
-      <path d="M54 36 L70 27 L86 36 L70 45 Z" fill="#2d2a24" stroke="#ea580c" strokeWidth="0.8" />
+      <path d="M54 36 L70 27 L86 36 L70 45 Z" fill="#2d2a24" stroke="#2563eb" strokeWidth="0.8" />
       <path d="M54 36 L70 45 L70 59 L54 50 Z" fill="url(#do3d-face-left)" stroke="#33312c" strokeWidth="0.5" />
       <path d="M70 45 L86 36 L86 50 L70 59 Z" fill="url(#do3d-face-right)" stroke="#252320" strokeWidth="0.5" />
 

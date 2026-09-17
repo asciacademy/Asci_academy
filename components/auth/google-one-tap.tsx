@@ -17,6 +17,9 @@ interface GoogleOneTapProps {
   disabled?: boolean
 }
 
+/** Reasons that indicate a permanent configuration issue — One Tap should not retry */
+const PERMANENT_FAILURE_REASONS = new Set(["unregistered_origin", "invalid_client", "missing_client_id"])
+
 export function GoogleOneTap({
   redirectTo,
   onPromptUnavailable,
@@ -25,12 +28,14 @@ export function GoogleOneTap({
   const { isAuthenticated, isLoading } = useAuth()
   const router = useRouter()
   const [scriptLoaded, setScriptLoaded] = useState(false)
-  const isInitializingRef = useRef(false)
   const rawNonceRef = useRef<string | null>(null)
 
   const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID
   const isEnvDisabled = process.env.NEXT_PUBLIC_DISABLE_GOOGLE_ONE_TAP === "true"
   const isDisabled = disabled || isEnvDisabled
+
+  // Guard against FedCM / One Tap dual-path firing the credential callback twice
+  const isProcessingRef = useRef(false)
 
   // Callback to handle returned Google credential and sign in with Supabase
   const handleCredentialResponse = useCallback(
@@ -40,14 +45,25 @@ export function GoogleOneTap({
         return
       }
 
+      // Prevent duplicate processing if callback fires twice (FedCM + One Tap dual-path)
+      if (isProcessingRef.current) {
+        console.info("[Google One Tap] Credential callback already in progress, skipping duplicate.")
+        return
+      }
+      isProcessingRef.current = true
+
       console.info("[Google One Tap] Received credential token. Authenticating with Supabase...")
+
+      // Capture nonce before any async work to avoid race conditions
+      const capturedNonce = rawNonceRef.current
+      rawNonceRef.current = null
 
       try {
         const supabase = createClient()
         const { data, error } = await supabase.auth.signInWithIdToken({
           provider: "google",
           token: response.credential,
-          nonce: rawNonceRef.current || undefined,
+          nonce: capturedNonce || undefined,
         })
 
         if (error) {
@@ -65,13 +81,36 @@ export function GoogleOneTap({
       } catch (err: any) {
         console.error("[Google One Tap] Authentication callback failure:", err?.message || err)
       } finally {
-        rawNonceRef.current = null
+        isProcessingRef.current = false
       }
     },
     [redirectTo, router]
   )
 
   const hasPromptedRef = useRef(false)
+  /** Tracks whether a permanent config error killed One Tap (should NOT retry) */
+  const hasPermanentFailureRef = useRef(false)
+
+  // Reset refs when the user signs out so One Tap can re-appear
+  // without requiring a full page reload.
+  // Guard: only treat it as a real sign-out if we saw a live session
+  // (not just stale localStorage that Supabase invalidated on init).
+  const prevAuthenticatedRef = useRef(isAuthenticated)
+  const hadLiveSessionRef = useRef(false)
+  useEffect(() => {
+    if (isAuthenticated) {
+      hadLiveSessionRef.current = true
+    }
+    if (prevAuthenticatedRef.current && !isAuthenticated && hadLiveSessionRef.current) {
+      // User genuinely signed out — allow One Tap to re-prompt
+      hasPromptedRef.current = false
+      hasPermanentFailureRef.current = false
+      isProcessingRef.current = false
+      rawNonceRef.current = null
+      hadLiveSessionRef.current = false
+    }
+    prevAuthenticatedRef.current = isAuthenticated
+  }, [isAuthenticated])
 
   // Initialize and display the One Tap prompt
   const initializeAndPrompt = useCallback(async () => {
@@ -91,6 +130,10 @@ export function GoogleOneTap({
     if (hasPromptedRef.current) {
       return
     }
+    // Don't retry after a permanent config error (e.g., unregistered origin)
+    if (hasPermanentFailureRef.current) {
+      return
+    }
 
     hasPromptedRef.current = true
 
@@ -99,7 +142,15 @@ export function GoogleOneTap({
       const { rawNonce, hashedNonce } = await generateNonce()
       rawNonceRef.current = rawNonce
 
-      // 2. Initialize Google Identity Services
+      // 2. Cancel any existing GIS state before re-initializing
+      //    (prevents internal errors when re-initializing after sign-out)
+      try {
+        window.google.accounts.id.cancel()
+      } catch {
+        // cancel() may throw if never initialized — safe to ignore
+      }
+
+      // 3. Initialize Google Identity Services
       window.google.accounts.id.initialize({
         client_id: clientId,
         callback: handleCredentialResponse,
@@ -111,18 +162,19 @@ export function GoogleOneTap({
         itp_support: true,
       })
 
-      // 3. Prompt user with comprehensive moment diagnostics
+      // 4. Prompt user with comprehensive moment diagnostics
       window.google.accounts.id.prompt((notification: PromptMomentNotification) => {
         if (notification.isNotDisplayed()) {
           const reason = notification.getNotDisplayedReason()
-          if (reason === "unregistered_origin" || reason === "invalid_client") {
+          if (PERMANENT_FAILURE_REASONS.has(reason)) {
             const currentOrigin = typeof window !== "undefined" ? window.location.origin : "current origin"
             console.warn(
               `[Google One Tap] Origin '${currentOrigin}' is not registered in Google Cloud Console.\n` +
               `To enable Google One Tap locally, add '${currentOrigin}' and 'http://localhost' to Authorized JavaScript origins for Client ID: ${clientId} at https://console.cloud.google.com/apis/credentials\n` +
               `To suppress One Tap locally without console noise, set NEXT_PUBLIC_DISABLE_GOOGLE_ONE_TAP="true" in .env.local.`
             )
-            hasPromptedRef.current = true
+            // Permanent config failure — do not retry
+            hasPermanentFailureRef.current = true
           } else if (reason === "suppressed_by_user") {
             console.info("[Google One Tap] Prompt suppressed because it was recently dismissed by the user. Test in Incognito or clear site cookies.")
           } else if (reason === "opt_out_or_no_session") {
@@ -143,7 +195,8 @@ export function GoogleOneTap({
       })
     } catch (err) {
       console.warn("[Google One Tap] Prompt initialization skipped:", err)
-      hasPromptedRef.current = true
+      // Transient errors should allow retry on next auth state change
+      // (hasPromptedRef is already true, but will be reset on sign-out cycle)
     }
   }, [
     isDisabled,
@@ -206,6 +259,17 @@ export function GoogleOneTap({
       initializeAndPrompt()
     }
   }, [scriptLoaded, isReadyToPrompt, isAuthenticated, isLoading, initializeAndPrompt])
+
+  // Cleanup: cancel GIS on unmount to prevent stale callbacks
+  useEffect(() => {
+    return () => {
+      try {
+        window.google?.accounts?.id?.cancel()
+      } catch {
+        // Safe to ignore — component unmounting
+      }
+    }
+  }, [])
 
   // If disabled, don't render script
   if (isDisabled) return null

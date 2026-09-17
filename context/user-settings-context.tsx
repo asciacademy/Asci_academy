@@ -13,7 +13,7 @@ export type UserSettings = {
 }
 
 const DEFAULT_SETTINGS: UserSettings = {
-    accentColor: "#ea580c",
+    accentColor: "#2563eb",
     compactMode: false,
     emailNotifs: true,
     courseUpdates: true,
@@ -33,40 +33,17 @@ const UserSettingsContext = createContext<UserSettingsContextType | undefined>(u
 const STORAGE_KEY = "asci-user-settings"
 
 function sanitizeAccentColor(color?: string): string {
-    if (!color) return "#ea580c"
+    if (!color) return "#2563eb"
     const lower = color.trim().toLowerCase()
+    // Migrate old orange colors to royal blue
     if (
-        lower.includes("green") ||
-        lower.includes("emerald") ||
-        lower.includes("lime") ||
-        lower.includes("teal") ||
-        lower.includes("39ff14") ||
-        lower.includes("062112") ||
-        lower.includes("10b981") ||
-        lower.includes("22c55e") ||
-        lower.includes("16a34a") ||
-        lower.includes("15803d") ||
-        lower.includes("059669") ||
-        lower.includes("047857") ||
-        lower.includes("5db8") ||
-        lower.includes("cc785c") ||
-        lower.includes("d4b872") ||
-        lower.includes("gold") ||
-        lower.includes("blue") ||
-        lower.includes("cyan")
+        lower === "#ea580c" ||
+        lower === "#c2410c" ||
+        lower === "#f97316" ||
+        lower.includes("orange") ||
+        lower.includes("amber")
     ) {
-        return "#ea580c"
-    }
-    if (lower.startsWith("#")) {
-        const hex = lower.replace("#", "")
-        if (hex.length === 3 || hex.length === 6) {
-            const r = parseInt(hex.length === 3 ? hex[0] + hex[0] : hex.slice(0, 2), 16)
-            const g = parseInt(hex.length === 3 ? hex[1] + hex[1] : hex.slice(2, 4), 16)
-            const b = parseInt(hex.length === 3 ? hex[2] + hex[2] : hex.slice(4, 6), 16)
-            if (!isNaN(r) && !isNaN(g) && !isNaN(b)) {
-                if (g > r && g > 80) return "#ea580c"
-            }
-        }
+        return "#2563eb"
     }
     return color
 }
@@ -98,9 +75,9 @@ export function UserSettingsProvider({ children }: { children: React.ReactNode }
         const activeColor = sanitizeAccentColor(settings.accentColor)
         document.documentElement.style.setProperty("--accent", activeColor)
         document.documentElement.style.setProperty("--primary", activeColor)
-        document.documentElement.style.setProperty("--primary-active", "#c2410c")
+        document.documentElement.style.setProperty("--primary-active", "#1d4ed8")
         document.documentElement.style.setProperty("--ring", activeColor)
-        document.documentElement.style.setProperty("--success", "#ea580c")
+        document.documentElement.style.setProperty("--success", "#10b981")
     }, [settings.accentColor, loaded])
 
     // Apply compact mode

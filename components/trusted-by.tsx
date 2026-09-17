@@ -10,7 +10,7 @@ const COMPANIES = [
 export function TrustedBy() {
     return (
         <section className="relative border-y border-hairline bg-secondary/30 py-12 overflow-hidden">
-            <div className="relative mx-auto max-w-7xl px-5 mb-8">
+            <div className="relative mx-auto max-w-[1400px] px-5 mb-8">
                 <div className="flex flex-col items-center justify-center text-center">
                     <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-hairline bg-secondary px-3 py-1 text-xs font-medium text-primary">
                         <Globe className="h-3.5 w-3.5" />

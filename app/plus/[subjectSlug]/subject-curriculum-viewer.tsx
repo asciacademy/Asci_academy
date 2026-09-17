@@ -428,7 +428,7 @@ export function SubjectCurriculumViewer({ subject }: Props) {
                                 className={cn(
                                   "rounded-lg border px-2 py-0.5 text-[10px] font-mono",
                                   isQuiz
-                                    ? "border-amber-500/30 bg-amber-500/10 text-amber-500 font-medium"
+                                    ? "border-blue-500/30 bg-blue-500/10 text-blue-500 font-medium"
                                     : "border-hairline bg-secondary text-muted-foreground"
                                 )}
                               >

@@ -28,7 +28,7 @@ export default function SignupPage() {
     if (/[^A-Za-z0-9]/.test(pass)) score += 1
 
     if (score <= 1) return { score: 1, label: "Weak (min 6 characters)", color: "text-rose-500" }
-    if (score === 2) return { score: 2, label: "Medium", color: "text-amber-500" }
+    if (score === 2) return { score: 2, label: "Medium", color: "text-blue-500" }
     if (score >= 3) return { score: 3, label: "Strong", color: "text-primary font-semibold" }
     return { score: 0, label: "Required", color: "text-muted-foreground" }
   }
@@ -201,7 +201,7 @@ export default function SignupPage() {
                 />
                 <div
                   className={`h-1 rounded-full transition-all ${
-                    strength.score >= 2 ? "bg-amber-500" : "bg-hairline"
+                    strength.score >= 2 ? "bg-blue-500" : "bg-hairline"
                   }`}
                 />
                 <div

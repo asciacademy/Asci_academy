@@ -44,10 +44,10 @@ export function R4XRobot({
     window.addEventListener("message", handleMessage)
 
 
-    // Safety fallback: if message is delayed or missed, reveal after 7s
+    // Safety fallback: if message is delayed or missed, reveal quickly
     const fallbackTimer = setTimeout(() => {
       setIsLoaded(true)
-    }, 7000)
+    }, 2000)
 
     return () => {
       window.removeEventListener("message", handleMessage)
@@ -157,15 +157,15 @@ export function R4XRobot({
       >
         <div className="relative flex items-center justify-center">
 
-          {/* Outer Emerald Orbital Ring */}
+          {/* Outer Orbital Ring */}
           <div
-            className="w-20 h-20 rounded-full border-2 border-primary/20 border-t-primary border-r-amber-500/80 animate-spin"
+            className="w-20 h-20 rounded-full border-2 border-primary/20 border-t-primary border-r-indigo-500/80 animate-spin"
             style={{ animationDuration: "1.6s" }}
           />
 
           {/* Inner Counter-Orbit Ring */}
           <div
-            className="absolute w-12 h-12 rounded-full border-2 border-foreground/15 border-b-primary/90 border-l-amber-500/70 animate-spin"
+            className="absolute w-12 h-12 rounded-full border-2 border-foreground/15 border-b-primary/90 border-l-cyan-400/70 animate-spin"
             style={{ animationDuration: "1.1s", animationDirection: "reverse" }}
           />
 
@@ -210,6 +210,9 @@ export function R4XRobot({
         src="/r4x-viewer.html"
         title="3D Robot"
         allow="autoplay; fullscreen; vr"
+        onLoad={() => {
+          setTimeout(() => setIsLoaded(true), 800)
+        }}
         className={`w-full h-full border-0 outline-none bg-transparent transition-opacity duration-700 ease-out ${
           isLoaded ? "opacity-100" : "opacity-0"
         }`}

@@ -2,6 +2,7 @@
 
 import { createClient } from "@/utils/supabase/server"
 import { revalidatePath } from "next/cache"
+import { awardUserXpServer } from "@/app/actions/gamification"
 import type {
   HackathonItem,
   JobOpportunity,
@@ -254,7 +255,7 @@ export async function getEcosystemData(): Promise<EcosystemData> {
     .select("*")
     .order("challenge_date", { ascending: false })
     .limit(1)
-    .single()
+    .maybeSingle()
 
   let potd: POTDProblem | null = null
   if (rawPotd) {
@@ -266,7 +267,7 @@ export async function getEcosystemData(): Promise<EcosystemData> {
         .select("*")
         .eq("problem_id", rawPotd.id)
         .eq("user_id", userId)
-        .single()
+        .maybeSingle()
       if (potdSub) {
         solved = potdSub.solved
         userCode = potdSub.user_code
@@ -295,7 +296,7 @@ export async function getEcosystemData(): Promise<EcosystemData> {
       .from("ambassador_profiles")
       .select("*")
       .eq("user_id", userId)
-      .single()
+      .maybeSingle()
 
     if (rawAmb) {
       ambassador = {
@@ -319,7 +320,7 @@ export async function getEcosystemData(): Promise<EcosystemData> {
       .from("ats_resumes")
       .select("*")
       .eq("user_id", userId)
-      .single()
+      .maybeSingle()
 
     if (rawResume) {
       atsResume = {
@@ -525,7 +526,7 @@ export async function bookMentorAction(bookingData: {
       booked_at: new Date().toISOString(),
     })
     .select()
-    .single()
+    .maybeSingle()
 
   if (error) {
     console.error("Error booking mentor session:", error)
@@ -569,7 +570,7 @@ export async function createTeammatePostAction(postData: {
       posted_at: new Date().toISOString(),
     })
     .select()
-    .single()
+    .maybeSingle()
 
   if (error) {
     console.error("Error creating teammate post:", error)
@@ -599,6 +600,9 @@ export async function solvePOTDAction(problemId: string, userCode: string) {
     console.error("Error recording POTD submission:", error)
     return { error: error.message }
   }
+
+  // Persist 150 XP and advance calendar streak in Supabase
+  await awardUserXpServer(150, "Solved Problem of the Day")
 
   revalidatePath("/dashboard")
   return { success: true }
@@ -650,7 +654,7 @@ export async function claimAmbassadorPerkAction(perk: string) {
     .from("ambassador_profiles")
     .select("*")
     .eq("user_id", user.id)
-    .single()
+    .maybeSingle()
 
   const currentPerks = profile?.unlocked_perks || []
   if (currentPerks.includes(perk)) return { success: true }

@@ -1,4 +1,31 @@
-import { CurriculumCourse } from "../curriculum-data"
+import { CurriculumCourse, CurriculumModule } from "../curriculum-data"
+import { pythonCourseCurriculum, Part } from "@/lib/python-course-data"
+
+function pythonCurriculumToModules(parts: Part[]): CurriculumModule[] {
+  let moduleSeq = 1
+  return parts.flatMap((part) =>
+    part.chapters.map((chapter) => ({
+      id: chapter.id || `py-mod-${moduleSeq}`,
+      title: chapter.title,
+      sequence_order: moduleSeq++,
+      description: chapter.description || `${chapter.concepts.length} production lessons with real code`,
+      lessons: chapter.concepts.map((concept, lIdx) => ({
+        id: concept.id || `${chapter.id}-les-${lIdx + 1}`,
+        title: concept.title,
+        sequence_order: lIdx + 1,
+        content_type: "challenge" as const,
+        xp_reward: 50,
+        description: concept.tldr || concept.description || "",
+        content: `${concept.description}\n\n${concept.tldr ? `> **Key Takeaway:** ${concept.tldr}` : ""}`,
+        challenge_data: {
+          initialCode: concept.code || "",
+          expectedOutput: concept.expectedOutput || "",
+          instructions: concept.exercisePrompt || concept.tldr || "Run and inspect the Python code."
+        }
+      }))
+    }))
+  )
+}
 
 export const PROGRAMMING_COURSES: CurriculumCourse[] = [
   // =========================================================================
@@ -13,7 +40,7 @@ export const PROGRAMMING_COURSES: CurriculumCourse[] = [
     level: "All Levels",
     weeks: "12 Weeks",
     duration_hours: 50,
-    lessons: 24,
+    lessons: pythonCourseCurriculum.reduce((acc, p) => acc + p.chapters.reduce((cAcc, ch) => cAcc + ch.concepts.length, 0), 0),
     projects: 3,
     certificate: "ASCI Master Certificate",
     is_premium: false,
@@ -25,31 +52,9 @@ export const PROGRAMMING_COURSES: CurriculumCourse[] = [
       "Metaprogramming: Decorators, Descriptors, Metaclasses & Dynamic Typing",
       "Enterprise Microservices Architecture with FastAPI, Pydantic & Docker"
     ],
-    modules: [
-      {
-        id: "py-master-mod-1",
-        title: "Module 1: CPython Architecture & Runtime Execution",
-        sequence_order: 1,
-        description: "Explore the CPython interpreter internals from tokenization to bytecode evaluation.",
-        lessons: [
-          {
-            id: "py-master-1-1",
-            title: "1.1 CPython Compilation Pipeline",
-            sequence_order: 1,
-            content_type: "challenge",
-            xp_reward: 50,
-            description: "Understand how Python source translates into bytecode instructions.",
-            content: "Explore the CPython execution loop.",
-            challenge_data: {
-              initialCode: "def execute():\n    return 'CPYTHON_READY'\n\nprint(execute())\n",
-              expectedOutput: "CPYTHON_READY",
-              instructions: "Run the Python pipeline script."
-            }
-          }
-        ]
-      }
-    ]
+    modules: pythonCurriculumToModules(pythonCourseCurriculum)
   },
+
   // =========================================================================
   // COURSE 1: PYTHON FOR DATA SCIENCE, AI & DEVELOPMENT
   // =========================================================================

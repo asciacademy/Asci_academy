@@ -39,7 +39,7 @@ export function Automation3DIcon({
 
       {/* Left Interlocking Isometric Gear Plate */}
       <ellipse cx="48" cy="46" rx="18" ry="10" fill="#292622" stroke="#D4B872" strokeWidth="1" />
-      <ellipse cx="48" cy="46" rx="8" ry="4.5" fill="#141413" stroke="#ea580c" strokeWidth="0.75" />
+      <ellipse cx="48" cy="46" rx="8" ry="4.5" fill="#141413" stroke="#2563eb" strokeWidth="0.75" />
       {/* Gear Teeth Pins */}
       <circle cx="48" cy="36" r="1.5" fill="#D4B872" />
       <circle cx="66" cy="46" r="1.5" fill="#D4B872" />
@@ -47,13 +47,13 @@ export function Automation3DIcon({
       <circle cx="30" cy="46" r="1.5" fill="#D4B872" />
 
       {/* Right Interlocking Isometric Gear Plate */}
-      <ellipse cx="72" cy="56" rx="16" ry="9" fill="#22201d" stroke="#ea580c" strokeWidth="1" />
+      <ellipse cx="72" cy="56" rx="16" ry="9" fill="#22201d" stroke="#2563eb" strokeWidth="1" />
       <ellipse cx="72" cy="56" rx="7" ry="4" fill="#141413" stroke="#D4B872" strokeWidth="0.75" />
       {/* Gear Teeth Pins */}
-      <circle cx="72" cy="47" r="1.5" fill="#ea580c" />
-      <circle cx="88" cy="56" r="1.5" fill="#ea580c" />
-      <circle cx="72" cy="65" r="1.5" fill="#ea580c" />
-      <circle cx="56" cy="56" r="1.5" fill="#ea580c" />
+      <circle cx="72" cy="47" r="1.5" fill="#2563eb" />
+      <circle cx="88" cy="56" r="1.5" fill="#2563eb" />
+      <circle cx="72" cy="65" r="1.5" fill="#2563eb" />
+      <circle cx="56" cy="56" r="1.5" fill="#2563eb" />
 
       {/* Synchronized Flow Circuit Trace */}
       <path

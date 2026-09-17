@@ -47,7 +47,7 @@ export function ThemeToggle({ className = "", showLabel = false }: ThemeTogglePr
       <div className="relative h-4 w-4 shrink-0 flex items-center justify-center">
         {/* Sun Icon (Visible in Dark Mode) */}
         <Sun
-          className={`absolute inset-0 h-4 w-4 text-[#f59e0b] dark:text-[#f59e0b] transition-all duration-300 ${
+          className={`absolute inset-0 h-4 w-4 text-yellow-400 dark:text-yellow-400 transition-all duration-300 ${
             isDark
               ? "rotate-0 scale-100 opacity-100"
               : "-rotate-90 scale-0 opacity-0"

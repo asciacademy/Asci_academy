@@ -46,12 +46,12 @@ export function Agents3DIcon({
       <ellipse cx="60" cy="50" rx="26" ry="10" stroke="#D4B872" strokeWidth="1.2" strokeDasharray="4 2" fill="none" />
 
       {/* Satellite Autonomous Subagent Nodes */}
-      <circle cx="34" cy="50" r="3.5" fill="#ea580c" stroke="#141413" strokeWidth="1" />
+      <circle cx="34" cy="50" r="3.5" fill="#2563eb" stroke="#141413" strokeWidth="1" />
       <circle cx="86" cy="50" r="3.5" fill="#10b981" stroke="#141413" strokeWidth="1" />
       <circle cx="60" cy="40" r="3" fill="#D4B872" />
 
       {/* Coordinated Feedback Vector Rays */}
-      <line x1="34" y1="50" x2="48" y2="44" stroke="#ea580c" strokeWidth="1.5" strokeLinecap="round" />
+      <line x1="34" y1="50" x2="48" y2="44" stroke="#2563eb" strokeWidth="1.5" strokeLinecap="round" />
       <line x1="86" y1="50" x2="72" y2="44" stroke="#10b981" strokeWidth="1.5" strokeLinecap="round" />
     </svg>
   )

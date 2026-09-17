@@ -102,7 +102,7 @@ export function SplashScreen() {
         {/* Clean Hairline Progress Indicator */}
         <div className="mt-8 w-32 sm:w-36">
           <div className="relative h-[2px] w-full overflow-hidden rounded-full bg-border">
-            <div className="h-full w-1/2 bg-[#ea580c] animate-laser-sweep rounded-full" />
+            <div className="h-full w-1/2 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 animate-laser-sweep rounded-full" />
           </div>
         </div>
       </div>
