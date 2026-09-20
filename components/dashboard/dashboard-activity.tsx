@@ -83,7 +83,9 @@ export function DashboardActivity({ totalXP, streak, userName, events = [] }: Da
       <div id="dashboard-activity-header" className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-hairline">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="badge-coral text-[10px]">Telemetry & Logs</span>
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-mono uppercase tracking-wider bg-primary/10 text-primary border border-primary/20 shrink-0 leading-none font-semibold">
+              Telemetry &amp; Logs
+            </span>
             <span className="text-xs font-mono text-muted-foreground">Historical Audit Record</span>
           </div>
           <h1 className="font-serif text-3xl font-normal tracking-tight text-foreground">
@@ -151,9 +153,9 @@ export function DashboardActivity({ totalXP, streak, userName, events = [] }: Da
           <div className="flex items-center gap-2 text-xs font-mono text-muted-foreground">
             <span>Less</span>
             <div className="w-3 h-3 rounded-sm bg-secondary border border-hairline" />
-            <div className="w-3 h-3 rounded-sm bg-blue-500/20" />
-            <div className="w-3 h-3 rounded-sm bg-blue-500/50" />
-            <div className="w-3 h-3 rounded-sm bg-blue-600" />
+            <div className="w-3 h-3 rounded-sm bg-primary/20" />
+            <div className="w-3 h-3 rounded-sm bg-primary/50" />
+            <div className="w-3 h-3 rounded-sm bg-primary" />
             <span>More</span>
           </div>
         </div>
@@ -163,9 +165,9 @@ export function DashboardActivity({ totalXP, streak, userName, events = [] }: Da
           <div className="grid grid-cols-7 sm:grid-cols-7 md:grid-cols-12 lg:grid-cols-18 gap-2">
             {heatmapDays.map((day, idx) => {
               let bg = "bg-secondary border-hairline"
-              if (day.intensity === "low") bg = "bg-blue-500/20 border-blue-500/30 text-blue-700 dark:text-blue-300"
-              if (day.intensity === "med") bg = "bg-blue-500/50 border-blue-500/60 text-white"
-              if (day.intensity === "high") bg = "bg-gradient-to-br from-blue-600 to-indigo-600 border-blue-500 text-white shadow-sm shadow-blue-500/30"
+              if (day.intensity === "low") bg = "bg-primary/20 border-primary/30 text-primary"
+              if (day.intensity === "med") bg = "bg-primary/50 border-primary/60 text-primary-foreground"
+              if (day.intensity === "high") bg = "bg-primary border-primary text-primary-foreground shadow-xs"
 
               return (
                 <div
@@ -268,7 +270,7 @@ export function DashboardActivity({ totalXP, streak, userName, events = [] }: Da
                         <span
                           className={`inline-flex items-center gap-1 text-[10px] font-mono font-semibold px-2.5 py-0.5 rounded-full border uppercase tracking-wider ${
                             event.status === "Verified Pass" || event.status === "Completed"
-                              ? "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/30"
+                              ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30"
                               : "bg-primary/10 text-primary border-primary/20"
                           }`}
                         >

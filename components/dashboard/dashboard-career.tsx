@@ -42,10 +42,10 @@ export function DashboardCareer({ initialSubTab = "jobs" }: DashboardCareerProps
           <button
             key={tab.id}
             onClick={() => setSubTab(tab.id)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer flex items-center gap-2 ${
+            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all cursor-pointer flex items-center gap-2 ${
               subTab === tab.id
-                ? "bg-blue-600 text-white font-semibold shadow-xs shadow-blue-500/20"
-                : "bg-secondary text-muted-foreground hover:text-foreground hover:bg-secondary/80"
+                ? "bg-primary text-primary-foreground font-semibold shadow-xs"
+                : "bg-secondary text-muted-foreground hover:text-foreground hover:bg-secondary/80 border border-hairline"
             }`}
           >
             <tab.icon className="w-4 h-4" />

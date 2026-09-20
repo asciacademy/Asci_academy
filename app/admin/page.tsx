@@ -8,7 +8,7 @@ import {
     Users, BookOpen, GraduationCap, MessageSquare,
     Shield, RefreshCw, Loader2, ArrowRight,
     Zap, Edit3, X, Save, Globe, EyeOff, Lock, Check,
-    TerminalSquare, Clock
+    TerminalSquare, Clock, Briefcase
 } from "lucide-react"
 
 const DIFFICULTIES = ["Beginner", "Intermediate", "Advanced", "Expert"]
@@ -102,14 +102,15 @@ export default function AdminDashboardPage() {
 
     const statCards = [
         { name: "Total Users", value: stats?.totalUsers ?? 0, icon: Users, sub: `+${stats?.newUsersToday ?? 0} today` },
-        { name: "Total Courses", value: stats?.totalCourses ?? 0, icon: BookOpen, sub: "Published & Draft" },
+        { name: "Total Courses", value: stats?.totalCourses ?? 0, icon: BookOpen, sub: "Curriculum modules" },
+        { name: "Opportunities", value: stats?.totalOpportunities ?? 0, icon: Briefcase, sub: `${stats?.totalApplications ?? 0} applications` },
         { name: "Enrollments", value: stats?.totalEnrollments ?? 0, icon: GraduationCap, sub: "Active members" },
-        { name: "Testimonials", value: stats?.totalTestimonials ?? 0, icon: MessageSquare, sub: "Reviews collected" },
     ]
 
     const quickLinks = [
         { label: "Manage Users", href: "/admin/users", icon: Users, desc: "Roles, XP, suspension" },
         { label: "Manage Courses", href: "/admin/courses", icon: BookOpen, desc: "Publish, curriculum, delete" },
+        { label: "Opportunities Hub", href: "/admin/opportunities", icon: Briefcase, desc: "Add & edit hiring drives" },
         { label: "Testimonials", href: "/admin/testimonials", icon: MessageSquare, desc: "Review & approve" },
         { label: "Announcements", href: "/admin/announcements", icon: Zap, desc: "Push site-wide banners" },
         { label: "Settings", href: "/admin/settings", icon: Shield, desc: "Platform configuration" },

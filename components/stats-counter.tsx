@@ -1,44 +1,81 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { Users, BookOpen, TrendingUp, Globe } from "lucide-react"
+import { Users, BookOpen, TrendingUp, Star, ShieldCheck, Sparkles } from "lucide-react"
 
 const stats = [
-  { value: 2400, suffix: "+", label: "Students Enrolled", sublabel: "Across 40+ countries", icon: Users },
-  { value: 94, suffix: "%", label: "Placement Rate", sublabel: "At top-tier tech companies", icon: TrendingUp },
-  { value: 12, suffix: "+", label: "Programs Available", sublabel: "Foundational to Advanced", icon: BookOpen },
-  { value: 40, suffix: "+", label: "Global Reach", sublabel: "Worldwide alumni network", icon: Globe },
+  {
+    value: 240000,
+    suffix: "+",
+    label: "Active Learners",
+    sublabel: "Across 40+ countries globally",
+    icon: Users,
+    badge: "Global Reach",
+    accent: "from-blue-600/10 to-indigo-600/5",
+  },
+  {
+    value: 94,
+    suffix: "%",
+    label: "Career Placement",
+    sublabel: "Promotions, raises, or offers",
+    icon: TrendingUp,
+    badge: "Verified Outcomes",
+    accent: "from-emerald-600/10 to-teal-600/5",
+  },
+  {
+    value: 47,
+    suffix: "+",
+    label: "Specializations & Tracks",
+    sublabel: "Aligned with industry pioneers",
+    icon: BookOpen,
+    badge: "Accredited",
+    accent: "from-purple-600/10 to-pink-600/5",
+  },
+  {
+    value: 4.9,
+    suffix: "★",
+    label: "Average Course Rating",
+    sublabel: "From 62,000+ alumni reviews",
+    icon: Star,
+    badge: "Top Rated",
+    accent: "from-amber-600/10 to-yellow-600/5",
+  },
 ]
 
-function useCountUpNumber(target: number, active: boolean) {
+function useCountUpNumber(target: number, active: boolean, isDecimal = false) {
   const [count, setCount] = useState(0)
   useEffect(() => {
     if (!active) return
     let start = 0
-    const duration = 1600
+    const duration = 1400
     const step = 16
     const steps = duration / step
     const increment = target / steps
     const timer = setInterval(() => {
       start += increment
-      if (start >= target) { clearInterval(timer); setCount(target); return }
-      setCount(Math.floor(start))
+      if (start >= target) {
+        clearInterval(timer)
+        setCount(target)
+        return
+      }
+      setCount(start)
     }, step)
     return () => clearInterval(timer)
   }, [target, active])
-  return count
+  return isDecimal ? count.toFixed(1) : Math.floor(count).toLocaleString()
 }
 
 function StatCard({ stat }: { stat: typeof stats[0] }) {
   const ref = useRef<HTMLDivElement>(null)
   const [active, setActive] = useState(false)
-  const count = useCountUpNumber(stat.value, active)
+  const isDecimal = stat.suffix === "★"
+  const count = useCountUpNumber(stat.value, active, isDecimal)
 
   useEffect(() => {
     if (!ref.current) return
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) setActive(true)
-    }, { threshold: 0.5 })
+    }, { threshold: 0.3 })
     observer.observe(ref.current)
     return () => observer.disconnect()
   }, [])
@@ -46,23 +83,41 @@ function StatCard({ stat }: { stat: typeof stats[0] }) {
   return (
     <div
       ref={ref}
-      className="group relative flex flex-col card-whisper p-6 card-interactive"
+      className="group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-stone-200/90 dark:border-stone-800/90 bg-card/80 dark:bg-card/40 backdrop-blur-md p-6 sm:p-7 transition-all duration-300 hover:border-primary/40 hover:-translate-y-1 shadow-xs hover:shadow-md"
     >
-      {/* Icon */}
-      <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-secondary text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-        <stat.icon className="h-5 w-5" />
+      <div className={`absolute -right-10 -top-10 h-32 w-32 rounded-full bg-gradient-to-br ${stat.accent} blur-2xl pointer-events-none group-hover:scale-150 transition-transform duration-500`} />
+
+      <div>
+        <div className="flex items-center justify-between gap-3 mb-6">
+          <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-hairline bg-secondary/80 text-primary transition-all group-hover:bg-primary group-hover:text-primary-foreground group-hover:scale-105 shadow-2xs">
+            <stat.icon className="h-5 w-5" />
+          </div>
+          <span className="inline-flex items-center gap-1 rounded-full border border-hairline bg-secondary/80 px-2.5 py-0.5 text-[10px] font-mono font-medium text-foreground/80">
+            <Sparkles className="h-3 w-3 text-amber-500" />
+            <span>{stat.badge}</span>
+          </span>
+        </div>
+
+        <div className="flex items-baseline gap-1">
+          <span className="font-serif text-3xl sm:text-4xl lg:text-5xl font-normal text-foreground tracking-tight">
+            {count}
+          </span>
+          <span className="font-serif text-2xl sm:text-3xl text-primary font-normal">
+            {stat.suffix}
+          </span>
+        </div>
+
+        <p className="mt-2 text-sm sm:text-base font-medium text-foreground tracking-tight">
+          {stat.label}
+        </p>
+        <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
+          {stat.sublabel}
+        </p>
       </div>
 
-      {/* Number */}
-      <div className="mt-5">
-        <div className="flex items-baseline gap-1">
-          <span className="font-serif text-3xl sm:text-4xl text-foreground" style={{ letterSpacing: '-1px' }}>
-            {count.toLocaleString()}
-          </span>
-          <span className="font-serif text-2xl text-primary">{stat.suffix}</span>
-        </div>
-        <p className="mt-2 font-medium text-foreground text-sm">{stat.label}</p>
-        <p className="mt-0.5 text-xs text-muted-foreground">{stat.sublabel}</p>
+      <div className="mt-5 pt-3.5 border-t border-hairline/60 flex items-center gap-1.5 text-[11px] font-mono text-muted-foreground">
+        <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" />
+        <span>Verified by academic records</span>
       </div>
     </div>
   )
@@ -70,16 +125,20 @@ function StatCard({ stat }: { stat: typeof stats[0] }) {
 
 export function StatsCounter() {
   return (
-    <section className="section-spacing overflow-hidden">
-      <div className="relative mx-auto max-w-[1400px] px-5 sm:px-6 lg:px-8">
-        <div className="mb-10 text-center">
-          <span className="text-caption-uppercase text-primary mb-3 inline-block">
-            Proven Results
-          </span>
-          <h2 className="font-serif text-3xl sm:text-4xl text-foreground" style={{ letterSpacing: '-0.5px' }}>
-            Helping thousands learn to code and land great jobs
+    <section className="relative py-16 lg:py-20 bg-background overflow-hidden border-b border-border/40">
+      <div className="relative mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
+        <div className="mb-10 sm:mb-12 max-w-2xl text-left">
+          <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3.5 py-1 text-[11px] font-mono font-medium text-primary uppercase tracking-widest mb-3 backdrop-blur-xs shadow-xs">
+            <span>Demonstrated Impact</span>
+          </div>
+          <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-foreground font-normal tracking-tight leading-tight">
+            Education engineered for real career transformation
           </h2>
+          <p className="mt-3 text-sm sm:text-base text-muted-foreground leading-relaxed">
+            Our curriculum and mentors empower learners from over 40 countries to master systems programming, artificial intelligence, and software engineering.
+          </p>
         </div>
+
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {stats.map((stat) => (
             <StatCard key={stat.label} stat={stat} />

@@ -7,13 +7,14 @@ import { createClient } from "@/utils/supabase/client"
 import {
     LayoutDashboard, Users, BookOpen, MessageSquare, Settings,
     Megaphone, ChevronLeft, ChevronRight, LogOut, Shield, ExternalLink,
-    Menu, X
+    Menu, X, Briefcase
 } from "lucide-react"
 
 const navLinks = [
     { name: "Overview", href: "/admin", icon: LayoutDashboard, exact: true },
     { name: "Users", href: "/admin/users", icon: Users },
     { name: "Courses", href: "/admin/courses", icon: BookOpen },
+    { name: "Opportunities", href: "/admin/opportunities", icon: Briefcase },
     { name: "Testimonials", href: "/admin/testimonials", icon: MessageSquare },
     { name: "Announcements", href: "/admin/announcements", icon: Megaphone },
     { name: "Settings", href: "/admin/settings", icon: Settings },

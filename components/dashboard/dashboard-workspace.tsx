@@ -363,11 +363,11 @@ export function DashboardWorkspace({ initialData, user }: DashboardWorkspaceProp
                 onClick={() => handleSwitchTab(item.id)}
                 className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all cursor-pointer ${
                   activeTab === item.id
-                    ? "bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 text-white font-semibold shadow-md shadow-blue-500/20"
+                    ? "bg-primary text-primary-foreground font-semibold shadow-xs"
                     : "text-muted-foreground hover:text-foreground hover:bg-secondary/60"
                 }`}
               >
-                <item.icon className={`w-[18px] h-[18px] shrink-0 ${activeTab === item.id ? "text-white" : ""}`} />
+                <item.icon className={`w-[18px] h-[18px] shrink-0 ${activeTab === item.id ? "text-primary-foreground" : ""}`} />
                 <span>{item.label}</span>
               </button>
             ))}

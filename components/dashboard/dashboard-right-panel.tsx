@@ -116,9 +116,9 @@ export function DashboardRightPanel({
           </span>
           <button
             onClick={onClosePanel}
-            className="flex items-center gap-1.5 text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 transition-colors cursor-pointer group"
+            className="flex items-center gap-1.5 text-xs font-semibold text-primary hover:text-primary-active transition-colors cursor-pointer group"
           >
-            <span className="w-4 h-4 rounded-full border border-blue-500/40 flex items-center justify-center text-[10px] group-hover:bg-blue-500/10">
+            <span className="w-4 h-4 rounded-full border border-primary/40 flex items-center justify-center text-[10px] group-hover:bg-primary/10">
               ✕
             </span>
             <span>Close Details</span>
@@ -136,13 +136,13 @@ export function DashboardRightPanel({
             <button
               type="button"
               onClick={() => setShowAvatarPicker && setShowAvatarPicker(true)}
-              className="w-16 h-16 rounded-lg overflow-hidden bg-blue-50/50 dark:bg-stone-800 border-2 border-blue-500/25 hover:border-blue-500 transition-all flex items-center justify-center relative group cursor-pointer shadow-2xs"
+              className="w-16 h-16 rounded-lg overflow-hidden bg-primary/5 dark:bg-stone-800 border-2 border-primary/25 hover:border-primary transition-all flex items-center justify-center relative group cursor-pointer shadow-2xs"
               title="Change Profile Avatar"
             >
               {effectiveAvatar ? (
                 <img src={effectiveAvatar} alt={userName} className="w-full h-full object-cover" />
               ) : (
-                <div className="w-full h-full bg-gradient-to-tr from-blue-600 via-indigo-600 to-blue-500 flex items-center justify-center text-xl font-bold text-white shadow-sm">
+                <div className="w-full h-full bg-gradient-to-tr from-primary via-emerald-800 to-primary flex items-center justify-center text-xl font-bold text-white shadow-sm">
                   {userName ? userName.charAt(0).toUpperCase() : "A"}
                 </div>
               )}
@@ -161,12 +161,12 @@ export function DashboardRightPanel({
                   value={editedName}
                   onChange={(e) => setEditedName && setEditedName(e.target.value)}
                   autoFocus
-                  className="text-sm font-bold text-foreground bg-secondary border border-blue-500 rounded-md px-2 py-0.5 w-32 focus:outline-none"
+                  className="text-sm font-bold text-foreground bg-secondary border border-primary rounded-md px-2 py-0.5 w-32 focus:outline-none"
                   disabled={isSavingName}
                 />
                 <button
                   type="submit"
-                  className="p-1 rounded bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:opacity-90 transition-opacity shadow-xs"
+                  className="p-1 rounded bg-primary text-primary-foreground hover:bg-primary-active transition-colors shadow-xs"
                   title="Save Name"
                 >
                   <Check className="w-3.5 h-3.5" />
@@ -203,8 +203,8 @@ export function DashboardRightPanel({
             </p>
 
             {/* Real Points / XP Badge */}
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-500/20 text-xs font-semibold">
-              <span className="text-blue-500">🪙</span>
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#D4B872]/15 text-[#D4B872] border border-[#D4B872]/30 text-xs font-semibold">
+              <span className="text-[#D4B872]">🪙</span>
               <span>{totalXP ? totalXP.toLocaleString() : "0"} XP</span>
             </div>
           </div>
@@ -214,7 +214,7 @@ export function DashboardRightPanel({
         <div className="grid grid-cols-3 gap-1.5 sm:gap-2 mt-4 sm:mt-5 pt-3 sm:pt-4 border-t border-border/80">
           <div className="flex flex-col items-center text-center p-2 rounded-lg bg-secondary/60">
             <div className="flex items-center gap-1 text-primary mb-0.5">
-              <Flame className="w-3.5 h-3.5 fill-blue-500/20 text-primary shrink-0" />
+              <Flame className="w-3.5 h-3.5 fill-primary/20 text-primary shrink-0" />
               <span className="font-bold text-xs sm:text-sm font-mono">{streak > 0 ? (streak < 10 ? `0${streak}` : streak) : "00"}</span>
             </div>
             <span className="text-[10px] font-medium text-muted-foreground whitespace-nowrap">Streak</span>
@@ -289,14 +289,14 @@ export function DashboardRightPanel({
                 key={index}
                 className={`flex flex-col items-center py-2 sm:py-2.5 px-0.5 sm:px-1 rounded-lg transition-all min-w-0 ${
                   isActive
-                    ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm shadow-blue-500/25"
+                    ? "bg-primary text-primary-foreground font-semibold shadow-xs"
                     : "bg-secondary/60 text-foreground hover:bg-secondary"
                 }`}
               >
-                <span className={`text-[9px] sm:text-[10px] font-medium mb-0.5 sm:mb-1 truncate ${isActive ? "text-blue-100" : "text-muted-foreground"}`}>
+                <span className={`text-[9px] sm:text-[10px] font-medium mb-0.5 sm:mb-1 truncate ${isActive ? "text-primary-foreground/90" : "text-muted-foreground"}`}>
                   {item.name}
                 </span>
-                <span className={`text-[11px] sm:text-xs font-bold ${isActive ? "text-white" : "text-foreground"}`}>
+                <span className={`text-[11px] sm:text-xs font-bold ${isActive ? "text-primary-foreground" : "text-foreground"}`}>
                   {item.date}
                 </span>
               </div>
@@ -308,8 +308,8 @@ export function DashboardRightPanel({
         <div className="grid grid-cols-2 gap-2.5 sm:gap-3 pt-2">
           {/* Courses In Progress */}
           <div className="p-3 sm:p-3.5 rounded-lg bg-secondary/50 border border-border flex flex-col justify-between">
-            <div className="w-7 h-7 rounded-md bg-blue-500/10 text-blue-600 border border-blue-500/20 flex items-center justify-center mb-2.5 sm:mb-3">
-              <BookOpen className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600" />
+            <div className="w-7 h-7 rounded-md bg-primary/10 text-primary border border-primary/20 flex items-center justify-center mb-2.5 sm:mb-3">
+              <BookOpen className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary" />
             </div>
             <div>
               <div className="text-sm sm:text-base font-bold text-foreground">
@@ -323,8 +323,8 @@ export function DashboardRightPanel({
 
           {/* Courses Completed */}
           <div className="p-3 sm:p-3.5 rounded-lg bg-secondary/50 border border-border flex flex-col justify-between">
-            <div className="w-7 h-7 rounded-md bg-blue-500/10 text-blue-600 border border-blue-500/20 flex items-center justify-center mb-2.5 sm:mb-3">
-              <CheckCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600" />
+            <div className="w-7 h-7 rounded-md bg-primary/10 text-primary border border-primary/20 flex items-center justify-center mb-2.5 sm:mb-3">
+              <CheckCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary" />
             </div>
             <div>
               <div className="text-sm sm:text-base font-bold text-foreground">
@@ -412,8 +412,8 @@ export function DashboardRightPanel({
                   <div
                     className={`w-3 sm:w-3.5 rounded-full transition-all duration-300 ${
                       isPeak
-                        ? "bg-gradient-to-t from-blue-600 via-indigo-500 to-cyan-400 shadow-md shadow-blue-500/30"
-                        : "bg-muted-foreground/20 hover:bg-blue-400/60"
+                        ? "bg-gradient-to-t from-primary via-emerald-600 to-[#D4B872] shadow-xs"
+                        : "bg-muted-foreground/20 hover:bg-primary/40"
                     }`}
                     style={{ height: `${heightPercent}%` }}
                     title={`${item.day}: ${item.label}`}

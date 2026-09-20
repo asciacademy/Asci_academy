@@ -73,3 +73,69 @@ export function getAllCurriculumCourses(): CurriculumCourse[] {
   return CURRICULUM_COURSES
 }
 
+export function getCurriculumLessonInfo(lessonId: string): {
+  course: CurriculumCourse
+  module: CurriculumModule
+  lesson: CurriculumLesson
+} | undefined {
+  if (!lessonId) return undefined
+  const targetId = lessonId.toLowerCase().trim()
+  for (const course of CURRICULUM_COURSES) {
+    for (const module of course.modules) {
+      for (const lesson of module.lessons) {
+        if (lesson.id?.toLowerCase().trim() === targetId) {
+          return { course, module, lesson }
+        }
+      }
+    }
+  }
+  return undefined
+}
+
+export interface CourseParts {
+  beginnerModules: (CurriculumModule & { is_premium?: boolean })[]
+  advancedModules: (CurriculumModule & { is_premium?: boolean })[]
+}
+
+export function getCourseParts(course: CurriculumCourse): CourseParts {
+  if (!course || !course.modules || course.modules.length === 0) {
+    return { beginnerModules: [], advancedModules: [] }
+  }
+
+  const hasExplicitPremium = course.modules.some((m: any) => m.is_premium === true)
+  if (hasExplicitPremium) {
+    return {
+      beginnerModules: course.modules.filter((m: any) => !m.is_premium),
+      advancedModules: course.modules.filter((m: any) => m.is_premium),
+    }
+  }
+
+  if (course.modules.length === 1) {
+    return {
+      beginnerModules: [...course.modules],
+      advancedModules: [],
+    }
+  }
+
+  const splitIdx = Math.ceil(course.modules.length / 2)
+  const beginner = course.modules.slice(0, splitIdx)
+  const advanced = course.modules.slice(splitIdx).map((m) => ({ ...m, is_premium: true }))
+
+  return {
+    beginnerModules: beginner,
+    advancedModules: advanced,
+  }
+}
+
+export function isLessonLocked(
+  course: CurriculumCourse,
+  module: CurriculumModule & { is_premium?: boolean },
+  userTier?: string,
+  isTestDrive?: boolean
+): boolean {
+  if (isTestDrive) return false
+  if (userTier === "pro" || userTier === "architect") return false
+  if (module?.is_premium) return true
+  return false
+}
+

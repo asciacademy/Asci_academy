@@ -91,9 +91,8 @@ test.ts
 test.*
 tests/
 test/
-__tests__/
-*.test.*
-*.spec.*
+# __tests__ directory is tracked for automated CI and npm test
+!__tests__/**
 debug.js
 debug_progress.js
 debug*.js

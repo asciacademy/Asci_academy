@@ -272,7 +272,9 @@ public class QuickSort {
       <div id="dashboard-practice-header" className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-hairline">
         <div className="space-y-1.5 min-w-0">
           <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
-            <span className="badge-coral text-[10px] sm:text-[11px] shrink-0 leading-none font-semibold">Algorithm Workbench</span>
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-mono uppercase tracking-wider bg-primary/10 text-primary border border-primary/20 shrink-0 leading-none font-semibold">
+              Algorithm Workbench
+            </span>
             <span className="text-xs font-mono text-muted-foreground shrink-0 flex items-center gap-1.5">
               <span className="w-1 h-1 rounded-full bg-stone-300 dark:bg-stone-700 hidden sm:inline-block" />
               <span>8 Interactive Engines + Sandbox</span>
@@ -452,7 +454,7 @@ public class QuickSort {
                 <button
                   onClick={handleRunCode}
                   disabled={isRunningCode}
-                  className="inline-flex items-center gap-2 text-xs px-4 py-1.5 font-semibold rounded-lg bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 text-white shadow-md shadow-blue-500/20 cursor-pointer active:scale-95 transition-all disabled:opacity-50"
+                  className="inline-flex items-center gap-2 text-xs px-4 py-1.5 font-semibold rounded-lg bg-primary hover:bg-primary-active text-primary-foreground shadow-xs cursor-pointer active:scale-95 transition-all disabled:opacity-50"
                 >
                   <Play className="w-3.5 h-3.5" />
                   <span>{isRunningCode ? "Executing..." : "Run Code"}</span>
@@ -483,7 +485,7 @@ public class QuickSort {
                     <Terminal className="w-3.5 h-3.5 text-primary" />
                     <span>stdout terminal</span>
                   </div>
-                  <span className="text-[10px] text-blue-400">Status: Clean</span>
+                  <span className="text-[10px] text-emerald-400 font-mono">Status: Clean</span>
                 </div>
 
                 <div className="flex-1 overflow-y-auto space-y-1.5 custom-scrollbar text-zinc-300 font-mono text-xs pr-2">

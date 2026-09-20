@@ -139,8 +139,8 @@ export function DashboardPracticeArena() {
       >
         <div className="space-y-2.5 max-w-2xl min-w-0">
           <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-mono uppercase tracking-wider bg-blue-500/10 text-blue-700 dark:text-blue-300 border border-blue-500/20 shrink-0 leading-none font-semibold">
-              <Sparkles className="w-3 h-3 text-blue-500 shrink-0" />
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-mono uppercase tracking-wider bg-primary/10 text-primary border border-primary/20 shrink-0 leading-none font-semibold">
+              <Sparkles className="w-3 h-3 text-primary shrink-0" />
               <span>Algorithmic &amp; Systems Competency</span>
             </span>
             <span className="text-xs font-mono text-muted-foreground shrink-0 flex items-center gap-1.5">
@@ -149,7 +149,7 @@ export function DashboardPracticeArena() {
             </span>
           </div>
           <h1 className="font-serif text-2xl sm:text-3xl font-normal text-foreground flex items-start sm:items-center gap-2.5 leading-tight">
-            <Layers className="w-6 h-6 text-blue-500 shrink-0 mt-0.5 sm:mt-0" />
+            <Layers className="w-6 h-6 text-primary shrink-0 mt-0.5 sm:mt-0" />
             <span className="break-words">Skill Graph &amp; Practice Arena</span>
           </h1>
           <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed max-w-xl">
@@ -216,7 +216,7 @@ export function DashboardPracticeArena() {
                 : "bg-secondary text-muted-foreground hover:text-foreground hover:bg-secondary/80 border border-transparent"
             }`}
           >
-            <Flame className="w-3.5 h-3.5 text-blue-500 shrink-0" />
+            <Flame className="w-3.5 h-3.5 text-[#D4B872] shrink-0" />
             <span>100-Day Streak</span>
           </button>
         </div>
@@ -234,7 +234,7 @@ export function DashboardPracticeArena() {
           <div className="rounded-2xl border border-hairline bg-card p-5 sm:p-6 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-5 sm:gap-6">
             <div className="space-y-2 max-w-xl min-w-0">
               <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
-                <span className="text-xs font-mono px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-700 dark:text-blue-300 border border-blue-500/20 font-bold shrink-0 leading-none">
+                <span className="text-xs font-mono px-2.5 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 font-bold shrink-0 leading-none">
                   SDE-2 Benchmark: 74% Overall
                 </span>
                 <span className="text-xs font-mono text-muted-foreground shrink-0 flex items-center gap-1.5">
@@ -253,7 +253,7 @@ export function DashboardPracticeArena() {
             <div className="flex items-center gap-3 shrink-0 self-start md:self-auto w-full sm:w-auto">
               <button
                 onClick={() => setActiveTab("potd")}
-                className="w-full sm:w-auto px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs shadow-blue-500/20 transition-all cursor-pointer flex items-center justify-center gap-1.5"
+                className="w-full sm:w-auto px-4 py-2 rounded-xl bg-primary hover:bg-primary-active text-primary-foreground text-xs font-semibold shadow-xs transition-all cursor-pointer flex items-center justify-center gap-1.5"
               >
                 <span>Solve Today&apos;s Challenge</span>
                 <ArrowRight className="w-3.5 h-3.5 shrink-0" />
@@ -262,7 +262,7 @@ export function DashboardPracticeArena() {
           </div>
 
           {/* 5 Competency Pillars + Target Benchmark */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4.5 sm:gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5">
             {competencies.map((comp) => {
               const CompIcon = comp.icon
               return (
@@ -272,10 +272,10 @@ export function DashboardPracticeArena() {
                 >
                   <div className="space-y-3.5">
                     <div className="flex items-start justify-between gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0">
+                      <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shrink-0">
                         <CompIcon className="w-5 h-5" />
                       </div>
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-700 dark:text-blue-300 border border-blue-500/20 font-medium shrink-0 leading-none">
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 font-medium shrink-0 leading-none">
                         {comp.level}
                       </span>
                     </div>
@@ -288,7 +288,7 @@ export function DashboardPracticeArena() {
                       </div>
                       <div className="h-1.5 w-full rounded-full bg-secondary overflow-hidden mt-1.5 border border-hairline/40">
                         <div
-                          className="h-full bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full transition-all duration-500"
+                          className="h-full bg-gradient-to-r from-primary to-emerald-500 rounded-full transition-all duration-500"
                           style={{ width: `${comp.mastery}%` }}
                         />
                       </div>
@@ -323,11 +323,11 @@ export function DashboardPracticeArena() {
             })}
 
             {/* Target Role Readiness Card */}
-            <div className="rounded-2xl border border-blue-500/30 bg-card p-5 flex flex-col justify-between shadow-2xs space-y-4 relative overflow-hidden">
-              <div className="absolute top-0 right-0 left-0 h-1 bg-gradient-to-r from-blue-600 to-indigo-600" />
+            <div className="rounded-2xl border border-[#D4B872]/40 bg-card p-5 flex flex-col justify-between shadow-2xs space-y-4 relative overflow-hidden">
+              <div className="absolute top-0 right-0 left-0 h-1 bg-gradient-to-r from-[#D4B872] via-amber-400 to-[#D4B872]" />
               <div className="space-y-3.5">
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-blue-600 dark:text-blue-400 font-bold shrink-0">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-[#D4B872] font-bold shrink-0">
                     Target Role Benchmark
                   </span>
                   <span className="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20 shrink-0 leading-none">
@@ -347,14 +347,14 @@ export function DashboardPracticeArena() {
                     <span className="text-foreground font-bold">82 / 100</span>
                   </div>
                   <div className="h-1.5 w-full rounded-full bg-secondary overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full" style={{ width: "82%" }} />
+                    <div className="h-full bg-gradient-to-r from-primary to-[#D4B872] rounded-full" style={{ width: "82%" }} />
                   </div>
                 </div>
               </div>
 
               <button
                 onClick={() => setActiveTab("quizzes")}
-                className="w-full py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs shadow-blue-500/20 transition-all cursor-pointer flex items-center justify-center gap-1.5 mt-2"
+                className="w-full py-2 rounded-xl bg-primary hover:bg-primary-active text-primary-foreground text-xs font-semibold shadow-xs transition-all cursor-pointer flex items-center justify-center gap-1.5 mt-2"
               >
                 <span>Take System Design Quiz</span>
                 <ChevronRight className="w-3.5 h-3.5 shrink-0" />
@@ -374,7 +374,7 @@ export function DashboardPracticeArena() {
                 <span className="text-[10px] font-mono uppercase tracking-widest text-primary shrink-0 font-semibold">
                   {potd.date}
                 </span>
-                <span className="text-xs font-mono px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 font-medium shrink-0 leading-none">
+                <span className="text-xs font-mono px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 font-medium shrink-0 leading-none">
                   {potd.difficulty}
                 </span>
               </div>
@@ -500,7 +500,7 @@ export function DashboardPracticeArena() {
               <button
                 onClick={handleSubmitPOTD}
                 disabled={isRunning || potd.solved}
-                className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs shadow-blue-500/20 transition-all cursor-pointer inline-flex items-center justify-center gap-1.5 disabled:opacity-50"
+                className="px-5 py-2 rounded-xl bg-primary hover:bg-primary-active text-primary-foreground text-xs font-semibold shadow-xs transition-all cursor-pointer inline-flex items-center justify-center gap-1.5 disabled:opacity-50"
               >
                 <CheckCircle2 className="w-3.5 h-3.5" />
                 <span>{potd.solved ? "Submitted & Verified" : "Submit & Claim 150 XP"}</span>
@@ -515,7 +515,7 @@ export function DashboardPracticeArena() {
         <div className="max-w-3xl mx-auto rounded-2xl border border-hairline bg-card p-5 sm:p-8 shadow-xs space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-2 border-b border-hairline pb-4">
             <div>
-              <span className="text-[10px] font-mono uppercase tracking-widest text-blue-600 dark:text-blue-400 block font-semibold">
+              <span className="text-[10px] font-mono uppercase tracking-widest text-primary block font-semibold">
                 Rapid Round {quizIndex + 1} of {speedQuizzes.length}
               </span>
               <h2 className="font-serif text-xl sm:text-2xl font-normal text-foreground mt-0.5">
@@ -574,7 +574,7 @@ export function DashboardPracticeArena() {
               <div className="pt-2 flex justify-end">
                 <button
                   onClick={handleNextQuiz}
-                  className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs shadow-blue-500/20 transition-all cursor-pointer inline-flex items-center gap-1"
+                  className="px-4 py-2 rounded-xl bg-primary hover:bg-primary-active text-primary-foreground text-xs font-semibold shadow-xs transition-all cursor-pointer inline-flex items-center gap-1"
                 >
                   <span>{quizIndex < speedQuizzes.length - 1 ? "Next Question" : "Restart Quiz"}</span>
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -591,7 +591,7 @@ export function DashboardPracticeArena() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 border-b border-hairline pb-4">
             <div>
               <h2 className="font-serif text-xl sm:text-2xl font-normal text-foreground flex items-center gap-2">
-                <Flame className="w-5 h-5 text-blue-500 shrink-0" />
+                <Flame className="w-5 h-5 text-[#D4B872] shrink-0" />
                 <span>ASCI 100-Day Engineering Cadence</span>
               </h2>
               <p className="text-xs text-muted-foreground mt-0.5">
@@ -599,7 +599,7 @@ export function DashboardPracticeArena() {
               </p>
             </div>
             <div className="flex items-center gap-3 shrink-0 self-start sm:self-auto">
-              <span className="text-xs font-mono px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-700 dark:text-blue-300 border border-blue-500/20 font-bold shrink-0 leading-none">
+              <span className="text-xs font-mono px-2.5 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 font-bold shrink-0 leading-none">
                 Day 42 Active Streak
               </span>
             </div>
@@ -618,7 +618,7 @@ export function DashboardPracticeArena() {
                     key={i}
                     className={`w-3.5 h-3.5 rounded-xs transition-colors ${
                       isActive
-                        ? "bg-gradient-to-tr from-blue-600 to-indigo-600 shadow-2xs"
+                        ? "bg-gradient-to-tr from-primary to-emerald-500 shadow-2xs"
                         : "bg-secondary border border-hairline/60"
                     }`}
                     title={`Day ${i + 1}: ${isActive ? "Solved POTD (+150 XP)" : "Rest day"}`}

@@ -6,11 +6,12 @@ import { StudentContext } from "@/types/axel"
 export async function POST(req: Request) {
   try {
     const body = await req.json()
-    const { prompt, context = {}, history = [] } = body
+    const { prompt, message, context = {}, history = [] } = body
+    const userPrompt = (prompt || message || "").trim()
 
-    if (!prompt || typeof prompt !== "string" || prompt.trim() === "") {
+    if (!userPrompt || typeof userPrompt !== "string") {
       return NextResponse.json(
-        { error: "Prompt is required" },
+        { error: "Prompt or message is required" },
         { status: 400 }
       )
     }
@@ -45,7 +46,7 @@ export async function POST(req: Request) {
       failingTest: context.failingTest,
     }
 
-    const response = await generateAxelResponse(prompt, studentContext, history)
+    const response = await generateAxelResponse(userPrompt, studentContext, history)
     return NextResponse.json(response)
   } catch (error: any) {
     console.error("Error in /api/axel/chat route:", error)

@@ -90,12 +90,20 @@ export function Hero() {
   const { user: authUser } = useAuth()
   const [ctaHovered, setCtaHovered] = useState(false)
 
-  const demoBypassUser = typeof document !== "undefined" && !authUser ? (() => {
-    const match = document.cookie.match(/(^| )demo_bypass=([^;]+)/)
-    return match ? { email: "demo@example.com" } : null
-  })() : null
+  const [mounted, setMounted] = useState(false)
+  const [demoBypassUser, setDemoBypassUser] = useState<any>(null)
 
-  const user = authUser || demoBypassUser
+  useEffect(() => {
+    setMounted(true)
+    if (!authUser && typeof document !== "undefined") {
+      const match = document.cookie.match(/(^| )demo_bypass=([^;]+)/)
+      if (match) {
+        setDemoBypassUser({ email: "demo@example.com" })
+      }
+    }
+  }, [authUser])
+
+  const user = mounted ? (authUser || demoBypassUser) : null
 
   useEffect(() => {
     window.dispatchEvent(

@@ -192,35 +192,40 @@ export function Navbar() {
   const { count: wishlistCount } = useWishlist()
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
-  // Demo bypass fallback for mock demo sessions
-  const demoBypassUser = typeof document !== "undefined" && !authUser ? (() => {
-    const match = document.cookie.match(/(^| )demo_bypass=([^;]+)/)
-    if (match) {
-      const isDemoAdmin = match[2] === "admin"
-      return {
-        user: {
-          id: "demo-user-id",
-          email: isDemoAdmin ? "admin@asci.edu" : "fellow@asci.edu",
-          user_metadata: { full_name: isDemoAdmin ? "ASCI Administrator" : "ASCI Fellow", avatar_url: null, picture: null },
-        } as any,
-        profile: {
-          id: "demo-user-id",
-          name: isDemoAdmin ? "ASCI Administrator" : "ASCI Fellow",
-          role: isDemoAdmin ? "admin" : "fellow",
-          rank: isDemoAdmin ? "Admin" : "Fellow",
-          avatar_url: null,
-          xp: 0,
-          streak_count: 0,
-        } as any,
-        isAdmin: isDemoAdmin,
+  const [mounted, setMounted] = useState(false)
+  const [demoBypassUser, setDemoBypassUser] = useState<any>(null)
+
+  // Hydrate demo bypass safely on client mount to avoid SSR hydration mismatch
+  useEffect(() => {
+    setMounted(true)
+    if (!authUser && typeof document !== "undefined") {
+      const match = document.cookie.match(/(^| )demo_bypass=([^;]+)/)
+      if (match) {
+        const isDemoAdmin = match[2] === "admin"
+        setDemoBypassUser({
+          user: {
+            id: "demo-user-id",
+            email: isDemoAdmin ? "admin@asci.edu" : "fellow@asci.edu",
+            user_metadata: { full_name: isDemoAdmin ? "ASCI Administrator" : "ASCI Fellow", avatar_url: null, picture: null },
+          } as any,
+          profile: {
+            id: "demo-user-id",
+            name: isDemoAdmin ? "ASCI Administrator" : "ASCI Fellow",
+            role: isDemoAdmin ? "admin" : "fellow",
+            rank: isDemoAdmin ? "Admin" : "Fellow",
+            avatar_url: null,
+            xp: 0,
+            streak_count: 0,
+          } as any,
+          isAdmin: isDemoAdmin,
+        })
       }
     }
-    return null
-  })() : null
+  }, [authUser])
 
-  // Active user and profile derived directly from AuthContext as the single source of truth
-  const user: any = authUser || demoBypassUser?.user || null
-  const userProfile: any = authProfile || demoBypassUser?.profile || (user ? {
+  // Active user and profile derived directly from AuthContext as the single source of truth (mounted-guarded for zero SSR mismatch)
+  const user: any = mounted ? (authUser || demoBypassUser?.user || null) : null
+  const userProfile: any = mounted ? (authProfile || demoBypassUser?.profile || (user ? {
     id: user.id || "guest",
     name: user.user_metadata?.full_name || user.email?.split("@")[0] || "Scholar",
     role: "user",
@@ -228,9 +233,9 @@ export function Navbar() {
     xp: 0,
     streak_count: 0,
     avatar_url: user.user_metadata?.avatar_url || user.user_metadata?.picture || null,
-  } : null)
+  } : null)) : null
 
-  const isAdmin = authProfile?.role === "admin" || authProfile?.role === "super_admin" || Boolean(demoBypassUser?.isAdmin)
+  const isAdmin = Boolean(mounted && (authProfile?.role === "admin" || authProfile?.role === "super_admin" || demoBypassUser?.isAdmin))
 
   const handleSignOut = async () => {
     try {

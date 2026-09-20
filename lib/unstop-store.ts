@@ -13,6 +13,17 @@ import {
   saveAtsResumeAction,
   claimAmbassadorPerkAction,
 } from "@/app/actions/unstop"
+import {
+  createAdminOpportunity,
+  updateAdminOpportunity,
+  deleteAdminOpportunity,
+  createAdminHackathon,
+  updateAdminHackathon,
+  deleteAdminHackathon,
+  createAdminMentor,
+  updateAdminMentor,
+  deleteAdminMentor,
+} from "@/app/actions/admin"
 
 // ==========================================
 // 1. DATA TYPES & INTERFACES
@@ -32,6 +43,8 @@ export interface HackathonItem {
   title: string
   host: string
   hostLogo?: string
+  hostLogoPreset?: string
+  hostLogoCustom?: string
   bannerImage?: string
   bannerTag: string
   prizePool: string
@@ -148,6 +161,8 @@ export interface MentorProfile {
   name: string
   role: string
   company: string
+  companyLogo?: string
+  companyLogoPreset?: string
   avatar: string
   experienceYears: number
   rating: number
@@ -1183,6 +1198,228 @@ export function useUnstopEcosystem() {
     applyJobAction(jobId).catch((err) => console.warn("Supabase job application sync error:", err))
   }, [])
 
+  const addJob = useCallback(async (jobData: Omit<JobOpportunity, "id" | "applied">) => {
+    const newId = `job-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`
+    const newJob: JobOpportunity = {
+      ...jobData,
+      id: newId,
+      applied: false,
+    }
+
+    setJobs((prev) => {
+      const updated = [newJob, ...prev]
+      setStoredData(STORAGE_KEYS.JOBS, updated)
+      return updated
+    })
+
+    try {
+      await createAdminOpportunity({
+        title: jobData.title,
+        company: jobData.company,
+        companyLogo: jobData.companyLogo,
+        roleType: jobData.roleType,
+        location: jobData.location,
+        workMode: jobData.workMode,
+        compensation: jobData.compensation,
+        batchEligibility: jobData.batchEligibility,
+        experience: jobData.experience,
+        skills: jobData.skills,
+        closingInDays: jobData.closingInDays,
+        featured: jobData.featured,
+        description: jobData.description,
+        requirements: jobData.requirements,
+        perks: jobData.perks,
+      })
+    } catch (err) {
+      console.warn("Could not sync job to Supabase:", err)
+    }
+
+    return newJob
+  }, [])
+
+  const updateJob = useCallback(async (jobId: string, updates: Partial<JobOpportunity>) => {
+    setJobs((prev) => {
+      const updated = prev.map((j) => (j.id === jobId ? { ...j, ...updates } : j))
+      setStoredData(STORAGE_KEYS.JOBS, updated)
+      return updated
+    })
+
+    try {
+      await updateAdminOpportunity(jobId, updates as any)
+    } catch (err) {
+      console.warn("Could not sync job update to Supabase:", err)
+    }
+  }, [])
+
+  const deleteJob = useCallback(async (jobId: string) => {
+    setJobs((prev) => {
+      const updated = prev.filter((j) => j.id !== jobId)
+      setStoredData(STORAGE_KEYS.JOBS, updated)
+      return updated
+    })
+
+    try {
+      await deleteAdminOpportunity(jobId)
+    } catch (err) {
+      console.warn("Could not delete job in Supabase:", err)
+    }
+  }, [])
+
+  // Admin Hackathon Management
+  const addHackathon = useCallback(async (hackathonData: Partial<HackathonItem>) => {
+    const newHack: HackathonItem = {
+      id: `hack-${Date.now()}`,
+      title: hackathonData.title || "ASCI Open Innovation Sprint",
+      host: hackathonData.host || "ASCI Research Labs",
+      hostLogo: hackathonData.hostLogo || "/images/asci-logo.png",
+      bannerTag: hackathonData.bannerTag || "Open Cup",
+      prizePool: hackathonData.prizePool || "₹2,50,000",
+      firstPrize: hackathonData.firstPrize || "₹1,00,000",
+      registeredCount: 1,
+      teamSize: hackathonData.teamSize || "1-4 Members",
+      deadline: hackathonData.deadline || "In 14 Days",
+      mode: hackathonData.mode || "Online",
+      difficulty: hackathonData.difficulty || "All Welcome",
+      tags: hackathonData.tags || ["Systems", "Full-Stack"],
+      problemStatement: hackathonData.problemStatement || "Design and deploy a scalable microservices architecture.",
+      rounds: hackathonData.rounds || [
+        { id: "r1", name: "Registration & Ideation", type: "prototype", date: "Stage 1", status: "active", description: "Submit design doc and prototype" },
+        { id: "r2", name: "Grand Finale", type: "presentation", date: "Stage 2", status: "upcoming", description: "Live architectural defense" },
+      ],
+      ...hackathonData,
+    }
+
+    setHackathons((prev) => {
+      const updated = [newHack, ...prev]
+      setStoredData(STORAGE_KEYS.HACKATHONS, updated)
+      return updated
+    })
+
+    try {
+      await createAdminHackathon({
+        title: newHack.title,
+        host: newHack.host,
+        hostLogo: newHack.hostLogo,
+        prizePool: newHack.prizePool,
+        firstPrize: newHack.firstPrize,
+        deadline: newHack.deadline,
+        teamSize: newHack.teamSize,
+        mode: newHack.mode,
+        difficulty: newHack.difficulty,
+        tags: newHack.tags,
+        problemStatement: newHack.problemStatement,
+        bannerTag: newHack.bannerTag,
+      })
+    } catch (err) {
+      console.warn("Could not sync hackathon to Supabase:", err)
+    }
+
+    return newHack
+  }, [])
+
+  const updateHackathon = useCallback(async (hackathonId: string, updates: Partial<HackathonItem>) => {
+    setHackathons((prev) => {
+      const updated = prev.map((h) => (h.id === hackathonId ? { ...h, ...updates } : h))
+      setStoredData(STORAGE_KEYS.HACKATHONS, updated)
+      return updated
+    })
+
+    try {
+      await updateAdminHackathon(hackathonId, updates as any)
+    } catch (err) {
+      console.warn("Could not sync hackathon update to Supabase:", err)
+    }
+  }, [])
+
+  const deleteHackathon = useCallback(async (hackathonId: string) => {
+    setHackathons((prev) => {
+      const updated = prev.filter((h) => h.id !== hackathonId)
+      setStoredData(STORAGE_KEYS.HACKATHONS, updated)
+      return updated
+    })
+
+    try {
+      await deleteAdminHackathon(hackathonId)
+    } catch (err) {
+      console.warn("Could not delete hackathon in Supabase:", err)
+    }
+  }, [])
+
+  // Admin Mentor Management
+  const addMentor = useCallback(async (mentorData: Partial<MentorProfile>) => {
+    const newMentor: MentorProfile = {
+      id: `mentor-${Date.now()}`,
+      name: mentorData.name || "Senior Mentor",
+      role: mentorData.role || "Staff Engineer",
+      company: mentorData.company || "Google",
+      avatar: mentorData.avatar || "/avatars/ninja.png",
+      experienceYears: mentorData.experienceYears || 6,
+      rating: mentorData.rating || 4.9,
+      reviewsCount: mentorData.reviewsCount || 1,
+      specialties: mentorData.specialties || ["System Design", "Distributed Systems"],
+      bio: mentorData.bio || "Staff Engineer mentoring aspiring architects on high-concurrency patterns.",
+      sessionDuration: mentorData.sessionDuration || "45 Mins",
+      availableSlots: mentorData.availableSlots || [
+        { date: "This Thursday", slots: ["6:00 PM - 6:45 PM", "7:00 PM - 7:45 PM"] },
+        { date: "This Saturday", slots: ["11:00 AM - 11:45 AM", "4:00 PM - 4:45 PM"] }
+      ],
+      ...mentorData,
+    }
+
+    setMentors((prev) => {
+      const updated = [newMentor, ...prev]
+      setStoredData(STORAGE_KEYS.MENTORS, updated)
+      return updated
+    })
+
+    try {
+      await createAdminMentor({
+        name: newMentor.name,
+        role: newMentor.role,
+        company: newMentor.company,
+        avatar: newMentor.avatar,
+        experienceYears: newMentor.experienceYears,
+        rating: newMentor.rating,
+        reviewsCount: newMentor.reviewsCount,
+        specialties: newMentor.specialties,
+        bio: newMentor.bio,
+        sessionDuration: newMentor.sessionDuration,
+      })
+    } catch (err) {
+      console.warn("Could not sync mentor to Supabase:", err)
+    }
+
+    return newMentor
+  }, [])
+
+  const updateMentor = useCallback(async (mentorId: string, updates: Partial<MentorProfile>) => {
+    setMentors((prev) => {
+      const updated = prev.map((m) => (m.id === mentorId ? { ...m, ...updates } : m))
+      setStoredData(STORAGE_KEYS.MENTORS, updated)
+      return updated
+    })
+
+    try {
+      await updateAdminMentor(mentorId, updates as any)
+    } catch (err) {
+      console.warn("Could not sync mentor update to Supabase:", err)
+    }
+  }, [])
+
+  const deleteMentor = useCallback(async (mentorId: string) => {
+    setMentors((prev) => {
+      const updated = prev.filter((m) => m.id !== mentorId)
+      setStoredData(STORAGE_KEYS.MENTORS, updated)
+      return updated
+    })
+
+    try {
+      await deleteAdminMentor(mentorId)
+    } catch (err) {
+      console.warn("Could not delete mentor in Supabase:", err)
+    }
+  }, [])
+
   const recordAssessmentResult = useCallback((assessmentId: string, score: number, passed: boolean) => {
     const percentile = Math.min(99, Math.round(score * 0.8 + 20))
     setAssessments((prev) => {
@@ -1351,9 +1588,18 @@ export function useUnstopEcosystem() {
     activeTeammatesCount,
     registerForHackathon,
     submitHackathonProject,
+    addHackathon,
+    updateHackathon,
+    deleteHackathon,
     applyForJob,
+    addJob,
+    updateJob,
+    deleteJob,
     recordAssessmentResult,
     bookMentorSession,
+    addMentor,
+    updateMentor,
+    deleteMentor,
     addTeammatePost,
     inviteTeammate,
     solvePOTD,

@@ -1,14 +1,16 @@
 "use client"
 
 import { useRef, useEffect, useState } from "react"
+import Link from "next/link"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { useScrollReveal } from "@/hooks/use-gsap"
 import {
-  Route, CheckCircle2, Clock,
+  Compass, CheckCircle2, Clock,
   Braces, Code2, Globe, Cloud,
   Database, Server, Cpu, BrainCircuit,
   Layout, Smartphone, Blocks, Layers,
+  ArrowRight, Sparkles, FolderGit2, TerminalSquare
 } from "lucide-react"
 
 if (typeof window !== "undefined") {
@@ -212,6 +214,25 @@ const roadmaps = {
 
 type RoadmapKey = keyof typeof roadmaps
 
+function getTrackIcon(key: RoadmapKey) {
+  switch (key) {
+    case "software":
+      return Code2
+    case "ai":
+      return BrainCircuit
+    case "backend":
+      return Server
+    case "systems":
+      return Cpu
+    case "frontend":
+      return Layout
+    case "algorithms":
+      return Braces
+    default:
+      return TerminalSquare
+  }
+}
+
 export function LearningPaths() {
   const [activeTab, setActiveTab] = useState<RoadmapKey>("software")
   const headerRef = useScrollReveal<HTMLDivElement>({ y: 30, duration: 0.7 })
@@ -229,7 +250,7 @@ export function LearningPaths() {
         gsap.fromTo(
           cards,
           { opacity: 0, y: 20 },
-          { opacity: 1, y: 0, duration: 0.35, stagger: 0.08, ease: "power2.out" }
+          { opacity: 1, y: 0, duration: 0.35, stagger: 0.06, ease: "power2.out" }
         )
       } else {
         cards.forEach((card) => {
@@ -237,7 +258,7 @@ export function LearningPaths() {
             card,
             { y: 30, opacity: 0 },
             {
-              y: 0, opacity: 1, duration: 0.6, ease: "power2.out",
+              y: 0, opacity: 1, duration: 0.5, ease: "power2.out",
               scrollTrigger: { trigger: card, start: "top 85%", toggleActions: "play none none none" },
             }
           )
@@ -255,155 +276,218 @@ export function LearningPaths() {
   }
 
   return (
-    <section id="learning-paths" className="relative py-20 lg:py-28 bg-background">
-      <div className="relative mx-auto max-w-[1400px] px-5 sm:px-6 lg:px-8">
+    <section id="learning-paths" className="relative py-20 lg:py-28 bg-background overflow-hidden">
+      {/* Subtle ambient light gradient background */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-primary/5 rounded-full blur-3xl pointer-events-none -z-10" />
+
+      <div className="relative mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
         {/* Header with Dedicated Axel Stage */}
-        <div ref={headerRef} className="relative mb-14 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
-          <div className="max-w-2xl text-left">
-            <div className="inline-flex items-center gap-1.5 text-xs uppercase tracking-widest text-primary font-medium mb-3">
-              <Route className="h-3.5 w-3.5" />
-              <span>Learning Roadmaps</span>
+        <div ref={headerRef} className="relative mb-10 sm:mb-12 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
+          <div className="max-w-3xl text-left">
+            <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3.5 py-1 text-xs font-medium text-primary mb-4 backdrop-blur-xs shadow-xs">
+              <Compass className="h-3.5 w-3.5" />
+              <span className="tracking-widest uppercase font-mono text-[11px]">Engineering Curriculum Roadmaps</span>
             </div>
-            <h2 className="font-serif text-3xl font-normal tracking-tight text-foreground sm:text-4xl lg:text-5xl" style={{ letterSpacing: "-1px" }}>
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-normal tracking-tight text-foreground leading-[1.1]">
               Step-by-Step Learning Roadmaps
             </h2>
-            <p className="mt-3 max-w-xl text-sm sm:text-base text-body leading-relaxed">
+            <p className="mt-4 text-sm sm:text-base text-muted-foreground leading-relaxed">
               {activeRoadmap.description}
             </p>
           </div>
 
           {/* Dedicated Axel Stage: Reserved layout space so nothing overlays */}
-          <div className="hidden lg:flex relative shrink-0 w-64 h-56 items-center justify-center self-center lg:self-auto">
+          <div className="hidden lg:flex relative shrink-0 w-64 h-48 items-center justify-center self-center lg:self-auto">
             <div
               id="learning-paths-robot-anchor"
+              data-axel-anchor="true"
+              data-section-id="learning-paths"
+              data-emotion="thinking"
+              data-scale="0.95"
+              data-label="Engineering Roadmaps"
               className="w-full h-full relative flex items-center justify-center pointer-events-none select-none"
               aria-hidden="true"
             />
           </div>
         </div>
 
-        {/* Tab Selector — Category tabs */}
-        <div className="flex justify-center mb-16 relative z-20">
-          <div className="inline-flex flex-wrap items-center justify-center gap-1 rounded-lg border border-hairline bg-secondary p-1">
+        {/* Track Switcher Bar — Sleek segmented pill container */}
+        <div className="flex justify-center mb-10 overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
+          <div className="inline-flex items-center gap-1.5 rounded-full border border-hairline bg-card/80 dark:bg-card/40 backdrop-blur-md p-1.5 shadow-2xs">
             {(Object.keys(roadmaps) as RoadmapKey[]).map((key) => {
               const roadmap = roadmaps[key]
               const isActive = activeTab === key
+              const Icon = getTrackIcon(key)
               return (
                 <button
                   key={key}
                   onClick={() => handleTabChange(key)}
                   suppressHydrationWarning
-                  className={`rounded-md px-4 py-2 text-xs font-medium transition-all duration-200 cursor-pointer ${
+                  className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-medium transition-all active:scale-[0.98] cursor-pointer whitespace-nowrap ${
                     isActive
-                      ? "bg-card text-foreground shadow-xs border border-hairline"
-                      : "text-muted-foreground hover:text-foreground bg-transparent"
+                      ? "bg-foreground text-background font-semibold shadow-xs"
+                      : "text-muted-foreground hover:text-foreground hover:bg-secondary/60"
                   }`}
                 >
-                  {roadmap.name}
+                  <Icon className={`h-3.5 w-3.5 ${isActive ? "text-background" : "text-primary"}`} />
+                  <span>{roadmap.name}</span>
                 </button>
               )
             })}
           </div>
         </div>
 
-        {/* Pathway Metadata Overview Banner */}
-        <div className="max-w-5xl mx-auto mb-12 p-6 rounded-2xl border border-hairline bg-card/80 space-y-4">
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-hairline/60 pb-3">
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-mono font-semibold px-2.5 py-0.5 rounded bg-primary/10 text-primary border border-primary/20">
+        {/* Executive Blueprint Overview Bento */}
+        <div className="relative mb-12 rounded-3xl border border-hairline dark:border-white/[0.08] bg-card/80 dark:bg-[#151514]/80 backdrop-blur-xl p-6 sm:p-8 lg:p-10 shadow-xs">
+          {/* Top Metadata Strip */}
+          <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-hairline/80">
+            <div className="flex items-center gap-2.5 flex-wrap">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 border border-primary/20 px-3 py-1 text-xs font-mono font-medium text-primary">
+                <Sparkles className="h-3 w-3" />
                 {activeRoadmap.difficulty}
               </span>
-              <span className="text-xs font-mono text-muted-foreground flex items-center gap-1.5">
-                <Clock className="w-3.5 h-3.5" />
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary border border-hairline px-3 py-1 text-xs font-mono text-muted-foreground">
+                <Clock className="h-3 w-3 text-primary" />
                 {activeRoadmap.effort}
               </span>
             </div>
-            <div className="text-xs font-mono text-muted-foreground">
-              4 Phased Progression Milestones
+            <div className="flex items-center gap-2 text-xs font-mono text-muted-foreground">
+              <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span>4 Phased Progression Milestones • 100% Hands-On Capstones</span>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-            <div>
-              <span className="font-mono uppercase tracking-wider text-muted-foreground text-[10px] font-semibold block mb-1">
-                Target Engineering Outcome
-              </span>
-              <p className="text-foreground leading-relaxed">
-                {activeRoadmap.outcomes}
-              </p>
-            </div>
-            <div>
-              <span className="font-mono uppercase tracking-wider text-muted-foreground text-[10px] font-semibold block mb-1">
-                Featured Capstone Projects
-              </span>
-              <p className="text-foreground leading-relaxed">
-                {activeRoadmap.projects}
-              </p>
-            </div>
-          </div>
+          {/* Middle 2-Column Content */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-6">
+            {/* Left Column: Target Outcome & Capstones */}
+            <div className="lg:col-span-7 space-y-6">
+              <div>
+                <span className="text-[11px] font-mono uppercase tracking-widest text-primary font-semibold block mb-2">
+                  Target Engineering Outcome
+                </span>
+                <p className="text-base sm:text-lg font-serif text-foreground leading-snug">
+                  &ldquo;{activeRoadmap.outcomes}&rdquo;
+                </p>
+              </div>
 
-          <div className="pt-2 border-t border-hairline/40 flex flex-wrap items-center gap-1.5">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground font-semibold mr-1">
-              Skills:
-            </span>
-            {activeRoadmap.skills.map((skill) => (
-              <span
-                key={skill}
-                className="px-2 py-0.5 rounded bg-secondary text-[11px] font-mono text-foreground border border-hairline"
-              >
-                {skill}
-              </span>
-            ))}
+              <div>
+                <span className="text-[11px] font-mono uppercase tracking-widest text-muted-foreground font-semibold block mb-2.5 flex items-center gap-1.5">
+                  <FolderGit2 className="h-3.5 w-3.5 text-primary" />
+                  Featured Capstone Projects
+                </span>
+                <div className="flex flex-wrap gap-2">
+                  {activeRoadmap.projects.split(", ").map((proj) => (
+                    <span
+                      key={proj}
+                      className="inline-flex items-center gap-1.5 rounded-xl border border-hairline bg-secondary/80 px-3 py-1.5 text-xs text-foreground font-medium"
+                    >
+                      <Code2 className="h-3 w-3 text-muted-foreground" />
+                      {proj}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column: Skills & Direct Action */}
+            <div className="lg:col-span-5 flex flex-col justify-between space-y-6 lg:border-l lg:border-hairline/80 lg:pl-8">
+              <div>
+                <span className="text-[11px] font-mono uppercase tracking-widest text-muted-foreground font-semibold block mb-2.5">
+                  Core Technologies &amp; Standards
+                </span>
+                <div className="flex flex-wrap gap-1.5">
+                  {activeRoadmap.skills.map((skill) => (
+                    <span
+                      key={skill}
+                      className="rounded-lg border border-hairline bg-secondary/60 hover:bg-secondary px-2.5 py-1 text-xs font-mono text-foreground transition-colors"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Direct Action Buttons */}
+              <div className="pt-4 border-t border-hairline/60 flex flex-wrap items-center gap-3">
+                <Link
+                  href="/programs"
+                  className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-xs sm:text-sm font-semibold text-primary-foreground shadow-xs hover:bg-primary/90 transition-all cursor-pointer group"
+                >
+                  <span>Explore Track Roadmaps</span>
+                  <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+                </Link>
+                <Link
+                  href="/courses"
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-hairline bg-secondary/80 hover:bg-secondary px-4 py-2.5 text-xs sm:text-sm font-medium text-foreground transition-all cursor-pointer"
+                >
+                  <span>Browse Syllabus</span>
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Timeline */}
-        <div ref={timelineRef} className="relative mt-8 max-w-6xl mx-auto">
-          {/* Center line */}
-          <div className="absolute left-1/2 top-0 hidden h-full w-px -translate-x-1/2 bg-hairline lg:block" aria-hidden="true" />
+        {/* 4-Stage Progressive Milestone Cards */}
+        <div ref={timelineRef} className="relative">
+          {/* Connecting Track Line for wide viewports */}
+          <div
+            className="hidden lg:block absolute top-12 left-8 right-8 h-0.5 bg-gradient-to-r from-primary/10 via-primary/30 to-primary/10 pointer-events-none -z-0"
+            aria-hidden="true"
+          />
 
-          <div className="flex flex-col gap-8 lg:gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 relative z-10">
             {activeRoadmap.phases.map((path, i) => {
-              const isLeft = i % 2 === 0
               const IconComp = path.icon
               return (
-                <div key={path.phase} className="path-card relative">
-                  {/* Dot on center line */}
-                  <div className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 lg:block z-10" aria-hidden="true">
-                    <div className="h-3 w-3 rounded-full bg-primary ring-4 ring-background" />
-                  </div>
-
-                  <div className={`flex lg:w-1/2 ${isLeft ? "lg:pr-12" : "lg:ml-auto lg:pl-12"}`}>
-                    <div className="group flex w-full flex-col overflow-hidden rounded-2xl border border-hairline dark:border-white/[0.08] bg-card/90 dark:bg-[#181715]/90 transition-all duration-200 hover:border-foreground/30 dark:hover:border-white/25 hover:-translate-y-0.5 shadow-2xs">
-                      {/* Header */}
-                      <div className="flex items-center gap-3 border-b border-hairline/60 px-6 py-4">
-                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-hairline bg-secondary text-primary transition-all group-hover:scale-105 group-hover:border-foreground/20">
-                          <IconComp className="h-5 w-5" />
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground truncate">
-                            {path.phase}
-                          </p>
-                          <h3 className="font-serif text-base font-normal text-foreground truncate">
-                            {path.title}
-                          </h3>
-                        </div>
-                        <div className="ml-auto flex shrink-0 items-center gap-1.5 rounded-full bg-secondary px-3 py-1 text-xs text-muted-foreground border border-hairline">
-                          <Clock className="h-3 w-3 text-primary" />
-                          <span>{path.weeks}</span>
-                        </div>
+                <div
+                  key={path.phase}
+                  className="path-card group relative flex flex-col justify-between rounded-3xl border border-hairline dark:border-white/[0.08] bg-card/90 dark:bg-[#151514]/90 p-6 transition-all duration-300 hover:border-primary/40 hover:-translate-y-1 hover:shadow-lg shadow-2xs"
+                >
+                  {/* Top: Phase Number & Duration Pill */}
+                  <div>
+                    <div className="flex items-center justify-between gap-2 pb-4 mb-4 border-b border-hairline/60">
+                      <div className="inline-flex items-center gap-2">
+                        <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 border border-primary/20 font-mono text-xs font-bold text-primary">
+                          0{i + 1}
+                        </span>
+                        <span className="text-xs font-mono uppercase tracking-wider text-muted-foreground font-semibold">
+                          {path.phase}
+                        </span>
                       </div>
-
-                      {/* Topics */}
-                      <div className="flex flex-col gap-2.5 p-6">
-                        {path.topics.map((topic) => (
-                          <div key={topic} className="flex items-center gap-2.5 text-xs text-body">
-                            <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" />
-                            <span>{topic}</span>
-                          </div>
-                        ))}
+                      <div className="inline-flex items-center gap-1 rounded-full bg-secondary px-2.5 py-0.5 text-[11px] font-mono text-muted-foreground border border-hairline">
+                        <Clock className="h-3 w-3 text-primary" />
+                        <span>{path.weeks}</span>
                       </div>
                     </div>
+
+                    {/* Phase Title & Domain Icon */}
+                    <div className="flex items-start gap-3 mb-5">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-hairline bg-secondary/80 text-primary transition-all group-hover:scale-105 group-hover:bg-primary/10 group-hover:border-primary/30">
+                        <IconComp className="h-5 w-5" />
+                      </div>
+                      <h3 className="font-serif text-base sm:text-lg font-medium text-foreground leading-snug">
+                        {path.title}
+                      </h3>
+                    </div>
+
+                    {/* Topics Checklist */}
+                    <div className="space-y-2.5">
+                      {path.topics.map((topic) => (
+                        <div
+                          key={topic}
+                          className="flex items-start gap-2.5 text-xs text-muted-foreground group-hover:text-foreground/90 transition-colors"
+                        >
+                          <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-500 mt-0.5" />
+                          <span className="leading-relaxed">{topic}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Card Bottom: Milestone Indicator */}
+                  <div className="mt-6 pt-4 border-t border-hairline/60 flex items-center justify-between text-[11px] font-mono text-muted-foreground">
+                    <span className="text-primary font-medium">Milestone 0{i + 1}</span>
+                    <span className="text-muted-foreground/80">Verified Outcome</span>
                   </div>
                 </div>
               )

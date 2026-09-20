@@ -156,7 +156,7 @@ export function DashboardAssessments() {
           Metrics Ribbon (Unstop Style)
       ══════════════════════════════════════════════ */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="rounded-2xl border border-hairline bg-card p-4.5 shadow-2xs">
+        <div className="rounded-2xl border border-hairline bg-card p-4 sm:p-5 shadow-2xs">
           <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
             <HelpCircle className="w-3.5 h-3.5 text-primary" />
             Standardized Tests
@@ -165,7 +165,7 @@ export function DashboardAssessments() {
           <span className="text-[11px] text-muted-foreground mt-0.5 block">Industry benchmarked suites</span>
         </div>
 
-        <div className="rounded-2xl border border-hairline bg-card p-4.5 shadow-2xs">
+        <div className="rounded-2xl border border-hairline bg-card p-4 sm:p-5 shadow-2xs">
           <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
             <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
             Verified Badges Earned
@@ -176,7 +176,7 @@ export function DashboardAssessments() {
           </span>
         </div>
 
-        <div className="rounded-2xl border border-hairline bg-card p-4.5 shadow-2xs">
+        <div className="rounded-2xl border border-hairline bg-card p-4 sm:p-5 shadow-2xs">
           <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
             <Award className="w-3.5 h-3.5 text-[#D4B872]" />
             Average Percentile
@@ -187,7 +187,7 @@ export function DashboardAssessments() {
           <span className="text-[11px] text-muted-foreground mt-0.5 block">Nationwide candidate ranking</span>
         </div>
 
-        <div className="rounded-2xl border border-hairline bg-card p-4.5 shadow-2xs">
+        <div className="rounded-2xl border border-hairline bg-card p-4 sm:p-5 shadow-2xs">
           <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
             <Shield className="w-3.5 h-3.5 text-primary" />
             Proctor Integrity

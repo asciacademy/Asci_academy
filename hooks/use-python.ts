@@ -76,8 +76,126 @@ function precompilePythonSyntax(code: string): { valid: boolean; error?: string 
     return { valid: true }
 }
 
+// Helper to transpile Python challenge syntax into executable JavaScript in the fallback sandbox
+function transpilePythonToJs(code: string): string {
+    const lines = code.split("\n")
+    const outLines: string[] = []
+    const indentStack: number[] = []
+
+    for (const rawLine of lines) {
+        if (!rawLine.trim()) {
+            outLines.push("")
+            continue
+        }
+
+        const indent = rawLine.search(/\S/)
+        while (indentStack.length > 0 && indent <= indentStack[indentStack.length - 1]) {
+            indentStack.pop()
+            outLines.push(" ".repeat(indentStack[indentStack.length - 1] || 0) + "}")
+        }
+
+        let line = rawLine
+
+        // Remove inline comments
+        line = line.replace(/(^|\s)#.*$/, "")
+
+        // Replace f-strings: f"..." or f'...'
+        line = line.replace(/f"([^"\\]*(?:\\.[^"\\]*)*)"/g, (_, content) => {
+            const interpolated = content.replace(/\{([^}]+)\}/g, "${$1}")
+            return `\`${interpolated}\``
+        })
+        line = line.replace(/f'([^'\\]*(?:\\.[^'\\]*)*)'/g, (_, content) => {
+            const interpolated = content.replace(/\{([^}]+)\}/g, "${$1}")
+            return `\`${interpolated}\``
+        })
+
+        // Replace for loop: for <var> in range(<args>):
+        const forRangeMatch = line.match(/^(\s*)for\s+([a-zA-Z0-9_]+)\s+in\s+range\((.*?)\)\s*:/)
+        if (forRangeMatch) {
+            const [, spaces, varName, rangeArgs] = forRangeMatch
+            line = `${spaces}for (let ${varName} of range(${rangeArgs})) {`
+            indentStack.push(indent)
+            outLines.push(line)
+            continue
+        }
+
+        // Replace for loop: for <var> in <iter>:
+        const forInMatch = line.match(/^(\s*)for\s+([a-zA-Z0-9_]+)\s+in\s+(.*?)\s*:/)
+        if (forInMatch) {
+            const [, spaces, varName, iter] = forInMatch
+            line = `${spaces}for (let ${varName} of ${iter}) {`
+            indentStack.push(indent)
+            outLines.push(line)
+            continue
+        }
+
+        // Replace def func(...) with function func(...)
+        const defMatch = line.match(/^(\s*)def\s+([a-zA-Z0-9_]+)\s*\((.*?)\)\s*:/)
+        if (defMatch) {
+            const [, spaces, funcName, params] = defMatch
+            line = `${spaces}function ${funcName}(${params}) {`
+            indentStack.push(indent)
+            outLines.push(line)
+            continue
+        }
+
+        // Replace if / elif / else:
+        const ifMatch = line.match(/^(\s*)if\s+(.*?)\s*:/)
+        if (ifMatch) {
+            const [, spaces, cond] = ifMatch
+            line = `${spaces}if (${cond}) {`
+            indentStack.push(indent)
+            outLines.push(line)
+            continue
+        }
+        const elifMatch = line.match(/^(\s*)elif\s+(.*?)\s*:/)
+        if (elifMatch) {
+            const [, spaces, cond] = elifMatch
+            line = `${spaces}else if (${cond}) {`
+            indentStack.push(indent)
+            outLines.push(line)
+            continue
+        }
+        const elseMatch = line.match(/^(\s*)else\s*:/)
+        if (elseMatch) {
+            const [, spaces] = elseMatch
+            line = `${spaces}else {`
+            indentStack.push(indent)
+            outLines.push(line)
+            continue
+        }
+
+        // Replace assignments without declaration at start of line
+        const assignMatch = line.match(/^(\s*)([a-zA-Z_][a-zA-Z0-9_]*)\s*(=|\+=|-=|\*=|\/=)(.*)$/)
+        if (assignMatch && assignMatch[3] === "=") {
+            const [, spaces, varName, op, rest] = assignMatch
+            line = `${spaces}var ${varName} ${op}${rest}`
+        }
+
+        // Replace .append( with .push(
+        line = line.replace(/\.append\s*\(/g, ".push(")
+
+        // Replace print(...) with pyPrint(...)
+        line = line.replace(/\bprint\s*\(/g, "pyPrint(")
+
+        // Replace True/False/None
+        line = line.replace(/\bTrue\b/g, "true")
+        line = line.replace(/\bFalse\b/g, "false")
+        line = line.replace(/\bNone\b/g, "null")
+
+        outLines.push(line)
+    }
+
+    while (indentStack.length > 0) {
+        indentStack.pop()
+        outLines.push("}")
+    }
+
+    return outLines.join("\n")
+}
+
 // In-browser instant fallback interpreter for Python challenges if WASM CDN is offline or downloading
-function executeFallbackPython(code: string): { output: string; error?: string } {
+export function executeFallbackPython(code: string): { output: string; error?: string } {
     const logs: string[] = []
     
     // Create an isolated Python-like runtime sandbox
@@ -100,7 +218,7 @@ function executeFallbackPython(code: string): { output: string; error?: string }
         }
 
         const len = (val: any) => (val && val.length !== undefined ? val.length : Object.keys(val || {}).length)
-        const sum = (arr: number[]) => arr.reduce((a, b) => a + b, 0)
+        const sum = (arr: number[]) => (Array.isArray(arr) ? arr.reduce((a, b) => a + b, 0) : 0)
         const max = (...args: any[]) => {
             const arr = Array.isArray(args[0]) ? args[0] : args
             return Math.max(...arr)
@@ -114,25 +232,22 @@ function executeFallbackPython(code: string): { output: string; error?: string }
             const factor = Math.pow(10, d)
             return Math.round(n * factor) / factor
         }
+        const range = (start: number, stop?: number, step: number = 1) => {
+            if (stop === undefined) {
+                stop = start
+                start = 0
+            }
+            const res: number[] = []
+            for (let i = start; step > 0 ? i < stop : i > stop; i += step) {
+                res.push(i)
+            }
+            return res
+        }
 
-        // Simple transpile for simple one-off snippets
-        let jsCode = code
-            // Replace Python print with pyPrint
-            .replace(/\bprint\s*\(/g, "pyPrint(")
-            // Replace True/False/None with true/false/null
-            .replace(/\bTrue\b/g, "true")
-            .replace(/\bFalse\b/g, "false")
-            .replace(/\bNone\b/g, "null")
-            // Replace def func(...) with function func(...)
-            .replace(/\bdef\s+([a-zA-Z0-9_]+)\s*\((.*?)\):/g, "function $1($2) {")
-            // Replace elif with else if
-            .replace(/\belif\b/g, "else if")
-            // Replace Python comments
-            .replace(/(^|\s)#.*$/gm, "")
+        const jsCode = transpilePythonToJs(code)
 
         // Sandbox evaluation
-        const sandboxFn = new Function("pyPrint", "len", "sum", "max", "min", "abs", "round", `
-            "use strict";
+        const sandboxFn = new Function("pyPrint", "len", "sum", "max", "min", "abs", "round", "range", `
             try {
                 ${jsCode}
             } catch(e) {
@@ -141,11 +256,11 @@ function executeFallbackPython(code: string): { output: string; error?: string }
             return { error: null };
         `)
 
-        const res = sandboxFn(pyPrint, len, sum, max, min, abs, round)
+        const res = sandboxFn(pyPrint, len, sum, max, min, abs, round, range)
         if (res?.error) {
             return { output: logs.join("\n"), error: `RuntimeError: ${res.error}` }
         }
-        return { output: logs.join("\n") }
+        return { output: logs.join("\n"), error: undefined }
     } catch (e: any) {
         return { output: logs.join("\n"), error: `Python Compile Error: ${e.message}` }
     }

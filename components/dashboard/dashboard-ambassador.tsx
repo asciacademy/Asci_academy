@@ -69,7 +69,9 @@ export function DashboardAmbassador() {
       >
         <div className="space-y-2.5 max-w-2xl min-w-0">
           <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
-            <span className="badge-coral text-[10px] sm:text-[11px] shrink-0 leading-none font-semibold">Unstop Igniters Network</span>
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-mono uppercase tracking-wider bg-primary/10 text-primary border border-primary/20 shrink-0 leading-none font-semibold">
+              Unstop Igniters Network
+            </span>
             <span className="text-xs font-mono text-muted-foreground shrink-0 flex items-center gap-1.5">
               <span className="w-1 h-1 rounded-full bg-stone-300 dark:bg-stone-700 hidden sm:inline-block" />
               <span>{ambassador.campusName}</span>
@@ -102,7 +104,9 @@ export function DashboardAmbassador() {
         <div className="space-y-1">
           <div className="text-xs font-semibold text-foreground flex items-center gap-2">
             <span>Your Exclusive Chapter Invitation URL</span>
-            <span className="badge-coral text-[10px]">{ambassador.referralCode}</span>
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-primary/10 text-primary border border-primary/20">
+              {ambassador.referralCode}
+            </span>
           </div>
           <p className="text-xs text-muted-foreground">
             Peers signing up through your link earn 200 welcome XP and auto-join your campus chapter roster.
@@ -140,7 +144,7 @@ export function DashboardAmbassador() {
             unit: "Students",
             sub: `${50 - ambassador.joinedPeers} to Diamond Fellow`,
             icon: Users,
-            color: "text-blue-500",
+            color: "text-[#D4B872]",
           },
           {
             label: "Ambassador XP",
@@ -198,7 +202,9 @@ export function DashboardAmbassador() {
                 Milestones unlocked based on campus engagement and verified registrations.
               </p>
             </div>
-            <span className="badge-coral text-xs">Current: {ambassador.tier}</span>
+            <span className="px-2.5 py-0.5 rounded-full text-xs font-mono font-semibold bg-[#D4B872]/20 text-[#D4B872] border border-[#D4B872]/30">
+              Current: {ambassador.tier}
+            </span>
           </div>
 
           <div className="space-y-4">
@@ -226,7 +232,7 @@ export function DashboardAmbassador() {
                     tier.status === "unlocked"
                       ? "text-emerald-600 dark:text-emerald-400 bg-emerald-500/10"
                       : tier.status === "in_progress"
-                      ? "text-blue-600 dark:text-blue-400 bg-blue-500/10"
+                      ? "text-primary bg-primary/10"
                       : "text-muted-foreground bg-secondary"
                   }`}>
                     {tier.status === "unlocked" ? "Unlocked" : tier.status === "in_progress" ? "Active Goal" : "Locked"}
@@ -254,7 +260,7 @@ export function DashboardAmbassador() {
           <div className="flex items-center justify-between border-b border-hairline pb-4">
             <div>
               <h2 className="font-serif text-xl font-normal text-foreground flex items-center gap-2">
-                <Trophy className="w-5 h-5 text-blue-500" />
+                <Trophy className="w-5 h-5 text-[#D4B872]" />
                 <span>Campus Leaderboard</span>
               </h2>
               <p className="text-xs text-muted-foreground mt-0.5">
@@ -276,7 +282,7 @@ export function DashboardAmbassador() {
                 <div className="flex items-center gap-3 min-w-0">
                   <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-mono font-semibold shrink-0 ${
                     item.rank === 1
-                      ? "bg-blue-500/20 text-blue-600 dark:text-blue-400"
+                      ? "bg-[#D4B872]/20 text-[#D4B872]"
                       : item.rank === 2
                       ? "bg-slate-300/30 text-foreground"
                       : item.rank === 3

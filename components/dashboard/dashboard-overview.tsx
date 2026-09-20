@@ -72,10 +72,10 @@ export function DashboardOverview({
       {/* ─────────────────────────────────────
           1. Welcome Banner + Stats
       ───────────────────────────────────── */}
-      <section id="dashboard-welcome-section" className="rounded-2xl bg-gradient-to-r from-blue-600/10 via-indigo-600/5 to-transparent border border-blue-500/20 p-5 sm:p-6 shadow-xs relative overflow-hidden">
+      <section id="dashboard-welcome-section" className="rounded-2xl bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border border-primary/20 p-5 sm:p-6 shadow-xs relative overflow-hidden">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div className="flex items-center gap-3.5">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-blue-600 via-indigo-600 to-blue-500 text-white flex items-center justify-center text-lg font-bold shadow-md shadow-blue-500/20 overflow-hidden shrink-0">
+            <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-primary via-emerald-800 to-primary text-primary-foreground flex items-center justify-center text-lg font-bold shadow-xs overflow-hidden shrink-0">
               {effectiveAvatar ? (
                 <img src={effectiveAvatar} alt={userName} className="w-full h-full object-cover" />
               ) : (
@@ -95,16 +95,16 @@ export function DashboardOverview({
           <div className="flex items-center gap-4 shrink-0 flex-wrap sm:flex-nowrap">
             {/* Inline Stats */}
             <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 text-sm font-medium border border-blue-500/20">
-                <Flame className="w-4 h-4 text-blue-500" />
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary/10 text-primary text-sm font-medium border border-primary/20">
+                <Flame className="w-4 h-4 text-primary" />
                 <span>{streak} day streak</span>
               </div>
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-blue-500/15 to-indigo-500/15 text-blue-600 dark:text-blue-400 text-sm font-semibold border border-blue-500/25">
-                <Zap className="w-4 h-4 text-blue-500" />
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#D4B872]/15 text-[#D4B872] text-sm font-semibold border border-[#D4B872]/30">
+                <Zap className="w-4 h-4 text-[#D4B872]" />
                 <span>Level {currentLevel}</span>
               </div>
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-sm font-medium border border-indigo-500/20">
-                <Award className="w-4 h-4 text-indigo-500" />
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-sm font-medium border border-emerald-500/20">
+                <Award className="w-4 h-4 text-emerald-500" />
                 <span>{totalXP.toLocaleString()} XP</span>
               </div>
             </div>
@@ -127,11 +127,11 @@ export function DashboardOverview({
         <div className="mt-4 pt-3 border-t border-border/40">
           <div className="flex items-center justify-between text-xs text-muted-foreground mb-1.5">
             <span>Level {currentLevel} progress</span>
-            <span className="font-semibold text-blue-600 dark:text-blue-400">{levelXP}/1000 XP</span>
+            <span className="font-semibold text-primary">{levelXP}/1000 XP</span>
           </div>
           <div className="w-full h-2 bg-secondary rounded-full overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-blue-600 via-indigo-500 to-cyan-400 rounded-full transition-all duration-700 ease-out"
+              className="h-full bg-gradient-to-r from-primary via-emerald-600 to-[#D4B872] rounded-full transition-all duration-700 ease-out"
               style={{ width: `${levelPercent}%` }}
             />
           </div>
@@ -145,9 +145,9 @@ export function DashboardOverview({
         <h2 className="text-base font-bold text-foreground mb-3">Quick Actions</h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
           {[
-            { icon: BookOpen, label: "Continue Learning", desc: "Resume your enrolled courses", tab: "courses", color: "text-blue-500", bg: "bg-blue-500/10" },
+            { icon: BookOpen, label: "Continue Learning", desc: "Resume your enrolled courses", tab: "courses", color: "text-primary", bg: "bg-primary/10" },
             { icon: Code, label: "Practice DSA", desc: "Solve problems & build skills", tab: "practice", color: "text-emerald-500", bg: "bg-emerald-500/10" },
-            { icon: Trophy, label: "Hackathons", desc: "Compete in national challenges", tab: "hackathons", color: "text-blue-500", bg: "bg-blue-500/10" },
+            { icon: Trophy, label: "Hackathons", desc: "Compete in national challenges", tab: "hackathons", color: "text-[#D4B872]", bg: "bg-[#D4B872]/10" },
             { icon: Briefcase, label: "Find Jobs", desc: "Browse engineering roles", tab: "jobs", color: "text-purple-500", bg: "bg-purple-500/10" },
             { icon: FileCheck, label: "Resume Scanner", desc: "ATS compatibility check", tab: "resume-ats", color: "text-rose-500", bg: "bg-rose-500/10" },
             { icon: Award, label: "My Certificates", desc: "View earned credentials", tab: "certificates", color: "text-primary", bg: "bg-primary/10" },
@@ -194,7 +194,7 @@ export function DashboardOverview({
             </p>
             <button
               onClick={() => onSwitchTab("courses")}
-              className="mt-4 inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold shadow-xs shadow-blue-500/20 transition-colors cursor-pointer"
+              className="mt-4 inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary hover:bg-primary-active text-primary-foreground text-sm font-semibold shadow-xs transition-colors cursor-pointer"
             >
               Explore Courses <ArrowRight className="w-3.5 h-3.5" />
             </button>
@@ -204,7 +204,7 @@ export function DashboardOverview({
             {continueLearningCourses.slice(0, 2).map((course) => (
               <div
                 key={course.id}
-                className="rounded-xl border border-border/60 bg-card overflow-hidden hover:border-blue-500/40 transition-all group"
+                className="rounded-xl border border-border/60 bg-card overflow-hidden hover:border-primary/40 transition-all group"
               >
                 {/* Course Image */}
                 <div className="relative aspect-[2/1] w-full overflow-hidden bg-secondary">
@@ -220,7 +220,7 @@ export function DashboardOverview({
 
                 {/* Course Info */}
                 <div className="p-4 space-y-3">
-                  <h3 className="text-sm font-semibold text-foreground leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-1">
+                  <h3 className="text-sm font-semibold text-foreground leading-snug group-hover:text-primary transition-colors line-clamp-1">
                     {course.title}
                   </h3>
 
@@ -228,11 +228,11 @@ export function DashboardOverview({
                   <div>
                     <div className="flex items-center justify-between text-xs text-muted-foreground mb-1">
                       <span>{course.lessons} lessons</span>
-                      <span className="font-semibold text-blue-600 dark:text-blue-400">{course.progress}%</span>
+                      <span className="font-semibold text-primary">{course.progress}%</span>
                     </div>
                     <div className="w-full h-1.5 bg-secondary rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-gradient-to-r from-blue-600 via-indigo-500 to-cyan-400 rounded-full transition-all duration-500"
+                        className="h-full bg-gradient-to-r from-primary to-emerald-500 rounded-full transition-all duration-500"
                         style={{ width: `${course.progress}%` }}
                       />
                     </div>
@@ -240,7 +240,7 @@ export function DashboardOverview({
 
                   <Link
                     href={course.href}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 text-white text-xs font-semibold shadow-md shadow-blue-500/20 transition-all cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-primary hover:bg-primary-active text-primary-foreground text-xs font-semibold shadow-xs transition-all cursor-pointer"
                   >
                     Resume <Play className="w-3 h-3 fill-current" />
                   </Link>
@@ -257,7 +257,7 @@ export function DashboardOverview({
       <section className="rounded-xl border border-border/60 bg-card p-4 sm:p-5">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="w-9 h-9 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 flex items-center justify-center shrink-0">
+            <div className="w-9 h-9 rounded-lg bg-primary/10 text-primary border border-primary/20 flex items-center justify-center shrink-0">
               <Terminal className="w-[18px] h-[18px]" />
             </div>
             <div className="min-w-0">
@@ -268,7 +268,7 @@ export function DashboardOverview({
                 <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full leading-none ${
                   (potd?.difficulty || "Medium") === "Easy" ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400" :
                   (potd?.difficulty || "Medium") === "Hard" ? "bg-rose-500/10 text-rose-600 dark:text-rose-400" :
-                  "bg-blue-500/10 text-blue-600 dark:text-blue-400"
+                  "bg-amber-500/10 text-amber-600 dark:text-amber-400"
                 }`}>
                   {potd?.difficulty || "Medium"}
                 </span>
@@ -280,7 +280,7 @@ export function DashboardOverview({
           </div>
           <button
             onClick={() => onSwitchTab("practice")}
-            className="px-4 py-2 rounded-lg bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 text-white text-sm font-semibold shadow-md shadow-blue-500/20 transition-all shrink-0 cursor-pointer"
+            className="px-4 py-2 rounded-lg bg-primary hover:bg-primary-active text-primary-foreground text-sm font-semibold shadow-xs transition-all shrink-0 cursor-pointer"
           >
             Solve Now
           </button>

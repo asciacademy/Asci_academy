@@ -195,7 +195,7 @@ export function DashboardCertificates({
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
           <div className="space-y-2">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase tracking-wider bg-blue-500/10 text-blue-700 dark:text-blue-300 border border-blue-500/20 shrink-0 leading-none">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase tracking-wider bg-primary/10 text-primary border border-primary/20 shrink-0 leading-none">
                 <ShieldCheck className="w-3 h-3" />
                 Accredited Credentials
               </span>
@@ -222,14 +222,14 @@ export function DashboardCertificates({
             />
             <div className="flex items-center gap-3">
               <div className="text-right">
-                <div className="font-mono text-2xl font-bold text-blue-600 dark:text-blue-400">
+                <div className="font-mono text-2xl font-bold text-primary">
                   {certificates.length}
                 </div>
                 <div className="text-[11px] font-mono text-muted-foreground">
                   Earned Credentials
                 </div>
               </div>
-              <div className="w-12 h-12 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-600 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/20 text-primary flex items-center justify-center">
                 <Award className="w-6 h-6" />
               </div>
             </div>
@@ -284,11 +284,11 @@ export function DashboardCertificates({
             {certificates.map((cert) => (
               <div
                 key={cert.certificate_id}
-                className="rounded-2xl border border-hairline bg-card hover:border-blue-500/40 p-5 sm:p-6 flex flex-col justify-between shadow-2xs hover:shadow-xs transition-all duration-200 group relative overflow-hidden"
+                className="rounded-2xl border border-hairline bg-card hover:border-primary/40 p-5 sm:p-6 flex flex-col justify-between shadow-2xs hover:shadow-xs transition-all duration-200 group relative overflow-hidden"
               >
                 <div>
                   <div className="flex items-center justify-between gap-2 mb-3">
-                    <span className="font-mono text-[10.5px] font-bold text-blue-700 dark:text-blue-300 bg-blue-500/10 px-2.5 py-0.5 rounded-full border border-blue-500/20">
+                    <span className="font-mono text-[10.5px] font-bold text-primary bg-primary/10 px-2.5 py-0.5 rounded-full border border-primary/20">
                       {cert.certificate_id}
                     </span>
                     <span className="text-[11px] font-mono text-muted-foreground">
@@ -300,13 +300,13 @@ export function DashboardCertificates({
                     </span>
                   </div>
 
-                  <h3 className="font-serif text-xl font-medium text-foreground group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                  <h3 className="font-serif text-xl font-medium text-foreground group-hover:text-primary transition-colors">
                     {cert.course_title}
                   </h3>
 
                   <div className="mt-2.5 flex items-center gap-2">
                     <span className="inline-flex items-center gap-1.5 text-[11px] font-mono text-muted-foreground">
-                      <ShieldCheck className="w-3.5 h-3.5 text-blue-600" />
+                      <ShieldCheck className="w-3.5 h-3.5 text-primary" />
                       {cert.grade || "Mastery with Highest Distinction"}
                     </span>
                   </div>
@@ -319,7 +319,7 @@ export function DashboardCertificates({
                         setSelectedCertificate(cert)
                         setModalOpen(true)
                       }}
-                      className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs shadow-blue-500/20 transition-all cursor-pointer shrink-0"
+                      className="px-4 py-2 rounded-xl bg-primary hover:bg-primary-active text-primary-foreground text-xs font-semibold shadow-xs transition-all cursor-pointer shrink-0"
                     >
                       View &amp; Print
                     </button>
@@ -418,9 +418,9 @@ export function DashboardCertificates({
                       <button
                         onClick={() => handleClaimCertificate(course)}
                         disabled={isGenerating}
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-xs font-semibold shadow-xs shadow-blue-500/20 transition-colors cursor-pointer w-full justify-center"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary hover:bg-primary-active disabled:opacity-50 text-primary-foreground text-xs font-semibold shadow-xs transition-colors cursor-pointer w-full justify-center"
                       >
-                        <Award className="w-3.5 h-3.5" />
+                        <Award className="w-3.5 h-3.5 text-[#D4B872]" />
                         <span>{isGenerating ? "Minting Credential..." : "Claim Gravit Certificate"}</span>
                       </button>
                     )}
@@ -465,7 +465,7 @@ export function DashboardCertificates({
                       <span className="text-[10px] font-mono text-muted-foreground uppercase">
                         {course.category || "In Progress"}
                       </span>
-                      <span className="text-[10px] font-mono font-medium text-blue-600 dark:text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded-full flex items-center gap-1">
+                      <span className="text-[10px] font-mono font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-full flex items-center gap-1">
                         <Lock className="w-3 h-3" />
                         {percent}% Complete
                       </span>
@@ -483,7 +483,7 @@ export function DashboardCertificates({
                       </div>
                       <div className="w-full h-1.5 bg-secondary rounded-full overflow-hidden border border-hairline">
                         <div
-                          className="h-full bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full transition-all duration-500"
+                          className="h-full bg-gradient-to-r from-primary to-emerald-500 rounded-full transition-all duration-500"
                           style={{ width: `${percent}%` }}
                         />
                       </div>
@@ -496,7 +496,7 @@ export function DashboardCertificates({
                         href={`/courses/${courseSlug}/learn`}
                         className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg border border-hairline bg-secondary hover:bg-card text-xs font-mono text-foreground transition-colors"
                       >
-                        <PlayCircle className="w-3.5 h-3.5 text-blue-600" />
+                        <PlayCircle className="w-3.5 h-3.5 text-primary" />
                         <span>Continue Learning</span>
                       </Link>
 
@@ -513,7 +513,7 @@ export function DashboardCertificates({
                     {/* Interactive Test Button to simulate 100% completion in demo */}
                     <button
                       onClick={() => handleSimulateCompletion(courseKey)}
-                      className="text-[10px] font-mono text-blue-600 dark:text-blue-400 hover:text-blue-500 transition-colors text-center cursor-pointer hover:underline flex items-center justify-center gap-1 pt-1"
+                      className="text-[10px] font-mono text-primary hover:text-primary-active transition-colors text-center cursor-pointer hover:underline flex items-center justify-center gap-1 pt-1"
                     >
                       <Zap className="w-3 h-3" />
                       <span>Simulate 100% Completion (Test Unlocking)</span>

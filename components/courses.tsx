@@ -1,43 +1,48 @@
 "use client"
 
-import { useState, useEffect, useMemo } from "react"
+import { useState, useEffect, useMemo, useTransition } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import {
   ArrowRight, Code2, Server, Layers, Globe, Cloud, Zap, Braces, Clock,
   BarChart3, BookOpen, TerminalSquare, BrainCircuit, ShieldCheck, GitBranch,
   Award, Search, Star, Filter, LayoutGrid, List, Users, CheckCircle2,
-  X, ChevronDown, Check, ChevronLeft, ChevronRight, Rows3, Plus, PlayCircle, Loader2
+  X, ChevronDown, Check, ChevronLeft, ChevronRight, Rows3, Plus, PlayCircle, Loader2,
+  Sparkles, GraduationCap, Briefcase, ExternalLink, Bookmark, Edit3, Trash2
 } from "lucide-react"
 import { useAuth } from "@/context/auth-context"
+import { useAdmin } from "@/context/admin-context"
 import { CURRICULUM_COURSES } from "@/lib/curriculum-data"
-import { getCourseraDataForCourse, CourseraExtraData } from "@/lib/coursera-metadata"
+import { getCourseraDataForCourse, CourseraExtraData, COURSERA_PARTNERS } from "@/lib/coursera-metadata"
 import { EnrollModal } from "@/components/enroll-modal"
-import { TechLogo } from "@/components/tech-logo"
 import { WishlistButton } from "@/components/courses/wishlist-button"
 import { useWishlist, useEnrollments } from "@/lib/user-learning-store"
 import { enrollInCourse } from "@/app/actions/courses"
 import { EmptyBook3DIcon } from "@/components/icons"
 import { CareerRoleShelf } from "@/components/courses/career-role-shelf"
 import { CAREER_ROLE_TRACKS, CareerRoleTrack } from "@/lib/career-roles-data"
+import { useCoursesStore, UnifiedCourse } from "@/lib/courses-store"
+import { CourseEditorModal } from "@/components/courses/course-editor-modal"
+import {
+  CourseCardSkeleton,
+  CourseGridSkeleton,
+  CoursePathwaySkeleton,
+  CourseListSkeleton,
+} from "@/components/courses/courses-skeleton"
 
 const categories = [
   "All",
-  "Enrolled",
-  "Wishlist",
   "AI & ML",
   "Data Science",
   "Cybersecurity",
-  "Languages & Web",
-  "Web Development",
-  "Programming",
-  "Git & DevOps",
-  "Cloud & Infra",
+  "Web & Full-Stack",
+  "Systems & Languages",
   "DSA",
-  "Backend"
+  "Enrolled",
+  "Wishlist",
 ]
 
-const credentialTypes = ["All Types", "Specialization", "Professional Certificate", "Course"]
+const credentialTypes = ["All Types", "Professional Certificate", "Specialization", "Course"]
 const difficultyLevels = ["All Levels", "Beginner", "Intermediate", "Advanced"]
 const partnerOptions = [
   "All Partners",
@@ -46,6 +51,7 @@ const partnerOptions = [
   "IBM",
   "Microsoft",
   "HarvardX",
+  "Anthropic",
   "Linux Foundation",
   "Vercel",
   "ASCI Institute"
@@ -121,21 +127,98 @@ export function Courses({ hideHeader = false, className = "" }: CoursesProps = {
   const [difficultyFilter, setDifficultyFilter] = useState("All Levels")
   const [partnerFilter, setPartnerFilter] = useState("All Partners")
   const [searchQuery, setSearchQuery] = useState("")
+  const [showFilters, setShowFilters] = useState(false)
   const [viewMode, setViewMode] = useState<"pathways" | "grid" | "list">("pathways")
   const [sortBy, setSortBy] = useState<"popular" | "rating" | "newest">("popular")
-  const [courses, setCourses] = useState<CourseType[]>(BASE_COURSES)
+  const { courses: storeCourses, isLoaded, addCourse, updateCourse, deleteCourse } = useCoursesStore()
+  const [isPending, startTransition] = useTransition()
+
+  const courses = useMemo<CourseType[]>(() => {
+    const source = storeCourses && storeCourses.length > 0 ? storeCourses : BASE_COURSES
+    return source.map((c) => ({
+      ...c,
+      icon: getCategoryIcon(c.category),
+    })) as CourseType[]
+  }, [storeCourses])
+
+  const [isEditorModalOpen, setIsEditorModalOpen] = useState(false)
+  const [editingCourse, setEditingCourse] = useState<UnifiedCourse | null>(null)
+  const [deleteConfirmCourse, setDeleteConfirmCourse] = useState<{ id: string; title: string } | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
+
+  const handleOpenCreateCourse = () => {
+    setEditingCourse(null)
+    setIsEditorModalOpen(true)
+  }
+
+  const handleOpenEditCourse = (course: CourseType) => {
+    setEditingCourse(course as unknown as UnifiedCourse)
+    setIsEditorModalOpen(true)
+  }
+
+  const handleSaveCourse = async ({ isNew, course }: { isNew: boolean; course: any }) => {
+    if (isNew) {
+      await addCourse(course)
+    } else {
+      const targetKey = editingCourse?.id || editingCourse?.slug || course.slug
+      await updateCourse(targetKey, course)
+    }
+  }
+
+  const handleDeleteCourse = async () => {
+    if (!deleteConfirmCourse) return
+    setIsDeleting(true)
+    try {
+      await deleteCourse(deleteConfirmCourse.id)
+      setDeleteConfirmCourse(null)
+    } catch (err) {
+      console.warn("Error deleting course:", err)
+    } finally {
+      setIsDeleting(false)
+    }
+  }
+
   const [navigatingSlug, setNavigatingSlug] = useState<string | null>(null)
-  const [isFilterPending, setIsFilterPending] = useState(false)
   const { profile } = useAuth()
+  const { isAdmin } = useAdmin()
   const userTier = profile?.subscription_tier || null
   const { isSaved, count: wishlistCount } = useWishlist()
   const { isEnrolled, getEnrollment, enroll, count: enrolledCount } = useEnrollments()
 
+  const activeFilterCount =
+    (credentialFilter !== "All Types" ? 1 : 0) +
+    (difficultyFilter !== "All Levels" ? 1 : 0) +
+    (partnerFilter !== "All Partners" ? 1 : 0)
+
   const handleFilterSelect = (cat: string) => {
     if (filter === cat) return
-    setIsFilterPending(true)
-    setFilter(cat)
-    setTimeout(() => setIsFilterPending(false), 200)
+    startTransition(() => {
+      setFilter(cat)
+    })
+  }
+
+  const handleCredentialSelect = (val: string) => {
+    startTransition(() => {
+      setCredentialFilter(val)
+    })
+  }
+
+  const handleDifficultySelect = (val: string) => {
+    startTransition(() => {
+      setDifficultyFilter(val)
+    })
+  }
+
+  const handlePartnerSelect = (val: string) => {
+    startTransition(() => {
+      setPartnerFilter(val)
+    })
+  }
+
+  const handleSortSelect = (val: any) => {
+    startTransition(() => {
+      setSortBy(val)
+    })
   }
 
   // Enrollment modal state
@@ -155,26 +238,25 @@ export function Courses({ hideHeader = false, className = "" }: CoursesProps = {
       } else if (filter === "Wishlist") {
         const s = course.slug || course.id
         if (!isSaved(s)) return false
-      } else if (filter === "Languages & Web") {
+      } else if (filter === "Web & Full-Stack") {
         const s = (course.slug || course.id).toLowerCase()
-        const isLangOrWeb =
-          s === "c" ||
-          s === "cpp" ||
-          s === "webdev" ||
-          s === "html" ||
-          s === "css" ||
-          s === "javascript" ||
-          s === "java" ||
-          s === "python" ||
-          s === "typescript" ||
-          s === "react" ||
-          s === "sql" ||
-          s === "git" ||
-          course.category === "Web Development" ||
-          course.category === "Programming"
-        if (!isLangOrWeb) return false
-      } else if (filter !== "All" && course.category !== filter) {
-        return false
+        const isWeb =
+          s === "webdev" || s === "html" || s === "css" || s === "javascript" ||
+          s === "react" || course.category === "Web Development"
+        if (!isWeb) return false
+      } else if (filter === "Systems & Languages") {
+        const s = (course.slug || course.id).toLowerCase()
+        const isSys =
+          s === "c" || s === "cpp" || s === "python" || s === "java" ||
+          s === "typescript" || s === "sql" || course.category === "Programming" || course.category === "Backend"
+        if (!isSys) return false
+      } else if (filter === "DSA") {
+        const s = (course.slug || course.id).toLowerCase()
+        if (course.category !== "DSA" && !s.includes("dsa") && !s.includes("algorithm")) return false
+      } else if (filter === "Cybersecurity") {
+        if (course.category !== "Cybersecurity" && course.category !== "Cloud & Infra" && course.category !== "Git & DevOps") return false
+      } else if (filter !== "All") {
+        if (course.category !== filter) return false
       }
 
       // Credential type filter
@@ -229,26 +311,20 @@ export function Courses({ hideHeader = false, className = "" }: CoursesProps = {
         acc[cat] = enrolledCount
       } else if (cat === "Wishlist") {
         acc[cat] = wishlistCount
-      } else if (cat === "Languages & Web") {
+      } else if (cat === "Web & Full-Stack") {
         acc[cat] = courses.filter((c) => {
           const s = (c.slug || c.id).toLowerCase()
-          return (
-            s === "c" ||
-            s === "cpp" ||
-            s === "webdev" ||
-            s === "html" ||
-            s === "css" ||
-            s === "javascript" ||
-            s === "java" ||
-            s === "python" ||
-            s === "typescript" ||
-            s === "react" ||
-            s === "sql" ||
-            s === "git" ||
-            c.category === "Web Development" ||
-            c.category === "Programming"
-          )
+          return s === "webdev" || s === "html" || s === "css" || s === "javascript" || s === "react" || c.category === "Web Development"
         }).length
+      } else if (cat === "Systems & Languages") {
+        acc[cat] = courses.filter((c) => {
+          const s = (c.slug || c.id).toLowerCase()
+          return s === "c" || s === "cpp" || s === "python" || s === "java" || s === "typescript" || s === "sql" || c.category === "Programming" || c.category === "Backend"
+        }).length
+      } else if (cat === "DSA") {
+        acc[cat] = courses.filter((c) => c.category === "DSA" || (c.slug || "").includes("dsa")).length
+      } else if (cat === "Cybersecurity") {
+        acc[cat] = courses.filter((c) => c.category === "Cybersecurity" || c.category === "Cloud & Infra" || c.category === "Git & DevOps").length
       } else {
         acc[cat] = courses.filter((c) => c.category === cat).length
       }
@@ -270,15 +346,14 @@ export function Courses({ hideHeader = false, className = "" }: CoursesProps = {
         return { ...track, courses: wishlistCourses }
       }
 
-      // Filter courses within this track
       const matchingCourses = track.courses.filter((course) => {
-        // Category filtering
         if (filter !== "All") {
-          if (filter === "Languages & Web") {
-            if (course.category !== "Web Development" && course.category !== "Programming") return false
-          } else if (course.category !== filter) {
-            return false
-          }
+          if (filter === "Web & Full-Stack" && course.category !== "Web Development") return false
+          if (filter === "Systems & Languages" && course.category !== "Programming" && course.category !== "Backend") return false
+          if (filter === "Cybersecurity" && course.category !== "Cybersecurity" && course.category !== "Cloud & Infra") return false
+          if (filter === "AI & ML" && course.category !== "AI & ML") return false
+          if (filter === "Data Science" && course.category !== "Data Science") return false
+          if (filter === "DSA" && course.category !== "DSA") return false
         }
 
         if (credentialFilter !== "All Types") {
@@ -312,13 +387,11 @@ export function Courses({ hideHeader = false, className = "" }: CoursesProps = {
 
   const hasActiveFilters = filter !== "All" || credentialFilter !== "All Types" || difficultyFilter !== "All Levels" || partnerFilter !== "All Partners" || searchQuery.trim() !== ""
 
-  // Finite pagination & batch browsing (eliminates infinite scroll fatigue)
+  // Finite pagination & batch browsing (strictly 2 rows x 3 cols = 6 items per page in grid view)
   const [currentPage, setCurrentPage] = useState(1)
   const [showAll, setShowAll] = useState(false)
-  // Strictly 2 rows per page in grid view (2 rows x 3 columns = 6 items); paginate if exceeded
   const itemsPerPage = viewMode === "grid" ? 6 : 4
 
-  // Reset pagination whenever filters, category tabs, or view modes change
   useEffect(() => {
     setCurrentPage(1)
     setShowAll(false)
@@ -356,34 +429,40 @@ export function Courses({ hideHeader = false, className = "" }: CoursesProps = {
   }, [currentPage, totalPages])
 
   const resetAllFilters = () => {
-    setFilter("All")
-    setCredentialFilter("All Types")
-    setDifficultyFilter("All Levels")
-    setPartnerFilter("All Partners")
-    setSearchQuery("")
+    startTransition(() => {
+      setFilter("All")
+      setCredentialFilter("All Types")
+      setDifficultyFilter("All Levels")
+      setPartnerFilter("All Partners")
+      setSearchQuery("")
+    })
   }
 
   return (
-    <section id="courses" className={`relative ${hideHeader ? "py-6 lg:py-10" : "py-16 lg:py-24"} bg-background ${className}`}>
+    <section id="courses" className={`relative ${hideHeader ? "py-8" : "py-16 lg:py-24"} bg-background ${className}`}>
       <div className="relative mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        {/* Section Header with Dedicated Axel Stage */}
+        {/* ══════════════════════════════════════════════════════════
+            1. COURSERA-STYLE ACADEMIC & INSTITUTIONAL HEADER
+        ══════════════════════════════════════════════════════════ */}
         {!hideHeader && (
-          <div className="relative mb-12 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
-            <div className="max-w-2xl text-left">
+          <div className="relative mb-10 sm:mb-12 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
+            <div className="max-w-3xl text-left">
               <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3.5 py-1 text-xs font-medium text-primary mb-4 backdrop-blur-xs shadow-xs">
-                <BookOpen className="h-3.5 w-3.5" />
-                <span className="tracking-widest uppercase font-mono text-[11px]">Course Catalog</span>
+                <GraduationCap className="h-3.5 w-3.5" />
+                <span className="tracking-widest uppercase font-mono text-[11px]">Accredited Curriculum Catalog</span>
               </div>
-              <h2
-                className="font-serif text-3xl font-normal tracking-tight text-foreground sm:text-4xl md:text-5xl lg:text-6xl"
-                style={{ letterSpacing: "-1.2px" }}
-              >
-                All Courses &amp; Learning Tracks
+              <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-normal tracking-tight text-foreground leading-[1.08]">
+                Specializations &amp; Professional Certificates
               </h2>
               <p className="mt-4 text-sm sm:text-base text-muted-foreground leading-relaxed">
-                Explore <span className="font-semibold text-foreground">{courses.length} practical courses</span> designed to teach you coding, databases, web development, and algorithms step-by-step.
+                Explore verified programs designed by global technology leaders and academic institutions including <span className="font-semibold text-foreground">Google, DeepLearning.AI, IBM, Microsoft, and HarvardX</span>. Earn career-recognized credentials, build production-grade projects, and master software engineering step-by-step.
               </p>
+
+              {/* Coursera Career Impact Stat Pill */}
+              <div className="mt-4 inline-flex items-center gap-2 rounded-xl bg-secondary/80 border border-hairline px-3.5 py-1.5 text-xs text-foreground/90 font-mono">
+                <Briefcase className="h-3.5 w-3.5 text-emerald-500" />
+                <span><strong className="text-foreground">92% of learners</strong> report career benefits including new job offers, promotions, or salary increases.</span>
+              </div>
             </div>
 
             {/* Dedicated Axel Stage: Reserved layout space so nothing overlays */}
@@ -403,10 +482,10 @@ export function Courses({ hideHeader = false, className = "" }: CoursesProps = {
         )}
 
         {hideHeader && (
-          <div className="flex items-center justify-between pt-4 pb-2 border-b border-border/40 mb-6">
+          <div className="flex items-center justify-between pt-2 pb-2 border-b border-border/40 mb-6">
             <div>
-              <span className="text-xs font-mono uppercase tracking-widest text-primary">Course Catalog</span>
-              <h2 className="font-serif text-2xl font-normal text-foreground mt-1">Specializations & Certificates</h2>
+              <span className="text-xs font-mono uppercase tracking-widest text-primary">Academic Catalog</span>
+              <h2 className="font-serif text-2xl font-normal text-foreground mt-1">Specializations &amp; Certificates</h2>
             </div>
             <div className="hidden lg:flex relative shrink-0 w-56 h-48 items-center justify-center">
               <div
@@ -423,107 +502,175 @@ export function Courses({ hideHeader = false, className = "" }: CoursesProps = {
           </div>
         )}
 
-        {/* Coursera Search & Discovery Control Bar */}
-        <div className="mb-6 space-y-4">
-          {/* Top Search & View Mode Switcher */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+        {/* ══════════════════════════════════════════════════════════
+            2. COURSERA SEARCH & DISCOVERY CONTROL BAR
+        ══════════════════════════════════════════════════════════ */}
+        {/* ══════════════════════════════════════════════════════════
+            ADMIN CONTROLS RIBBON (Visible to Administrators)
+        ══════════════════════════════════════════════════════════ */}
+        {isAdmin && (
+          <div className="mb-8 rounded-2xl border border-emerald-500/30 bg-gradient-to-r from-emerald-950/40 via-emerald-900/20 to-teal-950/40 backdrop-blur-md p-4 sm:p-5 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex items-center gap-3.5">
+              <div className="h-10 w-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0 shadow-inner">
+                <ShieldCheck className="h-5 w-5" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-400">
+                    Admin Mode Active
+                  </span>
+                  <span className="inline-flex items-center rounded-full bg-emerald-500/20 px-2 py-0.5 text-[10px] font-mono text-emerald-300">
+                    Full Catalog Control
+                  </span>
+                </div>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  Create new specializations, customize module contents, adjust pricing locks, or publish live lessons.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 flex-wrap shrink-0">
+              <button
+                type="button"
+                onClick={handleOpenCreateCourse}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-primary hover:bg-primary-active text-primary-foreground text-xs font-semibold shadow-xs transition-all active:scale-[0.98] cursor-pointer"
+              >
+                <Plus className="h-3.5 w-3.5" />
+                <span>Add New Course</span>
+              </button>
+              <Link
+                href="/admin/courses"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-hairline bg-card hover:bg-secondary text-foreground text-xs font-medium transition-all"
+              >
+                <ExternalLink className="h-3.5 w-3.5 text-muted-foreground" />
+                <span>Curriculum Manager</span>
+              </Link>
+            </div>
+          </div>
+        )}
+
+        <div className="mb-8 space-y-3.5">
+          {/* Main Control Row: Search + Filter Toggle + Sort + View */}
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
             {/* Search Input */}
-            <div className="relative w-full sm:max-w-md">
+            <div className="relative flex-1">
               <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="What do you want to learn? (e.g., Deep Learning, Python, Kubernetes...)"
-                className="w-full rounded-xl border border-hairline bg-card/80 pl-10 pr-9 py-2.5 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-xs transition-[border-color,box-shadow] duration-150"
+                placeholder="What do you want to learn? (e.g., Deep Learning, Python, Next.js)..."
+                className="w-full rounded-full border border-hairline bg-card/80 dark:bg-card/40 backdrop-blur-md pl-10 pr-9 py-2.5 text-xs sm:text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 shadow-2xs transition-all"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer p-0.5"
+                  aria-label="Clear search"
                 >
-                  <X className="h-3.5 w-3.5" />
+                  <X className="h-4 w-4" />
                 </button>
               )}
             </div>
 
-            {/* View Mode & Sort Switcher */}
-            <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
-              {/* Sort Dropdown */}
-              <div className="flex items-center gap-1.5 rounded-xl border border-hairline bg-card/60 px-3 py-1.5 text-xs text-muted-foreground">
-                <span>Sort:</span>
+            {/* Actions Cluster: Filter Toggle, Sort, View Switcher */}
+            <div className="flex items-center gap-2 justify-between sm:justify-end shrink-0">
+              {/* Filter Button with Active Badge */}
+              <button
+                type="button"
+                onClick={() => setShowFilters(!showFilters)}
+                className={`inline-flex items-center gap-1.5 rounded-full border px-3.5 py-2 text-xs font-medium transition-all cursor-pointer ${
+                  showFilters || activeFilterCount > 0
+                    ? "bg-primary/10 border-primary/40 text-primary font-semibold"
+                    : "border-hairline bg-card/80 hover:bg-secondary text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <Filter className="h-3.5 w-3.5" />
+                <span>Filters</span>
+                {activeFilterCount > 0 && (
+                  <span className="rounded-full bg-primary text-primary-foreground px-1.5 py-0.2 text-[10px] font-mono font-bold leading-tight">
+                    {activeFilterCount}
+                  </span>
+                )}
+                <ChevronDown className={`h-3 w-3 transition-transform duration-200 ${showFilters ? "rotate-180" : ""}`} />
+              </button>
+
+              {/* Sort Selector */}
+              <div className="flex items-center gap-1.5 rounded-full border border-hairline bg-card/80 px-3 py-2 text-xs text-muted-foreground">
+                <span className="font-mono text-[11px] hidden md:inline">Sort:</span>
                 <select
                   value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value as any)}
-                  className="bg-transparent text-foreground font-medium focus:outline-none cursor-pointer"
+                  onChange={(e) => handleSortSelect(e.target.value)}
+                  className="bg-transparent text-foreground font-medium focus:outline-none cursor-pointer text-xs"
                 >
                   <option value="popular" className="bg-card text-foreground">Most Popular</option>
                   <option value="rating" className="bg-card text-foreground">Highest Rated</option>
-                  <option value="newest" className="bg-card text-foreground">Newest (2026)</option>
+                  <option value="newest" className="bg-card text-foreground">Newest</option>
                 </select>
               </div>
 
-              {/* View Toggle */}
-              <div className="inline-flex items-center rounded-xl border border-hairline bg-card/60 p-1">
+              {/* View Mode Toggle: Pathways vs Grid vs List */}
+              <div className="inline-flex items-center rounded-full border border-hairline bg-card/80 p-0.5">
                 <button
                   onClick={() => setViewMode("pathways")}
-                  title="Career Role Pathways (Horizontal Shelves)"
-                  className={`rounded-lg px-2.5 py-1 text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer ${
+                  title="Career Role Pathways"
+                  className={`rounded-full px-3 py-1.5 text-xs font-medium flex items-center gap-1.5 transition-all cursor-pointer ${
                     viewMode === "pathways"
-                      ? "bg-primary text-primary-foreground shadow-xs font-semibold"
+                      ? "bg-primary text-primary-foreground shadow-2xs font-semibold"
                       : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
                   <Rows3 className="h-3.5 w-3.5" />
-                  <span className="hidden sm:inline">Pathways</span>
+                  <span className="hidden md:inline">Pathways</span>
                 </button>
                 <button
                   onClick={() => setViewMode("grid")}
-                  title="Curated Grid View"
-                  className={`rounded-lg p-1.5 transition-colors cursor-pointer ${
-                    viewMode === "grid" ? "bg-primary text-primary-foreground shadow-xs" : "text-muted-foreground hover:text-foreground"
+                  title="Curated Grid"
+                  className={`rounded-full p-1.5 transition-all cursor-pointer ${
+                    viewMode === "grid"
+                      ? "bg-primary text-primary-foreground shadow-2xs"
+                      : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
-                  <LayoutGrid className="h-4 w-4" />
+                  <LayoutGrid className="h-3.5 w-3.5" />
                 </button>
                 <button
                   onClick={() => setViewMode("list")}
-                  title="Detailed List View"
-                  className={`rounded-lg p-1.5 transition-colors cursor-pointer ${
-                    viewMode === "list" ? "bg-primary text-primary-foreground shadow-xs" : "text-muted-foreground hover:text-foreground"
+                  title="Detailed List"
+                  className={`rounded-full p-1.5 transition-all cursor-pointer ${
+                    viewMode === "list"
+                      ? "bg-primary text-primary-foreground shadow-2xs"
+                      : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
-                  <List className="h-4 w-4" />
+                  <List className="h-3.5 w-3.5" />
                 </button>
               </div>
             </div>
           </div>
 
-          {/* Category Filter Tabs (Segmented Capsule with Horizontal Scroll on Mobile) */}
-          <div className="flex sm:justify-center overflow-x-auto no-scrollbar pb-1 -mx-4 px-4 sm:mx-0 sm:px-0">
-            <div className="inline-flex flex-nowrap sm:flex-wrap items-center gap-1.5 rounded-2xl border border-hairline bg-secondary/80 p-1.5 backdrop-blur-md shadow-xs shrink-0 sm:shrink">
+          {/* Clean Category Navigation Pills */}
+          <div className="flex overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 py-0.5">
+            <div className="inline-flex items-center gap-1.5 shrink-0">
               {categories.map((cat) => {
                 const count = categoryCounts[cat] || 0
                 const isActive = filter === cat
+                if (count === 0 && !isActive) return null
+
                 return (
                   <button
                     key={cat}
                     onClick={() => handleFilterSelect(cat)}
-                    suppressHydrationWarning
-                    className={`group inline-flex items-center gap-2 rounded-xl px-3.5 py-1.5 text-xs font-medium transition-[color,background-color,border-color,box-shadow,transform] duration-150 active:scale-[0.98] cursor-pointer ${
+                    className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-medium transition-all active:scale-[0.98] cursor-pointer whitespace-nowrap ${
                       isActive
-                        ? "bg-card text-foreground border border-hairline shadow-xs font-semibold"
-                        : "text-muted-foreground hover:text-foreground hover:bg-card/40"
+                        ? "bg-foreground text-background font-semibold shadow-xs"
+                        : "border border-hairline bg-card/60 hover:bg-card text-muted-foreground hover:text-foreground"
                     }`}
                   >
-                    <span>{cat}</span>
-                    <span
-                      className={`rounded-full px-1.5 py-0.5 text-[10px] font-mono leading-none transition-colors ${
-                        isActive
-                          ? "bg-primary/20 text-primary font-bold"
-                          : "bg-muted text-muted-foreground group-hover:text-foreground"
-                      }`}
-                    >
+                    {cat === "Enrolled" && <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />}
+                    {cat === "Wishlist" && <Bookmark className="h-3 w-3 text-amber-500" />}
+                    <span>{cat === "All" ? "All Programs" : cat}</span>
+                    <span className={`text-[10px] font-mono ${isActive ? "opacity-75" : "text-muted-foreground/70"}`}>
                       {count}
                     </span>
                   </button>
@@ -532,41 +679,92 @@ export function Courses({ hideHeader = false, className = "" }: CoursesProps = {
             </div>
           </div>
 
-          {/* Secondary Level Filters & Live Status Bar */}
-          <div className="flex flex-wrap items-center justify-between gap-3 pt-1 text-xs">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="text-muted-foreground font-mono text-[11px]">Level:</span>
-              <div className="inline-flex items-center gap-1 rounded-xl border border-hairline bg-card/60 p-1">
-                {difficultyLevels.map((lvl) => (
-                  <button
-                    key={lvl}
-                    onClick={() => setDifficultyFilter(lvl)}
-                    className={`rounded-lg px-2.5 py-1 text-[11px] font-medium transition-colors cursor-pointer ${
-                      difficultyFilter === lvl
-                        ? "bg-primary text-primary-foreground font-semibold shadow-2xs"
-                        : "text-muted-foreground hover:text-foreground"
-                    }`}
-                  >
-                    {lvl}
-                  </button>
-                ))}
+          {/* Expandable Filter Drawer (Type, Level, Partner) */}
+          {showFilters && (
+            <div className="rounded-2xl border border-hairline bg-card/95 p-4 space-y-3.5 shadow-xs transition-all animate-in fade-in slide-in-from-top-2 duration-150">
+              <div className="flex flex-wrap items-start gap-5 text-xs">
+                {/* Credential Type */}
+                <div className="space-y-1.5">
+                  <span className="text-[11px] font-mono text-muted-foreground font-medium">Type:</span>
+                  <div className="flex items-center gap-1 flex-wrap">
+                    {credentialTypes.map((t) => (
+                      <button
+                        key={t}
+                        onClick={() => handleCredentialSelect(t)}
+                        className={`rounded-lg px-2.5 py-1 text-[11px] transition-colors cursor-pointer ${
+                          credentialFilter === t
+                            ? "bg-primary text-primary-foreground font-semibold"
+                            : "bg-secondary text-muted-foreground hover:text-foreground"
+                        }`}
+                      >
+                        {t}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Level */}
+                <div className="space-y-1.5">
+                  <span className="text-[11px] font-mono text-muted-foreground font-medium">Level:</span>
+                  <div className="flex items-center gap-1 flex-wrap">
+                    {difficultyLevels.map((lvl) => (
+                      <button
+                        key={lvl}
+                        onClick={() => handleDifficultySelect(lvl)}
+                        className={`rounded-lg px-2.5 py-1 text-[11px] transition-colors cursor-pointer ${
+                          difficultyFilter === lvl
+                            ? "bg-primary text-primary-foreground font-semibold"
+                            : "bg-secondary text-muted-foreground hover:text-foreground"
+                        }`}
+                      >
+                        {lvl}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Partner Selector */}
+                <div className="space-y-1.5">
+                  <span className="text-[11px] font-mono text-muted-foreground font-medium">Partner:</span>
+                  <div>
+                    <select
+                      value={partnerFilter}
+                      onChange={(e) => handlePartnerSelect(e.target.value)}
+                      className="rounded-lg border border-hairline bg-secondary px-2.5 py-1 text-[11px] text-foreground font-medium focus:outline-none cursor-pointer"
+                    >
+                      {partnerOptions.map((opt) => (
+                        <option key={opt} value={opt} className="bg-card text-foreground">
+                          {opt}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
               </div>
 
+              {/* Reset link inside drawer if filters active */}
               {hasActiveFilters && (
-                <button
-                  onClick={resetAllFilters}
-                  className="text-xs text-primary underline underline-offset-4 hover:text-foreground cursor-pointer ml-1 font-mono"
-                >
-                  Clear all
-                </button>
+                <div className="pt-2.5 border-t border-hairline flex items-center justify-between">
+                  <span className="text-[11px] text-muted-foreground font-mono">
+                    {activeFilterCount} custom {activeFilterCount === 1 ? "filter" : "filters"} applied
+                  </span>
+                  <button
+                    onClick={resetAllFilters}
+                    className="text-xs text-primary underline underline-offset-2 hover:text-foreground cursor-pointer font-medium"
+                  >
+                    Reset all filters
+                  </button>
+                </div>
               )}
             </div>
+          )}
 
-            {/* Metric Status indicator */}
-            <div className="flex items-center gap-2 text-muted-foreground font-mono text-[11px]">
+          {/* Clean Live Status Line */}
+          <div className="flex items-center justify-between pt-1 text-xs text-muted-foreground font-mono text-[11px]">
+            <div className="flex items-center gap-2">
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-600 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
               </span>
               <span>
                 {viewMode === "pathways" ? (
@@ -576,33 +774,52 @@ export function Courses({ hideHeader = false, className = "" }: CoursesProps = {
                 ) : filtered.length > itemsPerPage && !showAll ? (
                   <>
                     Showing <strong className="text-foreground">{startIndex + 1}–{endIndex}</strong> of{" "}
-                    <strong className="text-foreground">{filtered.length}</strong> {filtered.length === 1 ? "track" : "tracks"}
+                    <strong className="text-foreground">{filtered.length}</strong> courses
                   </>
                 ) : (
                   <>
-                    Showing <strong className="text-foreground">{filtered.length}</strong> {filtered.length === 1 ? "track" : "tracks"}
+                    Showing <strong className="text-foreground">{filtered.length}</strong> courses
                   </>
                 )}
               </span>
             </div>
+
+            {hasActiveFilters && !showFilters && (
+              <button
+                onClick={resetAllFilters}
+                className="text-xs text-primary underline underline-offset-2 hover:text-foreground cursor-pointer font-medium"
+              >
+                Clear all filters
+              </button>
+            )}
           </div>
         </div>
 
         {/* Anchor for smooth page jumping */}
-        <div id="courses-grid-anchor" className="scroll-mt-28" />
+        <div id="courses-grid-anchor" className="scroll-mt-24" />
 
-        {/* Feature Cards Grid vs List vs Pathways */}
-        {viewMode === "pathways" ? (
+        {/* ══════════════════════════════════════════════════════════
+            3. MAIN CATALOG PRESENTATION MODES
+        ══════════════════════════════════════════════════════════ */}
+        {!isLoaded || isPending ? (
+          viewMode === "pathways" ? (
+            <CoursePathwaySkeleton shelves={2} />
+          ) : viewMode === "grid" ? (
+            <CourseGridSkeleton count={itemsPerPage} />
+          ) : (
+            <CourseListSkeleton count={4} />
+          )
+        ) : viewMode === "pathways" ? (
           filteredTracks.length === 0 ? (
-            <div className="rounded-2xl border border-hairline p-10 sm:p-14 text-center bg-card/40 space-y-4 max-w-xl mx-auto">
+            <div className="rounded-3xl border border-hairline p-10 sm:p-14 text-center bg-card/60 space-y-4 max-w-xl mx-auto">
               <div className="flex justify-center">
                 <EmptyBook3DIcon size="lg" className="hover:scale-105 transition-transform duration-300" />
               </div>
               <p className="text-sm text-muted-foreground leading-relaxed">
                 {filter === "Enrolled"
-                  ? "You haven't enrolled in any tracks yet. Click 'Enroll Track' on any course card to start learning and track progress."
+                  ? "You haven't enrolled in any tracks yet. Click 'Enroll Course' on any card to begin your journey."
                   : filter === "Wishlist"
-                  ? "Your course wishlist is currently empty. Click the bookmark icon on any course to save it here."
+                  ? "Your wishlist is empty. Click the bookmark icon on any course to save it here."
                   : "No career pathway tracks matched your search and filter criteria."}
               </p>
               <button
@@ -620,6 +837,7 @@ export function Courses({ hideHeader = false, className = "" }: CoursesProps = {
                   track={track}
                   userTier={userTier}
                   navigatingSlug={navigatingSlug}
+                  isAdmin={isAdmin}
                   onSelectCourse={(slug) => setNavigatingSlug(slug)}
                   onQuickEnroll={(course) =>
                     setActiveEnrollCourse({
@@ -633,16 +851,16 @@ export function Courses({ hideHeader = false, className = "" }: CoursesProps = {
             </div>
           )
         ) : filtered.length === 0 ? (
-          <div className="rounded-2xl border border-hairline p-10 sm:p-14 text-center bg-card/40 space-y-4 max-w-xl mx-auto">
+          <div className="rounded-3xl border border-hairline p-10 sm:p-14 text-center bg-card/60 space-y-4 max-w-xl mx-auto">
             <div className="flex justify-center">
               <EmptyBook3DIcon size="lg" className="hover:scale-105 transition-transform duration-300" />
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed">
               {filter === "Enrolled"
-                ? "You haven't enrolled in any tracks yet. Click 'Enroll Track' on any course card to start learning and track progress."
+                ? "You haven't enrolled in any tracks yet. Click 'Enroll Course' on any card to begin."
                 : filter === "Wishlist"
-                ? "Your course wishlist is currently empty. Click the bookmark icon on any course to save it here."
-                : "No tracks matched your search and filter criteria."}
+                ? "Your course wishlist is empty. Click the bookmark icon on any course to save it here."
+                : "No courses matched your search and filter criteria."}
             </p>
             <button
               onClick={resetAllFilters}
@@ -652,8 +870,8 @@ export function Courses({ hideHeader = false, className = "" }: CoursesProps = {
             </button>
           </div>
         ) : viewMode === "grid" ? (
-          /* Course Grid View (Finite Paginated Batch) */
-          <div className={`grid gap-6 sm:grid-cols-2 lg:grid-cols-3 transition-opacity duration-200 ${isFilterPending ? "opacity-60 pointer-events-none" : "opacity-100"}`}>
+          /* Coursera 3-Column Card Grid (Strictly 2 rows x 3 cols = 6 items per page) */
+          <div className={`grid gap-6 sm:grid-cols-2 lg:grid-cols-3 transition-opacity duration-200 ${isPending ? "opacity-60 pointer-events-none" : "opacity-100"}`}>
             {paginatedCourses.map((course) => {
               const cSlug = course.slug || course.id
               return (
@@ -662,7 +880,10 @@ export function Courses({ hideHeader = false, className = "" }: CoursesProps = {
                   course={course}
                   userTier={userTier}
                   isSelected={navigatingSlug === cSlug}
+                  isAdmin={isAdmin}
                   onSelect={() => setNavigatingSlug(cSlug)}
+                  onEditCourse={handleOpenEditCourse}
+                  onDeleteCourse={(c) => setDeleteConfirmCourse({ id: c.id, title: c.title })}
                   onQuickEnroll={() =>
                     setActiveEnrollCourse({
                       title: course.title,
@@ -675,8 +896,8 @@ export function Courses({ hideHeader = false, className = "" }: CoursesProps = {
             })}
           </div>
         ) : (
-          /* Course Detailed List View (Finite Paginated Batch) */
-          <div className={`space-y-4 transition-opacity duration-200 ${isFilterPending ? "opacity-60 pointer-events-none" : "opacity-100"}`}>
+          /* Detailed Coursera Syllabus List View */
+          <div className={`space-y-5 transition-opacity duration-200 ${isPending ? "opacity-60 pointer-events-none" : "opacity-100"}`}>
             {paginatedCourses.map((course) => {
               const cSlug = course.slug || course.id
               return (
@@ -685,7 +906,10 @@ export function Courses({ hideHeader = false, className = "" }: CoursesProps = {
                   course={course}
                   userTier={userTier}
                   isSelected={navigatingSlug === cSlug}
+                  isAdmin={isAdmin}
                   onSelect={() => setNavigatingSlug(cSlug)}
+                  onEditCourse={handleOpenEditCourse}
+                  onDeleteCourse={(c) => setDeleteConfirmCourse({ id: c.id, title: c.title })}
                   onQuickEnroll={() =>
                     setActiveEnrollCourse({
                       title: course.title,
@@ -699,14 +923,15 @@ export function Courses({ hideHeader = false, className = "" }: CoursesProps = {
           </div>
         )}
 
-        {/* Pagination Bar (finite browsing with smooth page flip - only for Grid/List views) */}
+        {/* ══════════════════════════════════════════════════════════
+            4. STRICT NUMBERED PAGINATION BAR (NO INFINITE SCROLL FATIGUE)
+        ══════════════════════════════════════════════════════════ */}
         {viewMode !== "pathways" && filtered.length > itemsPerPage && !showAll && (
           <div className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-hairline pt-6">
-            {/* Range Indicator & Progress */}
             <div className="flex items-center gap-3 text-xs text-muted-foreground font-mono">
               <span>
                 Page <strong className="text-foreground">{currentPage}</strong> of{" "}
-                <strong className="text-foreground">{totalPages}</strong> ({filtered.length} total)
+                <strong className="text-foreground">{totalPages}</strong> ({filtered.length} total programs)
               </span>
               <div className="hidden sm:block w-24 h-1.5 rounded-full bg-secondary overflow-hidden">
                 <div
@@ -716,7 +941,6 @@ export function Courses({ hideHeader = false, className = "" }: CoursesProps = {
               </div>
             </div>
 
-            {/* Pagination Controls */}
             <div className="flex items-center gap-1.5 flex-wrap justify-center">
               <button
                 onClick={() => handlePageChange(currentPage - 1)}
@@ -764,7 +988,6 @@ export function Courses({ hideHeader = false, className = "" }: CoursesProps = {
                 <ChevronRight className="h-3.5 w-3.5" />
               </button>
 
-              {/* Show All Toggle Button */}
               <button
                 onClick={() => setShowAll(true)}
                 className="ml-2 text-xs font-mono text-primary hover:underline cursor-pointer"
@@ -775,7 +998,6 @@ export function Courses({ hideHeader = false, className = "" }: CoursesProps = {
           </div>
         )}
 
-        {/* If user toggled View All, allow collapsing back to paginated */}
         {viewMode !== "pathways" && showAll && filtered.length > itemsPerPage && (
           <div className="mt-8 flex justify-center">
             <button
@@ -792,29 +1014,63 @@ export function Courses({ hideHeader = false, className = "" }: CoursesProps = {
           </div>
         )}
 
-        {/* Institutional Curriculum Directory Discovery Card (Homepage Only) */}
-        {!hideHeader && (
-          <div className="mt-10 rounded-2xl border border-hairline bg-secondary/60 dark:bg-[#181715]/60 p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6">
-            <div className="space-y-1 text-center sm:text-left">
-              <span className="text-[11px] font-mono uppercase tracking-widest text-primary font-semibold">
-                Complete Academic Directory
-              </span>
-              <h3 className="font-serif text-lg sm:text-xl font-medium text-foreground">
-                Looking for a specific technology or specialization?
+        {/* ══════════════════════════════════════════════════════════
+            5. COURSERA PLUS / ASCI ALL-ACCESS MEMBERSHIP BANNER
+        ══════════════════════════════════════════════════════════ */}
+        <div className="mt-14 rounded-3xl border border-stone-200/90 dark:border-stone-800/90 bg-gradient-to-br from-secondary/80 via-card to-secondary/50 dark:from-[#151d2f]/80 dark:via-card dark:to-[#0f172a] p-6 sm:p-8 lg:p-10 shadow-sm relative overflow-hidden">
+          <div className="absolute right-0 top-0 -mt-8 -mr-8 w-64 h-64 rounded-full bg-primary/10 blur-3xl pointer-events-none" />
+
+          <div className="relative flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
+            <div className="space-y-3 max-w-2xl text-left">
+              <div className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-3.5 py-1 text-[11px] font-mono font-bold text-primary uppercase tracking-wider">
+                <Sparkles className="h-3.5 w-3.5 text-amber-500" />
+                <span>ASCI All-Access Pass</span>
+              </div>
+              <h3 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-normal text-foreground tracking-tight leading-tight">
+                Learn without limits. Earn verified credentials.
               </h3>
-              <p className="text-xs sm:text-sm text-muted-foreground max-w-xl leading-relaxed">
-                Browse all {courses.length} verified engineering tracks, interactive web primers, and DSA visual challenge modules in our full catalog.
+              <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                Gain unlimited access to 100+ certificate programs, hands-on cloud sandboxes, 1-on-1 mentor code reviews, and personal career referrals with a single flexible membership.
               </p>
+
+              {/* 4 Pillars */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 text-xs font-mono text-foreground/85">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
+                  <span>100+ Professional Certificates</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
+                  <span>Shareable LinkedIn Credentials</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
+                  <span>Weekly 1-on-1 Mentor Code Reviews</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
+                  <span>In-Browser Sandboxes &amp; Zero Setup</span>
+                </div>
+              </div>
             </div>
-            <Link
-              href="/programs"
-              className="shrink-0 inline-flex items-center gap-2 rounded-full bg-foreground text-background hover:bg-primary hover:text-primary-foreground px-6 py-3 text-xs font-semibold tracking-tight transition-all duration-200 shadow-xs cursor-pointer"
-            >
-              <span>Explore All {courses.length} Programs</span>
-              <ArrowRight className="h-4 w-4" />
-            </Link>
+
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full lg:w-auto shrink-0">
+              <Link
+                href="/pricing"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 text-white px-6 py-3.5 text-xs sm:text-sm font-semibold tracking-tight shadow-md shadow-blue-500/20 transition-all active:scale-[0.98] text-center"
+              >
+                <span>Start 7-Day Free Trial</span>
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                href="/programs"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-hairline bg-card hover:bg-secondary px-5 py-3.5 text-xs sm:text-sm font-medium text-foreground transition-all text-center"
+              >
+                <span>Explore Enterprise Plans</span>
+              </Link>
+            </div>
           </div>
-        )}
+        </div>
       </div>
 
       {/* Interactive Enrollment Modal */}
@@ -831,6 +1087,54 @@ export function Courses({ hideHeader = false, className = "" }: CoursesProps = {
               : "/courses"
           }
         />
+      )}
+
+      {/* In-Place Admin Course Editor Modal */}
+      <CourseEditorModal
+        isOpen={isEditorModalOpen}
+        onClose={() => {
+          setIsEditorModalOpen(false)
+          setEditingCourse(null)
+        }}
+        course={editingCourse}
+        onSave={handleSaveCourse}
+      />
+
+      {/* Delete Confirmation Modal */}
+      {deleteConfirmCourse && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fadeIn">
+          <div className="w-full max-w-md rounded-3xl border border-hairline bg-card p-6 space-y-4 shadow-2xl text-foreground">
+            <div className="w-12 h-12 rounded-2xl bg-destructive/10 text-destructive flex items-center justify-center">
+              <Trash2 className="w-6 h-6" />
+            </div>
+            <div className="space-y-1">
+              <h3 className="font-serif text-lg font-semibold text-foreground">
+                Delete Academic Program?
+              </h3>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Are you sure you want to remove <strong className="text-foreground">{deleteConfirmCourse.title}</strong> from the academic catalog? This will remove it from both the Home Page and the Student Dashboard.
+              </p>
+            </div>
+            <div className="flex items-center justify-end gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setDeleteConfirmCourse(null)}
+                className="px-4 py-2 rounded-xl border border-hairline bg-secondary text-xs font-medium text-muted-foreground hover:text-foreground cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleDeleteCourse}
+                disabled={isDeleting}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-destructive text-destructive-foreground text-xs font-semibold hover:bg-destructive/90 transition-all cursor-pointer shadow-xs disabled:opacity-50"
+              >
+                {isDeleting ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Trash2 className="w-3.5 h-3.5" />}
+                <span>Delete Program</span>
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </section>
   )
@@ -854,21 +1158,27 @@ function getCourseHref(courseSlug: string, isPremiumLocked?: boolean): string {
   return `/courses/${courseSlug}`
 }
 
-/* -------------------------------------------------------------
-   Course Grid Card Component (Dashboard 3D-Card Design & Connected)
-------------------------------------------------------------- */
+/* ═════════════════════════════════════════════════════════════════
+   6. AUTHENTIC COURSERA GRID CARD (High-Resolution Cover, Partner Attribution & Meta)
+═════════════════════════════════════════════════════════════════ */
 function CourseGridCard({
   course,
   userTier,
   onQuickEnroll,
   isSelected = false,
   onSelect,
+  isAdmin = false,
+  onEditCourse,
+  onDeleteCourse,
 }: {
   course: CourseType
   userTier: string | null
   onQuickEnroll: () => void
   isSelected?: boolean
   onSelect?: () => void
+  isAdmin?: boolean
+  onEditCourse?: (course: CourseType) => void
+  onDeleteCourse?: (course: CourseType) => void
 }) {
   const { isEnrolled, getEnrollment, enroll } = useEnrollments()
   const isPremiumLocked = course.is_premium && userTier !== "architect"
@@ -900,41 +1210,42 @@ function CourseGridCard({
   }
 
   return (
-    <div className={`course-card group relative flex flex-col justify-between overflow-hidden rounded-3xl border bg-card transition-[transform,border-color,box-shadow] duration-200 ease-out hover:-translate-y-0.5 shadow-xs hover:shadow-md will-change-[transform] ${
+    <div className={`group relative flex flex-col justify-between overflow-hidden rounded-3xl border bg-card transition-all duration-300 ease-out hover:-translate-y-1.5 shadow-xs hover:shadow-xl ${
       isSelected
-        ? "border-primary ring-2 ring-primary/40 shadow-lg shadow-primary/10"
-        : "border-stone-200/80 dark:border-stone-800/80 hover:border-blue-500/40 dark:hover:border-blue-500/30"
+        ? "border-primary ring-2 ring-primary/40 shadow-lg shadow-primary/15"
+        : "border-stone-200/90 dark:border-stone-800/90 hover:border-blue-500/50"
     }`}>
       {isSelected && (
-        <div className="absolute inset-0 z-30 bg-background/60 dark:bg-black/60 backdrop-blur-[1.5px] flex items-center justify-center p-4 select-none">
+        <div className="absolute inset-0 z-30 bg-background/60 dark:bg-black/60 backdrop-blur-[2px] flex items-center justify-center p-4 select-none">
           <div className="flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-4 py-2 text-xs font-semibold shadow-lg shadow-primary/25 animate-pulse">
             <Loader2 className="h-3.5 w-3.5 animate-spin" />
             <span>Launching {course.title.split(" ")[0]}...</span>
           </div>
         </div>
       )}
+
       <div>
-        {/* 16:9 Thumbnail Image Cover */}
+        {/* 16:9 Thumbnail Image Cover with Coursera Overlays */}
         <div className="relative aspect-[16/9] w-full overflow-hidden bg-stone-100 dark:bg-stone-900">
           <Image
             src={data.thumbnail}
             alt={course.title}
             fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-            className="object-cover transition-transform duration-500 ease-out group-hover:scale-105 select-none pointer-events-none"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover transition-transform duration-700 ease-out group-hover:scale-105 select-none pointer-events-none"
           />
-          <div className="absolute inset-0 bg-black/20 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent pointer-events-none" />
 
-          {/* Top-Left Category Pill (Dashboard Style) */}
+          {/* Top-Left Category Badge */}
           <div className="absolute top-3 left-3 z-10">
-            <span className="inline-flex items-center rounded-full bg-white/90 dark:bg-stone-900/90 backdrop-blur-xs px-2.5 py-0.5 text-[10px] font-bold text-foreground border border-stone-200/60 dark:border-stone-700/60 uppercase tracking-wider shadow-2xs select-none">
+            <span className="inline-flex items-center rounded-full bg-white/95 dark:bg-stone-900/95 backdrop-blur-xs px-2.5 py-0.5 text-[10px] font-mono font-bold text-foreground border border-stone-200/60 dark:border-stone-700/60 uppercase tracking-wider shadow-2xs select-none">
               {course.category}
             </span>
           </div>
 
-          {/* Top-Right Level Badge & Wishlist Bookmark */}
+          {/* Top-Right Difficulty & Wishlist */}
           <div className="absolute top-3 right-3 z-10 flex items-center gap-1.5">
-            <span className="inline-flex items-center rounded-full bg-black/60 backdrop-blur-xs px-2 py-0.5 text-[10px] font-mono font-medium text-white shadow-xs select-none">
+            <span className="inline-flex items-center rounded-full bg-black/60 backdrop-blur-xs px-2.5 py-0.5 text-[10px] font-mono font-medium text-white shadow-xs select-none">
               {course.level}
             </span>
             <WishlistButton
@@ -949,38 +1260,56 @@ function CourseGridCard({
                 thumbnail: data.thumbnail
               }}
               variant="icon"
-              className="h-6 w-6 bg-black/60 backdrop-blur-xs border border-white/20 text-white hover:text-blue-400 shadow-xs active:scale-95 transition-transform"
+              className="h-7 w-7 bg-black/60 backdrop-blur-xs border border-white/20 text-white hover:text-amber-400 shadow-xs active:scale-95 transition-transform"
             />
+          </div>
+
+          {/* Bottom Floating Credential Ribbon */}
+          <div className="absolute left-3 bottom-2.5 z-10 flex items-center gap-1.5 text-[11px] font-mono font-semibold text-white/95 drop-shadow-sm truncate max-w-[90%]">
+            <GraduationCap className="h-3.5 w-3.5 text-amber-400 shrink-0" />
+            <span className="truncate">{data.credentialType} · {course.modules || 4} Modules</span>
           </div>
         </div>
 
-        {/* Card Details Body (Dashboard Style) */}
-        <div className="p-5 space-y-2.5">
-          {/* Eyebrow: Partner/Modules & Rating */}
-          <div className="flex items-center justify-between text-xs font-mono text-muted-foreground">
-            <span className="truncate max-w-[200px] font-semibold text-primary text-[11px] tracking-wide uppercase">
-              {data.partner || `${course.modules || 4} Modules`}
+        {/* Coursera Card Body */}
+        <div className="p-5 sm:p-6 space-y-3">
+          {/* Partner Attribution Line */}
+          <div className="flex items-center justify-between gap-2 text-xs">
+            <span className="font-semibold text-primary truncate max-w-[210px] font-sans">
+              Offered by {data.partner}
             </span>
-            <div className="flex items-center gap-1 text-yellow-400 dark:text-yellow-400 font-bold shrink-0">
-              <Star className="h-3 w-3 fill-current" />
-              <span>{data.rating.toFixed(1)}</span>
-            </div>
+            <span className="text-[10px] font-mono text-muted-foreground uppercase shrink-0">
+              {data.partnerType}
+            </span>
           </div>
 
-          {/* Title */}
+          {/* Course Title */}
           <Link
             href={href}
             onClick={() => onSelect?.()}
-            className="group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
+            className="block group-hover:text-primary transition-colors"
           >
-            <h3 className="font-serif text-lg font-medium text-foreground line-clamp-2 leading-snug">
+            <h3 className="font-serif text-lg sm:text-xl font-medium text-foreground line-clamp-2 leading-snug">
               {course.title}
             </h3>
           </Link>
 
-          {/* Modules & Duration */}
-          <div className="text-[11px] font-mono text-muted-foreground">
-            <span>{course.modules || 4} Modules · {course.weeks || "6 Weeks"}</span>
+          {/* Social Proof: Stars, Rating, Reviews & Learners */}
+          <div className="flex flex-wrap items-center gap-2 text-xs font-mono text-muted-foreground">
+            <div className="flex items-center gap-1 text-amber-500 dark:text-amber-400 font-bold shrink-0">
+              <Star className="h-3.5 w-3.5 fill-current" />
+              <span>{data.rating.toFixed(1)}</span>
+            </div>
+            <span>•</span>
+            <span className="text-[11px]">{data.ratingCount}</span>
+            <span>•</span>
+            <span className="text-[11px] text-foreground/80 font-medium">{data.enrolledCount}</span>
+          </div>
+
+          {/* Duration & Effort */}
+          <div className="text-[11px] font-mono text-muted-foreground flex items-center gap-1.5">
+            <Clock className="h-3 w-3 text-muted-foreground/70" />
+            <span>{course.weeks || "6 Weeks"} · Approx. 8-10 hrs/week</span>
           </div>
 
           {/* Description */}
@@ -993,23 +1322,42 @@ function CourseGridCard({
             <div className="pt-2 space-y-1.5">
               <div className="flex justify-between text-[11px] font-mono text-muted-foreground">
                 <span>{enrolledData?.lessonsCompleted ?? 0} / {enrolledData?.totalLessons ?? ((course.modules || 4) * 3)} Lessons</span>
-                <span className="text-blue-600 dark:text-blue-400 font-bold">{enrolledData?.progressPercent ?? 0}%</span>
+                <span className="text-primary font-bold">{enrolledData?.progressPercent ?? 0}%</span>
               </div>
               <div className="w-full h-1.5 bg-stone-100 dark:bg-stone-800 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full transition-all duration-500"
+                  className="h-full bg-gradient-to-r from-primary via-emerald-600 to-teal-500 rounded-full transition-all duration-500"
                   style={{ width: `${enrolledData?.progressPercent ?? 0}%` }}
                 />
               </div>
             </div>
           )}
+
+          {/* Skills You Will Gain Chips */}
+          {!enrolled && data.skills && data.skills.length > 0 && (
+            <div className="pt-1 flex flex-wrap items-center gap-1.5">
+              {data.skills.slice(0, 3).map((skill, sIdx) => (
+                <span
+                  key={sIdx}
+                  className="rounded-md bg-secondary/80 border border-hairline px-2 py-0.5 text-[10px] font-mono text-foreground/80 truncate max-w-[130px]"
+                >
+                  {skill}
+                </span>
+              ))}
+              {data.skills.length > 3 && (
+                <span className="text-[10px] font-mono text-muted-foreground">
+                  +{data.skills.length - 3}
+                </span>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Card Action Footer: Only Action Button and Explore */}
-      <div className="p-4 pt-3 flex items-center justify-between border-t border-stone-100 dark:border-stone-800/80 mt-auto">
+      {/* Coursera Action Footer */}
+      <div className="p-4 pt-3.5 flex items-center justify-between border-t border-stone-100 dark:border-stone-800/80 mt-auto bg-stone-50/50 dark:bg-stone-900/30">
         {isSelected ? (
-          <div className="w-full inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-xl bg-primary text-white text-xs font-semibold shadow-xs">
+          <div className="w-full inline-flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl bg-primary text-white text-xs font-semibold shadow-xs">
             <Loader2 className="w-3.5 h-3.5 animate-spin" />
             <span>Launching course...</span>
           </div>
@@ -1018,37 +1366,93 @@ function CourseGridCard({
             <Link
               href={lessonHref}
               onClick={() => onSelect?.()}
-              className="flex-1 inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 text-white text-xs font-semibold shadow-md shadow-blue-500/20 transition-all active:scale-[0.98] cursor-pointer"
+              className="flex-1 inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-primary hover:bg-primary-active text-primary-foreground text-xs font-semibold shadow-xs transition-all active:scale-[0.98] cursor-pointer"
             >
               <PlayCircle className="w-3.5 h-3.5" />
-              <span>Continue</span>
+              <span>Continue Learning</span>
             </Link>
             <Link
               href={href}
               onClick={() => onSelect?.()}
-              className="inline-flex items-center justify-center gap-1 px-3 py-2 rounded-xl border border-stone-200 dark:border-stone-800 bg-secondary/50 hover:bg-secondary text-xs font-medium text-foreground hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer active:scale-[0.98] shrink-0"
+              className="inline-flex items-center justify-center gap-1 px-3 py-2.5 rounded-xl border border-hairline bg-card hover:bg-secondary text-xs font-medium text-foreground hover:text-primary transition-colors cursor-pointer active:scale-[0.98] shrink-0"
             >
-              <span>Explore</span>
+              <span>Syllabus</span>
               <ArrowRight className="w-3 h-3" />
             </Link>
+            {isAdmin && (
+              <div className="flex items-center gap-1 shrink-0">
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    onEditCourse?.(course)
+                  }}
+                  className="inline-flex items-center justify-center p-2.5 rounded-xl border border-hairline bg-card hover:bg-secondary text-foreground text-xs transition-colors cursor-pointer"
+                  title="Edit Program (Admin)"
+                >
+                  <Edit3 className="w-3.5 h-3.5 text-primary" />
+                </button>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    onDeleteCourse?.(course)
+                  }}
+                  className="inline-flex items-center justify-center p-2.5 rounded-xl border border-hairline bg-card hover:bg-destructive/10 text-muted-foreground hover:text-destructive text-xs transition-colors cursor-pointer"
+                  title="Delete Program (Admin)"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            )}
           </div>
         ) : (
           <div className="w-full flex items-center gap-2">
             <button
               onClick={handleEnrollClick}
-              className="flex-1 inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 text-white transition-all text-xs font-semibold cursor-pointer shadow-md shadow-blue-500/20 active:scale-[0.98]"
+              className="flex-1 inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-primary hover:bg-primary-active text-primary-foreground transition-all text-xs font-semibold cursor-pointer shadow-xs active:scale-[0.98]"
             >
               <Plus className="w-3.5 h-3.5" />
-              <span>Enroll Track</span>
+              <span>Enroll Free</span>
             </button>
             <Link
               href={href}
               onClick={() => onSelect?.()}
-              className="inline-flex items-center justify-center gap-1 px-3 py-2 rounded-xl border border-stone-200 dark:border-stone-800 bg-secondary/50 hover:bg-secondary text-xs font-medium text-foreground hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer active:scale-[0.98] shrink-0"
+              className="inline-flex items-center justify-center gap-1 px-3 py-2.5 rounded-xl border border-hairline bg-card hover:bg-secondary text-xs font-medium text-foreground hover:text-primary transition-colors cursor-pointer active:scale-[0.98] shrink-0"
             >
-              <span>Explore</span>
+              <span>Syllabus</span>
               <ArrowRight className="w-3 h-3" />
             </Link>
+            {isAdmin && (
+              <div className="flex items-center gap-1 shrink-0">
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    onEditCourse?.(course)
+                  }}
+                  className="inline-flex items-center justify-center p-2.5 rounded-xl border border-hairline bg-card hover:bg-secondary text-foreground text-xs transition-colors cursor-pointer"
+                  title="Edit Program (Admin)"
+                >
+                  <Edit3 className="w-3.5 h-3.5 text-primary" />
+                </button>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    onDeleteCourse?.(course)
+                  }}
+                  className="inline-flex items-center justify-center p-2.5 rounded-xl border border-hairline bg-card hover:bg-destructive/10 text-muted-foreground hover:text-destructive text-xs transition-colors cursor-pointer"
+                  title="Delete Program (Admin)"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -1056,21 +1460,27 @@ function CourseGridCard({
   )
 }
 
-/* -------------------------------------------------------------
-   Course Detailed List Card Component (Dashboard 3D-Card Design & Connected)
-------------------------------------------------------------- */
+/* ═════════════════════════════════════════════════════════════════
+   7. DETAILED COURSERA LIST CARD (Comprehensive Syllabus View)
+═════════════════════════════════════════════════════════════════ */
 function CourseListCard({
   course,
   userTier,
   onQuickEnroll,
   isSelected = false,
   onSelect,
+  isAdmin = false,
+  onEditCourse,
+  onDeleteCourse,
 }: {
   course: CourseType
   userTier: string | null
   onQuickEnroll: () => void
   isSelected?: boolean
   onSelect?: () => void
+  isAdmin?: boolean
+  onEditCourse?: (course: CourseType) => void
+  onDeleteCourse?: (course: CourseType) => void
 }) {
   const { isEnrolled, getEnrollment, enroll } = useEnrollments()
   const isPremiumLocked = course.is_premium && userTier !== "architect"
@@ -1102,40 +1512,41 @@ function CourseListCard({
   }
 
   return (
-    <div className={`course-card group relative flex flex-col sm:flex-row overflow-hidden rounded-3xl border bg-card transition-[transform,border-color,box-shadow] duration-200 ease-out hover:-translate-y-0.5 shadow-xs hover:shadow-md will-change-[transform] ${
+    <div className={`group relative flex flex-col sm:flex-row overflow-hidden rounded-3xl border bg-card transition-all duration-300 ease-out hover:-translate-y-1 shadow-xs hover:shadow-lg ${
       isSelected
-        ? "border-primary ring-2 ring-primary/40 shadow-lg shadow-primary/10"
-        : "border-stone-200/80 dark:border-stone-800/80 hover:border-blue-500/40 dark:hover:border-blue-500/30"
+        ? "border-primary ring-2 ring-primary/40 shadow-lg shadow-primary/15"
+        : "border-stone-200/90 dark:border-stone-800/90 hover:border-blue-500/50"
     }`}>
       {isSelected && (
-        <div className="absolute inset-0 z-30 bg-background/60 dark:bg-black/60 backdrop-blur-[1.5px] flex items-center justify-center p-4 select-none">
+        <div className="absolute inset-0 z-30 bg-background/60 dark:bg-black/60 backdrop-blur-[2px] flex items-center justify-center p-4 select-none">
           <div className="flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-4 py-2 text-xs font-semibold shadow-lg shadow-primary/25 animate-pulse">
             <Loader2 className="h-3.5 w-3.5 animate-spin" />
             <span>Launching {course.title.split(" ")[0]}...</span>
           </div>
         </div>
       )}
+
       {/* Left Thumbnail Cover */}
-      <div className="relative aspect-video sm:aspect-square sm:w-60 md:w-64 shrink-0 overflow-hidden bg-stone-100 dark:bg-stone-900">
+      <div className="relative aspect-video sm:aspect-square sm:w-64 md:w-72 shrink-0 overflow-hidden bg-stone-100 dark:bg-stone-900">
         <Image
           src={data.thumbnail}
           alt={course.title}
           fill
-          sizes="(max-width: 640px) 100vw, 256px"
-          className="object-cover transition-transform duration-500 ease-out group-hover:scale-105 select-none"
+          sizes="(max-width: 640px) 100vw, 288px"
+          className="object-cover transition-transform duration-700 ease-out group-hover:scale-105 select-none"
         />
-        <div className="absolute inset-0 bg-black/20" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
         {/* Category Badge */}
         <div className="absolute top-3 left-3 z-10">
-          <span className="inline-flex items-center rounded-full bg-white/90 dark:bg-stone-900/90 backdrop-blur-xs px-2.5 py-0.5 text-[10px] font-bold text-foreground border border-stone-200/60 dark:border-stone-700/60 uppercase tracking-wider shadow-2xs select-none">
+          <span className="inline-flex items-center rounded-full bg-white/95 dark:bg-stone-900/95 backdrop-blur-xs px-2.5 py-0.5 text-[10px] font-mono font-bold text-foreground border border-stone-200/60 dark:border-stone-700/60 uppercase tracking-wider shadow-2xs select-none">
             {course.category}
           </span>
         </div>
 
         {/* Level Badge & Wishlist Button */}
         <div className="absolute top-3 right-3 z-10 flex items-center gap-1.5">
-          <span className="inline-flex items-center rounded-full bg-black/60 backdrop-blur-xs px-2 py-0.5 text-[10px] font-mono font-medium text-white shadow-xs select-none">
+          <span className="inline-flex items-center rounded-full bg-black/60 backdrop-blur-xs px-2.5 py-0.5 text-[10px] font-mono font-medium text-white shadow-xs select-none">
             {course.level}
           </span>
           <WishlistButton
@@ -1150,21 +1561,27 @@ function CourseListCard({
               thumbnail: data.thumbnail
             }}
             variant="icon"
-            className="h-6 w-6 bg-black/60 backdrop-blur-xs border border-white/20 text-white hover:text-blue-400 shadow-xs active:scale-95 transition-transform"
+            className="h-7 w-7 bg-black/60 backdrop-blur-xs border border-white/20 text-white hover:text-amber-400 shadow-xs active:scale-95 transition-transform"
           />
+        </div>
+
+        {/* Bottom Credential Type Overlay */}
+        <div className="absolute left-3 bottom-2.5 z-10 flex items-center gap-1.5 text-[11px] font-mono font-semibold text-white/95 drop-shadow-sm truncate max-w-[90%]">
+          <GraduationCap className="h-3.5 w-3.5 text-amber-400 shrink-0" />
+          <span className="truncate">{data.credentialType}</span>
         </div>
       </div>
 
-      {/* Right Course Content */}
+      {/* Right Course Details */}
       <div className="flex flex-1 flex-col justify-between p-5 sm:p-6">
-        <div>
-          {/* Eyebrow: Partner & Credential Type */}
-          <div className="flex flex-wrap items-center justify-between gap-2 text-xs mb-1.5">
+        <div className="space-y-2.5">
+          {/* Eyebrow: Partner & Type */}
+          <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
             <span className="font-semibold text-primary">
-              {data.partner}
+              Offered by {data.partner}
             </span>
             <span className="text-[11px] font-mono text-muted-foreground uppercase">
-              {course.category} · {data.credentialType}
+              {data.credentialType} · {course.modules || 4} Modules
             </span>
           </div>
 
@@ -1172,39 +1589,35 @@ function CourseListCard({
           <Link
             href={href}
             onClick={() => onSelect?.()}
-            className="group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
+            className="block group-hover:text-primary transition-colors"
           >
-            <h3 className="font-serif text-lg sm:text-xl font-normal text-foreground leading-snug">
+            <h3 className="font-serif text-xl sm:text-2xl font-normal text-foreground leading-snug">
               {course.title}
             </h3>
           </Link>
 
-          {/* Decision Stats: Modules · Duration · Rating */}
-          <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-muted-foreground font-mono">
-            <span>{course.modules || 4} Modules</span>
-            <span>•</span>
-            <span>{course.weeks || "6 Weeks"}</span>
-            <span>•</span>
-            <div className="flex items-center gap-0.5 text-yellow-400 dark:text-yellow-400 font-bold">
+          {/* Decision Stats: Rating · Duration · Learners */}
+          <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground font-mono">
+            <div className="flex items-center gap-1 text-amber-500 font-bold">
               <Star className="h-3.5 w-3.5 fill-current" />
               <span>{data.rating.toFixed(1)}</span>
             </div>
-            {course.certificate && (
-              <>
-                <span>•</span>
-                <span className="text-blue-600 dark:text-blue-400 font-medium">Certificate Included</span>
-              </>
-            )}
+            <span>•</span>
+            <span>{data.ratingCount}</span>
+            <span>•</span>
+            <span className="text-foreground/80 font-medium">{data.enrolledCount}</span>
+            <span>•</span>
+            <span>{course.weeks || "6 Weeks"} ({course.lessons || 18} Lessons)</span>
           </div>
 
           {/* Description */}
-          <p className="mt-2.5 text-xs sm:text-sm text-muted-foreground leading-relaxed line-clamp-2">
+          <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed line-clamp-2">
             {course.description}
           </p>
 
-          {/* Live Progress Bar if Enrolled */}
+          {/* Progress Bar if Enrolled */}
           {enrolled && (
-            <div className="mt-3.5 space-y-1.5 max-w-md">
+            <div className="mt-2 space-y-1.5 max-w-md">
               <div className="flex justify-between text-[11px] font-mono text-muted-foreground">
                 <span>{enrolledData?.lessonsCompleted ?? 0} / {enrolledData?.totalLessons ?? ((course.modules || 4) * 3)} Lessons</span>
                 <span className="text-blue-600 dark:text-blue-400 font-bold">{enrolledData?.progressPercent ?? 0}%</span>
@@ -1219,20 +1632,20 @@ function CourseListCard({
           )}
 
           {/* Skills Chips */}
-          {data.skills && data.skills.length > 0 && !enrolled && (
-            <div className="mt-3.5 flex flex-wrap items-center gap-1.5">
+          {!enrolled && data.skills && data.skills.length > 0 && (
+            <div className="flex flex-wrap items-center gap-1.5 pt-1">
               <span className="text-[11px] text-muted-foreground font-mono mr-1">Skills:</span>
-              {data.skills.slice(0, 3).map((skill, idx) => (
+              {data.skills.slice(0, 4).map((skill, idx) => (
                 <span
                   key={idx}
-                  className="rounded-md bg-secondary border border-hairline px-2.5 py-0.5 text-[11px] font-medium text-foreground/80"
+                  className="rounded-md bg-secondary border border-hairline px-2.5 py-0.5 text-[11px] font-medium text-foreground/85"
                 >
                   {skill}
                 </span>
               ))}
-              {data.skills.length > 3 && (
+              {data.skills.length > 4 && (
                 <span className="text-[11px] text-muted-foreground font-mono">
-                  +{data.skills.length - 3} more
+                  +{data.skills.length - 4} more
                 </span>
               )}
             </div>
@@ -1240,9 +1653,10 @@ function CourseListCard({
         </div>
 
         {/* Footer Meta & Actions */}
-        <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-stone-100 dark:border-stone-800/80 pt-3.5">
-          <div className="text-xs font-mono text-muted-foreground">
-            100% Online · Verified Syllabus
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-stone-100 dark:border-stone-800/80 pt-3.5">
+          <div className="text-xs font-mono text-muted-foreground flex items-center gap-2">
+            <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
+            <span>Shareable Certificate · 100% Online</span>
           </div>
 
           <div className="flex items-center gap-2.5">
@@ -1253,13 +1667,13 @@ function CourseListCard({
               </div>
             ) : enrolled ? (
               <>
-                <span className="inline-flex items-center gap-1 text-xs font-mono text-blue-600 dark:text-blue-400 font-semibold">
-                  <Check className="w-3.5 h-3.5 text-emerald-500" /> Enrolled
+                <span className="inline-flex items-center gap-1 text-xs font-mono text-emerald-600 dark:text-emerald-400 font-semibold mr-1">
+                  <Check className="w-3.5 h-3.5" /> Enrolled
                 </span>
                 <Link
                   href={lessonHref}
                   onClick={() => onSelect?.()}
-                  className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 px-4 py-2 text-xs font-semibold text-white shadow-md shadow-blue-500/20 transition-all active:scale-[0.98] cursor-pointer"
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-primary hover:bg-primary-active px-4 py-2 text-xs font-semibold text-primary-foreground shadow-xs transition-all active:scale-[0.98] cursor-pointer"
                 >
                   <PlayCircle className="w-3.5 h-3.5" />
                   <span>Continue Lesson</span>
@@ -1269,10 +1683,10 @@ function CourseListCard({
               <>
                 <button
                   onClick={handleEnrollClick}
-                  className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 px-4 py-2 text-xs font-semibold text-white shadow-md shadow-blue-500/20 transition-all cursor-pointer active:scale-[0.98]"
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-primary hover:bg-primary-active px-4 py-2 text-xs font-semibold text-primary-foreground shadow-xs transition-all cursor-pointer active:scale-[0.98]"
                 >
                   <Plus className="w-3.5 h-3.5" />
-                  <span>Enroll Track</span>
+                  <span>Enroll Free</span>
                 </button>
                 <Link
                   href={href}
@@ -1283,6 +1697,35 @@ function CourseListCard({
                   <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
               </>
+            )}
+            {isAdmin && (
+              <div className="flex items-center gap-1">
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    onEditCourse?.(course)
+                  }}
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-hairline bg-card hover:bg-secondary px-3.5 py-2 text-xs font-semibold text-primary transition-colors shadow-2xs cursor-pointer active:scale-[0.98]"
+                  title="Edit Program (Admin)"
+                >
+                  <Edit3 className="w-3.5 h-3.5" />
+                  <span>Edit</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    onDeleteCourse?.(course)
+                  }}
+                  className="inline-flex items-center justify-center p-2 rounded-xl border border-hairline bg-card hover:bg-destructive/10 text-muted-foreground hover:text-destructive text-xs transition-colors cursor-pointer"
+                  title="Delete Program (Admin)"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
+              </div>
             )}
           </div>
         </div>

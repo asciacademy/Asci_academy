@@ -56,10 +56,10 @@ function getStoredProfile(): UserProfile | null {
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter()
-  const [user, setUser] = useState<User | null>(getStoredUser)
+  const [user, setUser] = useState<User | null>(null)
   const [session, setSession] = useState<Session | null>(null)
-  const [profile, setProfile] = useState<UserProfile | null>(getStoredProfile)
-  const [isLoading, setIsLoading] = useState(() => !getStoredUser())
+  const [profile, setProfile] = useState<UserProfile | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   const saveUser = useCallback((newUser: User | null) => {
