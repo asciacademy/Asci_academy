@@ -12,11 +12,89 @@ import {
   HelpCircle, ChevronDown, ChevronUp, Globe, ThumbsUp, Calendar, AlertCircle
 } from "lucide-react"
 import { PythonConcepts } from "@/components/python-concepts"
-import { getCurriculumCourseBySlug } from "@/lib/curriculum-data"
-import { getCourseraDataForCourse } from "@/lib/coursera-metadata"
+import { getCurriculumCourseBySlug, CurriculumCourse, CurriculumModule } from "@/lib/curriculum-data"
+import { getCourseraDataForCourse, CourseraExtraData } from "@/lib/coursera-metadata"
 import { EnrollModal } from "@/components/enroll-modal"
 import { CourseVideoEmbed } from "@/components/course-video-embed"
 import { AxelStage } from "@/components/axel/axel-stage"
+
+function getCourseModules(
+  course: CurriculumCourse | undefined,
+  courseraData: CourseraExtraData,
+  slug: string,
+  title: string
+): CurriculumModule[] {
+  if (course?.modules && course.modules.length > 0) {
+    return course.modules
+  }
+
+  const outcomes =
+    courseraData.whatYouWillLearn && courseraData.whatYouWillLearn.length >= 4
+      ? courseraData.whatYouWillLearn
+      : [
+          `Core principles and architectural foundations of ${title}`,
+          `Practical implementation, industry tooling, and best-practice workflows`,
+          `Advanced performance optimization, debugging, and edge cases`,
+          `Production deployment, capstone integration, and verification`
+        ]
+
+  const skills =
+    courseraData.skills && courseraData.skills.length > 0
+      ? courseraData.skills
+      : ["Architecture", "Engineering", "Algorithms", "Testing"]
+
+  return outcomes.slice(0, 4).map((outcome, idx) => {
+    const modNum = idx + 1
+    const skill1 = skills[idx % skills.length] || "Core Fundamentals"
+    const skill2 = skills[(idx + 1) % skills.length] || "Best Practices"
+
+    return {
+      id: `${slug}-mod-${modNum}`,
+      title: `Module ${modNum}: ${outcome}`,
+      sequence_order: modNum,
+      description: `Deep dive into ${skill1.toLowerCase()} and ${skill2.toLowerCase()} with hands-on practice katas and applied exercises.`,
+      lessons: [
+        {
+          id: `${slug}-${modNum}-1`,
+          title: `${modNum}.1 Foundations & Conceptual Architecture`,
+          sequence_order: 1,
+          content_type: "text",
+          xp_reward: 50,
+          description: `Learn the theoretical underpinning and industry best practices for ${skill1}.`,
+          content: `### Understanding ${skill1}\n\nThis lesson introduces core architectural patterns and mental models required for master-level fluency in **${title}**.\n\nKey areas explored:\n- Paradigm overview & practical trade-offs\n- Tooling setup & workspace configurations\n- Common pitfalls and enterprise design patterns.`
+        },
+        {
+          id: `${slug}-${modNum}-2`,
+          title: `${modNum}.2 Hands-On Implementation & Patterns`,
+          sequence_order: 2,
+          content_type: "challenge",
+          xp_reward: 75,
+          description: `Construct real-world code implementing ${skill1} and ${skill2}.`,
+          content: `### Applied Implementation\n\nWalk through step-by-step code construction with real-time assertions and benchmarks.\n\nPractice writing robust, clean, modular code that scales seamlessly.`,
+          challenge_data: {
+            initialCode: `// Implementation kata: ${skill1}\nfunction solution() {\n  return "completed";\n}\nconsole.log(solution());`,
+            expectedOutput: "completed",
+            instructions: `Implement the core logic for ${skill1} and ensure tests pass.`
+          }
+        },
+        {
+          id: `${slug}-${modNum}-3`,
+          title: `${modNum}.3 Capstone Challenge & Verification`,
+          sequence_order: 3,
+          content_type: "challenge",
+          xp_reward: 100,
+          description: `Synthesize concepts into an applied milestone kata with automated evaluation.`,
+          content: `### Milestone Verification\n\nApply your newly acquired skills in an end-to-end challenge mimicking real-world production environments.`,
+          challenge_data: {
+            initialCode: `// Verification challenge\nconst verify = () => true;\nconsole.log(verify());`,
+            expectedOutput: "true",
+            instructions: `Run the verification routine to complete Module ${modNum}.`
+          }
+        }
+      ]
+    }
+  })
+}
 
 export default function CoursePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params)
@@ -24,6 +102,9 @@ export default function CoursePage({ params }: { params: Promise<{ slug: string 
   const formattedTitle = curriculumCourse ? curriculumCourse.title : slug.replace(/-/g, " ")
   const category = curriculumCourse?.category || "AI & ML"
   const courseraData = getCourseraDataForCourse(slug, formattedTitle, category)
+
+  const modules = getCourseModules(curriculumCourse, courseraData, slug, formattedTitle)
+  const totalLessons = modules.reduce((acc, m) => acc + (m.lessons?.length || 0), 0)
 
   const [isEnrollModalOpen, setIsEnrollModalOpen] = useState(false)
   const [activeTab, setActiveTab] = useState("about")
@@ -61,9 +142,9 @@ export default function CoursePage({ params }: { params: Promise<{ slug: string 
     setExpandedFaq(prev => prev === index ? null : index)
   }
 
-  const firstLesson = curriculumCourse?.modules?.[0]?.lessons?.[0]
+  const firstLesson = modules[0]?.lessons?.[0]
   const firstLessonHref = firstLesson 
-    ? `/courses/${slug}/learn/${curriculumCourse?.modules?.[0]?.id || "m1"}/${firstLesson.id}`
+    ? `/courses/${slug}/learn/${modules[0]?.id || "m1"}/${firstLesson.id}`
     : `/courses/${slug}/learn`
 
   return (
@@ -350,6 +431,201 @@ export default function CoursePage({ params }: { params: Promise<{ slug: string 
       </div>
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+        {/* Section -1: About This Course (Deep Description & Curriculum Architecture) */}
+        <section id="about" className="scroll-mt-32 space-y-8">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-hairline pb-4">
+            <div>
+              <div className="inline-flex items-center gap-1.5 text-xs font-mono font-medium text-primary uppercase tracking-wider mb-1">
+                <BookOpen className="h-4 w-4" />
+                <span>Curriculum Overview</span>
+              </div>
+              <h2 className="font-serif text-2xl sm:text-3xl font-normal text-foreground">
+                About This Course
+              </h2>
+            </div>
+            <AxelStage
+              id="course-about-robot-anchor"
+              sectionId="about"
+              label="Course Deep Dive"
+              emotion="excited"
+              scale={0.46}
+              size="sm"
+            />
+          </div>
+
+          <div className="grid gap-8 lg:grid-cols-12 items-start">
+            {/* Left Narrative Column (8 Cols) */}
+            <div className="lg:col-span-8 space-y-6">
+              {/* Lead Paragraph Description */}
+              <div className="prose prose-sm dark:prose-invert max-w-none text-foreground/90 leading-relaxed text-sm sm:text-base space-y-4">
+                <p>
+                  {curriculumCourse?.description ||
+                    `Master modern ${formattedTitle} with industry-aligned architectural rigor. This comprehensive program is engineered in collaboration with ${courseraData.partner} to bridge the gap between foundational syntax and production-ready enterprise execution.`}
+                </p>
+                <p className="text-muted-foreground text-xs sm:text-sm">
+                  Throughout this track, you will transition from core conceptual mental models to building hardened, real-world software. Every module combines structured conceptual explanations with live in-browser coding katas, architectural diagrams, and automated test assertions. By completing the hands-on milestones, you build a verified portfolio demonstrating deep competency to engineering leaders and top employers.
+                </p>
+              </div>
+
+              {/* 4 Core Pillars Bento Grid */}
+              <div className="grid gap-4 sm:grid-cols-2 pt-2">
+                <div className="rounded-xl border border-hairline bg-card p-5 space-y-2 hover:border-foreground/20 transition-colors">
+                  <div className="h-9 w-9 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+                    <Code2 className="h-4 w-4" />
+                  </div>
+                  <h4 className="font-serif text-base font-medium text-foreground">
+                    Interactive In-Browser Katas
+                  </h4>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    Write, compile, and debug real code in our integrated sandbox with instant test verification and syntax hints.
+                  </p>
+                </div>
+
+                <div className="rounded-xl border border-hairline bg-card p-5 space-y-2 hover:border-foreground/20 transition-colors">
+                  <div className="h-9 w-9 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                    <Layers className="h-4 w-4" />
+                  </div>
+                  <h4 className="font-serif text-base font-medium text-foreground">
+                    Production Architecture
+                  </h4>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    Explore real enterprise patterns, memory trade-offs, concurrency paradigms, and scalable system design.
+                  </p>
+                </div>
+
+                <div className="rounded-xl border border-hairline bg-card p-5 space-y-2 hover:border-foreground/20 transition-colors">
+                  <div className="h-9 w-9 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+                    <Award className="h-4 w-4" />
+                  </div>
+                  <h4 className="font-serif text-base font-medium text-foreground">
+                    Verifiable Certificate
+                  </h4>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    Earn an accredited, shareable digital credential authenticated by {courseraData.partner} and ASCI Institute.
+                  </p>
+                </div>
+
+                <div className="rounded-xl border border-hairline bg-card p-5 space-y-2 hover:border-foreground/20 transition-colors">
+                  <div className="h-9 w-9 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center">
+                    <Laptop className="h-4 w-4" />
+                  </div>
+                  <h4 className="font-serif text-base font-medium text-foreground">
+                    Portfolio Capstone Project
+                  </h4>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    Build and deploy an end-to-end applied capstone deliverable ready to showcase on your GitHub and resume.
+                  </p>
+                </div>
+              </div>
+
+              {/* Course Highlights if defined */}
+              {curriculumCourse?.highlights && curriculumCourse.highlights.length > 0 && (
+                <div className="rounded-xl border border-hairline bg-secondary/20 p-5 space-y-3">
+                  <h4 className="text-xs font-mono font-semibold uppercase tracking-wider text-primary">
+                    Curriculum Highlights & Architectural Focus
+                  </h4>
+                  <ul className="grid gap-2 sm:grid-cols-2 text-xs text-foreground/90">
+                    {curriculumCourse.highlights.map((highlight, hIdx) => (
+                      <li key={hIdx} className="flex items-start gap-2">
+                        <CheckCircle2 className="h-3.5 w-3.5 text-primary shrink-0 mt-0.5" />
+                        <span>{highlight}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Tools & Tech Stack */}
+              <div className="space-y-3">
+                <h4 className="text-xs font-mono font-semibold uppercase tracking-wider text-muted-foreground">
+                  Technologies, Frameworks & Tooling Covered
+                </h4>
+                <div className="flex flex-wrap gap-2">
+                  {(curriculumCourse?.tools?.length ? curriculumCourse.tools : courseraData.skills).map((tool, tIdx) => (
+                    <span
+                      key={tIdx}
+                      className="inline-flex items-center gap-1 rounded-lg bg-card border border-hairline px-3 py-1.5 text-xs font-mono text-foreground hover:border-primary/40 transition-colors"
+                    >
+                      <TerminalSquare className="h-3 w-3 text-primary" />
+                      <span>{tool}</span>
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Right Specification Sidebar (4 Cols) */}
+            <div className="lg:col-span-4 space-y-4">
+              <div className="rounded-2xl border border-hairline bg-card p-6 space-y-5 shadow-xs">
+                <h3 className="font-serif text-lg font-medium text-foreground border-b border-hairline pb-3">
+                  Course Specifications
+                </h3>
+
+                <div className="space-y-4 text-xs">
+                  <div className="flex items-start justify-between gap-4">
+                    <span className="text-muted-foreground">Offered By</span>
+                    <strong className="text-foreground text-right">{courseraData.partner}</strong>
+                  </div>
+
+                  <div className="flex items-start justify-between gap-4">
+                    <span className="text-muted-foreground">Credential</span>
+                    <strong className="text-foreground text-right">{courseraData.credentialType}</strong>
+                  </div>
+
+                  <div className="flex items-start justify-between gap-4">
+                    <span className="text-muted-foreground">Skill Level</span>
+                    <strong className="text-foreground text-right">{curriculumCourse?.level || "Beginner to Intermediate"}</strong>
+                  </div>
+
+                  <div className="flex items-start justify-between gap-4">
+                    <span className="text-muted-foreground">Curriculum</span>
+                    <strong className="text-foreground text-right font-mono">
+                      {modules.length} Modules · {totalLessons} Lessons
+                    </strong>
+                  </div>
+
+                  <div className="flex items-start justify-between gap-4">
+                    <span className="text-muted-foreground">Commitment</span>
+                    <strong className="text-foreground text-right">{curriculumCourse?.weeks || "6–8 Weeks"} · Self-Paced</strong>
+                  </div>
+
+                  <div className="flex items-start justify-between gap-4">
+                    <span className="text-muted-foreground">Instruction</span>
+                    <strong className="text-foreground text-right">English · Auto Subtitles & Transcripts</strong>
+                  </div>
+
+                  <div className="flex items-start justify-between gap-4">
+                    <span className="text-muted-foreground">Certificate</span>
+                    <strong className="text-emerald-600 dark:text-emerald-400 text-right">Included upon Completion</strong>
+                  </div>
+                </div>
+
+                <div className="pt-2 border-t border-hairline">
+                  <button
+                    onClick={() => setIsEnrollModalOpen(true)}
+                    className="w-full rounded-xl bg-primary hover:bg-primary-active text-white py-2.5 text-center text-xs font-semibold transition-all cursor-pointer shadow-xs active:scale-[0.98]"
+                  >
+                    Enroll in This Course
+                  </button>
+                  <p className="mt-2 text-center text-[10px] text-muted-foreground font-mono">
+                    Free Audit Available · Full Access Included with Plus
+                  </p>
+                </div>
+              </div>
+
+              {/* Who Should Take This Course */}
+              <div className="rounded-2xl border border-hairline bg-secondary/30 p-5 space-y-2.5">
+                <h4 className="font-serif text-sm font-medium text-foreground">
+                  Who Should Take This Course?
+                </h4>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  Ideal for students, software engineers, and technical professionals aiming to master {formattedTitle}, pass technical interviews, and build production-grade applications.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Section 0: Official Lecture Video & Masterclass */}
         <section id="video" className="scroll-mt-32 space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-hairline pb-4">
@@ -468,7 +744,7 @@ export default function CoursePage({ params }: { params: Promise<{ slug: string 
                 Syllabus: What is in this {courseraData.credentialType}
               </h2>
               <p className="mt-1 text-xs text-muted-foreground">
-                {curriculumCourse?.modules?.length || 0} Modules · {curriculumCourse?.modules?.reduce((acc, m) => acc + m.lessons.length, 0) || curriculumCourse?.lessons || 0} Lessons · {curriculumCourse?.projects || 3} Capstone Projects
+                {modules.length} Modules · {totalLessons} Lessons · {curriculumCourse?.projects || 3} Capstone Projects
               </p>
 
             </div>
@@ -485,7 +761,7 @@ export default function CoursePage({ params }: { params: Promise<{ slug: string 
                 <button
                   onClick={() => {
                     const all: Record<string, boolean> = {}
-                    curriculumCourse?.modules?.forEach((_, i) => (all[i.toString()] = true))
+                    modules.forEach((_, i) => (all[i.toString()] = true))
                     setExpandedModules(all)
                   }}
                   className="text-xs text-primary underline underline-offset-4 hover:text-foreground cursor-pointer"
@@ -504,7 +780,7 @@ export default function CoursePage({ params }: { params: Promise<{ slug: string 
           </div>
 
           <div className="space-y-4">
-            {curriculumCourse?.modules?.map((mod, modIdx) => {
+            {modules.map((mod, modIdx) => {
               const isOpen = !!expandedModules[modIdx.toString()]
               return (
                 <div

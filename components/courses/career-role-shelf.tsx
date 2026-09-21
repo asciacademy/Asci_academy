@@ -100,9 +100,11 @@ export function CareerRoleShelf({
     const el = shelfRef.current
     if (!el) return
     updateScrollState()
+    const timer = setTimeout(updateScrollState, 150)
     el.addEventListener("scroll", updateScrollState, { passive: true })
     window.addEventListener("resize", updateScrollState, { passive: true })
     return () => {
+      clearTimeout(timer)
       el.removeEventListener("scroll", updateScrollState)
       window.removeEventListener("resize", updateScrollState)
     }
@@ -153,70 +155,93 @@ export function CareerRoleShelf({
             {track.headline}
           </p>
         </div>
-
-        {/* Action Link & Desktop Horizontal Scroll Arrow Controls */}
-        <div className="flex items-center gap-3 shrink-0 self-start sm:self-end">
-          <Link
-            href={track.goalUrl || "/programs"}
-            className="inline-flex items-center gap-1 text-xs font-mono font-medium text-primary hover:underline group"
-          >
-            <span>Edit goal</span>
-            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-          </Link>
-
-          {/* Desktop Left/Right Arrow Buttons */}
-          <div className="hidden sm:flex items-center gap-1.5 ml-1">
-            <button
-              type="button"
-              onClick={() => scroll("left")}
-              disabled={!canScrollLeft}
-              className="h-8 w-8 rounded-full border border-hairline bg-card hover:bg-secondary text-foreground flex items-center justify-center disabled:opacity-30 disabled:pointer-events-none transition-colors cursor-pointer shadow-2xs"
-              aria-label="Scroll left"
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </button>
-            <button
-              type="button"
-              onClick={() => scroll("right")}
-              disabled={!canScrollRight}
-              className="h-8 w-8 rounded-full border border-hairline bg-card hover:bg-secondary text-foreground flex items-center justify-center disabled:opacity-30 disabled:pointer-events-none transition-colors cursor-pointer shadow-2xs"
-              aria-label="Scroll right"
-            >
-              <ChevronRight className="h-4 w-4" />
-            </button>
-          </div>
-        </div>
       </div>
 
       {/* -------------------------------------------------------------
-          2. SIMPLE & FLUID HORIZONTAL SCROLL COURSE SHELF (FULL BLEED)
+          2. FLUID HORIZONTAL SCROLL COURSE SHELF WITH CLOUD EFFECT & SIDE ARROWS
       ------------------------------------------------------------- */}
-      <div className="w-full overflow-visible">
-        <div
-          ref={shelfRef}
-          className="w-[calc(100%+1.75rem)] -mx-3.5 px-3.5 sm:w-full sm:mx-0 sm:px-0 flex gap-3.5 sm:gap-5 overflow-x-auto snap-x snap-mandatory py-2.5 no-scrollbar scroll-smooth touch-pan-x"
-        >
-          {track.courses.map((course) => {
-            const cSlug = course.slug || course.id
-            const isSelected = navigatingSlug === cSlug || (Boolean(navigatingSlug) && navigatingSlug === course.id)
-            return (
-              <div
-                key={course.id || course.slug}
-                className="career-shelf-card-wrapper w-[76vw] sm:w-[330px] md:w-[350px] shrink-0 snap-start"
-              >
-                <CareerCourseCard
-                  course={course}
-                  onQuickEnroll={() => onQuickEnroll(course)}
-                  userTier={userTier}
-                  isSelected={isSelected}
-                  onSelect={() => onSelectCourse?.(cSlug)}
-                  isAdmin={isAdmin}
-                />
-              </div>
-            )
-          })}
-          {/* Explicit end spacer so last card has comfortable breathing margin */}
-          <div className="w-6 sm:hidden shrink-0 pointer-events-none select-none" aria-hidden="true" />
+      <div className="w-full overflow-visible space-y-2">
+        {/* Shelf Viewport Wrapper with Cloud Vignettes & Floating Navigation Arrows */}
+        <div className="relative group/shelf">
+          {/* Left Cloud / Fog Gradient Mask */}
+          <div
+            className={`absolute -left-3.5 sm:left-0 top-0 bottom-0 w-10 sm:w-20 z-20 pointer-events-none transition-opacity duration-300 bg-gradient-to-r from-background via-background/60 to-transparent ${
+              canScrollLeft ? "opacity-100" : "opacity-0"
+            }`}
+            aria-hidden="true"
+          />
+
+          {/* Right Cloud / Fog Gradient Mask */}
+          <div
+            className={`absolute -right-3.5 sm:right-0 top-0 bottom-0 w-10 sm:w-20 z-20 pointer-events-none transition-opacity duration-300 bg-gradient-to-l from-background via-background/60 to-transparent ${
+              canScrollRight ? "opacity-100" : "opacity-0"
+            }`}
+            aria-hidden="true"
+          />
+
+          {/* Left Side Floating Arrow Button */}
+          <div
+            className={`absolute left-0.5 sm:left-2 top-1/2 -translate-y-1/2 z-30 transition-all duration-300 ${
+              canScrollLeft
+                ? "opacity-100 scale-100 pointer-events-auto"
+                : "opacity-0 scale-75 pointer-events-none"
+            }`}
+          >
+            <button
+              type="button"
+              onClick={() => scroll("left")}
+              aria-label="Scroll courses left"
+              className="h-9 w-9 sm:h-11 sm:w-11 rounded-full bg-card/95 dark:bg-stone-900/95 backdrop-blur-md border border-stone-200/90 dark:border-stone-700/90 text-foreground flex items-center justify-center shadow-md hover:shadow-xl hover:scale-110 active:scale-95 hover:border-primary/50 transition-all cursor-pointer group/btn"
+            >
+              <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5 text-foreground/85 group-hover/btn:text-primary transition-colors" />
+            </button>
+          </div>
+
+          {/* Right Side Floating Arrow Button */}
+          <div
+            className={`absolute right-0.5 sm:right-2 top-1/2 -translate-y-1/2 z-30 transition-all duration-300 ${
+              canScrollRight
+                ? "opacity-100 scale-100 pointer-events-auto"
+                : "opacity-0 scale-75 pointer-events-none"
+            }`}
+          >
+            <button
+              type="button"
+              onClick={() => scroll("right")}
+              aria-label="Scroll courses right"
+              className="h-9 w-9 sm:h-11 sm:w-11 rounded-full bg-card/95 dark:bg-stone-900/95 backdrop-blur-md border border-stone-200/90 dark:border-stone-700/90 text-foreground flex items-center justify-center shadow-md hover:shadow-xl hover:scale-110 active:scale-95 hover:border-primary/50 transition-all cursor-pointer group/btn"
+            >
+              <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5 text-foreground/85 group-hover/btn:text-primary transition-colors" />
+            </button>
+          </div>
+
+          {/* Scrollable Shelf Track */}
+          <div
+            ref={shelfRef}
+            className="w-[calc(100%+1.75rem)] -mx-3.5 px-3.5 sm:w-full sm:mx-0 sm:px-0 flex gap-3.5 sm:gap-5 overflow-x-auto snap-x snap-mandatory py-2.5 no-scrollbar scroll-smooth touch-pan-x"
+          >
+            {track.courses.map((course) => {
+              const cSlug = course.slug || course.id
+              const isSelected = navigatingSlug === cSlug || (Boolean(navigatingSlug) && navigatingSlug === course.id)
+              return (
+                <div
+                  key={course.id || course.slug}
+                  className="career-shelf-card-wrapper w-[76vw] sm:w-[330px] md:w-[350px] shrink-0 snap-start"
+                >
+                  <CareerCourseCard
+                    course={course}
+                    onQuickEnroll={() => onQuickEnroll(course)}
+                    userTier={userTier}
+                    isSelected={isSelected}
+                    onSelect={() => onSelectCourse?.(cSlug)}
+                    isAdmin={isAdmin}
+                  />
+                </div>
+              )
+            })}
+            {/* Explicit end spacer so last card has comfortable breathing margin */}
+            <div className="w-6 sm:hidden shrink-0 pointer-events-none select-none" aria-hidden="true" />
+          </div>
         </div>
 
         {/* Subtle Horizontal Scroll Indicator */}
@@ -305,25 +330,38 @@ function CareerCourseCard({
 
       <div>
         {/* 2:1 Widescreen Cover Image with Category & Wishlist */}
-        <div className="relative aspect-[2/1] w-full overflow-hidden bg-secondary">
-          <Image
-            src={course.thumbnail}
-            alt={course.title}
-            fill
-            sizes="(max-width: 640px) 100vw, 360px"
-            className="object-cover transition-transform duration-500 ease-out group-hover:scale-105 select-none pointer-events-none"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
+        <div className="relative aspect-[2/1] w-full overflow-hidden bg-secondary group/thumb">
+          <Link
+            href={href}
+            onClick={() => onSelect?.()}
+            className="absolute inset-0 block cursor-pointer z-0"
+            aria-label={`View ${course.title} course`}
+          >
+            <Image
+              src={course.thumbnail}
+              alt={course.title}
+              fill
+              sizes="(max-width: 640px) 100vw, 360px"
+              className="object-cover transition-transform duration-500 ease-out group-hover:scale-105 select-none"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
+          </Link>
 
           {/* Top-Left Category Pill */}
-          <div className="absolute left-2.5 top-2.5 z-10">
+          <div className="absolute left-2.5 top-2.5 z-10 pointer-events-none">
             <span className="inline-flex items-center rounded-full bg-background/90 dark:bg-black/90 backdrop-blur-xs px-2.5 py-0.5 text-[10px] font-mono font-semibold text-foreground border border-hairline uppercase tracking-wider select-none">
               {course.category}
             </span>
           </div>
 
           {/* Top-Right Wishlist Button */}
-          <div className="absolute right-2.5 top-2.5 z-10">
+          <div
+            className="absolute right-2.5 top-2.5 z-10"
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+            }}
+          >
             <WishlistButton
               course={{
                 id: course.id,
@@ -336,7 +374,7 @@ function CareerCourseCard({
                 thumbnail: course.thumbnail
               }}
               variant="icon"
-              className="h-7 w-7 bg-black/60 backdrop-blur-xs border border-white/20 text-white hover:text-amber-400 shadow-xs active:scale-95 transition-transform"
+              className="h-7 w-7 bg-black/60 backdrop-blur-xs border border-white/20 text-white hover:text-amber-400 shadow-xs active:scale-95 transition-transform cursor-pointer"
             />
           </div>
         </div>

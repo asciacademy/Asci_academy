@@ -1192,25 +1192,38 @@ function CourseGridCard({
 
       <div>
         {/* 2:1 Widescreen Cover - Reduced Height */}
-        <div className="relative aspect-[2/1] w-full overflow-hidden bg-stone-100 dark:bg-stone-900">
-          <Image
-            src={data.thumbnail}
-            alt={course.title}
-            fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className="object-cover transition-transform duration-500 ease-out group-hover:scale-105 select-none pointer-events-none"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
+        <div className="relative aspect-[2/1] w-full overflow-hidden bg-stone-100 dark:bg-stone-900 group/cover">
+          <Link
+            href={href}
+            onClick={() => onSelect?.()}
+            className="absolute inset-0 block cursor-pointer z-0"
+            aria-label={`View ${course.title} course`}
+          >
+            <Image
+              src={data.thumbnail}
+              alt={course.title}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              className="object-cover transition-transform duration-500 ease-out group-hover:scale-105 select-none"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
+          </Link>
 
           {/* Top-Left Category Badge */}
-          <div className="absolute top-2.5 left-2.5 z-10">
+          <div className="absolute top-2.5 left-2.5 z-10 pointer-events-none">
             <span className="inline-flex items-center rounded-full bg-background/90 dark:bg-black/90 backdrop-blur-xs px-2.5 py-0.5 text-[10px] font-mono font-semibold text-foreground border border-hairline uppercase tracking-wider select-none">
               {course.category}
             </span>
           </div>
 
           {/* Top-Right Wishlist Button */}
-          <div className="absolute top-2.5 right-2.5 z-10">
+          <div
+            className="absolute top-2.5 right-2.5 z-10"
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+            }}
+          >
             <WishlistButton
               course={{
                 id: course.id,
@@ -1223,7 +1236,7 @@ function CourseGridCard({
                 thumbnail: data.thumbnail
               }}
               variant="icon"
-              className="h-7 w-7 bg-black/60 backdrop-blur-xs border border-white/20 text-white hover:text-amber-400 shadow-xs active:scale-95 transition-transform"
+              className="h-7 w-7 bg-black/60 backdrop-blur-xs border border-white/20 text-white hover:text-amber-400 shadow-xs active:scale-95 transition-transform cursor-pointer"
             />
           </div>
         </div>
@@ -1480,25 +1493,38 @@ function CourseListCard({
       )}
 
       {/* Left Thumbnail Cover - Widescreen & Sleeker */}
-      <div className="relative aspect-video sm:aspect-[16/10] sm:w-60 md:w-68 shrink-0 overflow-hidden bg-stone-100 dark:bg-stone-900">
-        <Image
-          src={data.thumbnail}
-          alt={course.title}
-          fill
-          sizes="(max-width: 640px) 100vw, 280px"
-          className="object-cover transition-transform duration-500 ease-out group-hover:scale-105 select-none"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+      <div className="relative aspect-video sm:aspect-[16/10] sm:w-60 md:w-68 shrink-0 overflow-hidden bg-stone-100 dark:bg-stone-900 group/cover">
+        <Link
+          href={href}
+          onClick={() => onSelect?.()}
+          className="absolute inset-0 block cursor-pointer z-0"
+          aria-label={`View ${course.title} course`}
+        >
+          <Image
+            src={data.thumbnail}
+            alt={course.title}
+            fill
+            sizes="(max-width: 640px) 100vw, 280px"
+            className="object-cover transition-transform duration-500 ease-out group-hover:scale-105 select-none"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+        </Link>
 
         {/* Category Badge */}
-        <div className="absolute top-2.5 left-2.5 z-10">
+        <div className="absolute top-2.5 left-2.5 z-10 pointer-events-none">
           <span className="inline-flex items-center rounded-full bg-background/90 dark:bg-black/90 backdrop-blur-xs px-2.5 py-0.5 text-[10px] font-mono font-semibold text-foreground border border-hairline uppercase tracking-wider select-none">
             {course.category}
           </span>
         </div>
 
         {/* Wishlist Button */}
-        <div className="absolute top-2.5 right-2.5 z-10">
+        <div
+          className="absolute top-2.5 right-2.5 z-10"
+          onClick={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+          }}
+        >
           <WishlistButton
             course={{
               id: course.id,
@@ -1511,7 +1537,7 @@ function CourseListCard({
               thumbnail: data.thumbnail
             }}
             variant="icon"
-            className="h-7 w-7 bg-black/60 backdrop-blur-xs border border-white/20 text-white hover:text-amber-400 shadow-xs active:scale-95 transition-transform"
+            className="h-7 w-7 bg-black/60 backdrop-blur-xs border border-white/20 text-white hover:text-amber-400 shadow-xs active:scale-95 transition-transform cursor-pointer"
           />
         </div>
       </div>
