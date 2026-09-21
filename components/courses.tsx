@@ -440,7 +440,7 @@ export function Courses({ hideHeader = false, className = "" }: CoursesProps = {
 
   return (
     <section id="courses" className={`relative ${hideHeader ? "py-8" : "py-16 lg:py-24"} bg-background ${className}`}>
-      <div className="relative mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
+      <div className="relative mx-auto max-w-[1400px] px-3.5 sm:px-6 lg:px-8">
         {/* ══════════════════════════════════════════════════════════
             1. COURSERA-STYLE ACADEMIC & INSTITUTIONAL HEADER
         ══════════════════════════════════════════════════════════ */}
@@ -1228,12 +1228,15 @@ function CourseGridCard({
           </div>
         </div>
 
-        {/* Clean Card Body - Streamlined Height */}
-        <div className="p-3.5 sm:px-5 sm:py-3 space-y-1.5">
-          {/* Partner Attribution */}
-          <p className="text-[11px] font-mono text-muted-foreground truncate">
-            Offered by <span className="font-semibold text-foreground/90">{data.partner}</span>
-          </p>
+        {/* Card Body - Coursera Structure */}
+        <div className="p-3.5 sm:p-4 space-y-2">
+          {/* Educator / Partner Row with avatar */}
+          <div className="flex items-center gap-2 text-xs font-medium text-foreground/90">
+            <div className="w-5 h-5 rounded-md bg-primary/10 border border-primary/20 flex items-center justify-center text-[9px] font-bold text-primary shrink-0 uppercase overflow-hidden">
+              {data.partner?.slice(0, 2) || "AS"}
+            </div>
+            <span className="truncate">{data.partner || "ASCI Institute"}</span>
+          </div>
 
           {/* Course Title */}
           <Link
@@ -1241,36 +1244,59 @@ function CourseGridCard({
             onClick={() => onSelect?.()}
             className="block group-hover:text-primary transition-colors"
           >
-            <h3 className="font-serif text-base sm:text-lg font-medium text-foreground line-clamp-2 leading-snug">
+            <h3 className="font-serif text-base sm:text-[17px] font-medium tracking-tight text-foreground line-clamp-2 leading-snug">
               {course.title}
             </h3>
           </Link>
 
-          {/* Clean Meta: Rating · Duration · Level */}
-          <div className="flex items-center gap-2 text-xs font-mono text-muted-foreground">
-            <div className="flex items-center gap-1 text-amber-500 font-bold shrink-0">
-              <Star className="h-3.5 w-3.5 fill-current" />
-              <span>{data.rating.toFixed(1)}</span>
-            </div>
-            <span>•</span>
-            <span>{course.weeks || "6 Weeks"}</span>
-            <span>•</span>
-            <span className="text-foreground/80 font-medium">{course.level || "Beginner"}</span>
+          {/* Coursera Signature: "Skills you'll gain:" */}
+          <div className="text-[11px] sm:text-xs text-muted-foreground line-clamp-2 leading-relaxed">
+            <span className="font-semibold text-foreground/90">Skills you'll gain: </span>
+            <span>{data.skills?.join(", ") || course.description}</span>
           </div>
 
-          {/* Description */}
-          <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2 pt-0.5">
-            {course.description}
-          </p>
+          {/* Coursera Meta Line: Rating · Duration · Level */}
+          <div className="flex items-center gap-1.5 text-xs text-muted-foreground flex-wrap pt-0.5">
+            <div className="flex items-center gap-1 text-foreground font-semibold shrink-0">
+              <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-500" />
+              <span>{data.rating.toFixed(1)}</span>
+              <span className="text-muted-foreground font-normal">({data.ratingCount || "10K+"})</span>
+            </div>
+            <span>·</span>
+            <span>{course.level || "Beginner"}</span>
+            <span>·</span>
+            <span className="truncate">{data.credentialType || "Specialization"}</span>
+            {course.weeks && (
+              <>
+                <span>·</span>
+                <span className="shrink-0">{course.weeks}</span>
+              </>
+            )}
+          </div>
+
+          {/* Coursera Status / Category Badge */}
+          {course.is_premium ? (
+            <div className="pt-0.5">
+              <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-mono font-semibold uppercase tracking-wider bg-primary/10 text-primary border border-primary/20">
+                Top AI program
+              </span>
+            </div>
+          ) : (
+            <div className="pt-0.5">
+              <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-mono font-semibold uppercase tracking-wider bg-secondary text-muted-foreground border border-hairline">
+                Top recommendation
+              </span>
+            </div>
+          )}
 
           {/* Progress Bar if Enrolled */}
           {enrolled && (
-            <div className="pt-2 space-y-1.5">
+            <div className="pt-1.5 space-y-1.5">
               <div className="flex justify-between text-[11px] font-mono text-muted-foreground">
                 <span>{enrolledData?.lessonsCompleted ?? 0} / {enrolledData?.totalLessons ?? ((course.modules || 4) * 3)} Lessons</span>
                 <span className="text-primary font-bold">{enrolledData?.progressPercent ?? 0}%</span>
               </div>
-              <div className="w-full h-1.5 bg-stone-100 dark:bg-stone-800 rounded-full overflow-hidden">
+              <div className="w-full h-1.5 bg-secondary rounded-full overflow-hidden">
                 <div
                   className="h-full bg-primary rounded-full transition-all duration-500"
                   style={{ width: `${enrolledData?.progressPercent ?? 0}%` }}

@@ -280,7 +280,7 @@ export function CertificateCard({ certificate, isPrintMode = false }: Certificat
                 <img
                   src="/images/asci-logo.png"
                   alt="ASCI Logo"
-                  className="w-full h-full object-contain filter drop-shadow-[0_2px_4px_rgba(234,88,12,0.18)]"
+                  className="w-full h-full object-contain filter drop-shadow-[0_2px_6px_rgba(37,99,235,0.25)]"
                 />
               </div>
 

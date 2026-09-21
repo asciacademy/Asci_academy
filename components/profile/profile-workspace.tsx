@@ -623,7 +623,7 @@ export function ProfileWorkspace({
                     {profile?.subscription_tier === "architect" ? (
                       <button
                         onClick={async () => {
-                          const res = await fetch("/api/razorpay/cancel-subscription", { method: "POST" })
+                          const res = await fetch("/api/subscription/cancel", { method: "POST" })
                           if (res.ok) window.location.reload()
                           else alert("Failed to cancel subscription")
                         }}

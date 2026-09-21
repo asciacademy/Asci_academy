@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from 'next'
 import { Inter, JetBrains_Mono, EB_Garamond } from 'next/font/google'
 import { ThemeProvider } from '@/components/theme-provider'
 import { Analytics } from '@vercel/analytics/next'
-import Script from 'next/script'
 import './globals.css'
 
 const inter = Inter({
@@ -30,9 +29,11 @@ export const metadata: Metadata = {
     'Comprehensive learning platform for mastering Data Structures, Algorithms, and full-stack web development. Interactive visualizers, 1-on-1 mentorship, real-world projects, and career-focused curriculum.',
   icons: {
     icon: [
+      { url: '/favicon.ico' },
       { url: '/icon.svg', type: 'image/svg+xml' },
-      { url: '/logo.png', sizes: '32x32', type: 'image/png' },
+      { url: '/icon.png', sizes: '512x512', type: 'image/png' },
     ],
+    shortcut: '/favicon.ico',
     apple: [
       { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
     ],
@@ -67,7 +68,6 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${jetbrainsMono.variable} ${ebGaramond.variable} font-sans antialiased bg-background text-foreground min-h-screen transition-colors duration-200`}
       >
-        <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <AuthProvider>
             <UserSettingsProvider>

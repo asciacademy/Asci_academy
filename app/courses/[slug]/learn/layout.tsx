@@ -100,9 +100,9 @@ export default function CourseLayout({
         <div className="flex min-h-screen flex-col bg-background text-foreground">
             <Navbar />
 
-            <div className="flex flex-1 flex-col lg:flex-row mt-[72px]">
+            <div className="flex flex-1 flex-col lg:flex-row mt-16 sm:mt-[68px]">
                 {/* Sidebar Navigation */}
-                <aside className="w-full shrink-0 border-r border-border/80 bg-card/70 backdrop-blur-2xl lg:w-80 flex flex-col h-auto lg:h-full lg:min-h-[calc(100vh-72px)]">
+                <aside className="w-full shrink-0 border-r border-border/80 bg-card/70 backdrop-blur-2xl lg:w-80 flex flex-col h-auto lg:h-full lg:min-h-[calc(100vh-68px)]">
                     {/* Header */}
                     <div className="flex items-center justify-between border-b border-border/80 p-4 sm:p-5 bg-card/50">
                         <div className="flex items-center gap-3">

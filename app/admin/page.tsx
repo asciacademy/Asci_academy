@@ -8,7 +8,7 @@ import {
     Users, BookOpen, GraduationCap, MessageSquare,
     Shield, RefreshCw, Loader2, ArrowRight,
     Zap, Edit3, X, Save, Globe, EyeOff, Lock, Check,
-    TerminalSquare, Clock, Briefcase
+    TerminalSquare, Clock, Briefcase, CreditCard
 } from "lucide-react"
 
 const DIFFICULTIES = ["Beginner", "Intermediate", "Advanced", "Expert"]
@@ -110,6 +110,7 @@ export default function AdminDashboardPage() {
     const quickLinks = [
         { label: "Manage Users", href: "/admin/users", icon: Users, desc: "Roles, XP, suspension" },
         { label: "Manage Courses", href: "/admin/courses", icon: BookOpen, desc: "Publish, curriculum, delete" },
+        { label: "Payment Verification", href: "/admin/payments", icon: CreditCard, desc: "Verify UPI & UTR receipts" },
         { label: "Opportunities Hub", href: "/admin/opportunities", icon: Briefcase, desc: "Add & edit hiring drives" },
         { label: "Testimonials", href: "/admin/testimonials", icon: MessageSquare, desc: "Review & approve" },
         { label: "Announcements", href: "/admin/announcements", icon: Zap, desc: "Push site-wide banners" },

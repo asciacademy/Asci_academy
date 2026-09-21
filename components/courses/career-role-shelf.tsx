@@ -111,7 +111,10 @@ export function CareerRoleShelf({
   const scroll = (direction: "left" | "right") => {
     const el = shelfRef.current
     if (!el) return
-    const scrollAmount = Math.max(300, el.clientWidth * 0.75)
+    const card = el.querySelector<HTMLElement>(".career-shelf-card-wrapper")
+    const step = card ? card.offsetWidth + 20 : 360
+    const visibleCount = Math.max(1, Math.floor(el.clientWidth / step))
+    const scrollAmount = step * visibleCount
     el.scrollBy({
       left: direction === "left" ? -scrollAmount : scrollAmount,
       behavior: "smooth"
@@ -143,7 +146,7 @@ export function CareerRoleShelf({
 
           {/* Main Title & Headline */}
           <h3 className="font-serif text-2xl sm:text-3xl font-medium tracking-tight text-foreground">
-            {track.title}
+            In-demand skills for <span className="text-primary">{track.title}</span> roles
           </h3>
 
           <p className="text-xs sm:text-sm text-muted-foreground line-clamp-1 leading-relaxed">
@@ -157,7 +160,7 @@ export function CareerRoleShelf({
             href={track.goalUrl || "/programs"}
             className="inline-flex items-center gap-1 text-xs font-mono font-medium text-primary hover:underline group"
           >
-            <span>Explore Role Roadmap</span>
+            <span>Edit goal</span>
             <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
           </Link>
 
@@ -186,12 +189,12 @@ export function CareerRoleShelf({
       </div>
 
       {/* -------------------------------------------------------------
-          2. SIMPLE & FLUID HORIZONTAL SCROLL COURSE SHELF
+          2. SIMPLE & FLUID HORIZONTAL SCROLL COURSE SHELF (FULL BLEED)
       ------------------------------------------------------------- */}
-      <div className="w-full">
+      <div className="w-full overflow-visible">
         <div
           ref={shelfRef}
-          className="w-full flex gap-3.5 sm:gap-5 overflow-x-auto snap-x snap-mandatory py-2.5 no-scrollbar scroll-smooth -mx-4 px-4 sm:mx-0 sm:px-0 overscroll-x-contain"
+          className="w-[calc(100%+1.75rem)] -mx-3.5 px-3.5 sm:w-full sm:mx-0 sm:px-0 flex gap-3.5 sm:gap-5 overflow-x-auto snap-x snap-mandatory py-2.5 no-scrollbar scroll-smooth touch-pan-x"
         >
           {track.courses.map((course) => {
             const cSlug = course.slug || course.id
@@ -199,7 +202,7 @@ export function CareerRoleShelf({
             return (
               <div
                 key={course.id || course.slug}
-                className="w-[78vw] sm:w-[350px] md:w-[370px] max-w-[325px] shrink-0 snap-start"
+                className="career-shelf-card-wrapper w-[76vw] sm:w-[330px] md:w-[350px] shrink-0 snap-start"
               >
                 <CareerCourseCard
                   course={course}
@@ -212,8 +215,8 @@ export function CareerRoleShelf({
               </div>
             )
           })}
-          {/* Explicit end spacer so the last card retains full padding-right on mobile */}
-          <div className="w-2 sm:hidden shrink-0 pointer-events-none select-none" aria-hidden="true" />
+          {/* Explicit end spacer so last card has comfortable breathing margin */}
+          <div className="w-6 sm:hidden shrink-0 pointer-events-none select-none" aria-hidden="true" />
         </div>
 
         {/* Subtle Horizontal Scroll Indicator */}
@@ -235,7 +238,7 @@ export function CareerRoleShelf({
 }
 
 /* -------------------------------------------------------------
-   3. CLEAN & ELEGANT COURSE CARD
+   3. AUTHENTIC COURSERA CARD (Partner Avatar, Skills, Rating & Badge)
 ------------------------------------------------------------- */
 function CareerCourseCard({
   course,
@@ -279,15 +282,21 @@ function CareerCourseCard({
     onQuickEnroll()
   }
 
+  // Format comma-separated skills list like Coursera
+  const skillsList =
+    course.skills && course.skills.length > 0
+      ? course.skills.join(", ")
+      : "Probability & Statistics, Algorithms, Deep Learning, Python Programming, Model Optimization"
+
   return (
     <div className={`w-full h-full relative flex flex-col justify-between overflow-hidden rounded-2xl border bg-card transition-all duration-200 ease-out hover:-translate-y-1 group ${
       isSelected
-        ? "border-primary ring-1 ring-primary/40"
-        : "border-hairline hover:border-primary/40"
+        ? "border-primary ring-1 ring-primary/40 shadow-sm"
+        : "border-stone-200/90 dark:border-stone-800/90 hover:border-primary/40 shadow-2xs"
     }`}>
       {isSelected && (
         <div className="absolute inset-0 z-30 bg-background/60 dark:bg-black/60 backdrop-blur-[1.5px] flex items-center justify-center p-4 select-none">
-          <div className="flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-4 py-2 text-xs font-semibold">
+          <div className="flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-4 py-2 text-xs font-semibold shadow-xs">
             <Loader2 className="h-3.5 w-3.5 animate-spin" />
             <span>Launching {course.title.split(" ")[0]}...</span>
           </div>
@@ -295,13 +304,13 @@ function CareerCourseCard({
       )}
 
       <div>
-        {/* 2:1 Widescreen Thumbnail Image Cover - Reduced Height */}
+        {/* 2:1 Widescreen Cover Image with Category & Wishlist */}
         <div className="relative aspect-[2/1] w-full overflow-hidden bg-secondary">
           <Image
             src={course.thumbnail}
             alt={course.title}
             fill
-            sizes="(max-width: 640px) 80vw, 370px"
+            sizes="(max-width: 640px) 100vw, 360px"
             className="object-cover transition-transform duration-500 ease-out group-hover:scale-105 select-none pointer-events-none"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
@@ -332,12 +341,15 @@ function CareerCourseCard({
           </div>
         </div>
 
-        {/* Card Content Body - Streamlined Height */}
-        <div className="p-3.5 sm:px-4.5 sm:py-3 space-y-1.5">
-          {/* Partner Attribution */}
-          <p className="text-[11px] font-mono text-muted-foreground truncate">
-            Offered by <span className="font-semibold text-foreground/90">{course.partner || "ASCI Institute"}</span>
-          </p>
+        {/* Card Body - Coursera Structure */}
+        <div className="p-3.5 sm:p-4 space-y-2">
+          {/* Educator / Partner Row with avatar */}
+          <div className="flex items-center gap-2 text-xs font-medium text-foreground/90">
+            <div className="w-5 h-5 rounded-md bg-primary/10 border border-primary/20 flex items-center justify-center text-[9px] font-bold text-primary shrink-0 uppercase overflow-hidden">
+              {course.partner?.slice(0, 2) || "AS"}
+            </div>
+            <span className="truncate">{course.partner || "ASCI Institute"}</span>
+          </div>
 
           {/* Course Title */}
           <Link
@@ -345,31 +357,54 @@ function CareerCourseCard({
             onClick={() => onSelect?.()}
             className="block group-hover:text-primary transition-colors"
           >
-            <h4 className="font-serif text-base sm:text-lg font-medium tracking-tight text-foreground line-clamp-2 leading-snug">
+            <h4 className="font-serif text-base sm:text-[17px] font-medium tracking-tight text-foreground line-clamp-2 leading-snug">
               {course.title}
             </h4>
           </Link>
 
-          {/* Clean Meta: Rating · Duration · Level */}
-          <div className="flex items-center gap-1.5 sm:gap-2 text-xs font-mono text-muted-foreground flex-wrap">
-            <div className="flex items-center gap-1 text-amber-500 font-bold shrink-0">
-              <Star className="h-3.5 w-3.5 fill-current" />
-              <span>{course.rating.toFixed(1)}</span>
-            </div>
-            <span>•</span>
-            <span className="truncate">{course.duration}</span>
-            <span>•</span>
-            <span className="text-foreground/80 font-medium shrink-0">{course.level || "Beginner"}</span>
+          {/* Coursera Signature: "Skills you'll gain:" */}
+          <div className="text-[11px] sm:text-xs text-muted-foreground line-clamp-2 leading-relaxed">
+            <span className="font-semibold text-foreground/90">Skills you'll gain: </span>
+            <span>{skillsList}</span>
           </div>
 
-          {/* Description */}
-          <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2 pt-0.5">
-            {course.description}
-          </p>
+          {/* Clean Meta: Rating · Duration · Level */}
+          <div className="flex items-center gap-1.5 text-xs text-muted-foreground flex-wrap pt-0.5">
+            <div className="flex items-center gap-1 text-foreground font-semibold shrink-0">
+              <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-500" />
+              <span>{course.rating.toFixed(1)}</span>
+              <span className="text-muted-foreground font-normal">({course.reviews || "10K+"})</span>
+            </div>
+            <span>·</span>
+            <span>{course.level || "Beginner"}</span>
+            <span>·</span>
+            <span className="truncate">{course.credential || "Specialization"}</span>
+            {course.duration && (
+              <>
+                <span>·</span>
+                <span className="shrink-0">{course.duration}</span>
+              </>
+            )}
+          </div>
+
+          {/* Coursera Status / Category Badge */}
+          {course.badge && (
+            <div className="pt-0.5">
+              <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-mono font-semibold uppercase tracking-wider ${
+                course.badge.toLowerCase().includes("top")
+                  ? "bg-primary/10 text-primary border border-primary/20"
+                  : course.badge.toLowerCase().includes("bestseller")
+                  ? "bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20"
+                  : "bg-secondary text-muted-foreground border border-hairline"
+              }`}>
+                {course.badge}
+              </span>
+            </div>
+          )}
 
           {/* Progress Bar if Enrolled */}
           {enrolled && (
-            <div className="pt-2 space-y-1.5">
+            <div className="pt-1.5 space-y-1.5">
               <div className="flex items-center justify-between text-[11px] font-mono text-muted-foreground">
                 <span>{enrolledData?.lessonsCompleted ?? 0} / {enrolledData?.totalLessons ?? 12} Lessons</span>
                 <span className="text-primary font-bold">{enrolledData?.progressPercent ?? 0}%</span>

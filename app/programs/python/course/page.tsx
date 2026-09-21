@@ -169,7 +169,7 @@ export default function PythonCourseDocsLayout() {
   const completionPercentage = Math.round((completedIds.size / (allLessons.length || 1)) * 100)
 
   return (
-    <div className="flex h-screen w-full max-w-full overflow-hidden bg-background text-foreground font-sans antialiased">
+    <div className="flex h-svh w-full max-w-full overflow-clip bg-background text-foreground font-sans antialiased">
       {/* ─── MOBILE HEADER ─── */}
       <div className="lg:hidden absolute top-0 left-0 right-0 h-14 border-b border-border bg-card/95 backdrop-blur-xl z-50 flex items-center justify-between px-4">
         <Link

@@ -110,17 +110,17 @@ export const CAREER_ROLE_TRACKS: CareerRoleTrack[] = [
     ],
     courses: [
       buildRoleCourse("agentic-ai", "Top recommendation"),
-      buildRoleCourse("generative-ai-rag", "Industry Standard"),
-      buildRoleCourse("deep-learning-specialization", "Core Specialization"),
-      buildRoleCourse("anthropic-claude-prompt-engineering", "Enterprise AI"),
-      buildRoleCourse("nvidia-dli-deep-learning", "GPU Microarchitecture"),
-      buildRoleCourse("deepseek-r1-reasoning-models", "Reasoning Models"),
-      buildRoleCourse("meta-pytorch-llama3", "Open Source AI"),
-      buildRoleCourse("google-cloud-generative-ai", "Cloud ML"),
-      buildRoleCourse("ibm-watsonx-generative-ai", "Foundation Models"),
-      buildRoleCourse("aws-skillbuilder-generative-ai", "Serverless AI"),
-      buildRoleCourse("columbia-ai", "Academic Rigor"),
-      buildRoleCourse("ai-for-everyone", "Foundational")
+      buildRoleCourse("generative-ai-rag", "Top AI program"),
+      buildRoleCourse("deep-learning-specialization", "Bestseller"),
+      buildRoleCourse("anthropic-claude-prompt-engineering", "Job skills"),
+      buildRoleCourse("nvidia-dli-deep-learning", "Top AI program"),
+      buildRoleCourse("deepseek-r1-reasoning-models", "Top recommendation"),
+      buildRoleCourse("meta-pytorch-llama3", "Bestseller"),
+      buildRoleCourse("google-cloud-generative-ai", "Top AI program"),
+      buildRoleCourse("ibm-watsonx-generative-ai", "Job skills"),
+      buildRoleCourse("aws-skillbuilder-generative-ai", "Top recommendation"),
+      buildRoleCourse("columbia-ai", "Bestseller"),
+      buildRoleCourse("ai-for-everyone", "Top AI program")
     ]
   },
 

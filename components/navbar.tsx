@@ -717,7 +717,7 @@ export function Navbar() {
                 className="w-full flex items-center justify-between rounded-xl border border-stone-200 dark:border-stone-800 bg-secondary/60 px-3.5 py-2.5 text-xs text-muted-foreground hover:text-foreground shadow-2xs cursor-pointer transition-colors"
               >
                 <div className="flex items-center gap-2.5">
-                  <Search className="h-4 w-4 text-blue-600" />
+                  <Search className="h-4 w-4 text-primary" />
                   <span>Search curriculum, code labs...</span>
                 </div>
                 <kbd className="rounded border border-stone-200 dark:border-stone-700 bg-background px-1.5 py-0.5 text-[9px] font-mono font-medium text-muted-foreground">
@@ -732,11 +732,11 @@ export function Navbar() {
                 className="flex items-center justify-between p-3 rounded-xl border border-border/80 dark:border-white/10 bg-card hover:bg-secondary/60 shadow-2xs transition-colors group"
               >
                 <div className="flex items-center gap-2.5 min-w-0">
-                  <div className="w-7 h-7 rounded-lg bg-blue-500/15 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
+                  <div className="w-7 h-7 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
                     <Flame className="w-4 h-4 fill-current" />
                   </div>
                   <div className="min-w-0">
-                    <div className="text-[10px] font-mono uppercase tracking-wider font-bold text-blue-600 dark:text-blue-400">
+                    <div className="text-[10px] font-mono uppercase tracking-wider font-bold text-primary">
                       Problem of the Day
                     </div>
                     <div className="text-xs font-bold text-foreground truncate">
@@ -744,7 +744,7 @@ export function Navbar() {
                     </div>
                   </div>
                 </div>
-                <span className="shrink-0 text-[10px] font-mono font-bold text-blue-600 dark:text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded-md">
+                <span className="shrink-0 text-[10px] font-mono font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-md">
                   +50 XP →
                 </span>
               </Link>

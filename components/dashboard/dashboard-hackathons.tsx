@@ -87,7 +87,7 @@ function HackathonHostLogo({ host, logo, className = "w-11 h-11" }: { host: stri
 
   if (norm.includes("asci")) {
     return (
-      <div className={`${className} rounded-xl bg-emerald-950 border border-emerald-500/30 flex items-center justify-center shrink-0 shadow-2xs p-1.5`}>
+      <div className={`${className} rounded-xl bg-blue-950/40 border border-blue-500/30 flex items-center justify-center shrink-0 shadow-2xs p-1.5`}>
         <img src="/images/asci-logo.png" alt="ASCI" className="w-full h-full object-contain" />
       </div>
     )
