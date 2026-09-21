@@ -685,27 +685,33 @@ export function DashboardOverview({
       </section>
 
       {/* ─────────────────────────────────────────────────────────────
-          5. Tactile Quick Actions (Icon Grid without paragraph clutter)
+          5. Tactile Quick Actions with 3D Visual Icons
       ───────────────────────────────────────────────────────────── */}
       <section>
-        <div className="grid grid-cols-3 sm:grid-cols-6 gap-2.5">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-3.5">
           {[
-            { icon: BookOpen, label: "Courses", tab: "courses", color: "text-primary", bg: "bg-primary/10" },
-            { icon: Code, label: "DSA Simulators", tab: "practice", color: "text-emerald-500", bg: "bg-emerald-500/10" },
-            { icon: Trophy, label: "Hackathons", tab: "hackathons", color: "text-[#D4B872]", bg: "bg-[#D4B872]/10" },
-            { icon: Briefcase, label: "Job Board", tab: "jobs", color: "text-purple-500", bg: "bg-purple-500/10" },
-            { icon: FileCheck, label: "ATS Scanner", tab: "resume-ats", color: "text-rose-500", bg: "bg-rose-500/10" },
-            { icon: Award, label: "Certificates", tab: "certificates", color: "text-primary", bg: "bg-primary/10" },
+            { image: "/images/dashboard-nav/courses.svg", label: "Courses", tab: "courses" },
+            { image: "/images/dashboard-nav/dsa-simulators.svg", label: "DSA Simulators", tab: "practice" },
+            { image: "/images/dashboard-nav/hackathons.svg", label: "Hackathons", tab: "hackathons" },
+            { image: "/images/dashboard-nav/job-board.svg", label: "Job Board", tab: "jobs" },
+            { image: "/images/dashboard-nav/ats-scanner.svg", label: "ATS Scanner", tab: "resume-ats" },
+            { image: "/images/dashboard-nav/certificates.svg", label: "Certificates", tab: "certificates" },
           ].map((action) => (
             <button
               key={action.tab}
               onClick={() => onSwitchTab(action.tab)}
-              className="p-3 rounded-xl border border-border/60 bg-card hover:bg-secondary/60 hover:border-primary/30 transition-all cursor-pointer text-center group shadow-2xs flex flex-col items-center justify-center gap-2"
+              className="p-3.5 sm:p-4 rounded-2xl border border-border/70 bg-card hover:bg-secondary/60 hover:border-primary/40 transition-all duration-300 cursor-pointer text-center group shadow-2xs hover:shadow-md flex flex-col items-center justify-between gap-2.5 relative overflow-hidden backdrop-blur-xl"
             >
-              <div className={`w-9 h-9 rounded-lg ${action.bg} ${action.color} flex items-center justify-center transition-transform group-hover:scale-110`}>
-                <action.icon className="w-4 h-4" />
+              <div className="absolute top-0 right-0 left-0 h-1 bg-gradient-to-r from-transparent via-primary/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="w-16 h-16 sm:w-20 sm:h-20 relative flex items-center justify-center transition-transform duration-300 group-hover:scale-110 group-hover:-translate-y-1">
+                <img
+                  src={action.image}
+                  alt={action.label}
+                  className="w-full h-full object-contain filter drop-shadow-sm"
+                  loading="lazy"
+                />
               </div>
-              <span className="text-xs font-semibold text-foreground group-hover:text-primary transition-colors truncate w-full">
+              <span className="text-xs font-bold text-foreground group-hover:text-primary transition-colors tracking-tight truncate w-full text-center">
                 {action.label}
               </span>
             </button>
