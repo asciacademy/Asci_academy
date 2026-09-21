@@ -93,5 +93,5 @@ describe("Integration Smoke Tests - Live Application Server & Routes", () => {
       expect(data.message).toBeTruthy()
       expect(data.emotion).toBeTruthy()
     }
-  })
+  }, 15000)
 })

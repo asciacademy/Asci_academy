@@ -259,14 +259,14 @@ export function Features({ stats }: { stats?: PlatformStats }) {
           <div
             ref={mobileCarouselRef}
             onScroll={handleCarouselScroll}
-            className="flex gap-4 overflow-x-auto snap-x snap-mandatory no-scrollbar -mx-4 px-4 py-2 scroll-smooth"
+            className="flex gap-4 overflow-x-auto snap-x snap-mandatory no-scrollbar -mx-4 px-4 py-2 scroll-smooth overscroll-x-contain"
           >
             {features.map((feature, idx) => {
               const IconComp = feature.icon
               return (
                 <div
                   key={feature.id}
-                  className="mobile-feature-card snap-center shrink-0 w-[88vw] max-w-[340px] rounded-3xl border border-hairline dark:border-white/10 bg-card/90 dark:bg-black/90 p-5 shadow-xs flex flex-col justify-between"
+                  className="mobile-feature-card snap-center shrink-0 w-[82vw] max-w-[325px] rounded-3xl border border-hairline dark:border-white/10 bg-card/90 dark:bg-black/90 p-5 shadow-xs flex flex-col justify-between"
                 >
                   <div>
                     {/* Top Row: Icon + Index + Metric */}
@@ -293,9 +293,23 @@ export function Features({ stats }: { stats?: PlatformStats }) {
                       </p>
                     </div>
                   </div>
+
+                  {/* Highlights Bulleted Tags */}
+                  <div className="mt-5 pt-3 border-t border-hairline/60">
+                    <ul className="space-y-1.5">
+                      {feature.tags.map((b, bIdx) => (
+                        <li key={bIdx} className="flex items-center gap-2 text-xs text-muted-foreground">
+                          <div className="h-1.5 w-1.5 rounded-full bg-primary/70 shrink-0" />
+                          <span className="line-clamp-1">{b}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
               )
             })}
+            {/* Trailing Spacer to prevent mobile right cut-off */}
+            <div className="w-2 sm:hidden shrink-0 pointer-events-none select-none" aria-hidden="true" />
           </div>
 
           {/* Carousel Footer Controls: Dots + Prev/Next Tap */}
