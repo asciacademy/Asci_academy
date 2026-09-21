@@ -10,6 +10,7 @@ import {
 import { useUnstopEcosystem } from "@/lib/unstop-store"
 import { awardUserXpServer } from "@/app/actions/gamification"
 import { AxelStage } from "@/components/axel/axel-stage"
+import { DashboardVisualizers } from "@/components/dashboard/dashboard-visualizers"
 
 export function DashboardPracticeArena() {
   const { potd, solvePOTD, speedQuizzes } = useUnstopEcosystem()
@@ -17,7 +18,7 @@ export function DashboardPracticeArena() {
   const [userCode, setUserCode] = useState(potd.userCode || potd.starterCode.javascript)
   const [testResults, setTestResults] = useState<{ passed: boolean; output: string }[] | null>(null)
   const [isRunning, setIsRunning] = useState(false)
-  const [activeTab, setActiveTab] = useState<"graph" | "potd" | "quizzes" | "streak">("graph")
+  const [activeTab, setActiveTab] = useState<"graph" | "potd" | "quizzes" | "visualizers" | "streak">("graph")
 
   // Skill Graph Competency Data
   const competencies = [
@@ -207,6 +208,18 @@ export function DashboardPracticeArena() {
           >
             <HelpCircle className="w-3.5 h-3.5 shrink-0" />
             <span>CS Fundamentals Quiz</span>
+          </button>
+          <button
+            onClick={() => setActiveTab("visualizers")}
+            className={`px-3.5 py-1.5 rounded-full text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5 shrink-0 ${
+              activeTab === "visualizers"
+                ? "bg-primary text-primary-foreground font-semibold shadow-xs"
+                : "bg-secondary text-muted-foreground hover:text-foreground hover:bg-secondary/80 border border-transparent"
+            }`}
+          >
+            <Cpu className="w-3.5 h-3.5 shrink-0" />
+            <span>Algorithm Simulators</span>
+            <span className="px-1.5 py-0.2 rounded-full text-[9px] bg-primary/20 text-primary font-mono font-bold">8</span>
           </button>
           <button
             onClick={() => setActiveTab("streak")}
@@ -585,7 +598,14 @@ export function DashboardPracticeArena() {
         </div>
       )}
 
-      {/* TAB 3: STREAK GRID */}
+      {/* TAB 3: ALGORITHM SIMULATORS */}
+      {activeTab === "visualizers" && (
+        <div className="space-y-6 animate-fadeIn">
+          <DashboardVisualizers />
+        </div>
+      )}
+
+      {/* TAB 4: STREAK GRID */}
       {activeTab === "streak" && (
         <div className="rounded-2xl border border-hairline bg-card p-5 sm:p-8 shadow-xs space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 border-b border-hairline pb-4">

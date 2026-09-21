@@ -530,6 +530,7 @@ export function DashboardWorkspace({ initialData, user }: DashboardWorkspaceProp
               weeklyActivity={weeklyActivity}
               catalogTracks={catalogTracks}
               recentLogs={initialData?.recentLogs || []}
+              activityEvents={initialData?.activityEvents || []}
               unlockedBadgeIds={unlockedBadgeIds}
               onSwitchTab={(tab) => {
                 const mapped = LEGACY_TAB_MAP[tab] || (tab as DashboardTab)
