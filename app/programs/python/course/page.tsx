@@ -169,7 +169,7 @@ export default function PythonCourseDocsLayout() {
   const completionPercentage = Math.round((completedIds.size / (allLessons.length || 1)) * 100)
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-background text-foreground font-sans antialiased">
+    <div className="flex h-screen w-full max-w-full overflow-hidden bg-background text-foreground font-sans antialiased">
       {/* ─── MOBILE HEADER ─── */}
       <div className="lg:hidden absolute top-0 left-0 right-0 h-14 border-b border-border bg-card/95 backdrop-blur-xl z-50 flex items-center justify-between px-4">
         <Link
@@ -192,7 +192,7 @@ export default function PythonCourseDocsLayout() {
       {/* ─── LEFT SIDEBAR NAVIGATION (Minimal & Focused) ─── */}
       <aside
         className={cn(
-          "w-72 shrink-0 border-r border-border/80 dark:border-white/10 bg-card/70 dark:bg-[#141413]/95 backdrop-blur-2xl flex flex-col z-40 transition-transform duration-300 absolute lg:relative h-full",
+          "w-72 shrink-0 border-r border-border/80 dark:border-white/10 bg-card/70 dark:bg-black/95 backdrop-blur-2xl flex flex-col z-40 transition-transform duration-300 absolute lg:relative h-full",
           isMobileMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         )}
       >
@@ -551,8 +551,8 @@ export default function PythonCourseDocsLayout() {
               </button>
             </div>
 
-            <div className="rounded-2xl border border-border/80 dark:border-white/10 bg-[#181715] dark:bg-[#100f0e] overflow-hidden text-slate-100 font-mono text-xs shadow-inner">
-              <div className="px-4 py-2.5 border-b border-border/80 dark:border-white/10 bg-[#141413]/80 flex items-center justify-between text-[11px] text-muted-foreground">
+            <div className="rounded-2xl border border-border/80 dark:border-white/10 bg-black overflow-hidden text-slate-100 font-mono text-xs">
+              <div className="px-4 py-2.5 border-b border-border/80 dark:border-white/10 bg-[#050505] flex items-center justify-between text-[11px] text-muted-foreground">
                 <div className="flex items-center gap-2">
                   <div className="w-2.5 h-2.5 rounded-full bg-rose-500/70" />
                   <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/50" />

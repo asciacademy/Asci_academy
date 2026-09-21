@@ -197,7 +197,7 @@ export default function CoursePage({ params }: { params: Promise<{ slug: string 
               <div className="pt-4 flex flex-wrap items-center gap-4">
                 <button
                   onClick={() => setIsEnrollModalOpen(true)}
-                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 text-white px-8 py-3.5 text-sm font-medium transition-all shadow-md shadow-blue-500/20 hover:shadow-lg cursor-pointer"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary hover:bg-primary-active text-white px-8 py-3.5 text-sm font-medium transition-all cursor-pointer"
                 >
                   <span>Enroll for Free</span>
                   <ArrowRight className="h-4 w-4" />
@@ -306,7 +306,7 @@ export default function CoursePage({ params }: { params: Promise<{ slug: string 
                   <div className="pt-4 border-t border-hairline">
                     <button
                       onClick={() => setIsEnrollModalOpen(true)}
-                      className="w-full rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 text-white py-3 text-center text-xs font-semibold transition-all shadow-md shadow-blue-500/20 cursor-pointer"
+                      className="w-full rounded-xl bg-primary hover:bg-primary-active text-white py-3 text-center text-xs font-semibold transition-all cursor-pointer"
                     >
                       Start Free Course Audit
                     </button>

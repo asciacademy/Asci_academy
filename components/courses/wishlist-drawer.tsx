@@ -96,7 +96,7 @@ export function WishlistDrawer({ isOpen, onClose }: WishlistDrawerProps) {
               role="dialog"
               aria-label="My Saved Courses Wishlist"
               aria-modal="true"
-              className="pointer-events-auto relative w-screen max-w-lg h-full max-h-screen bg-card border-l border-border shadow-2xl flex flex-col justify-between overflow-hidden text-foreground"
+              className="pointer-events-auto relative w-full max-w-lg h-full max-h-screen bg-card border-l border-border shadow-2xl flex flex-col justify-between overflow-hidden text-foreground"
             >
               {/* ══════════════════════════════════════════════
                   DRAWER HEADER

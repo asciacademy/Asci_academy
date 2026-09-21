@@ -271,7 +271,7 @@ export function TheoryReaderDialog({
                     )}
                   </button>
                 </div>
-                <div className="rounded-2xl border border-border/80 bg-[#181715] p-4 font-mono text-xs leading-relaxed text-foreground overflow-x-auto">
+                <div className="rounded-2xl border border-border/80 bg-black p-4 font-mono text-xs leading-relaxed text-foreground overflow-x-auto">
                   <pre className="text-slate-300">
                     <code>{theory.codeSnippet.code}</code>
                   </pre>

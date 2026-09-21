@@ -26,6 +26,8 @@ export interface CareerRoleTrack {
   title: string
   headline: string
   roleCategory: string
+  marketDemand?: string
+  salaryBenchmark?: string
   badgeText: string
   description: string
   goalLabel: string
@@ -90,7 +92,9 @@ export const CAREER_ROLE_TRACKS: CareerRoleTrack[] = [
     title: "Machine Learning Engineer",
     headline: "Architect, train, and productionize state-of-the-art neural architectures and AI systems",
     roleCategory: "AI & ML",
-    badgeText: "High Demand · ₹28L–₹45L Avg Salary",
+    marketDemand: "High Market Demand",
+    salaryBenchmark: "₹28L–₹45L / yr",
+    badgeText: "High Demand · ₹28L–₹45L Benchmark",
     description: "Master probability, neural architectures, PyTorch, TensorFlow, MLOps, and agentic workflows to train and deploy production AI models.",
     goalLabel: "Explore Role Roadmap",
     goalUrl: "/programs",
@@ -128,7 +132,9 @@ export const CAREER_ROLE_TRACKS: CareerRoleTrack[] = [
     title: "Data Scientist",
     headline: "Transform petabyte datasets into predictive intelligence, statistical proofs, and executive narratives",
     roleCategory: "Data Science",
-    badgeText: "Accelerating Field · ₹24L–₹38L Avg Salary",
+    marketDemand: "Accelerating Field",
+    salaryBenchmark: "₹24L–₹38L / yr",
+    badgeText: "Accelerating Field · ₹24L–₹38L Benchmark",
     description: "Acquire statistical mastery, machine learning pipelines, big data infrastructure, and executive storytelling with Python, SQL, and Power BI.",
     goalLabel: "Explore Role Roadmap",
     goalUrl: "/programs",
@@ -162,7 +168,9 @@ export const CAREER_ROLE_TRACKS: CareerRoleTrack[] = [
     title: "Cybersecurity Specialist",
     headline: "Defend enterprise boundaries with zero-trust networking, penetration testing, and cloud infrastructure hardening",
     roleCategory: "Cybersecurity",
-    badgeText: "Zero Unemployment · ₹22L–₹40L Avg Salary",
+    marketDemand: "Zero Unemployment",
+    salaryBenchmark: "₹22L–₹40L / yr",
+    badgeText: "Zero Unemployment · ₹22L–₹40L Benchmark",
     description: "Master offensive security, Nmap reconnaissance, OWASP Top 10 vulnerabilities, containerized GitOps pipelines, and AWS cloud security architectures.",
     goalLabel: "Explore Role Roadmap",
     goalUrl: "/programs",
@@ -194,8 +202,10 @@ export const CAREER_ROLE_TRACKS: CareerRoleTrack[] = [
     id: "full-stack-web-architect",
     title: "Full-Stack Software Engineer",
     headline: "Engineer scalable web platforms, high-throughput microservices, and distributed algorithmic backends",
-    roleCategory: "Web Development",
-    badgeText: "Essential Discipline · ₹20L–₹36L Avg Salary",
+    roleCategory: "Web Systems",
+    marketDemand: "Foundational Need",
+    salaryBenchmark: "₹20L–₹36L / yr",
+    badgeText: "Essential Discipline · ₹20L–₹36L Benchmark",
     description: "Master React 19, Next.js 15, TypeScript architecture, distributed system patterns, FAANG-caliber DSA, and enterprise Java & Go microservices.",
     goalLabel: "Explore Role Roadmap",
     goalUrl: "/programs",

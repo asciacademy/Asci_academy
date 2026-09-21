@@ -485,7 +485,7 @@ export function DashboardHackathons() {
                 })
                 setShowHackModal(true)
               }}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-md shadow-emerald-950/40 transition-all active:scale-[0.98] cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition-all active:scale-[0.98] cursor-pointer"
             >
               <Plus className="h-3.5 w-3.5" />
               <span>Add Hackathon</span>

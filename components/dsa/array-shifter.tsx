@@ -142,7 +142,7 @@ export default function ArrayShifter() {
              <button 
                onClick={handleAppendEnd}
                disabled={isSimulating || array.length >= MAX_SLOTS}
-               className="flex items-center gap-2 px-6 py-3 bg-blue-500/10 border border-blue-500/30 text-blue-400 hover:bg-gradient-to-r hover:from-blue-600 hover:to-indigo-600 hover:text-white disabled:opacity-50 transition-all uppercase font-mono text-xs font-bold tracking-widest cyber-corner cursor-pointer shadow-xs"
+               className="flex items-center gap-2 px-6 py-3 bg-blue-500/10 border border-blue-500/30 text-blue-400 hover:bg-blue-600 hover:text-white disabled:opacity-50 transition-all uppercase font-mono text-xs font-bold tracking-widest cyber-corner cursor-pointer"
              >
                <FastForward size={16} />
                Append End O(1)

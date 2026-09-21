@@ -139,7 +139,7 @@ export function Hero() {
           <div className="relative">
             <div className="max-w-3xl lg:max-w-2xl xl:max-w-3xl">
               {/* Main headline — kinetic editorial reveal */}
-              <h1 className="font-serif text-[clamp(2.3rem,6vw,4.5rem)] leading-[1.04] tracking-[-0.035em] text-foreground font-normal select-none">
+              <h1 className="font-serif text-[clamp(1.75rem,5.5vw,4.5rem)] leading-[1.04] tracking-[-0.035em] text-foreground font-normal select-none break-words">
                 <span className="block font-normal">
                   ENGINEERING IS A CRAFT.
                 </span>
@@ -182,30 +182,12 @@ export function Hero() {
                 Learn software engineering, AI, systems, algorithms, and modern development through interactive lessons, real projects, and intelligent guidance.
               </motion.p>
 
-              {/* Confidence chips */}
-              <motion.div
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.45, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                className="mt-5 flex flex-wrap items-center gap-2"
-              >
-                {["Production Systems", "Real-World Capstones", "Interactive Sandboxes"].map((label) => (
-                  <span
-                    key={label}
-                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-medium text-muted-foreground bg-secondary border border-hairline"
-                  >
-                    <CheckCircle2 className="h-3 w-3 text-primary" />
-                    {label}
-                  </span>
-                ))}
-              </motion.div>
-
               {/* CTAs */}
               <motion.div
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.45, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                className="mt-8 flex flex-col sm:flex-row sm:items-center gap-3.5"
+                transition={{ duration: 0.45, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                className="mt-7 flex flex-col sm:flex-row sm:items-center gap-3.5"
               >
                 {user ? (
                   <>
@@ -213,14 +195,14 @@ export function Hero() {
                       href="/dashboard"
                       onMouseEnter={() => setCtaHovered(true)}
                       onMouseLeave={() => setCtaHovered(false)}
-                      className="group inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 text-white px-6 py-3 text-sm font-semibold tracking-tight shadow-lg shadow-blue-500/25 transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer w-full sm:w-auto text-center"
+                      className="group inline-flex items-center justify-center gap-2 rounded-xl bg-primary hover:bg-primary-active text-white px-6 py-3 text-sm font-semibold tracking-tight transition-all active:scale-[0.99] cursor-pointer w-full sm:w-auto text-center"
                     >
                       <span>Go to Dashboard</span>
                       <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                     </Link>
                     <Link
                       href="/programs"
-                      className="inline-flex items-center justify-center gap-2 rounded-xl border border-hairline hover:border-primary/30 bg-card/70 hover:bg-card px-5 py-3 text-sm font-medium text-foreground transition-all cursor-pointer w-full sm:w-auto text-center"
+                      className="inline-flex items-center justify-center gap-2 rounded-xl border border-hairline hover:border-foreground/30 bg-card/70 hover:bg-card px-5 py-3 text-sm font-medium text-foreground transition-all cursor-pointer w-full sm:w-auto text-center"
                     >
                       <Compass className="h-4 w-4 text-muted-foreground" />
                       <span>Explore Curriculum</span>
@@ -233,21 +215,21 @@ export function Hero() {
                         href="/signup"
                         onMouseEnter={() => setCtaHovered(true)}
                         onMouseLeave={() => setCtaHovered(false)}
-                        className="group inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 text-white px-6 py-3 text-sm font-semibold tracking-tight shadow-lg shadow-blue-500/25 transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer w-full sm:w-auto text-center"
+                        className="group inline-flex items-center justify-center gap-2 rounded-xl bg-primary hover:bg-primary-active text-white px-6 py-3 text-sm font-semibold tracking-tight transition-all active:scale-[0.99] cursor-pointer w-full sm:w-auto text-center"
                       >
                         <span>Start Learning</span>
                         <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                       </Link>
                       <Link
                         href="/programs"
-                        className="inline-flex items-center justify-center gap-2 rounded-lg border border-hairline hover:border-primary/30 bg-card/70 hover:bg-card px-5 py-3 text-sm font-medium text-foreground transition-all cursor-pointer w-full sm:w-auto text-center"
+                        className="inline-flex items-center justify-center gap-2 rounded-xl border border-hairline hover:border-foreground/30 bg-card/70 hover:bg-card px-5 py-3 text-sm font-medium text-foreground transition-all cursor-pointer w-full sm:w-auto text-center"
                       >
                         <Compass className="h-4 w-4 text-muted-foreground" />
                         <span>Explore Curriculum</span>
                       </Link>
                     </div>
-                    <div className="flex items-center gap-1.5 text-[11px] font-mono text-muted-foreground">
-                      <ShieldCheck className="h-3.5 w-3.5 text-primary/70" />
+                    <div className="flex items-center gap-2 text-[11px] font-mono text-muted-foreground">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
                       <span>Zero setup needed · Free instant browser sandboxes</span>
                     </div>
                   </div>
@@ -258,70 +240,39 @@ export function Hero() {
             {/* 3D Robot Hero Stage Anchor — Fully responsive: below CTAs on mobile/tablet, right side on desktop */}
             <div
               id="hero-robot-anchor"
-              className="relative mx-auto mt-6 sm:mt-8 w-[280px] sm:w-[320px] h-[260px] sm:h-[300px] flex lg:absolute lg:right-0 lg:top-1/2 lg:-translate-y-1/2 lg:w-[340px] xl:w-[420px] lg:h-[340px] xl:h-[380px] lg:mt-0 items-center justify-center pointer-events-none select-none"
+              className="relative mx-auto mt-6 sm:mt-8 w-full max-w-[280px] sm:max-w-[320px] h-[240px] sm:h-[300px] flex lg:absolute lg:right-0 lg:top-1/2 lg:-translate-y-1/2 lg:w-[340px] xl:w-[420px] lg:h-[340px] xl:h-[380px] lg:mt-0 items-center justify-center pointer-events-none select-none"
               aria-hidden="true"
             />
           </div>
 
         {/* ═══════════════════════════════════════════
-            PILLAR BENTO — Asymmetric editorial cards
+            KEY HIGHLIGHTS STRIP
         ═══════════════════════════════════════════ */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-          className="mt-14 lg:mt-16"
+          transition={{ duration: 0.5, delay: 0.5 }}
+          className="mt-8 sm:mt-10 lg:mt-12"
         >
-          {/* Section label */}
-          <div className="flex items-center gap-3 mb-5">
-            <div className="h-px flex-1 bg-hairline" />
-            <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground">
-              What you get
-            </span>
-            <div className="h-px flex-1 bg-hairline" />
-          </div>
-
-          {/* Balanced bento: 1 col on mobile, 2 on tablet, 4 on desktop */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
             {pillars.map((p) => {
               const IconComponent = p.icon
               return (
                 <Link
                   key={p.code}
                   href={p.href}
-                  className="group relative rounded-2xl border border-hairline dark:border-white/[0.08] bg-card/70 dark:bg-[#181715]/70 p-5 sm:p-6 flex flex-col justify-between transition-all duration-200 hover:border-foreground/30 dark:hover:border-white/25 hover:bg-card dark:hover:bg-[#1e1d1a] hover:-translate-y-0.5 shadow-2xs min-h-[190px]"
+                  className="group flex items-center gap-2 sm:gap-3 rounded-2xl border border-hairline bg-card/60 hover:bg-card hover:border-primary/40 p-2.5 sm:p-3.5 transition-all shadow-2xs"
                 >
-                  {/* Top row: number + category */}
-                  <div>
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="font-mono text-[10px] font-semibold tracking-widest text-primary/90">
-                        {p.code} / {p.label}
-                      </span>
-                      <ArrowUpRight className="h-3.5 w-3.5 text-muted-foreground/40 group-hover:text-foreground group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200" />
-                    </div>
-
-                    {/* Icon + Title */}
-                    <div className="flex items-start gap-3 mb-3">
-                      <div className="w-9 h-9 rounded-xl bg-secondary border border-hairline flex items-center justify-center text-primary shrink-0 group-hover:scale-105 group-hover:border-foreground/20 transition-all">
-                        <IconComponent className="h-4 w-4" />
-                      </div>
-                      <div>
-                        <h3 className="text-[15px] font-semibold text-foreground tracking-tight group-hover:text-primary transition-colors leading-tight">
-                          {p.title}
-                        </h3>
-                        <p className="mt-1.5 text-xs text-muted-foreground leading-relaxed">
-                          {p.desc}
-                        </p>
-                      </div>
-                    </div>
+                  <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-secondary border border-hairline flex items-center justify-center text-primary shrink-0 group-hover:scale-105 group-hover:bg-primary/10 transition-all">
+                    <IconComponent className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   </div>
-
-                  {/* Bottom metadata */}
-                  <div className="mt-4 pt-3 border-t border-hairline-soft dark:border-white/[0.06] flex items-center justify-between">
-                    <span className="text-[11px] font-mono font-medium text-foreground/80">{p.meta}</span>
-                    <span className="text-[10px] font-mono text-muted-foreground/60 group-hover:text-foreground transition-colors flex items-center gap-0.5">
-                      Explore <ArrowRight className="h-2.5 w-2.5" />
-                    </span>
+                  <div className="min-w-0">
+                    <p className="text-xs sm:text-sm font-semibold text-foreground truncate group-hover:text-primary transition-colors">
+                      {p.title}
+                    </p>
+                    <p className="text-[10.5px] sm:text-[11px] text-muted-foreground font-mono truncate">
+                      {p.meta}
+                    </p>
                   </div>
                 </Link>
               )

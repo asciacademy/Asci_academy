@@ -30,33 +30,55 @@
 }
 
 .dark {
-  --background: #0b0f19;
+  --background: #000000;
   --foreground: #f8fafc;
-  --card: #111827;
+  --card: #050505;
   --card-foreground: #f8fafc;
-  --popover: #0b0f19;
+  --popover: #000000;
   --popover-foreground: #f8fafc;
-  --primary: #3b82f6;
+  --primary: #2563eb;
   --primary-foreground: #ffffff;
-  --secondary: #1e293b;
+  --secondary: #0a0a0a;
   --secondary-foreground: #cbd5e1;
-  --muted: #1e293b;
+  --muted: #0a0a0a;
   --muted-foreground: #94a3b8;
-  --accent: #60a5fa;
+  --accent: #141414;
   --accent-foreground: #ffffff;
   --destructive: #ef4444;
   --destructive-foreground: #ffffff;
-  --border: rgba(255, 255, 255, 0.08);
-  --input: rgba(255, 255, 255, 0.12);
+  --border: rgba(255, 255, 255, 0.12);
+  --input: rgba(255, 255, 255, 0.14);
   --ring: #3b82f6;
   --success: #22c55e;
   --warning: #f59e0b;
   --info: #38bdf8;
 }
 
+[class*="shadow-blue-"],
+[class*="shadow-indigo-"],
+[class*="shadow-primary"],
+[class*="shadow-emerald-"],
+[class*="shadow-cyan-"],
+[class*="shadow-purple-"],
+[class*="shadow-amber-"] {
+  --tw-shadow: 0 0 #0000 !important;
+  --tw-shadow-colored: 0 0 #0000 !important;
+  box-shadow: none !important;
+}
+
+.dark [class*="shadow-xl"],
+.dark [class*="shadow-2xl"],
+.dark [class*="shadow-lg"] {
+  --tw-shadow: 0 0 #0000 !important;
+  --tw-shadow-colored: 0 0 #0000 !important;
+  box-shadow: none !important;
+}
+
 @theme inline {
-  --font-sans: 'Geist', 'Geist Fallback';
-  --font-mono: 'Geist Mono', 'Geist Mono Fallback';
+  --font-sans: var(--font-inter), 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: var(--font-eb-garamond), 'Cormorant Garamond', 'EB Garamond', 'Playfair Display', Georgia, serif;
+  --font-mono: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
+  --font-display: var(--font-eb-garamond), 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);

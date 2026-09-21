@@ -49,10 +49,7 @@ export function FAQ() {
               <MessageSquare className="h-3.5 w-3.5" />
               <span>Common Questions</span>
             </div>
-            <h2
-              className="font-serif text-3xl font-normal tracking-tight text-foreground sm:text-4xl lg:text-5xl"
-              style={{ letterSpacing: "-1px" }}
-            >
+            <h2 className="font-serif text-3xl font-normal tracking-tight text-foreground sm:text-4xl lg:text-5xl">
               Frequently Asked Questions
             </h2>
             <p className="mt-3 max-w-xl text-sm sm:text-base text-body leading-relaxed">

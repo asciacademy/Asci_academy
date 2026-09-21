@@ -10,14 +10,14 @@ const fallbackStats = {
 }
 
 export async function getPlatformStats() {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-    if (!supabaseUrl || supabaseUrl.includes("placeholder")) {
-        return fallbackStats
-    }
-
-    const supabase = await createClient()
-
     try {
+        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+        if (!supabaseUrl || supabaseUrl.includes("placeholder")) {
+            return fallbackStats
+        }
+
+        const supabase = await createClient()
+
         // 1. Avg Testimonial Rating
         const { data: testimonials } = await supabase
             .from('testimonials')

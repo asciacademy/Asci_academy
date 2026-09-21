@@ -206,7 +206,7 @@ export function CPythonPipelineFlowchart() {
           </div>
 
           {/* Code Representation */}
-          <div className="space-y-2 p-4 rounded-xl bg-[#181715] border border-border text-blue-400 font-mono text-xs overflow-x-auto shadow-inner">
+          <div className="space-y-2 p-4 rounded-xl bg-black border border-border text-blue-400 font-mono text-xs overflow-x-auto">
             <span className="text-[10px] text-muted-foreground/80 uppercase block pb-1 border-b border-border">
               Runtime Representation Preview
             </span>

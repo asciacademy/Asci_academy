@@ -376,7 +376,7 @@ export function DailyTasksCard({ onXpAwarded, className = "" }: DailyTasksCardPr
               className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl bg-card border border-border shadow-2xl p-6 text-foreground"
             >
               {/* Top Accent Line */}
-              <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 rounded-t-3xl" />
+              <div className="absolute inset-x-0 top-0 h-1 bg-primary rounded-t-3xl" />
 
               {/* Close Button */}
               <button
@@ -449,16 +449,16 @@ export function DailyTasksCard({ onXpAwarded, className = "" }: DailyTasksCardPr
                   <div className="mt-4 pt-4 border-t border-border/60">
                     <div className="flex items-center justify-between text-xs mb-1.5">
                       <span className="text-foreground font-medium flex items-center gap-1.5">
-                        <Trophy className="h-3.5 w-3.5 text-blue-600" />
+                        <Trophy className="h-3.5 w-3.5 text-primary" />
                         <span>Next Milestone: {nextMilestoneBadge.title}</span>
                       </span>
-                      <span className="font-mono text-blue-600 dark:text-blue-400 font-semibold">
+                      <span className="font-mono text-primary font-semibold">
                         {streakCount} / {nextTargetDays} Days (+{nextMilestoneBadge.xpReward} XP)
                       </span>
                     </div>
                     <div className="h-2 w-full bg-secondary rounded-full overflow-hidden border border-border/40">
                       <div
-                        className="h-full bg-gradient-to-r from-blue-600 via-indigo-500 to-cyan-400 rounded-full transition-all duration-500"
+                        className="h-full bg-primary rounded-full transition-all duration-500"
                         style={{
                           width: `${Math.min(100, Math.round((streakCount / nextTargetDays) * 100))}%`,
                         }}

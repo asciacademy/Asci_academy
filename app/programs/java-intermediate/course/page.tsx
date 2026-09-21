@@ -70,7 +70,7 @@ export default function JavaIntermediateCourseDocsLayout() {
 
       {/* LEFT SIDEBAR NAVIGATION */}
       <aside className={cn(
-        "w-72 shrink-0 border-r border-border/80 dark:border-white/10 bg-card/70 dark:bg-[#141413]/95 backdrop-blur-2xl flex flex-col z-40 transition-transform duration-300 absolute lg:relative h-full",
+        "w-72 shrink-0 border-r border-border/80 dark:border-white/10 bg-card/70 dark:bg-black/95 backdrop-blur-2xl flex flex-col z-40 transition-transform duration-300 absolute lg:relative h-full",
         isMobileMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
       )}>
         <div className="hidden lg:flex h-14 border-b border-border/70 dark:border-white/10 items-center justify-between px-4 shrink-0">
@@ -274,8 +274,8 @@ export default function JavaIntermediateCourseDocsLayout() {
                        <Terminal size={14} className="text-primary" />
                        <span>{activeLesson.type === 'concept' ? 'Java Reference Code' : 'Exercise Starter'}</span>
                      </h3>
-                     <div className="rounded-2xl border border-border/80 dark:border-white/10 bg-[#181715] dark:bg-[#141413] overflow-hidden text-blue-400 font-mono text-xs shadow-inner">
-                       <div className="px-4 py-2.5 border-b border-border/80 dark:border-white/10 bg-[#141413]/80 flex items-center gap-2">
+                      <div className="rounded-2xl border border-border/80 dark:border-white/10 bg-black overflow-hidden text-blue-400 font-mono text-xs">
+                        <div className="px-4 py-2.5 border-b border-border/80 dark:border-white/10 bg-[#050505] flex items-center gap-2">
                             <div className="w-2.5 h-2.5 rounded-full bg-rose-500/70" />
                             <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/50" />
                             <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/70" />

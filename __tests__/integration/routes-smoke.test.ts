@@ -30,14 +30,16 @@ describe("Integration Smoke Tests - Live Application Server & Routes", () => {
       "/signup",
     ]
 
-    for (const path of publicPaths) {
-      const probe = await probeUrl(path)
-      // If server is currently running locally, check status; if server offline, skip gracefully
-      if (probe.status !== 0) {
-        expect([200, 307, 308]).toContain(probe.status)
-      }
-    }
-  })
+    await Promise.all(
+      publicPaths.map(async (path) => {
+        const probe = await probeUrl(path)
+        // If server is currently running locally, check status; if server offline, skip gracefully
+        if (probe.status !== 0) {
+          expect([200, 307, 308]).toContain(probe.status)
+        }
+      })
+    )
+  }, 15000)
 
   it("verifies legacy plus routes issue permanent redirect to /pricing", async () => {
     const probePlus = await probeUrl("/plus")

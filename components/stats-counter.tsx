@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { Users, BookOpen, TrendingUp, Star, ShieldCheck, Sparkles } from "lucide-react"
+import { Users, BookOpen, TrendingUp, Star } from "lucide-react"
 
 const stats = [
   {
@@ -83,19 +83,11 @@ function StatCard({ stat }: { stat: typeof stats[0] }) {
   return (
     <div
       ref={ref}
-      className="group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-stone-200/90 dark:border-stone-800/90 bg-card/80 dark:bg-card/40 backdrop-blur-md p-6 sm:p-7 transition-all duration-300 hover:border-primary/40 hover:-translate-y-1 shadow-xs hover:shadow-md"
+      className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-stone-200/90 dark:border-stone-800/90 bg-card/80 dark:bg-card/40 backdrop-blur-md p-6 transition-all duration-300 hover:border-primary/40 hover:-translate-y-1 shadow-xs"
     >
-      <div className={`absolute -right-10 -top-10 h-32 w-32 rounded-full bg-gradient-to-br ${stat.accent} blur-2xl pointer-events-none group-hover:scale-150 transition-transform duration-500`} />
-
       <div>
-        <div className="flex items-center justify-between gap-3 mb-6">
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-hairline bg-secondary/80 text-primary transition-all group-hover:bg-primary group-hover:text-primary-foreground group-hover:scale-105 shadow-2xs">
-            <stat.icon className="h-5 w-5" />
-          </div>
-          <span className="inline-flex items-center gap-1 rounded-full border border-hairline bg-secondary/80 px-2.5 py-0.5 text-[10px] font-mono font-medium text-foreground/80">
-            <Sparkles className="h-3 w-3 text-amber-500" />
-            <span>{stat.badge}</span>
-          </span>
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-hairline bg-secondary text-primary mb-5 transition-transform duration-200 group-hover:scale-105">
+          <stat.icon className="h-5 w-5" />
         </div>
 
         <div className="flex items-baseline gap-1">
@@ -113,11 +105,6 @@ function StatCard({ stat }: { stat: typeof stats[0] }) {
         <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
           {stat.sublabel}
         </p>
-      </div>
-
-      <div className="mt-5 pt-3.5 border-t border-hairline/60 flex items-center gap-1.5 text-[11px] font-mono text-muted-foreground">
-        <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" />
-        <span>Verified by academic records</span>
       </div>
     </div>
   )

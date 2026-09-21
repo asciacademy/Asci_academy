@@ -152,7 +152,7 @@ export default function QuizComponent({ questions, onComplete }: QuizComponentPr
                         </p>
                         <button
                             onClick={handleNext}
-                            className="mt-4 w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 text-white font-bold flex items-center justify-center gap-2 shadow-md shadow-blue-500/20 transition-all cursor-pointer active:scale-95"
+                            className="mt-4 w-full py-3 rounded-xl bg-primary hover:bg-primary-active text-white font-bold flex items-center justify-center gap-2 transition-all cursor-pointer active:scale-95"
                         >
                             {currentStep === questions.length - 1 ? "Finish Quiz" : "Next Question"}
                             <ArrowRight size={18} />

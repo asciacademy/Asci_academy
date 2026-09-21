@@ -155,21 +155,36 @@ export default function DegreesPage() {
             >
               <div>
                 {/* Header Metrics */}
-                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-hairline/70 pb-4">
-                  <div>
-                    <span className="text-[11px] font-mono text-primary font-semibold uppercase tracking-wider">
-                      {role.demand}
-                    </span>
-                    <h3 className="font-serif text-xl sm:text-2xl font-normal text-foreground mt-1">
+                <div className="flex flex-wrap items-end justify-between gap-3 border-b border-hairline/70 pb-4">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2 flex-wrap text-[11px] font-mono">
+                      <div className="inline-flex items-center gap-1.5 text-foreground/90">
+                        <span className="relative flex h-1.5 w-1.5">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                          <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
+                        </span>
+                        <span className="font-semibold text-primary uppercase tracking-wider">
+                          {role.demand}
+                        </span>
+                      </div>
+                      <span className="h-3 w-px bg-hairline hidden sm:inline-block" />
+                      <span className="text-muted-foreground/80 hidden sm:inline-block">
+                        {role.openRoles}
+                      </span>
+                    </div>
+                    <h3 className="font-serif text-xl sm:text-2xl font-normal text-foreground">
                       {role.role}
                     </h3>
                   </div>
-                  <div className="text-right">
-                    <span className="font-serif text-2xl font-medium text-foreground block">
-                      {role.salary}
-                    </span>
-                    <span className="text-[10px] font-mono text-muted-foreground">
-                      Median Industry Tech Compensation
+                  <div className="text-left sm:text-right shrink-0">
+                    <div className="flex items-baseline gap-1.5 sm:justify-end">
+                      <span className="text-[10px] font-mono text-muted-foreground uppercase">Benchmark:</span>
+                      <span className="font-serif text-xl sm:text-2xl font-medium text-foreground">
+                        {role.salary}
+                      </span>
+                    </div>
+                    <span className="text-[10px] font-mono text-muted-foreground block">
+                      Median Industry Compensation
                     </span>
                   </div>
                 </div>

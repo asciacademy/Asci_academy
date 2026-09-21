@@ -77,7 +77,7 @@ export function CertificateModal({
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent
         showCloseButton={false}
-        className="fixed inset-0 top-0 left-0 translate-x-0 translate-y-0 w-screen max-w-none sm:max-w-none h-screen max-h-none p-0 gap-0 border-0 bg-[#0E0D0C]/96 backdrop-blur-2xl text-[#FDFBF7] shadow-none flex flex-col justify-between items-center overflow-hidden z-50 select-none print:p-0 print:border-0 print:bg-transparent print:shadow-none print:w-screen print:h-screen print:max-h-none print:overflow-visible"
+        className="fixed inset-0 top-0 left-0 translate-x-0 translate-y-0 w-full max-w-none sm:max-w-none h-full max-h-none p-0 gap-0 border-0 bg-[#0E0D0C]/96 backdrop-blur-2xl text-[#FDFBF7] shadow-none flex flex-col justify-between items-center overflow-hidden z-50 select-none print:p-0 print:border-0 print:bg-transparent print:shadow-none print:w-screen print:h-screen print:max-h-none print:overflow-visible"
       >
         {/* Accessible screen-reader title */}
         <DialogTitle className="sr-only">
@@ -110,7 +110,7 @@ export function CertificateModal({
           {/* Close Lightbox Button */}
           <button
             onClick={onClose}
-            className="p-2 rounded-full bg-[#181715]/90 border border-[#2A2724] hover:border-blue-500/70 text-zinc-400 hover:text-white hover:bg-white/10 transition-all cursor-pointer shadow-lg group"
+            className="p-2 rounded-full bg-black/90 border border-white/15 hover:border-primary text-zinc-400 hover:text-white hover:bg-white/10 transition-all cursor-pointer group"
             title="Close viewer (ESC)"
             aria-label="Close viewer"
           >
@@ -134,11 +134,11 @@ export function CertificateModal({
         ══════════════════════════════════════════════ */}
         <footer className="w-full max-w-6xl flex flex-col items-center gap-2 px-4 sm:px-8 pb-4 sm:pb-5 pt-2 shrink-0 z-20 print:hidden">
           {/* Floating Action Pill Bar */}
-          <div className="flex items-center gap-2 sm:gap-3 p-1.5 sm:p-2 rounded-2xl bg-[#181715]/95 border border-blue-500/30 backdrop-blur-xl shadow-2xl flex-wrap justify-center">
+          <div className="flex items-center gap-2 sm:gap-3 p-1.5 sm:p-2 rounded-2xl bg-black/95 border border-hairline backdrop-blur-xl shadow-lg flex-wrap justify-center">
             {/* Primary Hero: Print / Save PDF */}
             <button
               onClick={handlePrint}
-              className="inline-flex items-center gap-2 px-5 sm:px-6 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 text-white text-xs font-bold font-mono tracking-wide shadow-md shadow-blue-500/25 transition-all cursor-pointer active:scale-95"
+              className="inline-flex items-center gap-2 px-5 sm:px-6 py-2.5 rounded-xl bg-primary hover:bg-primary-active text-white text-xs font-bold font-mono tracking-wide transition-all cursor-pointer active:scale-95"
             >
               <Printer className="w-4 h-4 text-white" />
               <span>Print / Save PDF</span>
@@ -147,7 +147,7 @@ export function CertificateModal({
             {/* Copy Verification Link */}
             <button
               onClick={handleCopyLink}
-              className="inline-flex items-center gap-1.5 px-3.5 sm:px-4 py-2.5 rounded-xl border border-[#2A2724] hover:border-blue-500/50 bg-[#1F1E1B] hover:bg-[#262420] text-xs font-mono font-medium text-zinc-200 transition-all cursor-pointer shadow-xs"
+              className="inline-flex items-center gap-1.5 px-3.5 sm:px-4 py-2.5 rounded-xl border border-hairline hover:border-foreground/30 bg-[#141414] hover:bg-[#1f1f1f] text-xs font-mono font-medium text-zinc-200 transition-all cursor-pointer shadow-xs"
               title="Copy verification link"
             >
               {copied ? (

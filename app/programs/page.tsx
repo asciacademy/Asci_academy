@@ -190,16 +190,16 @@ export default function ProgramsPage() {
                             return (
                                 <div
                                     key={course.id}
-                                    className={`group relative flex flex-col justify-between rounded-2xl border transition-all duration-200 hover:-translate-y-0.5 shadow-2xs p-5 ${
+                                    className={`group relative flex flex-col justify-between rounded-2xl border transition-all duration-200 hover:-translate-y-0.5 p-5 ${
                                         isSelected
-                                            ? "border-primary/60 ring-2 ring-primary/40 bg-card dark:bg-[#181715] shadow-lg shadow-primary/10"
-                                            : "border-hairline dark:border-white/[0.08] bg-card/90 dark:bg-[#181715]/90 hover:border-foreground/30 dark:hover:border-white/25"
+                                            ? "border-primary/60 ring-1 ring-primary/40 bg-card dark:bg-[#050505]"
+                                            : "border-hairline dark:border-white/[0.08] bg-card/90 dark:bg-[#050505]/90 hover:border-foreground/30 dark:hover:border-white/25"
                                     }`}
                                 >
                                     {/* Selection Launching Badge */}
                                     {isSelected && (
                                         <div className="absolute inset-x-0 -top-2.5 flex justify-center z-10 animate-in fade-in zoom-in-95 duration-150">
-                                            <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-primary text-primary-foreground text-[10px] font-mono font-medium shadow-md shadow-primary/20">
+                                            <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-primary text-primary-foreground text-[10px] font-mono font-medium">
                                                 <Loader2 className="h-3 w-3 animate-spin" />
                                                 Launching Course...
                                             </span>
@@ -209,7 +209,7 @@ export default function ProgramsPage() {
                                     <div>
                                         {/* Header with Logo and Badge */}
                                         <div className="flex items-center justify-between gap-2 mb-4">
-                                            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-hairline bg-secondary text-primary p-2 shadow-2xs group-hover:scale-105 group-hover:border-foreground/20 transition-all duration-200">
+                                            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-hairline bg-secondary text-primary p-2 group-hover:scale-105 group-hover:border-foreground/20 transition-all duration-200">
                                                 <TechLogo slug={course.id} className="h-7 w-7 object-contain" />
                                             </div>
                                             <div className="flex items-center gap-1.5">
@@ -260,7 +260,7 @@ export default function ProgramsPage() {
                                             <Link
                                                 href={playerUrl}
                                                 onClick={() => setNavigatingId(course.id)}
-                                                className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 text-white px-3 py-1.5 text-xs font-semibold shadow-md shadow-blue-500/20 transition-all cursor-pointer"
+                                                className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl bg-primary hover:bg-primary-active text-white px-3 py-1.5 text-xs font-semibold transition-all cursor-pointer"
                                             >
                                                 {isSelected ? (
                                                     <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -272,7 +272,7 @@ export default function ProgramsPage() {
                                         ) : (
                                             <button
                                                 onClick={handleEnroll}
-                                                className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-xs hover:bg-primary/90 transition-all cursor-pointer"
+                                                className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground hover:bg-primary/90 transition-all cursor-pointer"
                                             >
                                                 <Plus className="h-3.5 w-3.5" />
                                                 <span>Enroll Track</span>

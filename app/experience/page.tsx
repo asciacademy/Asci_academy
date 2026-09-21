@@ -123,8 +123,8 @@ export default function ExperiencePage() {
                 </div>
             </section>
 
-            {/* 3. Dark Navy Studio Preview Section */}
-            <section id="experience-sandbox" className="py-20 px-6 bg-[#181715] dark:bg-[#141413] border-y border-border/80 text-foreground scroll-mt-24">
+            {/* 3. Dark Studio Preview Section */}
+            <section id="experience-sandbox" className="py-20 px-6 bg-[#0a0a0a] dark:bg-black border-y border-border/80 text-foreground scroll-mt-24">
                 <div className="max-w-7xl mx-auto">
                     <div className="grid lg:grid-cols-12 gap-12 items-center">
                         <div className="lg:col-span-5 space-y-6">

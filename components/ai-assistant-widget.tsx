@@ -147,7 +147,7 @@ export function AIAssistantWidget() {
         onClick={handleToggle}
         whileHover={{ scale: 1.08 }}
         whileTap={{ scale: 0.92 }}
-        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 group flex items-center justify-center h-12 w-12 sm:h-14 sm:w-14 rounded-full border border-border/80 dark:border-white/15 bg-card/95 dark:bg-[#141414]/95 backdrop-blur-2xl shadow-sm hover:shadow-md hover:border-primary/60 dark:hover:border-primary/60 transition-all duration-300 cursor-pointer select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 group flex items-center justify-center h-12 w-12 sm:h-14 sm:w-14 rounded-full border border-border/80 dark:border-white/15 bg-card/95 dark:bg-black/95 backdrop-blur-2xl hover:border-primary/60 dark:hover:border-primary/60 transition-all duration-300 cursor-pointer select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
         aria-label={isOpen ? "Close AI Assistant" : "Open AI Assistant"}
         title={isOpen ? "Close AI Assistant" : "Ask AI Assistant"}
       >
@@ -157,7 +157,7 @@ export function AIAssistantWidget() {
         )}
 
         {/* Hover Context Tooltip (Left Side of Circle - Desktop Only) */}
-        <div className="pointer-events-none hidden sm:flex absolute right-full mr-3.5 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-xl bg-card/95 dark:bg-[#0c0c0c]/95 backdrop-blur-xl border border-border/80 dark:border-primary/20 text-xs font-semibold text-foreground shadow-lg whitespace-nowrap opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200 items-center gap-1.5">
+        <div className="pointer-events-none hidden sm:flex absolute right-full mr-3.5 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-xl bg-card/95 dark:bg-black/95 backdrop-blur-xl border border-border/80 dark:border-white/15 text-xs font-semibold text-foreground whitespace-nowrap opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200 items-center gap-1.5">
           <Bot className="h-3.5 w-3.5 text-primary shrink-0" />
           <span>{isOpen ? "Close Assistant" : "Ask AI Assistant"}</span>
         </div>
@@ -228,11 +228,11 @@ export function AIAssistantWidget() {
                 bottom-0 left-0 right-0 w-full h-[82vh] rounded-t-3xl rounded-b-none
                 md:bottom-[88px] md:left-auto md:right-6 md:w-[420px] md:max-w-[calc(100vw-32px)] md:h-[590px] md:max-h-[calc(100vh-110px)] md:rounded-3xl"
             >
-            <div className="flex flex-col h-full w-full rounded-3xl bg-card/98 dark:bg-[#0a0a0a]/98 backdrop-blur-2xl border border-hairline dark:border-[#262626] shadow-[0_24px_64px_rgba(0,0,0,0.14)] dark:shadow-[0_24px_64px_rgba(0,0,0,0.7)] overflow-hidden">
+            <div className="flex flex-col h-full w-full rounded-3xl bg-card/98 dark:bg-black/98 backdrop-blur-2xl border border-hairline dark:border-white/10 overflow-hidden">
               {/* Header */}
-              <div className="flex items-center justify-between px-4 py-3 border-b border-hairline dark:border-[#222222] bg-secondary/40 dark:bg-[#121212]/50">
+              <div className="flex items-center justify-between px-4 py-3 border-b border-hairline dark:border-white/10 bg-secondary/40 dark:bg-black/50">
                 <div className="flex items-center gap-2.5">
-                  <div className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary border border-primary/25 shadow-xs">
+                  <div className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary border border-primary/25">
                     <Bot className="h-4 w-4" />
                     {isSpeaking && (
                       <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">

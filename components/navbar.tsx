@@ -334,8 +334,8 @@ export function Navbar() {
     <header
       className={`fixed left-0 right-0 top-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "border-b border-border/80 dark:border-white/10 bg-background/95 dark:bg-[#070709]/95 backdrop-blur-2xl shadow-[0_4px_24px_rgba(0,0,0,0.06)] dark:shadow-[0_4px_30px_rgba(0,0,0,0.85)]"
-          : "border-b border-border/60 dark:border-white/10 bg-background/90 dark:bg-[#070709]/90 backdrop-blur-2xl"
+          ? "border-b border-border/80 dark:border-white/10 bg-background/95 dark:bg-black/95 backdrop-blur-2xl shadow-xs"
+          : "border-b border-border/60 dark:border-white/10 bg-background/90 dark:bg-black/90 backdrop-blur-2xl"
       }`}
     >
       {/* Soft Ambient Dimmer when Mega-Menu is open to guarantee 100% legibility over any page text or markdown */}
@@ -419,7 +419,7 @@ export function Navbar() {
                         section.alignClass || "left-0"
                       } ${section.dropdownWidth || "w-[360px]"}`}
                     >
-                      <div className="relative overflow-hidden rounded-2xl border border-border/80 dark:border-white/15 bg-card/98 dark:bg-[#0e0e11]/98 p-3 backdrop-blur-3xl shadow-[0_20px_50px_rgba(0,0,0,0.2)] dark:shadow-[0_24px_70px_rgba(0,0,0,0.9)]">
+                      <div className="relative overflow-hidden rounded-2xl border border-border/80 dark:border-white/15 bg-card/98 dark:bg-black/98 p-3 backdrop-blur-2xl shadow-xl">
                         {/* List of items */}
                         <div className="flex flex-col gap-1">
                           {section.items?.map((item) => {
@@ -553,7 +553,7 @@ export function Navbar() {
               <Link
                 href="/signup"
                 suppressHydrationWarning
-                className="group relative flex items-center gap-2 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 px-5 py-2 text-xs sm:text-[13.5px] font-semibold text-white shadow-md shadow-blue-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all tracking-tight"
+                className="group relative flex items-center gap-2 rounded-full bg-primary hover:bg-primary-active px-5 py-2 text-xs sm:text-[13.5px] font-semibold text-primary-foreground hover:scale-[1.02] active:scale-[0.98] transition-all tracking-tight"
               >
                 <span>Get Started</span>
                 <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
@@ -609,7 +609,7 @@ export function Navbar() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-50 overflow-hidden border-t border-border/80 dark:border-white/10 bg-background/98 dark:bg-[#0c0c0e]/98 backdrop-blur-3xl lg:hidden shadow-2xl"
+            className="relative z-50 overflow-hidden border-t border-border/80 dark:border-white/10 bg-background/98 dark:bg-black/98 backdrop-blur-2xl lg:hidden shadow-lg"
           >
             <nav
               className="px-4 py-4 max-h-[85vh] overflow-y-auto space-y-3.5 selection:bg-accent/20"
@@ -617,7 +617,7 @@ export function Navbar() {
             >
               {/* 1. Profile Header at TOP with Logo/Avatar & Instant Dashboard Action */}
               {user ? (
-                <div className="rounded-2xl border border-stone-200 dark:border-stone-800 bg-secondary/50 dark:bg-[#121214] p-3.5 space-y-3 shadow-2xs">
+                <div className="rounded-2xl border border-stone-200 dark:border-stone-800 bg-secondary/50 dark:bg-[#0a0a0a] p-3.5 space-y-3 shadow-2xs">
                   <div className="flex items-center justify-between gap-3">
                     {/* User Avatar / Logo + Active Status */}
                     <div className="flex items-center gap-3 min-w-0 flex-1">
@@ -669,7 +669,7 @@ export function Navbar() {
                   <Link
                     href="/dashboard"
                     onClick={() => setMobileOpen(false)}
-                    className="w-full flex items-center justify-between rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 text-white px-3.5 py-2.5 text-xs font-bold shadow-md shadow-blue-500/20 transition-all group"
+                    className="w-full flex items-center justify-between rounded-xl bg-primary hover:bg-primary-active text-primary-foreground px-3.5 py-2.5 text-xs font-bold transition-all group"
                   >
                     <div className="flex items-center gap-2">
                       <LayoutDashboard className="h-3.5 w-3.5" />
@@ -680,7 +680,7 @@ export function Navbar() {
                 </div>
               ) : (
                 /* Guest Brand & Auth Card with Clean Stacked Layout to Prevent Overlapping */
-                <div className="rounded-2xl border border-stone-200 dark:border-stone-800 bg-secondary/50 dark:bg-[#121214] p-4 space-y-3 shadow-2xs">
+                <div className="rounded-2xl border border-stone-200 dark:border-stone-800 bg-secondary/50 dark:bg-[#0a0a0a] p-4 space-y-3 shadow-2xs">
                   <div className="flex items-center gap-2.5">
                     <AsciLogo size={38} showText showBadge={false} useVector={false} />
                   </div>
@@ -698,7 +698,7 @@ export function Navbar() {
                     <Link
                       href="/signup"
                       onClick={() => setMobileOpen(false)}
-                      className="flex items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 text-white px-3 py-2 text-xs font-semibold shadow-md shadow-blue-500/20 transition-all"
+                      className="flex items-center justify-center gap-1.5 rounded-xl bg-primary hover:bg-primary-active text-primary-foreground px-3 py-2 text-xs font-semibold transition-all"
                     >
                       <span>Get Started</span>
                       <ArrowRight className="h-3.5 w-3.5" />
@@ -941,7 +941,7 @@ export function Navbar() {
             transition={{ duration: 0.2 }}
             className="fixed top-20 right-4 z-[60] max-w-sm"
           >
-            <div className="flex items-center gap-2.5 rounded-xl border border-destructive/30 bg-card dark:bg-[#0e0e11] p-3 shadow-lg text-xs text-destructive">
+            <div className="flex items-center gap-2.5 rounded-xl border border-destructive/30 bg-card dark:bg-black p-3 shadow-md text-xs text-destructive">
               <span className="flex-1">{authError}</span>
               <button
                 type="button"

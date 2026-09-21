@@ -244,10 +244,7 @@ export function DSAVisualizer() {
               <Braces className="h-3.5 w-3.5" />
               <span>Interactive Tool</span>
             </div>
-            <h2
-              className="font-serif text-3xl font-normal tracking-tight text-foreground sm:text-4xl lg:text-5xl"
-              style={{ letterSpacing: "-1px" }}
-            >
+            <h2 className="font-serif text-3xl font-normal tracking-tight text-foreground sm:text-4xl lg:text-5xl">
               Watch How Algorithms Work
             </h2>
             <p className="mt-3 max-w-xl text-sm sm:text-base text-body leading-relaxed">
@@ -272,11 +269,11 @@ export function DSAVisualizer() {
         >
           {/* Top Controls Bar */}
           <div
-            className="flex flex-wrap items-center justify-between gap-3 border-b border-hairline px-5 py-4 bg-secondary/70"
+            className="flex flex-wrap items-center justify-between gap-2.5 sm:gap-3 border-b border-hairline px-3 sm:px-5 py-3 sm:py-4 bg-secondary/70"
             suppressHydrationWarning
           >
             {/* Algorithm selection tabs */}
-            <div className="flex flex-wrap gap-1.5" suppressHydrationWarning>
+            <div className="flex flex-wrap gap-1 sm:gap-1.5" suppressHydrationWarning>
               {algorithms.map((algo) => (
                 <button
                   key={algo.id}
@@ -285,7 +282,7 @@ export function DSAVisualizer() {
                   }}
                   disabled={sorting}
                   suppressHydrationWarning
-                  className={`rounded-md px-3.5 py-1.5 text-xs font-medium transition-colors cursor-pointer ${
+                  className={`rounded-md px-2.5 sm:px-3.5 py-1.5 text-xs font-medium transition-colors cursor-pointer ${
                     activeAlgo === algo.id
                       ? "bg-primary text-primary-foreground font-semibold"
                       : "bg-background text-body hover:text-foreground hover:bg-card border border-hairline/60 disabled:opacity-50"
@@ -301,7 +298,7 @@ export function DSAVisualizer() {
               <button
                 onClick={reset}
                 suppressHydrationWarning
-                className="flex items-center gap-1.5 rounded-md border border-hairline bg-background px-3.5 py-1.5 text-xs font-medium text-body transition-colors hover:text-foreground hover:bg-card cursor-pointer"
+                className="flex items-center gap-1.5 rounded-md border border-hairline bg-background px-3 sm:px-3.5 py-1.5 text-xs font-medium text-body transition-colors hover:text-foreground hover:bg-card cursor-pointer"
                 aria-label="Reset"
               >
                 <RotateCcw className="h-3.5 w-3.5" />
@@ -321,7 +318,7 @@ export function DSAVisualizer() {
 
           {/* Custom Array Input Strip */}
           <div
-            className="flex items-center gap-3 border-b border-hairline bg-background px-5 py-2.5"
+            className="flex items-center gap-2 sm:gap-3 border-b border-hairline bg-background px-3 sm:px-5 py-2.5"
             suppressHydrationWarning
           >
             <span className="text-xs font-medium text-muted-foreground hidden sm:inline">Input Values:</span>
@@ -330,13 +327,13 @@ export function DSAVisualizer() {
               value={customInput}
               onChange={(e) => setCustomInput(e.target.value)}
               disabled={sorting}
-              placeholder="Enter comma-separated numbers (e.g. 45, 12, 88, 32, 19, 74)"
-              className="flex-1 rounded-md bg-card border border-hairline px-3.5 py-1.5 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary disabled:opacity-50 font-mono"
+              placeholder="Enter numbers (e.g. 45, 12, 88, 32, 19, 74)"
+              className="flex-1 min-w-0 rounded-md bg-card border border-hairline px-3 py-1.5 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary disabled:opacity-50 font-mono"
             />
             <button
               onClick={applyCustomArray}
               disabled={sorting || !customInput.trim()}
-              className="rounded-md px-3 py-1.5 bg-secondary border border-hairline text-xs font-medium text-foreground hover:bg-card transition-colors disabled:opacity-40 cursor-pointer"
+              className="rounded-md px-3 py-1.5 bg-secondary border border-hairline text-xs font-medium text-foreground hover:bg-card transition-colors disabled:opacity-40 cursor-pointer shrink-0"
             >
               Apply
             </button>
@@ -344,7 +341,7 @@ export function DSAVisualizer() {
 
           {/* Visualization Bars Area */}
           <div
-            className="flex items-end justify-center gap-1 sm:gap-1.5 px-6 py-12 bg-background border-b border-hairline/60"
+            className="flex items-end justify-center gap-1 sm:gap-1.5 px-3 sm:px-6 py-10 sm:py-12 bg-background border-b border-hairline/60"
             style={{ height: "280px" }}
           >
             {array.map((val, i) => {
@@ -369,7 +366,7 @@ export function DSAVisualizer() {
           </div>
 
           {/* Footer Bar */}
-          <div className="flex items-center justify-between border-t border-hairline bg-secondary/50 px-5 py-3.5 text-xs text-muted-foreground">
+          <div className="flex items-center justify-between border-t border-hairline bg-secondary/50 px-3 sm:px-5 py-3 text-xs text-muted-foreground flex-wrap gap-2">
             <span>
               {algorithms.find((a) => a.id === activeAlgo)?.label} &bull; {array.length} numbers
             </span>

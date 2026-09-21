@@ -332,7 +332,7 @@ export function ProblemSolver({ initialProblem }: ProblemSolverProps) {
   }, [handleSubmitCode, handleRunCode, adjacent, router, getTargetUrl])
 
   return (
-    <div className="flex flex-col h-screen w-screen overflow-hidden bg-background text-foreground font-sans">
+    <div className="flex flex-col h-screen w-full max-w-full overflow-hidden bg-background text-foreground font-sans">
       {/* ========================================================================= */}
       {/* TOP NAVIGATION BAR                                                        */}
       {/* ========================================================================= */}

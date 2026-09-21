@@ -388,7 +388,7 @@ export default function JavaMasterLandingPage() {
                 <Binary size={14} className="text-primary" />
                 <span>Distributed Architecture Flow</span>
               </h4>
-              <div className="rounded-2xl border border-border bg-[#181715] p-5 font-mono text-xs text-blue-400 overflow-x-auto shadow-inner leading-relaxed">
+              <div className="rounded-2xl border border-border bg-black p-5 font-mono text-xs text-blue-400 overflow-x-auto leading-relaxed">
                 <pre>{activeProject.architectureFlow}</pre>
               </div>
             </div>
@@ -416,8 +416,8 @@ export default function JavaMasterLandingPage() {
                 <Code2 size={14} className="text-primary" />
                 <span>Core Production Implementation Snippet</span>
               </h4>
-              <div className="rounded-2xl border border-border/80 dark:border-white/10 bg-[#181715] dark:bg-[#141413] overflow-hidden text-slate-200 font-mono text-xs shadow-md">
-                <div className="px-4 py-2.5 border-b border-border/70 dark:border-white/10 bg-[#141413]/80 flex items-center justify-between">
+              <div className="rounded-2xl border border-border/80 dark:border-white/10 bg-black overflow-hidden text-slate-200 font-mono text-xs">
+                <div className="px-4 py-2.5 border-b border-border/70 dark:border-white/10 bg-[#050505] flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <div className="w-2.5 h-2.5 rounded-full bg-rose-500/70" />
                     <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/50" />

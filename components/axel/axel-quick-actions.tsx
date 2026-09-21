@@ -209,7 +209,7 @@ export function AxelQuickActions({
                 whileHover={{ scale: 1.03, x: isRightSide ? -3 : 3 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={(e) => handleActionClick(e, action.prompt)}
-                className={`flex items-center gap-2.5 px-3.5 py-2 rounded-full text-xs font-medium bg-white/95 dark:bg-card/95 hover:bg-white dark:hover:bg-card backdrop-blur-3xl border border-hairline hover:border-blue-500/50 shadow-sm hover:shadow-md text-foreground/90 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 group whitespace-nowrap cursor-pointer ${
+                className={`flex items-center gap-2.5 px-3.5 py-2 rounded-full text-xs font-medium bg-white/95 dark:bg-card/95 hover:bg-white dark:hover:bg-card backdrop-blur-2xl border border-hairline hover:border-foreground/30 dark:hover:border-white/30 shadow-xs text-foreground/90 transition-all duration-200 group whitespace-nowrap cursor-pointer ${
                   isRightSide ? "text-right" : "text-left"
                 }`}
                 title={`Ask Axel: "${action.prompt}"`}

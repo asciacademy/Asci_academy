@@ -96,7 +96,7 @@ export function AxelSpeechBubble({
           className={`z-50 pointer-events-auto cursor-pointer select-none ${className}`}
           style={positionStyle}
         >
-          <div className="relative rounded-2xl p-3.5 bg-white/95 dark:bg-card/95 backdrop-blur-3xl border border-hairline hover:border-blue-500/50 shadow-md text-foreground text-xs leading-relaxed group transition-all duration-200">
+          <div className="relative rounded-2xl p-3.5 bg-white/95 dark:bg-card/95 backdrop-blur-2xl border border-hairline hover:border-foreground/30 dark:hover:border-white/30 shadow-xs text-foreground text-xs leading-relaxed group transition-all duration-200">
 
             {/* Header */}
             <div className="relative flex items-center gap-1.5 mb-1.5 text-[10px] font-mono tracking-wider uppercase">

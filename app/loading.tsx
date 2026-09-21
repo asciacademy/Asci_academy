@@ -13,9 +13,8 @@ export default function Loading() {
     >
       {/* Editorial Brand Identity */}
       <div className="relative z-10 flex flex-col items-center">
-        {/* Crisp Logo Mark with Subtle Aura */}
+        {/* Crisp Logo Mark */}
         <div className="relative mb-5 flex items-center justify-center">
-          <div className="absolute inset-0 rounded-2xl bg-primary/15 blur-xl animate-pulse" />
           <AsciLogo size={52} showText={false} />
         </div>
 
@@ -29,10 +28,10 @@ export default function Loading() {
           </p>
         </div>
 
-        {/* Hairline Laser Sweep Progress Indicator */}
+        {/* Hairline Progress Indicator */}
         <div className="mt-7 w-36 sm:w-44">
           <div className="relative h-[2.5px] w-full overflow-hidden rounded-full bg-border/60">
-            <div className="h-full w-1/2 bg-gradient-to-r from-blue-600 via-indigo-500 to-cyan-400 animate-laser-sweep rounded-full" />
+            <div className="h-full w-1/2 bg-primary animate-laser-sweep rounded-full" />
           </div>
         </div>
 

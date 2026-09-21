@@ -168,8 +168,8 @@ export function AxelFocusInterface({
       }
     >
       <div className="flex flex-col h-full w-full rounded-3xl bg-white/96 dark:bg-card/96 backdrop-blur-3xl border border-hairline shadow-2xl overflow-hidden">
-        {/* Vibrant Gradient Blue Top Accent */}
-        <div className="h-1 w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500" />
+        {/* Solid Blue Top Accent */}
+        <div className="h-1 w-full bg-primary" />
 
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-hairline bg-muted/20">
@@ -250,7 +250,7 @@ export function AxelFocusInterface({
               <div
                 className={`max-w-[88%] rounded-2xl px-3.5 py-2.5 leading-relaxed ${
                   m.role === "user"
-                    ? "bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 text-white rounded-tr-sm shadow-md font-ui font-medium"
+                    ? "bg-primary text-primary-foreground rounded-tr-sm shadow-xs font-ui font-medium"
                     : "bg-secondary/70 dark:bg-zinc-900/80 border border-hairline rounded-tl-sm text-foreground shadow-xs font-ui"
                 }`}
               >
@@ -292,7 +292,7 @@ export function AxelFocusInterface({
                   <div className="mt-2.5 pt-2 border-t border-border/60">
                     <button
                       onClick={() => handleActionClick(m.action?.target)}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[11px] font-semibold bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 text-white shadow-md shadow-blue-500/20 transition-all cursor-pointer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[11px] font-semibold bg-primary hover:bg-primary-active text-primary-foreground transition-all cursor-pointer"
                     >
                       <span>{m.action.label || "Explore"}</span>
                       <ArrowRight className="w-3 h-3" />
@@ -367,7 +367,7 @@ export function AxelFocusInterface({
           <button
             onClick={handleSend}
             disabled={!inputVal.trim() || isThinking}
-            className="p-2 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 text-white disabled:opacity-40 transition-opacity cursor-pointer disabled:cursor-not-allowed shadow-md shadow-blue-500/20"
+            className="p-2 rounded-xl bg-primary hover:bg-primary-active text-primary-foreground disabled:opacity-40 transition-opacity cursor-pointer disabled:cursor-not-allowed"
             title="Send (Enter)"
           >
             <Send className="w-4 h-4" />

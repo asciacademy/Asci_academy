@@ -693,7 +693,7 @@ export function UnifiedCoursePlayer({
           )}
 
           {/* Quick Check Quiz */}
-          <div className="p-5 sm:p-6 rounded-2xl border border-border/80 bg-card/70 dark:bg-[#181715] space-y-4 shadow-xs">
+          <div className="p-5 sm:p-6 rounded-2xl border border-border/80 bg-card/70 dark:bg-[#050505] space-y-4 shadow-xs">
             <div className="flex items-center gap-2">
               <span className="px-2 py-0.5 rounded-md text-[10px] font-mono uppercase tracking-wider bg-primary/10 text-primary border border-primary/20 font-semibold">
                 Quick Test

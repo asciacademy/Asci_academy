@@ -240,7 +240,7 @@ export function JvmPipelineFlowchart() {
               <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-semibold block">
                 Data Representation:
               </span>
-              <div className="rounded-xl border border-border bg-[#181715] p-3.5 font-mono text-xs text-blue-400 overflow-x-auto shadow-inner leading-relaxed">
+              <div className="rounded-xl border border-border bg-black p-3.5 font-mono text-xs text-blue-400 overflow-x-auto leading-relaxed">
                 <pre>{current.codeSnippet}</pre>
               </div>
             </div>
@@ -1699,7 +1699,7 @@ export function SmartVisualDiagramRenderer({
           )}
         </div>
       ) : (
-        <div className="rounded-2xl border border-border bg-[#181715] p-5 font-mono text-xs text-blue-400 overflow-x-auto shadow-inner leading-relaxed">
+        <div className="rounded-2xl border border-border bg-black p-5 font-mono text-xs text-blue-400 overflow-x-auto leading-relaxed">
           <pre>{schematicText || "Schematic initializing..."}</pre>
         </div>
       )}

@@ -12,11 +12,10 @@ const plans = [
     description: "Basic access to starter courses, coding practice, and the student community.",
     icon: Terminal,
     features: [
-      "Access to 3 starter coding courses",
-      "Student community forum access",
-      "Weekly group study sessions",
-      "50+ beginner coding problems",
-      "Free completion certificate",
+      "Access to starter coding tracks",
+      "50+ foundational coding problems",
+      "Student community forum",
+      "Verified completion certificate",
     ],
     cta: "Start for Free",
     href: "/signup",
@@ -31,13 +30,10 @@ const plans = [
     description: "Full access to all courses, 1-on-1 mentor guidance, and career prep.",
     icon: Layers,
     features: [
-      "All programming courses & learning tracks",
-      "Weekly 1-on-1 video call with an experienced mentor",
-      "200+ interview coding problems with video walkthroughs",
-      "Live coding sessions 5 times a week",
-      "Resume and portfolio feedback",
-      "Realistic mock coding interviews",
-      "Job recommendations and alumni network",
+      "All 100+ courses & interactive sandboxes",
+      "Weekly 1-on-1 senior mentor calls",
+      "200+ interview problems with video reviews",
+      "Direct referrals & hiring portfolio audit",
     ],
     cta: "Get Started with Pro",
     href: "/pricing",
@@ -52,12 +48,10 @@ const plans = [
     description: "Tailored team training and coaching for companies and universities.",
     icon: Server,
     features: [
-      "Everything included in Pro Learner",
-      "Dedicated mentor assigned to your team",
-      "Custom curriculum tailored to your tech stack",
-      "Manager dashboard to monitor progress",
-      "Discounted group team pricing",
-      "Priority email and phone support",
+      "Everything in Pro Learner for teams",
+      "Custom enterprise stack curriculum",
+      "Dedicated mentor & progress dashboard",
+      "Priority email & technical support",
     ],
     cta: "Talk to Us",
     href: "mailto:sales@asci.dev",
@@ -80,10 +74,7 @@ export function Pricing() {
               <Zap className="h-3.5 w-3.5" />
               <span>Simple Pricing</span>
             </div>
-            <h2
-              className="font-serif text-3xl font-normal tracking-tight text-foreground sm:text-4xl lg:text-5xl"
-              style={{ letterSpacing: "-1px" }}
-            >
+            <h2 className="font-serif text-3xl font-normal tracking-tight text-foreground sm:text-4xl lg:text-5xl">
               Simple, Transparent Plans
             </h2>
             <p className="mt-3 max-w-xl text-sm sm:text-base text-body leading-relaxed">
@@ -141,8 +132,8 @@ export function Pricing() {
                 key={plan.name}
                 className={`group relative flex flex-col rounded-2xl border transition-all duration-200 ${
                   isHighlighted
-                    ? "border-foreground/40 dark:border-white/30 bg-secondary/80 dark:bg-[#1c1b18] md:-translate-y-2 shadow-sm"
-                    : "border-hairline dark:border-white/[0.08] bg-card/90 dark:bg-[#181715]/90 text-foreground hover:border-foreground/30 dark:hover:border-white/20 shadow-2xs"
+                    ? "border-foreground/40 dark:border-white/30 bg-secondary/80 dark:bg-[#080808] md:-translate-y-2 shadow-xs"
+                    : "border-hairline dark:border-white/10 bg-card/90 dark:bg-black/90 text-foreground hover:border-foreground/30 dark:hover:border-white/20 shadow-2xs"
                 }`}
               >
                 {/* Savings Badge */}
@@ -181,10 +172,7 @@ export function Pricing() {
 
                   {/* Price in Serif Display */}
                   <div className="mt-6 flex items-baseline gap-1">
-                    <span
-                      className="font-serif text-3xl sm:text-4xl font-normal tracking-tight text-foreground"
-                      style={{ letterSpacing: "-0.5px" }}
-                    >
+                    <span className="font-serif text-3xl sm:text-4xl font-normal tracking-tight text-foreground">
                       {price}
                     </span>
                     {plan.period && (

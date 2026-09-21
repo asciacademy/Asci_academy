@@ -9,10 +9,8 @@ import {
   FolderGit2,
   Briefcase,
   ShieldCheck,
-  CheckCircle2,
   ChevronLeft,
   ChevronRight,
-  Sparkles,
 } from "lucide-react"
 
 interface PlatformStats {
@@ -90,49 +88,49 @@ export function Features({ stats }: { stats?: PlatformStats }) {
     {
       id: "01",
       shortTab: "Mentorship",
-      title: "1-on-1 Staff Engineer Mentorship",
+      title: "1-on-1 Senior Engineer Mentorship",
       description:
-        "Weekly dedicated video calls with senior software engineers from leading tech companies. Get your pull requests reviewed line-by-line, unblock complex architecture hurdles, and accelerate your engineering growth.",
+        "Weekly 1-on-1 video calls and line-by-line code reviews with senior engineers to unblock hurdles and accelerate your engineering growth.",
       icon: Users,
       metric: stats?.avgRating || "4.9/5",
       metricLabel: "Learner Rating",
-      tags: ["Weekly 1-on-1 Calls", "Pull Request Reviews", "Architecture Teardowns", "Personal Pace"],
+      tags: ["Weekly 1-on-1 Calls", "Code Reviews", "Architecture Guidance"],
       isSpan2: true,
     },
     {
       id: "02",
       shortTab: "Projects",
-      title: "Real Production-Grade Projects",
+      title: "Production-Grade Projects",
       description:
-        "Build and deploy production software from scratch: distributed key-value caches, real-time collaboration engines, and containerized microservices with full test coverage.",
+        "Build and deploy production software from scratch: distributed caches, real-time collaboration engines, and cloud microservices.",
       icon: FolderGit2,
       metric: stats?.projects || "47+",
       metricLabel: "Shipped Repos",
-      tags: ["Distributed Systems", "Clean Architecture", "Deployable Repos"],
+      tags: ["Distributed Systems", "Cloud Apps", "Deployable Repos"],
       isSpan2: false,
     },
     {
       id: "03",
       shortTab: "Interviews",
-      title: "FAANG-Caliber Interview Prep",
+      title: "Technical Interview Prep",
       description:
-        "200+ curated algorithmic problems with step-by-step invariant proofs covering trees, dynamic programming, graphs, sliding windows, and realistic mock technical rounds.",
+        "200+ curated problems covering data structures, dynamic programming, system design, and realistic mock technical rounds.",
       icon: Code2,
       metric: "200+",
       metricLabel: "Curated Problems",
-      tags: ["LeetCode Patterns", "System Design", "Mock Rounds"],
+      tags: ["Algorithms", "System Design", "Mock Rounds"],
       isSpan2: false,
     },
     {
       id: "04",
       shortTab: "Placement",
-      title: "Career Acceleration & Placement",
+      title: "Career Coaching & Referrals",
       description:
-        "Resume teardowns, clean portfolio audits, behavioral interview coaching, and direct employee referrals to high-growth tech firms and unicorn startups.",
+        "Resume reviews, portfolio audits, mock interviews, and direct referrals to high-growth tech companies and top startups.",
       icon: Briefcase,
       metric: "94%",
       metricLabel: "Hiring Outcomes",
-      tags: ["Resume Teardown", "Portfolio Audits", "Direct Referrals", "Salary Coaching"],
+      tags: ["Resume Reviews", "Portfolio Audits", "Job Referrals"],
       isSpan2: true,
     },
   ]
@@ -199,9 +197,6 @@ export function Features({ stats }: { stats?: PlatformStats }) {
 
   return (
     <section id="features" className="relative py-14 sm:py-20 lg:py-28 bg-background border-y border-hairline overflow-hidden">
-      {/* Subtle ambient light gradient background */}
-      <div className="absolute top-1/3 right-1/4 w-[600px] h-[400px] bg-primary/5 rounded-full blur-3xl pointer-events-none -z-10" />
-
       <div className="relative mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div ref={headerRef} className="relative mb-8 sm:mb-14 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 sm:gap-8">
@@ -214,7 +209,7 @@ export function Features({ stats }: { stats?: PlatformStats }) {
               Built to Help You Learn, Build, and Get Hired
             </h2>
             <p className="mt-2.5 sm:mt-4 text-xs sm:text-base text-muted-foreground leading-relaxed">
-              Everything you need to master software engineering, build practical software employers respect, and land high-paying roles — explained simply without confusing jargon.
+              Everything you need to master software engineering, build production projects, and land top engineering roles.
             </p>
           </div>
 
@@ -271,7 +266,7 @@ export function Features({ stats }: { stats?: PlatformStats }) {
               return (
                 <div
                   key={feature.id}
-                  className="mobile-feature-card snap-center shrink-0 w-[88vw] max-w-[340px] rounded-3xl border border-hairline dark:border-white/[0.08] bg-card/90 dark:bg-[#151514]/90 p-5 shadow-xs flex flex-col justify-between"
+                  className="mobile-feature-card snap-center shrink-0 w-[88vw] max-w-[340px] rounded-3xl border border-hairline dark:border-white/10 bg-card/90 dark:bg-black/90 p-5 shadow-xs flex flex-col justify-between"
                 >
                   <div>
                     {/* Top Row: Icon + Index + Metric */}
@@ -296,21 +291,6 @@ export function Features({ stats }: { stats?: PlatformStats }) {
                       <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
                         {feature.description}
                       </p>
-                    </div>
-                  </div>
-
-                  {/* Badges */}
-                  <div className="mt-5 pt-3.5 border-t border-hairline/60">
-                    <div className="flex flex-wrap gap-1">
-                      {feature.tags.slice(0, 3).map((tag) => (
-                        <span
-                          key={tag}
-                          className="inline-flex items-center gap-1 rounded-full border border-hairline bg-secondary/70 px-2.5 py-0.5 text-[10px] font-mono text-foreground/80"
-                        >
-                          <CheckCircle2 className="h-2.5 w-2.5 text-emerald-500 shrink-0" />
-                          <span>{tag}</span>
-                        </span>
-                      ))}
                     </div>
                   </div>
                 </div>
@@ -363,7 +343,7 @@ export function Features({ stats }: { stats?: PlatformStats }) {
             return (
               <div
                 key={feature.id}
-                className={`feature-bento-card group relative flex flex-col justify-between rounded-3xl border border-hairline dark:border-white/[0.08] bg-card/80 dark:bg-[#151514]/80 backdrop-blur-xl p-7 sm:p-9 transition-all duration-300 hover:border-primary/40 hover:-translate-y-1 hover:shadow-xl shadow-2xs ${
+                className={`feature-bento-card group relative flex flex-col justify-between rounded-3xl border border-hairline dark:border-white/10 bg-card/80 dark:bg-black/80 backdrop-blur-xl p-7 sm:p-9 transition-all duration-300 hover:border-primary/40 hover:-translate-y-1 shadow-xs ${
                   feature.isSpan2 ? "md:col-span-2 lg:col-span-2" : "md:col-span-1 lg:col-span-1"
                 }`}
               >
@@ -390,21 +370,6 @@ export function Features({ stats }: { stats?: PlatformStats }) {
                     <p className="mt-3 text-xs sm:text-sm text-muted-foreground leading-relaxed">
                       {feature.description}
                     </p>
-                  </div>
-                </div>
-
-                {/* Bottom Tags / Skills Badges */}
-                <div className="mt-8 pt-5 border-t border-hairline/60">
-                  <div className="flex flex-wrap items-center gap-1.5">
-                    {feature.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="inline-flex items-center gap-1 rounded-full border border-hairline bg-secondary/60 hover:bg-secondary px-3 py-1 text-[11px] font-mono text-foreground/80 transition-colors"
-                      >
-                        <CheckCircle2 className="h-3 w-3 text-emerald-500 shrink-0" />
-                        <span>{tag}</span>
-                      </span>
-                    ))}
                   </div>
                 </div>
               </div>

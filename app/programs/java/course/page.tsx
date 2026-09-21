@@ -209,7 +209,7 @@ export default function JavaCourseDocsLayout() {
       {/* ─── LEFT SIDEBAR NAVIGATION (Minimal & Focused) ─── */}
       <aside
         className={cn(
-          "w-72 shrink-0 border-r border-border/80 dark:border-white/10 bg-card/70 dark:bg-[#141413]/95 backdrop-blur-2xl flex flex-col z-40 transition-transform duration-300 absolute lg:relative h-full",
+          "w-72 shrink-0 border-r border-border/80 dark:border-white/10 bg-card/70 dark:bg-black/95 backdrop-blur-2xl flex flex-col z-40 transition-transform duration-300 absolute lg:relative h-full",
           isMobileMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         )}
       >
@@ -636,8 +636,8 @@ export default function JavaCourseDocsLayout() {
                       )}
                     </button>
                   </div>
-                  <div className="rounded-2xl border border-border bg-[#181715] overflow-hidden text-slate-100 font-mono text-xs shadow-md">
-                    <div className="px-4 py-2.5 border-b border-border bg-[#141413] flex items-center justify-between">
+                  <div className="rounded-2xl border border-border bg-black overflow-hidden text-slate-100 font-mono text-xs">
+                    <div className="px-4 py-2.5 border-b border-border bg-[#050505] flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <div className="w-2.5 h-2.5 rounded-full bg-rose-500/60" />
                         <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/50" />

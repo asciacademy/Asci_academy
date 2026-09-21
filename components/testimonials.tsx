@@ -18,45 +18,40 @@ const verifiedAlumniTestimonials = [
     id: "9b3691d0-efff-9785-0623-0299f7216f61",
     name: "Theja",
     role: "Google L4",
-    cohort: "Alumni 2025 · Google L4",
     avatar: "TH",
-    content: "The algorithmic optimization visualizers and the system design tracks made my interview prep seamless. I transitioned from struggling with dynamic programming invariants to securing offers at top tier tech firms within 4 months.",
+    content: "The algorithm visualizers and system design tracks made interview prep seamless. I transitioned to securing an L4 offer within 4 months.",
     rating: 5,
   },
   {
     id: "b65dfa37-dfde-f692-e517-a2a0ad0a2d9d",
     name: "Yamuna.T",
     role: "Vercel Platform",
-    cohort: "Batch 2025 · Vercel Platform",
     avatar: "YT",
-    content: "The full-stack curriculum with Next.js and high-concurrency systems taught me design patterns that I implement daily in production. Having mentor code reviews completely elevated my standard for code quality.",
+    content: "The Next.js and distributed systems curriculum taught me patterns I use daily in production. Mentor code reviews completely elevated my standard for code quality.",
     rating: 5,
   },
   {
     id: "6836fbbe-c330-374e-7e9c-caa96017895e",
     name: "BATTINA RAVIMANOHAR",
     role: "Razorpay Core",
-    cohort: "Batch 2025 · Razorpay Core",
     avatar: "BR",
-    content: "I started with basic data structure syntax and graduated to engineering distributed idempotency engines. The hackathons and live speed challenges gave me the real portfolio that recruiters cared about.",
+    content: "I started with data structure fundamentals and graduated to engineering distributed idempotency engines. The challenges built a portfolio recruiters cared about.",
     rating: 5,
   },
   {
     id: "8611efb9-c95b-c367-f1bb-57821f48e6e5",
     name: "Yamuna Reddy Thangasani",
     role: "Microsoft Fellow",
-    cohort: "Batch 2026 · Microsoft Fellow",
     avatar: "YR",
-    content: "The Agentic AI curriculum is unlike anything else on the internet. Working with LangGraph, stateful PRAL loops, and MCP tools directly prepared me for cutting-edge autonomous engineering roles.",
+    content: "The agentic AI and tool-calling curriculum directly prepared me for cutting-edge autonomous engineering roles at top tech organizations.",
     rating: 5,
   },
   {
     id: "cf58f520-0a67-cdea-4091-aec9b89c340b",
     name: "Shadows Elite",
     role: "Zerodha Systems",
-    cohort: "Batch 2025 · Zerodha Systems",
     avatar: "SE",
-    content: "The low-latency Go and distributed database modules pushed me to understand lock contention and cache stampedes. ASCI was the highest ROI decision of my college journey.",
+    content: "The low-latency Go and distributed database modules pushed me to understand concurrency and performance deeply. ASCI was the highest ROI decision of my journey.",
     rating: 5,
   },
 ]
@@ -145,7 +140,7 @@ export function Testimonials() {
               <Award className="h-3.5 w-3.5" />
               <span>Student Stories</span>
             </div>
-            <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-normal tracking-tight text-foreground" style={{ letterSpacing: "-1px" }}>
+            <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-normal tracking-tight text-foreground">
               Loved by Thousands of Learners
             </h2>
             <p className="mt-3 max-w-xl text-sm sm:text-base text-body leading-relaxed">
@@ -196,7 +191,7 @@ export function Testimonials() {
           {getVisible().map((t, i) => (
             <div
               key={`${t.name}-${activeIndex}`}
-              className={`testimonial-card group relative flex flex-col rounded-2xl border border-hairline dark:border-white/[0.08] bg-card/85 dark:bg-[#181715]/85 p-6 sm:p-8 transition-all duration-200 hover:border-foreground/30 dark:hover:border-white/25 hover:-translate-y-0.5 shadow-2xs ${
+              className={`testimonial-card group relative flex flex-col rounded-2xl border border-hairline dark:border-white/10 bg-card/85 dark:bg-black/85 p-6 sm:p-8 transition-all duration-200 hover:border-foreground/30 dark:hover:border-white/25 hover:-translate-y-0.5 shadow-2xs ${
                 i === 0 ? "" : i === 1 ? "hidden sm:flex" : "hidden lg:flex"
               }`}
             >
@@ -221,9 +216,6 @@ export function Testimonials() {
                   <p className="text-sm font-medium text-foreground truncate">{t.name}</p>
                   <p className="text-xs text-muted-foreground truncate">{t.role}</p>
                 </div>
-                <span className="badge-pill text-[10px]">
-                  {t.cohort}
-                </span>
               </div>
             </div>
           ))}

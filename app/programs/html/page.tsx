@@ -72,7 +72,7 @@ export default function HTMLLandingPage() {
           {htmlParts.map((part) => (
             <div
               key={part.id}
-              className="rounded-2xl border border-border/80 bg-card/70 dark:bg-[#181715] p-6 shadow-xs"
+              className="rounded-2xl border border-border/80 bg-card/70 dark:bg-[#050505] p-6 shadow-xs"
             >
               <h3 className="font-serif text-xl font-normal text-foreground mb-2">
                 {part.title}

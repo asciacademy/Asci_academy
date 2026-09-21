@@ -16,7 +16,6 @@ import {
   BookOpen,
   ChevronDown,
   ChevronUp,
-  Sparkles,
   TerminalSquare,
   Layers,
   Braces
@@ -167,10 +166,10 @@ export function FeaturedMasterTracks() {
               <span>Zero-Setup In-Browser Sandboxes</span>
             </div>
             <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-foreground font-normal tracking-tight leading-tight">
-              Learn by Doing: Interactive Guided Labs
+              Interactive Guided Labs
             </h2>
             <p className="mt-3 text-sm sm:text-base text-muted-foreground leading-relaxed">
-              Don't just watch videos — write code right now. Practice in live browser sandboxes with instant split-pane previews, WebAssembly compilers, and memory inspectors.
+              Write and test code directly in your browser with live previews, WebAssembly compilers, and algorithm animators.
             </p>
           </div>
 
@@ -211,20 +210,18 @@ export function FeaturedMasterTracks() {
             return (
               <div
                 key={lab.id}
-                className="group relative flex flex-col justify-between rounded-3xl border border-stone-200/90 dark:border-stone-800/90 bg-card/90 p-6 transition-all duration-200 hover:border-primary/40 hover:-translate-y-1 shadow-xs hover:shadow-md"
+                className="group relative flex flex-col justify-between rounded-2xl border border-stone-200/90 dark:border-stone-800/90 bg-card p-5 sm:p-6 transition-all duration-200 hover:border-primary/40 hover:-translate-y-1 shadow-xs"
               >
                 <div>
                   {/* Top Header: Logo + Badges */}
-                  <div className="flex items-center justify-between gap-3 mb-4">
+                  <div className="flex items-center justify-between gap-3 mb-3.5">
                     <div className="flex items-center gap-2.5">
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-hairline bg-secondary/80 p-2 shadow-2xs group-hover:scale-105 group-hover:border-primary/40 transition-all">
-                        <TechLogo slug={lab.id} className="h-6 w-6 object-contain" />
+                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-hairline bg-secondary/80 p-1.5 shadow-2xs group-hover:scale-105 group-hover:border-primary/40 transition-all">
+                        <TechLogo slug={lab.id} className="h-5 w-5 object-contain" />
                       </div>
-                      <div>
-                        <span className="inline-flex items-center rounded-md bg-primary/10 px-2 py-0.5 text-[10px] font-mono font-semibold text-primary uppercase tracking-wider">
-                          {lab.badge}
-                        </span>
-                      </div>
+                      <span className="inline-flex items-center rounded-md bg-primary/10 px-2 py-0.5 text-[10px] font-mono font-semibold text-primary uppercase tracking-wider">
+                        {lab.badge}
+                      </span>
                     </div>
 
                     <span className="text-[10px] font-mono text-muted-foreground border border-hairline rounded-md px-2 py-0.5 bg-secondary/60">
@@ -234,33 +231,17 @@ export function FeaturedMasterTracks() {
 
                   {/* Title & Description */}
                   <Link href={lab.overviewUrl} className="group-hover:text-primary transition-colors">
-                    <h3 className="font-serif text-xl font-medium text-foreground tracking-tight leading-snug">
+                    <h3 className="font-serif text-lg font-medium text-foreground tracking-tight leading-snug">
                       {lab.title}
                     </h3>
                   </Link>
-                  <p className="mt-2.5 text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                  <p className="mt-2 text-xs text-muted-foreground leading-relaxed line-clamp-2">
                     {lab.desc}
                   </p>
-
-                  {/* Interactive Highlight Pill */}
-                  <div className="mt-4 inline-flex items-center gap-1.5 rounded-xl border border-hairline bg-secondary/60 px-3 py-1 text-[11px] font-mono text-foreground font-medium">
-                    <Sparkles className="h-3.5 w-3.5 text-primary" />
-                    <span>{lab.interactiveBadge}</span>
-                  </div>
-
-                  {/* Capabilities List */}
-                  <div className="mt-4 space-y-2 pt-3.5 border-t border-hairline/60">
-                    {lab.capabilities.map((cap, cIdx) => (
-                      <div key={cIdx} className="flex items-start gap-2 text-xs text-foreground/80">
-                        <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-primary mt-0.5" />
-                        <span className="leading-snug">{cap}</span>
-                      </div>
-                    ))}
-                  </div>
                 </div>
 
                 {/* Footer Action */}
-                <div className="mt-6 pt-4 border-t border-hairline/60 flex items-center gap-2.5">
+                <div className="mt-5 pt-3.5 border-t border-hairline/60 flex items-center gap-2">
                   <Link
                     href={lab.courseUrl}
                     className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-primary hover:bg-primary-active text-primary-foreground px-4 py-2.5 text-xs font-semibold shadow-xs transition-all active:scale-[0.98] cursor-pointer"

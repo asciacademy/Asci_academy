@@ -131,7 +131,7 @@ export default function PricingPage() {
 
                     <div className="grid md:grid-cols-3 gap-8">
                         {/* Initiate Tier */}
-                        <div className="p-8 rounded-2xl bg-card/90 dark:bg-[#181715]/90 border border-hairline dark:border-white/[0.08] flex flex-col justify-between transition-all duration-200 hover:border-foreground/30 dark:hover:border-white/25 hover:-translate-y-0.5 shadow-2xs">
+                        <div className="p-8 rounded-2xl bg-card/90 dark:bg-[#050505]/90 border border-hairline dark:border-white/[0.08] flex flex-col justify-between transition-all duration-200 hover:border-foreground/30 dark:hover:border-white/25 hover:-translate-y-0.5 shadow-2xs">
                         <div>
                             <div className="text-xs font-mono uppercase tracking-widest text-muted-foreground mb-2">Tier 01</div>
                             <h3 className="font-serif text-2xl font-normal text-foreground mb-2">Free Plan</h3>
@@ -178,7 +178,7 @@ export default function PricingPage() {
                     </div>
 
                     {/* Architect Tier (Recommended) */}
-                    <div className="p-8 rounded-2xl bg-secondary/80 dark:bg-[#1c1b18] border border-foreground/40 dark:border-white/30 relative flex flex-col justify-between md:-translate-y-2 shadow-sm transition-all duration-200">
+                    <div className="p-8 rounded-2xl bg-secondary/80 dark:bg-black/90 border border-foreground/40 dark:border-white/30 relative flex flex-col justify-between md:-translate-y-2 shadow-sm transition-all duration-200">
                         <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-3 py-0.5 rounded-full text-[10px] font-mono uppercase tracking-widest font-semibold flex items-center gap-1 shadow-xs">
                             <Zap className="h-3 w-3" /> Recommended
                         </div>
@@ -240,7 +240,7 @@ export default function PricingPage() {
                     </div>
 
                     {/* Fellowship Tier */}
-                    <div className="p-8 rounded-2xl bg-card/90 dark:bg-[#181715]/90 border border-hairline dark:border-white/[0.08] flex flex-col justify-between transition-all duration-200 hover:border-foreground/30 dark:hover:border-white/25 hover:-translate-y-0.5 shadow-2xs">
+                    <div className="p-8 rounded-2xl bg-card/90 dark:bg-[#050505]/90 border border-hairline dark:border-white/[0.08] flex flex-col justify-between transition-all duration-200 hover:border-foreground/30 dark:hover:border-white/25 hover:-translate-y-0.5 shadow-2xs">
                         <div>
                             <div className="text-xs font-mono uppercase tracking-widest text-muted-foreground mb-2">Tier 03</div>
                             <h3 className="font-serif text-2xl font-normal text-foreground mb-2">Team & Mentorship</h3>

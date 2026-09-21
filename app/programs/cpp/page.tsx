@@ -101,7 +101,7 @@ export default function CPPLandingPage() {
           {CPP_COURSE_PARTS.map((part) => (
             <div
               key={part.id}
-              className="rounded-2xl border border-border/80 bg-card/70 dark:bg-[#181715] p-6 shadow-xs"
+              className="rounded-2xl border border-border/80 bg-card/70 dark:bg-[#050505] p-6 shadow-xs"
             >
               <div className="flex items-center justify-between gap-4 mb-3">
                 <h3 className="font-serif text-xl font-normal text-foreground">
@@ -139,7 +139,7 @@ export default function CPPLandingPage() {
         </div>
 
         {/* CTA Bottom Banner */}
-        <div className="mt-14 p-8 rounded-3xl border border-border/80 bg-card/70 dark:bg-[#181715] text-center max-w-3xl mx-auto shadow-xs">
+        <div className="mt-14 p-8 rounded-3xl border border-border/80 bg-card/70 dark:bg-[#050505] text-center max-w-3xl mx-auto shadow-xs">
           <h3 className="font-serif text-2xl sm:text-3xl font-normal text-foreground">
             Master High-Performance C++
           </h3>

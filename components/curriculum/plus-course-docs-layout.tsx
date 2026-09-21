@@ -599,8 +599,8 @@ export function PlusCourseDocsLayout({ subject }: PlusCourseDocsLayoutProps) {
                       )}
                     </button>
                   </div>
-                  <div className="rounded-2xl border border-border/80 bg-[#181715] overflow-hidden text-slate-100 font-mono text-xs shadow-md">
-                    <div className="px-4 py-2.5 border-b border-border/80 bg-[#141413] flex items-center gap-2">
+                  <div className="rounded-2xl border border-border/80 bg-black overflow-hidden text-slate-100 font-mono text-xs">
+                    <div className="px-4 py-2.5 border-b border-border/80 bg-[#050505] flex items-center gap-2">
                       <div className="w-2.5 h-2.5 rounded-full bg-rose-500/70" />
                       <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/50" />
                       <div className="w-2.5 h-2.5 rounded-full bg-primary/70" />

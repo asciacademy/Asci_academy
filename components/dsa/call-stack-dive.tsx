@@ -123,9 +123,9 @@ export default function CallStackDive() {
   if (!mounted) return null;
 
   return (
-    <div className="flex-1 w-full bg-[#181715] text-[#faf9f5] font-sans overflow-hidden flex flex-col">
+    <div className="flex-1 w-full bg-black text-[#faf9f5] font-sans overflow-hidden flex flex-col">
       {/* Top Header Bar */}
-      <div className="px-6 py-4 border-b border-white/10 bg-[#141413] flex items-center justify-between shrink-0">
+      <div className="px-6 py-4 border-b border-white/10 bg-[#050505] flex items-center justify-between shrink-0">
          <div className="flex items-center gap-3">
             <Layers className="text-blue-500" size={18} />
             <h2 className="font-mono text-xs uppercase tracking-widest font-semibold text-[#faf9f5]">
@@ -141,12 +141,12 @@ export default function CallStackDive() {
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-10 divide-y lg:divide-y-0 lg:divide-x divide-white/10 overflow-hidden">
         
         {/* PANEL 1: Code Viewer (30%) */}
-        <div className="lg:col-span-3 bg-[#181715] p-6 flex flex-col">
+        <div className="lg:col-span-3 bg-black p-6 flex flex-col">
           <h3 className="text-xs font-mono uppercase tracking-widest text-zinc-400 mb-4 flex items-center gap-2">
             <Terminal size={14} className="text-blue-500" />
             Code
           </h3>
-          <div className="bg-[#100f0e] border border-white/10 rounded-xl p-4 font-mono text-xs overflow-x-auto relative">
+          <div className="bg-[#050505] border border-white/10 rounded-xl p-4 font-mono text-xs overflow-x-auto relative">
             {PYTHON_CODE.split("\n").map((line, idx) => {
               const lineNum = idx + 1;
               const isActive = activeState.activeLine === lineNum;
@@ -248,7 +248,7 @@ export default function CallStackDive() {
         </div>
 
         {/* PANEL 3: Control Deck & Terminal (30%) */}
-        <div className="lg:col-span-3 bg-[#181715] flex flex-col">
+        <div className="lg:col-span-3 bg-black flex flex-col">
           {/* Controls */}
           <div className="p-6 border-b border-white/10">
             <h3 className="text-xs font-mono uppercase tracking-widest text-zinc-400 mb-4">
@@ -283,7 +283,7 @@ export default function CallStackDive() {
                 <button 
                   onClick={handleNext}
                   disabled={currentStep === trace.length - 1}
-                  className="flex items-center justify-center gap-1.5 p-2.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 text-white font-mono text-xs uppercase tracking-wider font-semibold rounded-xl disabled:opacity-40 transition-all shadow-md shadow-blue-500/20 cursor-pointer active:scale-95"
+                  className="flex items-center justify-center gap-1.5 p-2.5 bg-primary hover:bg-primary-active text-white font-mono text-xs uppercase tracking-wider font-semibold rounded-xl disabled:opacity-40 transition-all cursor-pointer active:scale-95"
                 >
                   <span>Step</span>
                   <ChevronRight size={14} />

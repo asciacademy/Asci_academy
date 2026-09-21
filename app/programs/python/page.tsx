@@ -377,7 +377,7 @@ export default function PythonMasterLandingPage() {
               <span className="text-xs font-mono text-muted-foreground uppercase tracking-wider block font-semibold">
                 Distributed Architecture Flow
               </span>
-              <div className="rounded-2xl border border-border/80 dark:border-white/10 bg-[#181715] dark:bg-[#141413] p-5 font-mono text-xs text-blue-400 overflow-x-auto shadow-inner leading-relaxed">
+              <div className="rounded-2xl border border-border/80 dark:border-white/10 bg-black p-5 font-mono text-xs text-blue-400 overflow-x-auto leading-relaxed">
                 <pre>{activeProject.architectureFlow}</pre>
               </div>
             </div>
@@ -404,7 +404,7 @@ export default function PythonMasterLandingPage() {
                 </span>
                 <span className="text-[11px] font-mono text-primary font-bold">Python 3.12+</span>
               </div>
-              <div className="rounded-2xl border border-border/80 dark:border-white/10 bg-[#181715] dark:bg-[#141413] p-5 font-mono text-xs text-blue-400 overflow-x-auto shadow-inner leading-relaxed">
+              <div className="rounded-2xl border border-border/80 dark:border-white/10 bg-black p-5 font-mono text-xs text-blue-400 overflow-x-auto leading-relaxed">
                 <pre><code>{activeProject.snippet.code}</code></pre>
               </div>
             </div>

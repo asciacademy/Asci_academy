@@ -445,28 +445,22 @@ export function Courses({ hideHeader = false, className = "" }: CoursesProps = {
             1. COURSERA-STYLE ACADEMIC & INSTITUTIONAL HEADER
         ══════════════════════════════════════════════════════════ */}
         {!hideHeader && (
-          <div className="relative mb-10 sm:mb-12 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
-            <div className="max-w-3xl text-left">
-              <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3.5 py-1 text-xs font-medium text-primary mb-4 backdrop-blur-xs shadow-xs">
+          <div className="relative mb-8 sm:mb-10 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+            <div className="max-w-2xl text-left">
+              <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3.5 py-1 text-xs font-medium text-primary mb-3 backdrop-blur-xs shadow-xs">
                 <GraduationCap className="h-3.5 w-3.5" />
-                <span className="tracking-widest uppercase font-mono text-[11px]">Accredited Curriculum Catalog</span>
+                <span className="tracking-widest uppercase font-mono text-[11px]">Curriculum Catalog</span>
               </div>
-              <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-normal tracking-tight text-foreground leading-[1.08]">
-                Specializations &amp; Professional Certificates
+              <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-normal tracking-tight text-foreground leading-[1.12]">
+                Explore Courses &amp; Specializations
               </h2>
-              <p className="mt-4 text-sm sm:text-base text-muted-foreground leading-relaxed">
-                Explore verified programs designed by global technology leaders and academic institutions including <span className="font-semibold text-foreground">Google, DeepLearning.AI, IBM, Microsoft, and HarvardX</span>. Earn career-recognized credentials, build production-grade projects, and master software engineering step-by-step.
+              <p className="mt-3 text-sm sm:text-base text-muted-foreground leading-relaxed">
+                Hands-on programs in software engineering, AI, systems, and algorithms designed to build real skills.
               </p>
-
-              {/* Coursera Career Impact Stat Pill */}
-              <div className="mt-4 inline-flex items-center gap-2 rounded-xl bg-secondary/80 border border-hairline px-3.5 py-1.5 text-xs text-foreground/90 font-mono">
-                <Briefcase className="h-3.5 w-3.5 text-emerald-500" />
-                <span><strong className="text-foreground">92% of learners</strong> report career benefits including new job offers, promotions, or salary increases.</span>
-              </div>
             </div>
 
             {/* Dedicated Axel Stage: Reserved layout space so nothing overlays */}
-            <div className="hidden lg:flex relative shrink-0 w-64 h-56 items-center justify-center self-center lg:self-auto">
+            <div className="hidden lg:flex relative shrink-0 w-64 h-48 items-center justify-center self-center lg:self-auto">
               <div
                 id="courses-robot-anchor"
                 data-axel-anchor="true"
@@ -574,12 +568,12 @@ export function Courses({ hideHeader = false, className = "" }: CoursesProps = {
             </div>
 
             {/* Actions Cluster: Filter Toggle, Sort, View Switcher */}
-            <div className="flex items-center gap-2 justify-between sm:justify-end shrink-0">
+            <div className="flex items-center gap-1.5 sm:gap-2 justify-between sm:justify-end shrink-0 flex-wrap sm:flex-nowrap">
               {/* Filter Button with Active Badge */}
               <button
                 type="button"
                 onClick={() => setShowFilters(!showFilters)}
-                className={`inline-flex items-center gap-1.5 rounded-full border px-3.5 py-2 text-xs font-medium transition-all cursor-pointer ${
+                className={`inline-flex items-center gap-1.5 rounded-full border px-3 sm:px-3.5 py-2 text-xs font-medium transition-all cursor-pointer ${
                   showFilters || activeFilterCount > 0
                     ? "bg-primary/10 border-primary/40 text-primary font-semibold"
                     : "border-hairline bg-card/80 hover:bg-secondary text-muted-foreground hover:text-foreground"
@@ -596,7 +590,7 @@ export function Courses({ hideHeader = false, className = "" }: CoursesProps = {
               </button>
 
               {/* Sort Selector */}
-              <div className="flex items-center gap-1.5 rounded-full border border-hairline bg-card/80 px-3 py-2 text-xs text-muted-foreground">
+              <div className="flex items-center gap-1 sm:gap-1.5 rounded-full border border-hairline bg-card/80 px-2.5 sm:px-3 py-2 text-xs text-muted-foreground">
                 <span className="font-mono text-[11px] hidden md:inline">Sort:</span>
                 <select
                   value={sortBy}
@@ -1017,56 +1011,28 @@ export function Courses({ hideHeader = false, className = "" }: CoursesProps = {
         {/* ══════════════════════════════════════════════════════════
             5. COURSERA PLUS / ASCI ALL-ACCESS MEMBERSHIP BANNER
         ══════════════════════════════════════════════════════════ */}
-        <div className="mt-14 rounded-3xl border border-stone-200/90 dark:border-stone-800/90 bg-gradient-to-br from-secondary/80 via-card to-secondary/50 dark:from-[#151d2f]/80 dark:via-card dark:to-[#0f172a] p-6 sm:p-8 lg:p-10 shadow-sm relative overflow-hidden">
-          <div className="absolute right-0 top-0 -mt-8 -mr-8 w-64 h-64 rounded-full bg-primary/10 blur-3xl pointer-events-none" />
-
-          <div className="relative flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
-            <div className="space-y-3 max-w-2xl text-left">
-              <div className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-3.5 py-1 text-[11px] font-mono font-bold text-primary uppercase tracking-wider">
-                <Sparkles className="h-3.5 w-3.5 text-amber-500" />
-                <span>ASCI All-Access Pass</span>
+        <div className="mt-12 rounded-2xl border border-stone-200/90 dark:border-stone-800/90 bg-card/60 backdrop-blur-md p-6 sm:p-8 shadow-xs relative overflow-hidden">
+          <div className="relative flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <div className="space-y-2 max-w-xl text-left">
+              <div className="inline-flex items-center gap-1.5 rounded-full border border-primary/25 bg-primary/10 px-3 py-0.5 text-[11px] font-mono font-semibold text-primary uppercase tracking-wider">
+                <Sparkles className="h-3 w-3 text-amber-500" />
+                <span>All-Access Membership</span>
               </div>
-              <h3 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-normal text-foreground tracking-tight leading-tight">
-                Learn without limits. Earn verified credentials.
+              <h3 className="font-serif text-xl sm:text-2xl font-medium text-foreground tracking-tight">
+                Unlock All 100+ Courses &amp; Sandboxes
               </h3>
               <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                Gain unlimited access to 100+ certificate programs, hands-on cloud sandboxes, 1-on-1 mentor code reviews, and personal career referrals with a single flexible membership.
+                One simple plan for unlimited courses, interactive coding sandboxes, and mentor feedback.
               </p>
-
-              {/* 4 Pillars */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 text-xs font-mono text-foreground/85">
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
-                  <span>100+ Professional Certificates</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
-                  <span>Shareable LinkedIn Credentials</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
-                  <span>Weekly 1-on-1 Mentor Code Reviews</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
-                  <span>In-Browser Sandboxes &amp; Zero Setup</span>
-                </div>
-              </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full lg:w-auto shrink-0">
+            <div className="flex items-center gap-3 shrink-0 w-full sm:w-auto">
               <Link
                 href="/pricing"
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 text-white px-6 py-3.5 text-xs sm:text-sm font-semibold tracking-tight shadow-md shadow-blue-500/20 transition-all active:scale-[0.98] text-center"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary hover:bg-primary-active text-primary-foreground px-5 py-2.5 text-xs sm:text-sm font-semibold transition-all active:scale-[0.98] w-full sm:w-auto text-center shadow-xs"
               >
-                <span>Start 7-Day Free Trial</span>
+                <span>View Plans &amp; Pricing</span>
                 <ArrowRight className="h-4 w-4" />
-              </Link>
-              <Link
-                href="/programs"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-hairline bg-card hover:bg-secondary px-5 py-3.5 text-xs sm:text-sm font-medium text-foreground transition-all text-center"
-              >
-                <span>Explore Enterprise Plans</span>
               </Link>
             </div>
           </div>
@@ -1210,14 +1176,14 @@ function CourseGridCard({
   }
 
   return (
-    <div className={`group relative flex flex-col justify-between overflow-hidden rounded-3xl border bg-card transition-all duration-300 ease-out hover:-translate-y-1.5 shadow-xs hover:shadow-xl ${
+    <div className={`group relative flex flex-col justify-between overflow-hidden rounded-2xl border bg-card transition-all duration-200 ease-out hover:-translate-y-1 shadow-xs ${
       isSelected
-        ? "border-primary ring-2 ring-primary/40 shadow-lg shadow-primary/15"
-        : "border-stone-200/90 dark:border-stone-800/90 hover:border-blue-500/50"
+        ? "border-primary ring-1 ring-primary"
+        : "border-stone-200/90 dark:border-stone-800/90 hover:border-foreground/30 dark:hover:border-white/30"
     }`}>
       {isSelected && (
         <div className="absolute inset-0 z-30 bg-background/60 dark:bg-black/60 backdrop-blur-[2px] flex items-center justify-center p-4 select-none">
-          <div className="flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-4 py-2 text-xs font-semibold shadow-lg shadow-primary/25 animate-pulse">
+          <div className="flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-4 py-2 text-xs font-semibold shadow-xs">
             <Loader2 className="h-3.5 w-3.5 animate-spin" />
             <span>Launching {course.title.split(" ")[0]}...</span>
           </div>
@@ -1225,29 +1191,26 @@ function CourseGridCard({
       )}
 
       <div>
-        {/* 16:9 Thumbnail Image Cover with Coursera Overlays */}
-        <div className="relative aspect-[16/9] w-full overflow-hidden bg-stone-100 dark:bg-stone-900">
+        {/* 2:1 Widescreen Cover - Reduced Height */}
+        <div className="relative aspect-[2/1] w-full overflow-hidden bg-stone-100 dark:bg-stone-900">
           <Image
             src={data.thumbnail}
             alt={course.title}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className="object-cover transition-transform duration-700 ease-out group-hover:scale-105 select-none pointer-events-none"
+            className="object-cover transition-transform duration-500 ease-out group-hover:scale-105 select-none pointer-events-none"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
 
           {/* Top-Left Category Badge */}
-          <div className="absolute top-3 left-3 z-10">
-            <span className="inline-flex items-center rounded-full bg-white/95 dark:bg-stone-900/95 backdrop-blur-xs px-2.5 py-0.5 text-[10px] font-mono font-bold text-foreground border border-stone-200/60 dark:border-stone-700/60 uppercase tracking-wider shadow-2xs select-none">
+          <div className="absolute top-2.5 left-2.5 z-10">
+            <span className="inline-flex items-center rounded-full bg-background/90 dark:bg-black/90 backdrop-blur-xs px-2.5 py-0.5 text-[10px] font-mono font-semibold text-foreground border border-hairline uppercase tracking-wider select-none">
               {course.category}
             </span>
           </div>
 
-          {/* Top-Right Difficulty & Wishlist */}
-          <div className="absolute top-3 right-3 z-10 flex items-center gap-1.5">
-            <span className="inline-flex items-center rounded-full bg-black/60 backdrop-blur-xs px-2.5 py-0.5 text-[10px] font-mono font-medium text-white shadow-xs select-none">
-              {course.level}
-            </span>
+          {/* Top-Right Wishlist Button */}
+          <div className="absolute top-2.5 right-2.5 z-10">
             <WishlistButton
               course={{
                 id: course.id,
@@ -1263,25 +1226,14 @@ function CourseGridCard({
               className="h-7 w-7 bg-black/60 backdrop-blur-xs border border-white/20 text-white hover:text-amber-400 shadow-xs active:scale-95 transition-transform"
             />
           </div>
-
-          {/* Bottom Floating Credential Ribbon */}
-          <div className="absolute left-3 bottom-2.5 z-10 flex items-center gap-1.5 text-[11px] font-mono font-semibold text-white/95 drop-shadow-sm truncate max-w-[90%]">
-            <GraduationCap className="h-3.5 w-3.5 text-amber-400 shrink-0" />
-            <span className="truncate">{data.credentialType} · {course.modules || 4} Modules</span>
-          </div>
         </div>
 
-        {/* Coursera Card Body */}
-        <div className="p-5 sm:p-6 space-y-3">
-          {/* Partner Attribution Line */}
-          <div className="flex items-center justify-between gap-2 text-xs">
-            <span className="font-semibold text-primary truncate max-w-[210px] font-sans">
-              Offered by {data.partner}
-            </span>
-            <span className="text-[10px] font-mono text-muted-foreground uppercase shrink-0">
-              {data.partnerType}
-            </span>
-          </div>
+        {/* Clean Card Body - Streamlined Height */}
+        <div className="p-3.5 sm:px-5 sm:py-3 space-y-1.5">
+          {/* Partner Attribution */}
+          <p className="text-[11px] font-mono text-muted-foreground truncate">
+            Offered by <span className="font-semibold text-foreground/90">{data.partner}</span>
+          </p>
 
           {/* Course Title */}
           <Link
@@ -1289,35 +1241,29 @@ function CourseGridCard({
             onClick={() => onSelect?.()}
             className="block group-hover:text-primary transition-colors"
           >
-            <h3 className="font-serif text-lg sm:text-xl font-medium text-foreground line-clamp-2 leading-snug">
+            <h3 className="font-serif text-base sm:text-lg font-medium text-foreground line-clamp-2 leading-snug">
               {course.title}
             </h3>
           </Link>
 
-          {/* Social Proof: Stars, Rating, Reviews & Learners */}
-          <div className="flex flex-wrap items-center gap-2 text-xs font-mono text-muted-foreground">
-            <div className="flex items-center gap-1 text-amber-500 dark:text-amber-400 font-bold shrink-0">
+          {/* Clean Meta: Rating · Duration · Level */}
+          <div className="flex items-center gap-2 text-xs font-mono text-muted-foreground">
+            <div className="flex items-center gap-1 text-amber-500 font-bold shrink-0">
               <Star className="h-3.5 w-3.5 fill-current" />
               <span>{data.rating.toFixed(1)}</span>
             </div>
             <span>•</span>
-            <span className="text-[11px]">{data.ratingCount}</span>
+            <span>{course.weeks || "6 Weeks"}</span>
             <span>•</span>
-            <span className="text-[11px] text-foreground/80 font-medium">{data.enrolledCount}</span>
-          </div>
-
-          {/* Duration & Effort */}
-          <div className="text-[11px] font-mono text-muted-foreground flex items-center gap-1.5">
-            <Clock className="h-3 w-3 text-muted-foreground/70" />
-            <span>{course.weeks || "6 Weeks"} · Approx. 8-10 hrs/week</span>
+            <span className="text-foreground/80 font-medium">{course.level || "Beginner"}</span>
           </div>
 
           {/* Description */}
-          <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">
+          <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2 pt-0.5">
             {course.description}
           </p>
 
-          {/* Live Progress Bar if Enrolled */}
+          {/* Progress Bar if Enrolled */}
           {enrolled && (
             <div className="pt-2 space-y-1.5">
               <div className="flex justify-between text-[11px] font-mono text-muted-foreground">
@@ -1326,38 +1272,19 @@ function CourseGridCard({
               </div>
               <div className="w-full h-1.5 bg-stone-100 dark:bg-stone-800 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-gradient-to-r from-primary via-emerald-600 to-teal-500 rounded-full transition-all duration-500"
+                  className="h-full bg-primary rounded-full transition-all duration-500"
                   style={{ width: `${enrolledData?.progressPercent ?? 0}%` }}
                 />
               </div>
             </div>
           )}
-
-          {/* Skills You Will Gain Chips */}
-          {!enrolled && data.skills && data.skills.length > 0 && (
-            <div className="pt-1 flex flex-wrap items-center gap-1.5">
-              {data.skills.slice(0, 3).map((skill, sIdx) => (
-                <span
-                  key={sIdx}
-                  className="rounded-md bg-secondary/80 border border-hairline px-2 py-0.5 text-[10px] font-mono text-foreground/80 truncate max-w-[130px]"
-                >
-                  {skill}
-                </span>
-              ))}
-              {data.skills.length > 3 && (
-                <span className="text-[10px] font-mono text-muted-foreground">
-                  +{data.skills.length - 3}
-                </span>
-              )}
-            </div>
-          )}
         </div>
       </div>
 
-      {/* Coursera Action Footer */}
-      <div className="p-4 pt-3.5 flex items-center justify-between border-t border-stone-100 dark:border-stone-800/80 mt-auto bg-stone-50/50 dark:bg-stone-900/30">
+      {/* Card Action Footer */}
+      <div className="px-4 py-2 sm:px-5 flex items-center justify-between border-t border-hairline mt-auto bg-card">
         {isSelected ? (
-          <div className="w-full inline-flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl bg-primary text-white text-xs font-semibold shadow-xs">
+          <div className="w-full inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-semibold shadow-xs">
             <Loader2 className="w-3.5 h-3.5 animate-spin" />
             <span>Launching course...</span>
           </div>
@@ -1366,17 +1293,17 @@ function CourseGridCard({
             <Link
               href={lessonHref}
               onClick={() => onSelect?.()}
-              className="flex-1 inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-primary hover:bg-primary-active text-primary-foreground text-xs font-semibold shadow-xs transition-all active:scale-[0.98] cursor-pointer"
+              className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-primary hover:bg-primary-active text-primary-foreground text-xs font-semibold shadow-xs transition-all active:scale-[0.98] cursor-pointer"
             >
               <PlayCircle className="w-3.5 h-3.5" />
-              <span>Continue Learning</span>
+              <span>Continue</span>
             </Link>
             <Link
               href={href}
               onClick={() => onSelect?.()}
-              className="inline-flex items-center justify-center gap-1 px-3 py-2.5 rounded-xl border border-hairline bg-card hover:bg-secondary text-xs font-medium text-foreground hover:text-primary transition-colors cursor-pointer active:scale-[0.98] shrink-0"
+              className="inline-flex items-center justify-center gap-1 px-3 py-2 rounded-xl border border-hairline bg-secondary hover:bg-card text-xs font-medium text-foreground transition-colors cursor-pointer active:scale-[0.98] shrink-0"
             >
-              <span>Syllabus</span>
+              <span>Details</span>
               <ArrowRight className="w-3 h-3" />
             </Link>
             {isAdmin && (
@@ -1388,7 +1315,7 @@ function CourseGridCard({
                     e.stopPropagation()
                     onEditCourse?.(course)
                   }}
-                  className="inline-flex items-center justify-center p-2.5 rounded-xl border border-hairline bg-card hover:bg-secondary text-foreground text-xs transition-colors cursor-pointer"
+                  className="inline-flex items-center justify-center p-2 rounded-xl border border-hairline bg-card hover:bg-secondary text-foreground text-xs transition-colors cursor-pointer"
                   title="Edit Program (Admin)"
                 >
                   <Edit3 className="w-3.5 h-3.5 text-primary" />
@@ -1400,7 +1327,7 @@ function CourseGridCard({
                     e.stopPropagation()
                     onDeleteCourse?.(course)
                   }}
-                  className="inline-flex items-center justify-center p-2.5 rounded-xl border border-hairline bg-card hover:bg-destructive/10 text-muted-foreground hover:text-destructive text-xs transition-colors cursor-pointer"
+                  className="inline-flex items-center justify-center p-2 rounded-xl border border-hairline bg-card hover:bg-destructive/10 text-muted-foreground hover:text-destructive text-xs transition-colors cursor-pointer"
                   title="Delete Program (Admin)"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
@@ -1412,17 +1339,17 @@ function CourseGridCard({
           <div className="w-full flex items-center gap-2">
             <button
               onClick={handleEnrollClick}
-              className="flex-1 inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-primary hover:bg-primary-active text-primary-foreground transition-all text-xs font-semibold cursor-pointer shadow-xs active:scale-[0.98]"
+              className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-primary hover:bg-primary-active text-primary-foreground transition-all text-xs font-semibold cursor-pointer shadow-xs active:scale-[0.98]"
             >
               <Plus className="w-3.5 h-3.5" />
-              <span>Enroll Free</span>
+              <span>Enroll</span>
             </button>
             <Link
               href={href}
               onClick={() => onSelect?.()}
-              className="inline-flex items-center justify-center gap-1 px-3 py-2.5 rounded-xl border border-hairline bg-card hover:bg-secondary text-xs font-medium text-foreground hover:text-primary transition-colors cursor-pointer active:scale-[0.98] shrink-0"
+              className="inline-flex items-center justify-center gap-1 px-3 py-2 rounded-xl border border-hairline bg-secondary hover:bg-card text-xs font-medium text-foreground transition-colors cursor-pointer active:scale-[0.98] shrink-0"
             >
-              <span>Syllabus</span>
+              <span>Details</span>
               <ArrowRight className="w-3 h-3" />
             </Link>
             {isAdmin && (
@@ -1434,7 +1361,7 @@ function CourseGridCard({
                     e.stopPropagation()
                     onEditCourse?.(course)
                   }}
-                  className="inline-flex items-center justify-center p-2.5 rounded-xl border border-hairline bg-card hover:bg-secondary text-foreground text-xs transition-colors cursor-pointer"
+                  className="inline-flex items-center justify-center p-2 rounded-xl border border-hairline bg-card hover:bg-secondary text-foreground text-xs transition-colors cursor-pointer"
                   title="Edit Program (Admin)"
                 >
                   <Edit3 className="w-3.5 h-3.5 text-primary" />
@@ -1446,7 +1373,7 @@ function CourseGridCard({
                     e.stopPropagation()
                     onDeleteCourse?.(course)
                   }}
-                  className="inline-flex items-center justify-center p-2.5 rounded-xl border border-hairline bg-card hover:bg-destructive/10 text-muted-foreground hover:text-destructive text-xs transition-colors cursor-pointer"
+                  className="inline-flex items-center justify-center p-2 rounded-xl border border-hairline bg-card hover:bg-destructive/10 text-muted-foreground hover:text-destructive text-xs transition-colors cursor-pointer"
                   title="Delete Program (Admin)"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
@@ -1461,7 +1388,7 @@ function CourseGridCard({
 }
 
 /* ═════════════════════════════════════════════════════════════════
-   7. DETAILED COURSERA LIST CARD (Comprehensive Syllabus View)
+   7. CLEAN COURSERA LIST CARD (Streamlined Syllabus View)
 ═════════════════════════════════════════════════════════════════ */
 function CourseListCard({
   course,
@@ -1512,43 +1439,40 @@ function CourseListCard({
   }
 
   return (
-    <div className={`group relative flex flex-col sm:flex-row overflow-hidden rounded-3xl border bg-card transition-all duration-300 ease-out hover:-translate-y-1 shadow-xs hover:shadow-lg ${
+    <div className={`group relative flex flex-col sm:flex-row overflow-hidden rounded-2xl border bg-card transition-all duration-200 ease-out hover:-translate-y-0.5 shadow-xs ${
       isSelected
-        ? "border-primary ring-2 ring-primary/40 shadow-lg shadow-primary/15"
-        : "border-stone-200/90 dark:border-stone-800/90 hover:border-blue-500/50"
+        ? "border-primary ring-1 ring-primary"
+        : "border-stone-200/90 dark:border-stone-800/90 hover:border-foreground/30 dark:hover:border-white/30"
     }`}>
       {isSelected && (
         <div className="absolute inset-0 z-30 bg-background/60 dark:bg-black/60 backdrop-blur-[2px] flex items-center justify-center p-4 select-none">
-          <div className="flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-4 py-2 text-xs font-semibold shadow-lg shadow-primary/25 animate-pulse">
+          <div className="flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-4 py-2 text-xs font-semibold shadow-xs">
             <Loader2 className="h-3.5 w-3.5 animate-spin" />
             <span>Launching {course.title.split(" ")[0]}...</span>
           </div>
         </div>
       )}
 
-      {/* Left Thumbnail Cover */}
-      <div className="relative aspect-video sm:aspect-square sm:w-64 md:w-72 shrink-0 overflow-hidden bg-stone-100 dark:bg-stone-900">
+      {/* Left Thumbnail Cover - Widescreen & Sleeker */}
+      <div className="relative aspect-video sm:aspect-[16/10] sm:w-60 md:w-68 shrink-0 overflow-hidden bg-stone-100 dark:bg-stone-900">
         <Image
           src={data.thumbnail}
           alt={course.title}
           fill
-          sizes="(max-width: 640px) 100vw, 288px"
-          className="object-cover transition-transform duration-700 ease-out group-hover:scale-105 select-none"
+          sizes="(max-width: 640px) 100vw, 280px"
+          className="object-cover transition-transform duration-500 ease-out group-hover:scale-105 select-none"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
 
         {/* Category Badge */}
-        <div className="absolute top-3 left-3 z-10">
-          <span className="inline-flex items-center rounded-full bg-white/95 dark:bg-stone-900/95 backdrop-blur-xs px-2.5 py-0.5 text-[10px] font-mono font-bold text-foreground border border-stone-200/60 dark:border-stone-700/60 uppercase tracking-wider shadow-2xs select-none">
+        <div className="absolute top-2.5 left-2.5 z-10">
+          <span className="inline-flex items-center rounded-full bg-background/90 dark:bg-black/90 backdrop-blur-xs px-2.5 py-0.5 text-[10px] font-mono font-semibold text-foreground border border-hairline uppercase tracking-wider select-none">
             {course.category}
           </span>
         </div>
 
-        {/* Level Badge & Wishlist Button */}
-        <div className="absolute top-3 right-3 z-10 flex items-center gap-1.5">
-          <span className="inline-flex items-center rounded-full bg-black/60 backdrop-blur-xs px-2.5 py-0.5 text-[10px] font-mono font-medium text-white shadow-xs select-none">
-            {course.level}
-          </span>
+        {/* Wishlist Button */}
+        <div className="absolute top-2.5 right-2.5 z-10">
           <WishlistButton
             course={{
               id: course.id,
@@ -1564,26 +1488,15 @@ function CourseListCard({
             className="h-7 w-7 bg-black/60 backdrop-blur-xs border border-white/20 text-white hover:text-amber-400 shadow-xs active:scale-95 transition-transform"
           />
         </div>
-
-        {/* Bottom Credential Type Overlay */}
-        <div className="absolute left-3 bottom-2.5 z-10 flex items-center gap-1.5 text-[11px] font-mono font-semibold text-white/95 drop-shadow-sm truncate max-w-[90%]">
-          <GraduationCap className="h-3.5 w-3.5 text-amber-400 shrink-0" />
-          <span className="truncate">{data.credentialType}</span>
-        </div>
       </div>
 
       {/* Right Course Details */}
-      <div className="flex flex-1 flex-col justify-between p-5 sm:p-6">
-        <div className="space-y-2.5">
-          {/* Eyebrow: Partner & Type */}
-          <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
-            <span className="font-semibold text-primary">
-              Offered by {data.partner}
-            </span>
-            <span className="text-[11px] font-mono text-muted-foreground uppercase">
-              {data.credentialType} · {course.modules || 4} Modules
-            </span>
-          </div>
+      <div className="flex flex-1 flex-col justify-between p-3.5 sm:px-5 sm:py-3.5">
+        <div className="space-y-2">
+          {/* Partner Attribution */}
+          <p className="text-[11px] font-mono text-muted-foreground truncate">
+            Offered by <span className="font-semibold text-foreground/90">{data.partner}</span>
+          </p>
 
           {/* Title */}
           <Link
@@ -1591,23 +1504,21 @@ function CourseListCard({
             onClick={() => onSelect?.()}
             className="block group-hover:text-primary transition-colors"
           >
-            <h3 className="font-serif text-xl sm:text-2xl font-normal text-foreground leading-snug">
+            <h3 className="font-serif text-lg sm:text-xl font-medium text-foreground leading-snug">
               {course.title}
             </h3>
           </Link>
 
-          {/* Decision Stats: Rating · Duration · Learners */}
-          <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground font-mono">
+          {/* Clean Meta: Rating · Duration · Level */}
+          <div className="flex items-center gap-2 text-xs text-muted-foreground font-mono">
             <div className="flex items-center gap-1 text-amber-500 font-bold">
               <Star className="h-3.5 w-3.5 fill-current" />
               <span>{data.rating.toFixed(1)}</span>
             </div>
             <span>•</span>
-            <span>{data.ratingCount}</span>
+            <span>{course.weeks || "6 Weeks"}</span>
             <span>•</span>
-            <span className="text-foreground/80 font-medium">{data.enrolledCount}</span>
-            <span>•</span>
-            <span>{course.weeks || "6 Weeks"} ({course.lessons || 18} Lessons)</span>
+            <span className="text-foreground/80 font-medium">{course.level || "Beginner"}</span>
           </div>
 
           {/* Description */}
@@ -1620,81 +1531,66 @@ function CourseListCard({
             <div className="mt-2 space-y-1.5 max-w-md">
               <div className="flex justify-between text-[11px] font-mono text-muted-foreground">
                 <span>{enrolledData?.lessonsCompleted ?? 0} / {enrolledData?.totalLessons ?? ((course.modules || 4) * 3)} Lessons</span>
-                <span className="text-blue-600 dark:text-blue-400 font-bold">{enrolledData?.progressPercent ?? 0}%</span>
+                <span className="text-primary font-bold">{enrolledData?.progressPercent ?? 0}%</span>
               </div>
               <div className="w-full h-1.5 bg-stone-100 dark:bg-stone-800 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full transition-all duration-500"
+                  className="h-full bg-primary rounded-full transition-all duration-500"
                   style={{ width: `${enrolledData?.progressPercent ?? 0}%` }}
                 />
               </div>
             </div>
           )}
-
-          {/* Skills Chips */}
-          {!enrolled && data.skills && data.skills.length > 0 && (
-            <div className="flex flex-wrap items-center gap-1.5 pt-1">
-              <span className="text-[11px] text-muted-foreground font-mono mr-1">Skills:</span>
-              {data.skills.slice(0, 4).map((skill, idx) => (
-                <span
-                  key={idx}
-                  className="rounded-md bg-secondary border border-hairline px-2.5 py-0.5 text-[11px] font-medium text-foreground/85"
-                >
-                  {skill}
-                </span>
-              ))}
-              {data.skills.length > 4 && (
-                <span className="text-[11px] text-muted-foreground font-mono">
-                  +{data.skills.length - 4} more
-                </span>
-              )}
-            </div>
-          )}
         </div>
 
-        {/* Footer Meta & Actions */}
-        <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-stone-100 dark:border-stone-800/80 pt-3.5">
-          <div className="text-xs font-mono text-muted-foreground flex items-center gap-2">
+        {/* Footer Actions */}
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-hairline pt-3">
+          <div className="text-xs font-mono text-muted-foreground flex items-center gap-1.5">
             <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
-            <span>Shareable Certificate · 100% Online</span>
+            <span>Verified Certificate Included</span>
           </div>
 
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2">
             {isSelected ? (
-              <div className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-4 py-2 text-xs font-semibold text-white shadow-xs">
+              <div className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-3.5 py-1.5 text-xs font-semibold text-white shadow-xs">
                 <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                <span>Launching course...</span>
+                <span>Launching...</span>
               </div>
             ) : enrolled ? (
               <>
-                <span className="inline-flex items-center gap-1 text-xs font-mono text-emerald-600 dark:text-emerald-400 font-semibold mr-1">
-                  <Check className="w-3.5 h-3.5" /> Enrolled
-                </span>
                 <Link
                   href={lessonHref}
                   onClick={() => onSelect?.()}
-                  className="inline-flex items-center gap-1.5 rounded-xl bg-primary hover:bg-primary-active px-4 py-2 text-xs font-semibold text-primary-foreground shadow-xs transition-all active:scale-[0.98] cursor-pointer"
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-primary hover:bg-primary-active px-3.5 py-1.5 text-xs font-semibold text-primary-foreground shadow-xs transition-all active:scale-[0.98] cursor-pointer"
                 >
                   <PlayCircle className="w-3.5 h-3.5" />
-                  <span>Continue Lesson</span>
+                  <span>Continue</span>
+                </Link>
+                <Link
+                  href={href}
+                  onClick={() => onSelect?.()}
+                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-hairline bg-secondary hover:bg-card text-xs font-medium text-foreground transition-colors cursor-pointer active:scale-[0.98]"
+                >
+                  <span>Details</span>
+                  <ArrowRight className="w-3 h-3" />
                 </Link>
               </>
             ) : (
               <>
                 <button
                   onClick={handleEnrollClick}
-                  className="inline-flex items-center gap-1.5 rounded-xl bg-primary hover:bg-primary-active px-4 py-2 text-xs font-semibold text-primary-foreground shadow-xs transition-all cursor-pointer active:scale-[0.98]"
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-primary hover:bg-primary-active px-3.5 py-1.5 text-xs font-semibold text-primary-foreground shadow-xs transition-all cursor-pointer active:scale-[0.98]"
                 >
                   <Plus className="w-3.5 h-3.5" />
-                  <span>Enroll Free</span>
+                  <span>Enroll</span>
                 </button>
                 <Link
                   href={href}
                   onClick={() => onSelect?.()}
-                  className="inline-flex items-center gap-1.5 rounded-xl border border-hairline bg-card hover:bg-secondary px-4 py-2 text-xs font-medium text-foreground transition-colors shadow-2xs active:scale-[0.98]"
+                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-hairline bg-secondary hover:bg-card text-xs font-medium text-foreground transition-colors shadow-2xs active:scale-[0.98]"
                 >
-                  <span>Explore Syllabus</span>
-                  <ArrowRight className="h-3.5 w-3.5" />
+                  <span>Details</span>
+                  <ArrowRight className="w-3 h-3" />
                 </Link>
               </>
             )}
@@ -1707,7 +1603,7 @@ function CourseListCard({
                     e.stopPropagation()
                     onEditCourse?.(course)
                   }}
-                  className="inline-flex items-center gap-1.5 rounded-xl border border-hairline bg-card hover:bg-secondary px-3.5 py-2 text-xs font-semibold text-primary transition-colors shadow-2xs cursor-pointer active:scale-[0.98]"
+                  className="inline-flex items-center gap-1 rounded-xl border border-hairline bg-card hover:bg-secondary px-2.5 py-1.5 text-xs font-semibold text-primary transition-colors cursor-pointer"
                   title="Edit Program (Admin)"
                 >
                   <Edit3 className="w-3.5 h-3.5" />
@@ -1720,7 +1616,7 @@ function CourseListCard({
                     e.stopPropagation()
                     onDeleteCourse?.(course)
                   }}
-                  className="inline-flex items-center justify-center p-2 rounded-xl border border-hairline bg-card hover:bg-destructive/10 text-muted-foreground hover:text-destructive text-xs transition-colors cursor-pointer"
+                  className="inline-flex items-center justify-center p-1.5 rounded-xl border border-hairline bg-card hover:bg-destructive/10 text-muted-foreground hover:text-destructive text-xs transition-colors cursor-pointer"
                   title="Delete Program (Admin)"
                 >
                   <Trash2 className="w-3.5 h-3.5" />

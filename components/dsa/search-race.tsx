@@ -172,7 +172,7 @@ export default function SearchRace() {
                  <button 
                    onClick={executeRace}
                    disabled={race.status === "racing"}
-                   className="flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 border border-blue-500/30 text-white disabled:opacity-50 transition-all uppercase font-mono text-xs font-bold tracking-widest cursor-pointer shadow-md shadow-blue-500/20 active:scale-95"
+                   className="flex items-center gap-2 px-6 py-2 bg-primary hover:bg-primary-active border border-primary/40 text-white disabled:opacity-50 transition-all uppercase font-mono text-xs font-bold tracking-widest cursor-pointer active:scale-95"
                  >
                    <Play size={16} />
                    Start Search

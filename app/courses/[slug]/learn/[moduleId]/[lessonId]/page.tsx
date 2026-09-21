@@ -614,10 +614,10 @@ export default function LessonPage() {
                                 <button
                                     onClick={handleRunCode}
                                     disabled={!languageReady || isRunning}
-                                    className={`inline-flex items-center gap-2 rounded-lg px-4 py-1.5 text-xs font-semibold transition-all shadow-md active:scale-95 cursor-pointer ${
+                                    className={`inline-flex items-center gap-2 rounded-lg px-4 py-1.5 text-xs font-semibold transition-all active:scale-95 cursor-pointer ${
                                         isRunning
                                             ? "bg-[#1c1c1c] text-[#a1a1aa] cursor-not-allowed border border-[#2e2e2e]"
-                                            : "bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 text-white border border-blue-500/30 shadow-md shadow-blue-500/20"
+                                            : "bg-primary hover:bg-primary-active text-white border border-primary/40"
                                     }`}
                                 >
                                     {isRunning ? (
@@ -969,7 +969,7 @@ export default function LessonPage() {
                                     <button
                                         onClick={handleComplete}
                                         disabled={isSubmittingProgress}
-                                        className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 text-white px-5 py-2 text-xs font-medium transition-all shadow-md shadow-blue-500/20 active:scale-95 cursor-pointer"
+                                        className="inline-flex items-center gap-2 rounded-full bg-primary hover:bg-primary-active text-white px-5 py-2 text-xs font-medium transition-all active:scale-95 cursor-pointer"
                                     >
                                         {isSubmittingProgress ? (
                                             <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -997,7 +997,7 @@ export default function LessonPage() {
                         <button
                             onClick={handleComplete}
                             disabled={isSubmittingProgress}
-                            className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-600 text-white px-6 py-2.5 text-xs font-medium transition-all shadow-md shadow-blue-500/20 active:scale-95 cursor-pointer"
+                            className="inline-flex items-center gap-2 rounded-full bg-primary hover:bg-primary-active text-white px-6 py-2.5 text-xs font-medium transition-all active:scale-95 cursor-pointer"
                         >
                             {isSubmittingProgress ? (
                                 <Loader2 className="h-3.5 w-3.5 animate-spin" />

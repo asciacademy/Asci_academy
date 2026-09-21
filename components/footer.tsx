@@ -71,7 +71,7 @@ export function Footer({ showCTA = false }: { showCTA?: boolean }) {
         <div className="section-spacing">
           <div className="mx-auto max-w-[1400px] px-5 sm:px-6 lg:px-8">
             <div className="rounded-2xl bg-primary px-8 py-16 text-center sm:px-16 sm:py-20 shadow-xs">
-              <h2 className="font-serif text-3xl sm:text-4xl text-primary-foreground tracking-tight" style={{ letterSpacing: '-0.5px' }}>
+              <h2 className="font-serif text-3xl sm:text-4xl text-primary-foreground tracking-tight">
                 Start learning to code today
               </h2>
               <p className="mx-auto mt-4 max-w-xl text-sm text-primary-foreground/90 leading-relaxed">

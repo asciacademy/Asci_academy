@@ -277,9 +277,6 @@ export function LearningPaths() {
 
   return (
     <section id="learning-paths" className="relative py-20 lg:py-28 bg-background overflow-hidden">
-      {/* Subtle ambient light gradient background */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-primary/5 rounded-full blur-3xl pointer-events-none -z-10" />
-
       <div className="relative mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
         {/* Header with Dedicated Axel Stage */}
         <div ref={headerRef} className="relative mb-10 sm:mb-12 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
@@ -338,7 +335,7 @@ export function LearningPaths() {
         </div>
 
         {/* Executive Blueprint Overview Bento */}
-        <div className="relative mb-12 rounded-3xl border border-hairline dark:border-white/[0.08] bg-card/80 dark:bg-[#151514]/80 backdrop-blur-xl p-6 sm:p-8 lg:p-10 shadow-xs">
+        <div className="relative mb-12 rounded-3xl border border-hairline dark:border-white/10 bg-card/80 dark:bg-black/80 backdrop-blur-xl p-6 sm:p-8 lg:p-10 shadow-xs">
           {/* Top Metadata Strip */}
           <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-hairline/80">
             <div className="flex items-center gap-2.5 flex-wrap">
@@ -441,7 +438,7 @@ export function LearningPaths() {
               return (
                 <div
                   key={path.phase}
-                  className="path-card group relative flex flex-col justify-between rounded-3xl border border-hairline dark:border-white/[0.08] bg-card/90 dark:bg-[#151514]/90 p-6 transition-all duration-300 hover:border-primary/40 hover:-translate-y-1 hover:shadow-lg shadow-2xs"
+                  className="path-card group relative flex flex-col justify-between rounded-3xl border border-hairline dark:border-white/10 bg-card/90 dark:bg-black/90 p-6 transition-all duration-300 hover:border-primary/40 hover:-translate-y-1 shadow-xs"
                 >
                   {/* Top: Phase Number & Duration Pill */}
                   <div>
