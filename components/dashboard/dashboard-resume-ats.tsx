@@ -91,15 +91,21 @@ const HIGH_IMPACT_SAMPLE_PROFILE = {
   ]
 }
 
+import { ATSScannerSkeleton } from "@/components/skeletons"
+
 export function DashboardResumeAts() {
   const { isAdmin } = useAdmin()
-  const { atsResume, saveAtsResume, jobs } = useUnstopEcosystem()
+  const { atsResume, saveAtsResume, jobs, isLoaded } = useUnstopEcosystem()
   const [resumeData, setResumeData] = useState(atsResume)
   const [selectedJobId, setSelectedJobId] = useState<string>(jobs[0]?.id || "")
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [activeTab, setActiveTab] = useState<"builder" | "preview">("builder")
   const [selectedTemplate, setSelectedTemplate] = useState<"stanford" | "modern" | "harvard">("stanford")
   const [newSkill, setNewSkill] = useState("")
+
+  if (!isLoaded) {
+    return <ATSScannerSkeleton />
+  }
 
   // Dynamic Section Configuration (Editable by Admin)
   const [sectionConfig, setSectionConfig] = useState(() => {

@@ -101,10 +101,13 @@ function HackathonHostLogo({ host, logo, className = "w-11 h-11" }: { host: stri
   )
 }
 
+import { HackathonCardSkeleton } from "@/components/skeletons"
+
 export function DashboardHackathons() {
   const { isAdmin } = useAdmin()
   const {
     hackathons,
+    isLoaded,
     registerForHackathon,
     submitHackathonProject,
     addHackathon,
@@ -866,7 +869,13 @@ export function DashboardHackathons() {
       {/* ══════════════════════════════════════════════
           Hackathon Cards List
       ══════════════════════════════════════════════ */}
-      {filteredHackathons.length === 0 ? (
+      {!isLoaded ? (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {Array.from({ length: 4 }).map((_, idx) => (
+            <HackathonCardSkeleton key={idx} />
+          ))}
+        </div>
+      ) : filteredHackathons.length === 0 ? (
         <div className="rounded-2xl border border-hairline bg-card/40 p-12 text-center">
           <Trophy className="w-10 h-10 text-muted-foreground/40 mx-auto mb-3" />
           <h3 className="font-serif text-lg font-normal text-foreground">No Competitions Found</h3>

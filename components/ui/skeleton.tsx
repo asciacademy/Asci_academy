@@ -1,13 +1,11 @@
-import { cn } from '@/lib/utils'
+export {
+  Skeleton,
+  SkeletonText,
+  SkeletonAvatar,
+  SkeletonButton,
+  SkeletonBadge,
+  SkeletonImage,
+  SkeletonIcon,
+} from "@/components/skeletons/Skeleton"
+export type { SkeletonProps, SkeletonVariant } from "@/components/skeletons/Skeleton"
 
-function Skeleton({ className, ...props }: React.ComponentProps<'div'>) {
-  return (
-    <div
-      data-slot="skeleton"
-      className={cn('bg-accent animate-pulse rounded-md', className)}
-      {...props}
-    />
-  )
-}
-
-export { Skeleton }

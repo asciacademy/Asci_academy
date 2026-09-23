@@ -60,6 +60,10 @@
 
   /* Shape & Elevation */
   --radius: 0.625rem;
+
+  /* Skeleton Loading Tokens (Light Mode) */
+  --skeleton-base: #ECECE8;
+  --skeleton-highlight: #F5F5F2;
 }
 
 .dark {
@@ -110,6 +114,10 @@
   --muted-soft: #94a3b8;
   --hairline: rgba(255, 255, 255, 0.12);
   --hairline-soft: rgba(255, 255, 255, 0.06);
+
+  /* Skeleton Loading Tokens (Dark Mode) */
+  --skeleton-base: rgba(255, 255, 255, 0.06);
+  --skeleton-highlight: rgba(255, 255, 255, 0.12);
 }
 
 @theme inline {
@@ -148,6 +156,8 @@
   --color-on-dark: var(--on-dark);
   --color-on-dark-soft: var(--on-dark-soft);
   --color-ink: var(--ink);
+  --color-skeleton-base: var(--skeleton-base);
+  --color-skeleton-highlight: var(--skeleton-highlight);
   --color-body: var(--body);
   --color-hairline: var(--hairline);
   --color-coral: var(--primary);
@@ -1071,6 +1081,29 @@ html {
 }
 
 /* ─────────────────────────────────────────────
+   SKELETON SHIMMER SYSTEM
+───────────────────────────────────────────── */
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--skeleton-base) 0%,
+    var(--skeleton-highlight) 50%,
+    var(--skeleton-base) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.6s ease-in-out infinite;
+}
+
+/* ─────────────────────────────────────────────
    ACCESSIBILITY: PREFERS REDUCED MOTION
 ───────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
@@ -1079,5 +1112,9 @@ html {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+  .animate-skeleton-shimmer {
+    animation: none !important;
+    background: var(--skeleton-base) !important;
   }
 }

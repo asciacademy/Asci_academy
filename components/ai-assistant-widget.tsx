@@ -20,6 +20,7 @@ import {
   ArrowRight,
   Clock,
 } from "lucide-react"
+import { AxelSkeleton } from "@/components/skeletons"
 
 export function AIAssistantWidget() {
   const router = useRouter()
@@ -366,16 +367,7 @@ export function AIAssistantWidget() {
 
                 {/* Thinking Indicator */}
                 {isThinking && (
-                  <div className="flex items-center gap-2.5 p-2.5 rounded-2xl bg-secondary/60 dark:bg-[#141414] border border-hairline dark:border-[#242424] w-fit">
-                    <div className="flex gap-1">
-                      <span className="h-1.5 w-1.5 rounded-full bg-primary animate-bounce [animation-delay:-0.3s]" />
-                      <span className="h-1.5 w-1.5 rounded-full bg-primary animate-bounce [animation-delay:-0.15s]" />
-                      <span className="h-1.5 w-1.5 rounded-full bg-primary animate-bounce" />
-                    </div>
-                    <span className="text-[11px] font-medium text-muted-foreground font-sans">
-                      Synthesizing response with Gemini...
-                    </span>
-                  </div>
+                  <AxelSkeleton thinkingOnly className="my-1" />
                 )}
               </div>
 

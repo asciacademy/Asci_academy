@@ -98,9 +98,11 @@ function CompanyLogo({ logo, name }: { logo?: string; name: string }) {
   )
 }
 
+import { JobCardSkeleton } from "@/components/skeletons"
+
 export function DashboardJobs() {
   const { isAdmin } = useAdmin()
-  const { jobs, applyForJob, addJob, updateJob, deleteJob } = useUnstopEcosystem()
+  const { jobs, isLoaded, applyForJob, addJob, updateJob, deleteJob } = useUnstopEcosystem()
   const [filter, setFilter] = useState<"all" | "full-time" | "internship" | "applied">("all")
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedJobForApply, setSelectedJobForApply] = useState<JobOpportunity | null>(null)
@@ -564,6 +566,12 @@ export function DashboardJobs() {
               </div>
             ))}
           </div>
+        </div>
+      ) : !isLoaded ? (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+          {Array.from({ length: 4 }).map((_, idx) => (
+            <JobCardSkeleton key={idx} />
+          ))}
         </div>
       ) : filteredJobs.length === 0 ? (
         <div className="rounded-2xl border border-hairline bg-card/40 p-12 text-center">
