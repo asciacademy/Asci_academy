@@ -15,7 +15,7 @@ import {
   ShieldCheck,
   AlertCircle,
 } from "lucide-react"
-import type { PaymentOrder, PaymentStatus } from "@/lib/aws-dynamodb"
+import type { PaymentOrder, PaymentStatus } from "@/lib/supabase-payments"
 
 const STATUS_LABELS: Record<PaymentStatus, { label: string; icon: any; color: string }> = {
   pending: {

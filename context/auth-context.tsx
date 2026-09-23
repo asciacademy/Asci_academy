@@ -98,7 +98,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .maybeSingle()
 
       if (!profileErr && data) {
-        saveProfile(data)
+        // Enrich with user metadata if custom database columns are missing
+        const { data: userData } = await supabase.auth.getUser()
+        const meta = userData?.user?.user_metadata || {}
+        const enriched = {
+          ...data,
+          subscription_tier: data.subscription_tier || meta.subscription_tier || "free",
+          subscription_status: data.subscription_status || meta.subscription_status || "inactive",
+          current_period_end: data.current_period_end || meta.current_period_end || null,
+        }
+        saveProfile(enriched)
       }
     } catch (err) {
       console.error("Error fetching user profile:", err)

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { createClient } from "@/utils/supabase/server"
-import { createPaymentOrder, PAYMENT_TABLE, type PaymentOrder } from "@/lib/aws-dynamodb"
+import { createPaymentOrder, type PaymentOrder } from "@/lib/supabase-payments"
 import { randomUUID } from "crypto"
 
 // Pricing matrix

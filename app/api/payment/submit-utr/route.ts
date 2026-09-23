@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { createClient } from "@/utils/supabase/server"
-import { getPaymentOrder, updatePaymentOrder } from "@/lib/aws-dynamodb"
+import { getPaymentOrder, updatePaymentOrder } from "@/lib/supabase-payments"
 
 export const dynamic = "force-dynamic"
 
