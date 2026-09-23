@@ -174,7 +174,7 @@ export function FeaturedMasterTracks() {
           </div>
 
           {/* Filter Pills */}
-          <div className="flex overflow-x-auto no-scrollbar max-w-full -mx-4 px-4 sm:mx-0 sm:px-0 overscroll-x-contain">
+          <div className="flex overflow-x-auto no-scrollbar max-w-full -mx-4 px-4 sm:mx-0 sm:px-0">
             <div className="inline-flex items-center gap-1.5 rounded-2xl border border-hairline bg-card/80 p-1.5 backdrop-blur-md shadow-xs shrink-0 text-xs font-mono pr-4 sm:pr-1.5">
               {(["All", "Web Labs", "Systems & Compilers", "Algorithms"] as const).map((tab) => {
                 const isActive = selectedFilter === tab

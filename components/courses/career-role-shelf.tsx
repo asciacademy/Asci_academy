@@ -215,10 +215,10 @@ export function CareerRoleShelf({
             </button>
           </div>
 
-          {/* Scrollable Shelf Track */}
+          {/* Scrollable Shelf Track - touch-auto & snap-proximity allows vertical page scroll without lockup */}
           <div
             ref={shelfRef}
-            className="w-[calc(100%+1.75rem)] -mx-3.5 px-3.5 sm:w-full sm:mx-0 sm:px-0 flex gap-3.5 sm:gap-5 overflow-x-auto snap-x snap-mandatory py-2.5 no-scrollbar scroll-smooth touch-pan-x"
+            className="w-[calc(100%+1.75rem)] -mx-3.5 px-3.5 sm:w-full sm:mx-0 sm:px-0 flex gap-3.5 sm:gap-5 overflow-x-auto snap-x snap-proximity py-2.5 no-scrollbar scroll-smooth"
           >
             {track.courses.map((course) => {
               const cSlug = course.slug || course.id
@@ -226,7 +226,7 @@ export function CareerRoleShelf({
               return (
                 <div
                   key={course.id || course.slug}
-                  className="career-shelf-card-wrapper w-[76vw] sm:w-[330px] md:w-[350px] shrink-0 snap-start"
+                  className="career-shelf-card-wrapper w-[82vw] max-w-[340px] sm:w-[330px] md:w-[350px] shrink-0 snap-start"
                 >
                   <CareerCourseCard
                     course={course}

@@ -255,11 +255,11 @@ export function Features({ stats }: { stats?: PlatformStats }) {
             })}
           </div>
 
-          {/* Horizontal Snap Carousel */}
+          {/* Horizontal Snap Carousel - natural scroll without trapping vertical page scroll */}
           <div
             ref={mobileCarouselRef}
             onScroll={handleCarouselScroll}
-            className="flex gap-4 overflow-x-auto snap-x snap-mandatory no-scrollbar -mx-4 px-4 py-2 scroll-smooth overscroll-x-contain"
+            className="flex gap-4 overflow-x-auto snap-x snap-proximity no-scrollbar -mx-4 px-4 py-2 scroll-smooth"
           >
             {features.map((feature, idx) => {
               const IconComp = feature.icon

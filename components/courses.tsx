@@ -644,7 +644,7 @@ export function Courses({ hideHeader = false, className = "" }: CoursesProps = {
           </div>
 
           {/* Clean Category Navigation Pills */}
-          <div className="flex overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 py-0.5 overscroll-x-contain">
+          <div className="flex overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 py-0.5">
             <div className="inline-flex items-center gap-1.5 shrink-0 pr-4 sm:pr-0">
               {categories.map((cat) => {
                 const count = categoryCounts[cat] || 0

@@ -119,6 +119,16 @@ export function ProblemSolver({ initialProblem }: ProblemSolverProps) {
     errorMessage?: string
   } | null>(null)
   const [revealedHints, setRevealedHints] = useState<Record<number, boolean>>({})
+  const [isMobileScreen, setIsMobileScreen] = useState(false)
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const checkMobile = () => setIsMobileScreen(window.innerWidth < 768)
+      checkMobile()
+      window.addEventListener("resize", checkMobile)
+      return () => window.removeEventListener("resize", checkMobile)
+    }
+  }, [])
 
   // Load solved set and drafts from localStorage
   useEffect(() => {
@@ -479,11 +489,11 @@ export function ProblemSolver({ initialProblem }: ProblemSolverProps) {
       {/* MAIN SPLIT WORKSPACE (Resizable Horizontal Panels)                       */}
       {/* ========================================================================= */}
       <div className="flex-1 overflow-hidden">
-        <ResizablePanelGroup direction="horizontal" className="h-full w-full">
+        <ResizablePanelGroup direction={isMobileScreen ? "vertical" : "horizontal"} className="h-full w-full">
           {/* --------------------------------------------------------------------- */}
           {/* LEFT PANEL: Problem Description, Editorial & Submissions              */}
           {/* --------------------------------------------------------------------- */}
-          <ResizablePanel defaultSize={44} minSize={25} maxSize={65} className="flex flex-col bg-card border-r border-border overflow-hidden">
+          <ResizablePanel defaultSize={isMobileScreen ? 45 : 44} minSize={20} maxSize={80} className="flex flex-col bg-card border-r border-border overflow-hidden">
             {/* Left Header Tabs */}
             <div className="flex items-center justify-between border-b border-border bg-secondary/20 px-3 py-1.5 shrink-0">
               <div className="flex items-center gap-1 text-xs">

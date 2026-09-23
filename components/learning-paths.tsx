@@ -309,7 +309,7 @@ export function LearningPaths() {
         </div>
 
         {/* Track Switcher Bar — Sleek segmented pill container */}
-        <div className="flex sm:justify-center mb-10 overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 overscroll-x-contain">
+        <div className="flex sm:justify-center mb-10 overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
           <div className="inline-flex items-center gap-1.5 rounded-full border border-hairline bg-card/80 dark:bg-card/40 backdrop-blur-md p-1.5 shadow-2xs pr-4 sm:pr-1.5">
             {(Object.keys(roadmaps) as RoadmapKey[]).map((key) => {
               const roadmap = roadmaps[key]

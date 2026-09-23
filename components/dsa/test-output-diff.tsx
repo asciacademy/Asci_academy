@@ -40,16 +40,16 @@ export function TestOutputDiff({
   return (
     <div className="rounded-lg border border-red-500/20 bg-red-500/[0.03] overflow-hidden my-2.5 font-mono text-xs">
       {/* Diff Header */}
-      <div className="px-3 py-2 bg-red-500/10 border-b border-red-500/20 flex items-center justify-between">
-        <div className="flex items-center gap-2 text-red-400 font-semibold">
-          <AlertCircle className="h-4 w-4" />
-          <span>Output Discrepancy Detected</span>
+      <div className="px-3 py-2 bg-red-500/10 border-b border-red-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div className="flex items-center gap-2 text-red-400 font-semibold text-xs">
+          <AlertCircle className="h-4 w-4 shrink-0" />
+          <span className="truncate">Output Discrepancy Detected</span>
         </div>
 
         {onAskAxel && (
           <button
             onClick={() => onAskAxel({ expected, actual, input, errorMessage })}
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-primary hover:bg-primary/90 text-primary-foreground font-sans font-medium text-xs transition-all shadow-xs hover:shadow-primary/25 cursor-pointer"
+            className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md bg-primary hover:bg-primary/90 text-primary-foreground font-sans font-medium text-xs transition-all shadow-xs hover:shadow-primary/25 cursor-pointer w-full sm:w-auto"
           >
             <Bot className="h-3.5 w-3.5" />
             <span>Explain with Axel AI</span>

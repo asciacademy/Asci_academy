@@ -49,9 +49,9 @@ export function EditorStatusBar({
   const modKey = isMac ? "⌘" : "Ctrl"
 
   return (
-    <div className="relative border-t border-[#2a2a2a] bg-[#141414] text-[#8e8e8e] px-3 py-1 flex items-center justify-between text-[11px] font-mono select-none shrink-0 z-10">
+    <div className="relative border-t border-[#2a2a2a] bg-[#141414] text-[#8e8e8e] px-2.5 sm:px-3 py-1 flex items-center justify-between text-[11px] font-mono select-none shrink-0 z-10 w-full overflow-x-hidden">
       {/* Left: Position & File metrics */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 sm:gap-3">
         <div className="flex items-center gap-1.5 hover:text-foreground transition-colors cursor-default">
           <span className="text-foreground/90 font-medium">Ln {cursorPos.line}</span>
           <span className="text-muted-foreground/60">:</span>
@@ -76,7 +76,7 @@ export function EditorStatusBar({
       </div>
 
       {/* Right: Runtime info & Keyboard shortcuts tooltip */}
-      <div className="flex items-center gap-2.5">
+      <div className="flex items-center gap-2 sm:gap-2.5">
         {/* Runtime Badge */}
         <div className={cn("px-2 py-0.5 rounded text-[10px] font-semibold border flex items-center gap-1.5", currentBadge.color)}>
           <Cpu className="h-2.5 w-2.5" />
@@ -103,7 +103,7 @@ export function EditorStatusBar({
                 className="fixed inset-0 z-40"
                 onClick={() => setShowShortcuts(false)}
               />
-              <div className="absolute bottom-7 right-0 z-50 w-64 rounded-lg border border-[#333] bg-[#1a1a1a] p-3 shadow-2xl shadow-black/80 text-foreground animate-in fade-in zoom-in-95 duration-150">
+              <div className="absolute bottom-7 right-0 z-50 w-64 max-w-[calc(100vw-24px)] rounded-lg border border-[#333] bg-[#1a1a1a] p-3 shadow-2xl shadow-black/80 text-foreground animate-in fade-in zoom-in-95 duration-150">
                 <div className="flex items-center justify-between pb-2 border-b border-[#2d2d2d] mb-2.5">
                   <span className="text-xs font-semibold text-foreground flex items-center gap-1.5">
                     <Command className="h-3 w-3 text-primary" />

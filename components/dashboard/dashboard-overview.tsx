@@ -349,7 +349,7 @@ export function DashboardOverview({
             </div>
 
             {/* Quick Copilot Chips */}
-            <div className="flex items-center gap-1.5 flex-wrap">
+            <div className="grid grid-cols-2 sm:flex sm:items-center gap-1.5 w-full sm:w-auto">
               {[
                 { icon: Bug, label: "Debug Code", color: "text-rose-500", prompt: "Review and debug my latest code submission." },
                 { icon: BrainCircuit, label: "Quick Quiz", color: "text-[#D4B872]", prompt: `Give me a 3-question conceptual quiz on ${curriculumCourse?.title || "DSA"}.` },
@@ -358,19 +358,19 @@ export function DashboardOverview({
                 <button
                   key={chip.label}
                   onClick={() => { openFocus(); sendMessage(chip.prompt); }}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-secondary/80 hover:bg-primary/15 text-foreground hover:text-primary border border-border/70 hover:border-primary/40 transition-all cursor-pointer shadow-2xs group"
+                  className="inline-flex items-center justify-center sm:justify-start gap-1.5 px-3 py-2 sm:py-1.5 rounded-lg text-xs font-semibold bg-secondary/80 hover:bg-primary/15 text-foreground hover:text-primary border border-border/70 hover:border-primary/40 transition-all cursor-pointer shadow-2xs group min-h-[38px]"
                 >
-                  <chip.icon className={`w-3.5 h-3.5 ${chip.color} group-hover:scale-110 transition-transform`} />
-                  <span>{chip.label}</span>
+                  <chip.icon className={`w-3.5 h-3.5 ${chip.color} group-hover:scale-110 transition-transform shrink-0`} />
+                  <span className="truncate">{chip.label}</span>
                 </button>
               ))}
 
               <button
                 onClick={() => openFocus()}
-                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold bg-primary/10 hover:bg-primary/20 text-primary border border-primary/25 transition-all cursor-pointer shadow-2xs"
+                className="inline-flex items-center justify-center sm:justify-start gap-1 px-3 py-2 sm:py-1.5 rounded-lg text-xs font-semibold bg-primary/10 hover:bg-primary/20 text-primary border border-primary/25 transition-all cursor-pointer shadow-2xs min-h-[38px]"
                 title="Chat with Axel"
               >
-                <Sparkles className="w-3.5 h-3.5" />
+                <Sparkles className="w-3.5 h-3.5 shrink-0" />
                 <span>Ask Axel</span>
               </button>
             </div>
@@ -441,10 +441,10 @@ export function DashboardOverview({
               </div>
             </div>
 
-            <div className="flex items-center justify-between gap-3 pt-4 mt-2 border-t border-border/40">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3 pt-4 mt-2 border-t border-border/40">
               <Link
                 href={nextLessonHref}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary hover:bg-primary-active text-primary-foreground text-xs font-semibold shadow-xs transition-all cursor-pointer group/btn"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-primary hover:bg-primary-active text-primary-foreground text-xs font-semibold shadow-xs transition-all cursor-pointer min-h-[44px] group/btn"
               >
                 <Terminal className="w-3.5 h-3.5" />
                 <span>Launch IDE Sandbox</span>
@@ -453,7 +453,7 @@ export function DashboardOverview({
 
               <button
                 onClick={() => onSwitchTab("courses")}
-                className="text-xs font-medium text-muted-foreground hover:text-primary transition-colors cursor-pointer"
+                className="text-xs font-medium text-muted-foreground hover:text-primary transition-colors cursor-pointer py-1.5 text-center sm:text-right"
               >
                 View Syllabus →
               </button>
@@ -495,14 +495,14 @@ export function DashboardOverview({
               </div>
             </div>
 
-            <div className="flex items-center justify-between gap-3 pt-4 mt-2 border-t border-border/40">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3 pt-4 mt-2 border-t border-border/40">
               <button
                 onClick={() => onSwitchTab("practice")}
-                className="px-4 py-2 rounded-xl bg-secondary hover:bg-secondary/80 border border-border text-xs font-semibold text-foreground hover:text-primary transition-all cursor-pointer shadow-2xs"
+                className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-secondary hover:bg-secondary/80 border border-border text-xs font-semibold text-foreground hover:text-primary transition-all cursor-pointer shadow-2xs min-h-[44px] text-center"
               >
                 Solve in Practice Arena →
               </button>
-              <span className="text-[11px] text-emerald-500 font-semibold flex items-center gap-1">
+              <span className="text-[11px] text-emerald-500 font-semibold flex items-center justify-center sm:justify-start gap-1 py-1">
                 <Flame className="w-3.5 h-3.5" />
                 Streak Safe
               </span>
@@ -684,17 +684,17 @@ export function DashboardOverview({
           </h3>
         </div>
 
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-2 w-full sm:w-auto shrink-0">
           <button
             onClick={() => setIsCertModalOpen(true)}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-card hover:bg-secondary border border-border text-xs font-semibold text-foreground transition-all cursor-pointer shadow-2xs"
+            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-card hover:bg-secondary border border-border text-xs font-semibold text-foreground transition-all cursor-pointer shadow-2xs min-h-[42px]"
           >
             <Award className="w-3.5 h-3.5 text-[#D4B872]" />
             <span>Preview</span>
           </button>
           <button
             onClick={handleLinkedInShare}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#0A66C2]/15 hover:bg-[#0A66C2]/25 text-[#0A66C2] dark:text-[#70B5F9] border border-[#0A66C2]/30 text-xs font-semibold transition-all cursor-pointer shadow-2xs"
+            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-[#0A66C2]/15 hover:bg-[#0A66C2]/25 text-[#0A66C2] dark:text-[#70B5F9] border border-[#0A66C2]/30 text-xs font-semibold transition-all cursor-pointer shadow-2xs min-h-[42px]"
           >
             <Share2 className="w-3.5 h-3.5" />
             <span>Add to LinkedIn</span>
@@ -706,7 +706,7 @@ export function DashboardOverview({
           5. Tactile Quick Actions with 3D Visual Icons
       ───────────────────────────────────────────────────────────── */}
       <section>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-3.5">
+        <div className="grid grid-cols-2 min-[480px]:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3.5">
           {[
             { image: "/images/dashboard-nav/courses.svg", label: "Courses", tab: "courses" },
             { image: "/images/dashboard-nav/dsa-simulators.svg", label: "DSA Simulators", tab: "practice" },
@@ -718,10 +718,10 @@ export function DashboardOverview({
             <button
               key={action.tab}
               onClick={() => onSwitchTab(action.tab)}
-              className="p-3.5 sm:p-4 rounded-2xl border border-border/70 bg-card hover:bg-secondary/60 hover:border-primary/40 transition-all duration-300 cursor-pointer text-center group shadow-2xs hover:shadow-md flex flex-col items-center justify-between gap-2.5 relative overflow-hidden backdrop-blur-xl"
+              className="p-3 sm:p-4 rounded-2xl border border-border/70 bg-card hover:bg-secondary/60 hover:border-primary/40 transition-all duration-300 cursor-pointer text-center group shadow-2xs hover:shadow-md flex flex-col items-center justify-between gap-2 sm:gap-2.5 relative overflow-hidden backdrop-blur-xl active:scale-[0.98] min-h-[105px]"
             >
               <div className="absolute top-0 right-0 left-0 h-1 bg-gradient-to-r from-transparent via-primary/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="w-16 h-16 sm:w-20 sm:h-20 relative flex items-center justify-center transition-transform duration-300 group-hover:scale-110 group-hover:-translate-y-1">
+              <div className="w-14 h-14 sm:w-20 sm:h-20 relative flex items-center justify-center transition-transform duration-300 group-hover:scale-110 group-hover:-translate-y-1">
                 <img
                   src={action.image}
                   alt={action.label}
@@ -741,11 +741,11 @@ export function DashboardOverview({
           6. Interactive Segment Switcher: Tracks vs Activity Feed
       ───────────────────────────────────────────────────────────── */}
       <section className="rounded-2xl border border-border/70 bg-card p-4 sm:p-5 shadow-xs">
-        <div className="flex items-center justify-between mb-4 border-b border-border/40 pb-3">
-          <div className="flex items-center gap-2">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 border-b border-border/40 pb-3">
+          <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap w-full sm:w-auto">
             <button
               onClick={() => setBottomTab("tracks")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              className={`flex-1 sm:flex-none px-3 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer min-h-[36px] text-center ${
                 bottomTab === "tracks"
                   ? "bg-primary text-primary-foreground shadow-xs"
                   : "text-muted-foreground hover:text-foreground"
@@ -755,7 +755,7 @@ export function DashboardOverview({
             </button>
             <button
               onClick={() => setBottomTab("activity")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              className={`flex-1 sm:flex-none px-3 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer min-h-[36px] text-center ${
                 bottomTab === "activity"
                   ? "bg-primary text-primary-foreground shadow-xs"
                   : "text-muted-foreground hover:text-foreground"
@@ -767,7 +767,7 @@ export function DashboardOverview({
 
           <Link
             href="/programs"
-            className="text-xs font-semibold text-primary hover:underline flex items-center gap-1"
+            className="text-xs font-semibold text-primary hover:underline flex items-center justify-end gap-1"
           >
             Explore Catalog <ChevronRight className="w-3 h-3" />
           </Link>

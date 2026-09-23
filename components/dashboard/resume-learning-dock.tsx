@@ -109,7 +109,7 @@ export function ResumeLearningDock({ enrollments = [], className }: ResumeLearni
 
           <Link
             href={activeCourse.href}
-            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs shadow-xs hover:shadow-primary/25 transition-all cursor-pointer group"
+            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs shadow-xs hover:shadow-primary/25 transition-all cursor-pointer min-h-[44px] group"
           >
             <span>Resume Learning</span>
             <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
@@ -117,10 +117,11 @@ export function ResumeLearningDock({ enrollments = [], className }: ResumeLearni
 
           <button
             onClick={() => setIsOpen(false)}
-            className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary/60 transition-colors cursor-pointer"
+            className="p-2.5 rounded-xl text-muted-foreground hover:text-foreground hover:bg-secondary/60 transition-colors cursor-pointer min-h-[44px] min-w-[44px] flex items-center justify-center shrink-0"
             title="Dismiss dock"
+            aria-label="Dismiss quick resume dock"
           >
-            <X className="h-3.5 w-3.5" />
+            <X className="h-4 w-4" />
           </button>
         </div>
       </div>
