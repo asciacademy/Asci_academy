@@ -17,6 +17,11 @@ import {
   Database,
   Zap,
   CheckCircle2,
+  Briefcase,
+  FolderGit2,
+  Trophy,
+  Award,
+  FileCheck,
 } from "lucide-react"
 import {
   CommandDialog,
@@ -205,6 +210,88 @@ export function SearchCommandDialog({ open, onOpenChange }: SearchCommandDialogP
 
         <CommandSeparator className="my-1" />
 
+        {/* Engineering Projects */}
+        <CommandGroup heading="Engineering Projects & Systems">
+          <CommandItem
+            onSelect={() => runCommand(() => router.push("/projects"))}
+            className="flex items-center gap-2.5 px-3 py-2 text-xs cursor-pointer rounded-lg hover:bg-secondary"
+          >
+            <FolderGit2 className="h-4 w-4 text-primary" />
+            <div className="flex flex-col">
+              <span className="font-medium text-foreground">Projects Hub Directory</span>
+              <span className="text-[10px] text-muted-foreground">Portfolio builds, systems architecture & capstones</span>
+            </div>
+          </CommandItem>
+          <CommandItem
+            onSelect={() => runCommand(() => router.push("/projects"))}
+            className="flex items-center gap-2.5 px-3 py-2 text-xs cursor-pointer rounded-lg hover:bg-secondary"
+          >
+            <Cpu className="h-4 w-4 text-primary" />
+            <div className="flex flex-col">
+              <span className="font-medium text-foreground">ApexKV — Distributed Raft KV Store</span>
+              <span className="text-[10px] text-muted-foreground">Go, Raft Consensus, gRPC, Docker</span>
+            </div>
+          </CommandItem>
+          <CommandItem
+            onSelect={() => runCommand(() => router.push("/projects"))}
+            className="flex items-center gap-2.5 px-3 py-2 text-xs cursor-pointer rounded-lg hover:bg-secondary"
+          >
+            <Zap className="h-4 w-4 text-primary" />
+            <div className="flex flex-col">
+              <span className="font-medium text-foreground">SpectraQuery — Vector RAG Engine</span>
+              <span className="text-[10px] text-muted-foreground">Python, FastAPI, pgvector, Next.js</span>
+            </div>
+          </CommandItem>
+        </CommandGroup>
+
+        <CommandSeparator className="my-1" />
+
+        {/* Career & Opportunities */}
+        <CommandGroup heading="Career Center & Opportunities">
+          <CommandItem
+            onSelect={() => runCommand(() => router.push("/career?tab=jobs"))}
+            className="flex items-center gap-2.5 px-3 py-2 text-xs cursor-pointer rounded-lg hover:bg-secondary"
+          >
+            <Briefcase className="h-4 w-4 text-primary" />
+            <div className="flex flex-col">
+              <span className="font-medium text-foreground">Software Engineering Jobs</span>
+              <span className="text-[10px] text-muted-foreground">Verified junior to senior developer openings</span>
+            </div>
+          </CommandItem>
+          <CommandItem
+            onSelect={() => runCommand(() => router.push("/career?tab=internships"))}
+            className="flex items-center gap-2.5 px-3 py-2 text-xs cursor-pointer rounded-lg hover:bg-secondary"
+          >
+            <Briefcase className="h-4 w-4 text-primary" />
+            <div className="flex flex-col">
+              <span className="font-medium text-foreground">Student Internships</span>
+              <span className="text-[10px] text-muted-foreground">Paid software internships with transparent stipends</span>
+            </div>
+          </CommandItem>
+          <CommandItem
+            onSelect={() => runCommand(() => router.push("/career?tab=hackathons"))}
+            className="flex items-center gap-2.5 px-3 py-2 text-xs cursor-pointer rounded-lg hover:bg-secondary"
+          >
+            <Trophy className="h-4 w-4 text-primary" />
+            <div className="flex flex-col">
+              <span className="font-medium text-foreground">Hackathons & Build Challenges</span>
+              <span className="text-[10px] text-muted-foreground">Active national hackathons with prize pools</span>
+            </div>
+          </CommandItem>
+          <CommandItem
+            onSelect={() => runCommand(() => router.push("/career?tab=resume"))}
+            className="flex items-center gap-2.5 px-3 py-2 text-xs cursor-pointer rounded-lg hover:bg-secondary"
+          >
+            <FileCheck className="h-4 w-4 text-primary" />
+            <div className="flex flex-col">
+              <span className="font-medium text-foreground">Resume ATS Scanner</span>
+              <span className="text-[10px] text-muted-foreground">Keyword matching & formatting analysis</span>
+            </div>
+          </CommandItem>
+        </CommandGroup>
+
+        <CommandSeparator className="my-1" />
+
         {/* Quick Portal Navigation */}
         <CommandGroup heading="Platform & Account">
           <CommandItem
@@ -216,6 +303,14 @@ export function SearchCommandDialog({ open, onOpenChange }: SearchCommandDialogP
           </CommandItem>
 
           <CommandItem
+            onSelect={() => runCommand(() => router.push("/certificates"))}
+            className="flex items-center gap-2.5 px-3 py-2 text-xs cursor-pointer rounded-lg hover:bg-secondary"
+          >
+            <Award className="h-4 w-4 text-muted-foreground" />
+            <span className="font-medium text-foreground">Credentials & Verified Certificates</span>
+          </CommandItem>
+
+          <CommandItem
             onSelect={() => runCommand(() => router.push("/profile"))}
             className="flex items-center gap-2.5 px-3 py-2 text-xs cursor-pointer rounded-lg hover:bg-secondary"
           >
@@ -224,27 +319,11 @@ export function SearchCommandDialog({ open, onOpenChange }: SearchCommandDialogP
           </CommandItem>
 
           <CommandItem
-            onSelect={() => runCommand(() => router.push("/degrees"))}
-            className="flex items-center gap-2.5 px-3 py-2 text-xs cursor-pointer rounded-lg hover:bg-secondary"
-          >
-            <GraduationCap className="h-4 w-4 text-muted-foreground" />
-            <span className="font-medium text-foreground">Engineering Specializations & Roles</span>
-          </CommandItem>
-
-          <CommandItem
-            onSelect={() => runCommand(() => router.push("/pricing"))}
-            className="flex items-center gap-2.5 px-3 py-2 text-xs cursor-pointer rounded-lg hover:bg-secondary"
-          >
-            <CreditCard className="h-4 w-4 text-muted-foreground" />
-            <span className="font-medium text-foreground">Tuition & Fellowship Pricing</span>
-          </CommandItem>
-
-          <CommandItem
             onSelect={() => runCommand(() => router.push("/community"))}
             className="flex items-center gap-2.5 px-3 py-2 text-xs cursor-pointer rounded-lg hover:bg-secondary"
           >
             <BookOpen className="h-4 w-4 text-muted-foreground" />
-            <span className="font-medium text-foreground">Discord Community & Outcomes</span>
+            <span className="font-medium text-foreground">Student Community & Discussions</span>
           </CommandItem>
         </CommandGroup>
       </CommandList>

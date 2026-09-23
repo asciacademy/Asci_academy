@@ -335,19 +335,8 @@ export function DashboardOverview({
             </div>
           </div>
 
-          {/* Interactive Axel Bar & Desktop Stage */}
+          {/* Interactive Axel Copilot Actions */}
           <div className="flex items-center gap-3 shrink-0 flex-wrap">
-            <div className="hidden lg:flex items-center">
-              <AxelStage
-                id="dashboard-home-robot-anchor"
-                sectionId="dashboard-welcome-section"
-                label="Copilot"
-                emotion="happy"
-                scale={0.42}
-                size="sm"
-              />
-            </div>
-
             {/* Quick Copilot Chips */}
             <div className="grid grid-cols-2 sm:flex sm:items-center gap-1.5 w-full sm:w-auto">
               {[
@@ -663,7 +652,54 @@ export function DashboardOverview({
       </section>
 
       {/* ─────────────────────────────────────────────────────────────
-          4. Milestone Radar Card (Slim & Actionable)
+          4. Engineering Skill Map (Restrained Visualizations)
+      ───────────────────────────────────────────────────────────── */}
+      <section className="rounded-2xl border border-border/70 bg-card p-5 shadow-xs">
+        <div className="flex items-center justify-between gap-3 mb-4">
+          <div className="flex items-center gap-2">
+            <Layers className="w-4 h-4 text-primary" />
+            <h3 className="text-sm sm:text-base font-bold text-foreground">
+              Engineering Skill Map
+            </h3>
+          </div>
+          <span className="text-[11px] font-mono text-muted-foreground">
+            Verified Competency Progress
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3.5">
+          {[
+            { skill: "Python & Systems", progress: 82, level: "Advanced", desc: "CPython, Asyncio, Microservices" },
+            { skill: "DSA & Algorithms", progress: 61, level: "Proficient", desc: "Trees, DP, Graphs" },
+            { skill: "React & Next.js", progress: 74, level: "Advanced", desc: "RSC, Server Actions, WebSockets" },
+            { skill: "System Design", progress: 31, level: "Foundational", desc: "Consensus, WAL, Sharding" },
+            { skill: "AI & Vector RAG", progress: 42, level: "Intermediate", desc: "Embeddings, pgvector, Agents" },
+          ].map((item) => (
+            <div
+              key={item.skill}
+              className="p-3 rounded-xl border border-border/80 bg-secondary/30 space-y-2"
+            >
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-semibold text-foreground">{item.skill}</span>
+                <span className="font-mono font-bold text-primary">{item.progress}%</span>
+              </div>
+              <div className="w-full bg-secondary h-1.5 rounded-full overflow-hidden">
+                <div
+                  className="bg-primary h-full rounded-full transition-all duration-500"
+                  style={{ width: `${item.progress}%` }}
+                />
+              </div>
+              <div className="flex items-center justify-between text-[10px] font-mono text-muted-foreground pt-0.5">
+                <span>{item.level}</span>
+                <span className="truncate max-w-[90px]">{item.desc}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ─────────────────────────────────────────────────────────────
+          5. Milestone Radar Card (Slim & Actionable)
       ───────────────────────────────────────────────────────────── */}
       <section className="rounded-2xl border border-[#D4B872]/30 bg-gradient-to-r from-card via-[#D4B872]/5 to-card p-4 sm:p-5 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="space-y-1">
