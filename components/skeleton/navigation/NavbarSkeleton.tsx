@@ -33,7 +33,8 @@ export function NavbarSkeleton({ className, ...props }: NavbarSkeletonProps) {
         {/* 3. Right Action Controls */}
         <div className="flex items-center gap-1.5 sm:gap-2.5">
           {/* Search trigger */}
-          <Skeleton className="h-9 w-9 sm:h-10 sm:w-10" rounded="full" />
+          <Skeleton className="hidden xl:flex h-9 w-48" rounded="full" />
+          <Skeleton className="flex xl:hidden h-9 w-9 sm:h-10 sm:w-10" rounded="full" />
           
           {/* Wishlist trigger */}
           <Skeleton className="hidden min-[420px]:flex sm:flex h-9 w-9 sm:h-10 sm:w-10" rounded="full" />

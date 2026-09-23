@@ -17,31 +17,21 @@ import {
   Code2,
   Layers,
   Server,
-  Braces,
-  Cpu,
-  Network,
-  Database,
-  GraduationCap,
-  Award,
-  Users,
   Terminal,
+  Cpu,
+  GraduationCap,
+  Users,
   PlayCircle,
   ArrowUpRight,
-  Compass,
   FolderGit2,
   Flame,
   LogOut,
   Bookmark,
-  Clock,
-  Briefcase,
-  Trophy,
-  Hammer,
   Sparkles,
-  Building2,
-  MessageSquare,
-  ShieldCheck,
+  Settings,
+  ChevronRight,
+  Compass,
 } from "lucide-react"
-import { createClient } from "@/utils/supabase/client"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { AsciLogo } from "@/components/asci-logo"
 import { SearchCommandDialog } from "@/components/search-command-dialog"
@@ -74,138 +64,121 @@ interface NavItem {
 
 const NAV_ITEMS: NavItem[] = [
   {
-    label: "Learn",
-    href: "/courses",
+    label: "Programs",
+    href: "/programs",
     hasDropdown: true,
     icon: BookOpen,
-    desc: "Curricula, DSA & Guided Engineering",
+    desc: "Curricula & Engineering Tracks",
     dropdownWidth: "w-[380px]",
     alignClass: "left-0",
     items: [
       {
-        title: "Course Catalog",
-        desc: "Interactive courses in Python, C++, React, Next.js & Systems",
-        href: "/courses",
-        icon: BookOpen,
-        badge: "Marketplace",
+        title: "Systems Engineering",
+        desc: "Low-level C, C++20, and memory model fundamentals",
+        href: "/programs/cpp",
+        icon: Cpu,
+        badge: "Core",
       },
       {
-        title: "Learning Paths",
-        desc: "Structured paths for AI, Web, Systems & Backend Engineers",
-        href: "/programs",
-        icon: GraduationCap,
-        badge: "Tracks",
+        title: "Enterprise Backend & Java",
+        desc: "Spring Boot, Concurrency, and Microservices",
+        href: "/programs/java",
+        icon: Server,
+        badge: "Popular",
       },
       {
-        title: "Practice DSA Arena",
-        desc: "474 hand-picked algorithmic problems with visual proofs & runner",
-        href: "/dsa",
+        title: "Full-Stack Web & TypeScript",
+        desc: "React 19, Next.js, and distributed UI architecture",
+        href: "/programs/react",
+        icon: Layers,
+      },
+      {
+        title: "Python for Engineers",
+        desc: "High-throughput APIs, algorithms, and data systems",
+        href: "/programs/python",
+        icon: Terminal,
+      },
+    ],
+    footerLink: { label: "Explore All Tracks & Curricula →", href: "/programs" },
+  },
+  {
+    label: "Practice DSA",
+    href: "/dsa",
+    hasDropdown: true,
+    icon: Code2,
+    desc: "Algorithmic Sheets & Visualizers",
+    dropdownWidth: "w-[370px]",
+    alignClass: "left-[-20px]",
+    items: [
+      {
+        title: "Complete DSA Sheet",
+        desc: "474 hand-picked algorithmic problems with visual proofs",
+        href: "/dsa/a2z-sheet",
         icon: Code2,
         badge: "474 Problems",
       },
       {
-        title: "Projects Hub",
-        desc: "Portfolio-grade systems, distributed engines & capstones",
-        href: "/projects",
-        icon: FolderGit2,
+        title: "Interactive Visualizers",
+        desc: "Step-through visual animations for trees, graphs, and pointers",
+        href: "/dsa",
+        icon: PlayCircle,
       },
       {
-        title: "Interactive Labs & Sandboxes",
-        desc: "Zero-setup in-browser runtimes and memory visualizers",
-        href: "/sandbox",
-        icon: Terminal,
-      },
-    ],
-    footerLink: { label: "Explore Complete Catalog →", href: "/courses" },
-  },
-  {
-    label: "Career",
-    href: "/career",
-    hasDropdown: true,
-    icon: Briefcase,
-    desc: "Opportunities, Hackathons & Job Tools",
-    dropdownWidth: "w-[380px]",
-    alignClass: "left-[-20px]",
-    items: [
-      {
-        title: "Software Engineering Jobs",
-        desc: "Verified developer positions, full-stack & backend roles",
-        href: "/career?tab=jobs",
-        icon: Briefcase,
-        badge: "Hiring",
-      },
-      {
-        title: "Student Internships",
-        desc: "Paid technical internships with transparent stipends",
-        href: "/career?tab=internships",
-        icon: Building2,
-      },
-      {
-        title: "Hackathons & Challenges",
-        desc: "National build challenges with team formation & prize pools",
-        href: "/career?tab=hackathons",
-        icon: Trophy,
-        badge: "Active",
-      },
-      {
-        title: "Skill Competitions",
-        desc: "Timed algorithmic contests, assessments & benchmarks",
-        href: "/career?tab=competitions",
+        title: "Algorithmic Problem Arena",
+        desc: "Search, filter, and practice coding challenges with test runner",
+        href: "/dsa",
         icon: Flame,
       },
-      {
-        title: "1-on-1 Mentorship & Mocks",
-        desc: "Line-by-line code reviews and senior engineer interview prep",
-        href: "/career?tab=mentorship",
-        icon: Users,
-      },
-      {
-        title: "Resume & ATS Scanner",
-        desc: "Real-time keyword gap analysis for tech job descriptions",
-        href: "/career?tab=resume",
-        icon: ShieldCheck,
-      },
     ],
-    footerLink: { label: "Open Career Center →", href: "/career" },
+    footerLink: { label: "Open Algorithmic Arena →", href: "/dsa" },
   },
   {
-    label: "Community",
-    href: "/community",
+    label: "Degrees & Careers",
+    href: "/degrees",
     hasDropdown: true,
-    icon: Users,
-    desc: "Collaborative Student Network",
-    dropdownWidth: "w-[340px]",
+    icon: GraduationCap,
+    desc: "Industry Roles, Capstones & Verified Repos",
+    dropdownWidth: "w-[360px]",
     alignClass: "left-[-40px]",
     items: [
       {
-        title: "Technical Discussions",
-        desc: "Ask questions, share architecture diagrams & debug code",
-        href: "/community",
-        icon: MessageSquare,
+        title: "Career Pathways & Degrees",
+        desc: "Structured paths for AI, DevOps, Backend & Full-Stack roles",
+        href: "/degrees",
+        icon: GraduationCap,
+        badge: "Accredited",
       },
       {
-        title: "Study Groups & Sprints",
-        desc: "Join cohorts preparing for DSA, interviews & certifications",
-        href: "/community",
+        title: "Student Capstone Showcase",
+        desc: "Verified student open-source repositories and production builds",
+        href: "/portfolio",
+        icon: FolderGit2,
+      },
+      {
+        title: "Mentorship & Placement",
+        desc: "Code reviews, mock technical interviews, and career guidance",
+        href: "/pricing",
         icon: Users,
       },
-      {
-        title: "Global Leaderboard",
-        desc: "Verified problem solvers and active contributors ranking",
-        href: "/community",
-        icon: Award,
-        badge: "XP Ranks",
-      },
     ],
-    footerLink: { label: "Join Student Community →", href: "/community" },
+    footerLink: { label: "Explore Career Pathways →", href: "/degrees" },
   },
   {
-    label: "Certificates",
-    href: "/certificates",
+    label: "Pricing",
+    href: "/pricing",
     hasDropdown: false,
-    icon: Award,
-    desc: "Verified Credentials",
+    icon: Sparkles,
+    desc: "Fellowship & Membership Plans",
   },
+]
+
+// Quick Pills for 1-Tap Mobile Navigation
+const QUICK_MOBILE_PILLS = [
+  { label: "474 DSA Sheet", href: "/dsa/a2z-sheet", icon: Code2, badge: "Popular" },
+  { label: "Systems C++", href: "/programs/cpp", icon: Cpu },
+  { label: "Java Backend", href: "/programs/java", icon: Server },
+  { label: "Full-Stack React", href: "/programs/react", icon: Layers },
+  { label: "Career Degrees", href: "/degrees", icon: GraduationCap },
 ]
 
 export function Navbar() {
@@ -217,7 +190,7 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [wishlistDrawerOpen, setWishlistDrawerOpen] = useState(false)
-  const [mobileExpandedSection, setMobileExpandedSection] = useState<string | null>(null)
+  const [mobileExpandedSection, setMobileExpandedSection] = useState<string | null>("Programs")
   const { count: wishlistCount } = useWishlist()
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
@@ -235,7 +208,11 @@ export function Navbar() {
           user: {
             id: "demo-user-id",
             email: isDemoAdmin ? "admin@asci.edu" : "fellow@asci.edu",
-            user_metadata: { full_name: isDemoAdmin ? "ASCI Administrator" : "ASCI Fellow", avatar_url: null, picture: null },
+            user_metadata: {
+              full_name: isDemoAdmin ? "ASCI Administrator" : "ASCI Fellow",
+              avatar_url: null,
+              picture: null,
+            },
           } as any,
           profile: {
             id: "demo-user-id",
@@ -243,8 +220,8 @@ export function Navbar() {
             role: isDemoAdmin ? "admin" : "fellow",
             rank: isDemoAdmin ? "Admin" : "Fellow",
             avatar_url: null,
-            xp: 0,
-            streak_count: 0,
+            xp: 1250,
+            streak_count: 5,
           } as any,
           isAdmin: isDemoAdmin,
         })
@@ -252,7 +229,7 @@ export function Navbar() {
     }
   }, [authUser])
 
-  // Active user and profile derived directly from AuthContext as the single source of truth (mounted-guarded for zero SSR mismatch)
+  // Active user and profile derived directly from AuthContext
   const user: any = mounted ? (authUser || demoBypassUser?.user || null) : null
   const userProfile: any = mounted ? (authProfile || demoBypassUser?.profile || (user ? {
     id: user.id || "guest",
@@ -276,17 +253,17 @@ export function Navbar() {
       console.warn("SignOut error:", e)
     } finally {
       setActiveDropdown(null)
+      setMobileOpen(false)
     }
   }
 
-  // Close mobile navigation drawer and flyouts on route change
+  // Close mobile drawer and flyouts on route changes
   useEffect(() => {
     setMobileOpen(false)
     setActiveDropdown(null)
-    setMobileExpandedSection(null)
   }, [pathname])
 
-  // Lock body scroll when mobile menu is open to prevent background scroll jank
+  // Lock body scroll when mobile menu is open to prevent background bleed
   useEffect(() => {
     if (mobileOpen) {
       document.body.style.overflow = "hidden"
@@ -298,6 +275,7 @@ export function Navbar() {
     }
   }, [mobileOpen])
 
+  // Escape key handler
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -305,13 +283,13 @@ export function Navbar() {
         setMobileOpen(false)
       }
     }
-
     document.addEventListener("keydown", handleKeyDown)
     return () => {
       document.removeEventListener("keydown", handleKeyDown)
     }
   }, [])
 
+  // Optimized passive scroll listener
   useEffect(() => {
     let ticking = false
     const onScroll = () => {
@@ -325,7 +303,6 @@ export function Navbar() {
       }
     }
     window.addEventListener("scroll", onScroll, { passive: true })
-
     return () => {
       window.removeEventListener("scroll", onScroll)
       if (timeoutRef.current) clearTimeout(timeoutRef.current)
@@ -348,26 +325,24 @@ export function Navbar() {
     user?.user_metadata,
     user?.email
   )
-
   const userInitials = getInitials(displayName)
   const oauthAvatar = user?.user_metadata?.avatar_url || user?.user_metadata?.picture || null
   const navAvatar = userProfile?.avatar_url || settings.avatar || oauthAvatar || null
-
   const userRoleBadge = isAdmin
     ? "Admin"
     : userProfile?.role === "fellow"
     ? "Fellow"
-    : userProfile?.rank || "Engineer"
+    : userProfile?.rank || "Scholar"
 
   return (
     <header
       className={`fixed left-0 right-0 top-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "border-b border-border/80 dark:border-white/10 bg-background/95 dark:bg-black/95 backdrop-blur-2xl shadow-xs"
-          : "border-b border-border/60 dark:border-white/10 bg-background/90 dark:bg-black/90 backdrop-blur-2xl"
+          ? "border-b border-border/80 dark:border-white/10 bg-background/90 dark:bg-[#070b09]/95 backdrop-blur-2xl shadow-xs"
+          : "border-b border-border/50 dark:border-white/8 bg-background/80 dark:bg-[#070b09]/80 backdrop-blur-xl"
       }`}
     >
-      {/* Soft Ambient Dimmer when Mega-Menu is open to guarantee 100% legibility over any page text or markdown */}
+      {/* Mega-menu ambient backdrop dimmer */}
       <AnimatePresence>
         {activeDropdown && (
           <motion.div
@@ -376,34 +351,43 @@ export function Navbar() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.18 }}
             onClick={() => setActiveDropdown(null)}
-            className="fixed inset-0 top-16 sm:top-[68px] bg-black/40 dark:bg-black/70 backdrop-blur-xs z-40 pointer-events-auto"
+            className="fixed inset-0 top-16 sm:top-[68px] bg-black/40 dark:bg-black/60 backdrop-blur-xs z-40 pointer-events-auto"
+            aria-hidden="true"
           />
         )}
       </AnimatePresence>
 
       <div className="mx-auto flex h-16 sm:h-[68px] max-w-[1400px] items-center justify-between px-3.5 sm:px-6 lg:px-8">
-        {/* 1. Brand Logo (Pure & Minimalist) */}
+        {/* 1. Brand Logo */}
         <Link
           href="/"
-          className="group flex items-center gap-2.5 transition-transform duration-200 hover:scale-[1.01]"
+          className="group flex items-center gap-2.5 transition-transform duration-200 hover:scale-[1.01] focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary/40 rounded-xl"
+          aria-label="ASCI Academy Home"
         >
-          <AsciLogo size={46} showText showBadge={false} useVector={false} />
+          <AsciLogo size={42} showText showBadge={false} useVector={false} />
         </Link>
 
-        {/* 2. Desktop Navigation with Clean, Minimal Dropdown Flyouts */}
+        {/* 2. Desktop Navigation with Clean Editorial Dropdowns */}
         <nav
-          className="hidden lg:flex items-center gap-2"
+          className="hidden lg:flex items-center gap-1.5"
           aria-label="Main navigation"
         >
           {NAV_ITEMS.map((section) => {
             const isOpen = activeDropdown === section.label
+            const isCurrent =
+              pathname === section.href ||
+              (section.href !== "/" && pathname.startsWith(section.href))
 
             if (!section.hasDropdown) {
               return (
                 <Link
                   key={section.label}
                   href={section.href}
-                  className="group/navlink relative flex items-center gap-1.5 rounded-full px-4 py-2 text-[14px] font-medium tracking-tight text-muted-foreground hover:bg-secondary/80 hover:text-foreground transition-all duration-150"
+                  className={`group relative flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[13.5px] font-medium tracking-tight transition-all duration-150 ${
+                    isCurrent
+                      ? "text-primary font-semibold bg-primary/10 dark:bg-primary/15"
+                      : "text-muted-foreground hover:bg-secondary/80 hover:text-foreground"
+                  }`}
                 >
                   <span>{section.label}</span>
                 </Link>
@@ -413,30 +397,30 @@ export function Navbar() {
             return (
               <div
                 key={section.label}
-                className="relative py-3"
+                className="relative py-2"
                 onMouseEnter={() => handleMouseEnter(section.label)}
                 onMouseLeave={handleMouseLeave}
               >
                 <Link
                   href={section.href}
-                  className={`group/navlink relative flex items-center gap-1.5 rounded-full px-4 py-2 text-[14px] font-medium tracking-tight transition-all duration-150 ${
-                    isOpen
-                      ? "bg-secondary text-foreground shadow-2xs font-semibold"
+                  className={`group relative flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[13.5px] font-medium tracking-tight transition-all duration-150 ${
+                    isOpen || isCurrent
+                      ? "bg-secondary text-foreground font-semibold shadow-2xs"
                       : "text-muted-foreground hover:bg-secondary/80 hover:text-foreground"
                   }`}
                 >
                   <span>{section.label}</span>
                   <ChevronDown
-                    className={`h-3.5 w-3.5 opacity-40 transition-transform duration-200 group-hover/navlink:opacity-80 ${
+                    className={`h-3.5 w-3.5 opacity-50 transition-transform duration-200 group-hover:opacity-100 ${
                       isOpen ? "rotate-180 opacity-100 text-primary" : ""
                     }`}
                   />
                 </Link>
 
-                {/* Invisible Hover Tunnel to prevent mouse drop */}
-                <div className="absolute top-full left-0 right-0 h-4" />
+                {/* Hover Bridge */}
+                <div className="absolute top-full left-0 right-0 h-3" />
 
-                {/* Minimal Single-Column Flyout Card */}
+                {/* Dropdown Flyout */}
                 <AnimatePresence>
                   {isOpen && (
                     <motion.div
@@ -446,10 +430,21 @@ export function Navbar() {
                       transition={{ duration: 0.16, ease: [0.16, 1, 0.3, 1] }}
                       className={`absolute top-full z-50 pt-2 ${
                         section.alignClass || "left-0"
-                      } ${section.dropdownWidth || "w-[360px]"}`}
+                      } ${section.dropdownWidth || "w-[380px]"}`}
                     >
-                      <div className="relative overflow-hidden rounded-2xl border border-border/80 dark:border-white/15 bg-card/98 dark:bg-black/98 p-3 backdrop-blur-2xl shadow-xl">
-                        {/* List of items */}
+                      <div className="relative overflow-hidden rounded-2xl border border-border/80 dark:border-white/12 bg-card/98 dark:bg-[#0c120e]/98 p-2.5 backdrop-blur-2xl shadow-2xl">
+                        {/* Dropdown Header Label */}
+                        <div className="px-2.5 py-1.5 mb-1 flex items-center justify-between border-b border-border/50 dark:border-white/8">
+                          <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-medium">
+                            {section.desc}
+                          </span>
+                          <span className="flex items-center gap-1 text-[10px] font-mono text-primary font-semibold">
+                            <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+                            Curated
+                          </span>
+                        </div>
+
+                        {/* List of Sub-items */}
                         <div className="flex flex-col gap-1">
                           {section.items?.map((item) => {
                             const Icon = item.icon
@@ -458,23 +453,23 @@ export function Navbar() {
                                 key={item.title}
                                 href={item.href}
                                 onClick={() => setActiveDropdown(null)}
-                                className="group/item flex items-start gap-3 rounded-xl p-2.5 transition-colors hover:bg-secondary/70"
+                                className="group/item flex items-start gap-3 rounded-xl p-2.5 transition-all hover:bg-secondary/70"
                               >
-                                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-border/80 bg-secondary/50 text-foreground transition-all duration-150 group-hover/item:border-primary/40 group-hover/item:bg-primary group-hover/item:text-primary-foreground mt-0.5">
-                                  <Icon className="h-3.5 w-3.5" />
+                                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-border/80 dark:border-white/10 bg-secondary/50 text-foreground transition-all duration-150 group-hover/item:border-primary/40 group-hover/item:bg-primary group-hover/item:text-primary-foreground mt-0.5">
+                                  <Icon className="h-4 w-4" />
                                 </div>
                                 <div className="flex-1 min-w-0">
                                   <div className="flex items-center justify-between gap-1.5">
-                                    <span className="text-xs font-semibold text-foreground tracking-tight group-hover/item:text-primary transition-colors truncate">
+                                    <span className="text-[13px] font-semibold text-foreground tracking-tight group-hover/item:text-primary transition-colors truncate">
                                       {item.title}
                                     </span>
                                     {item.badge && (
-                                      <span className="shrink-0 text-[8px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-bold border border-primary/20 leading-none">
+                                      <span className="shrink-0 text-[8.5px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded-md bg-primary/10 text-primary font-bold border border-primary/20 leading-none">
                                         {item.badge}
                                       </span>
                                     )}
                                   </div>
-                                  <p className="text-[11px] text-muted-foreground/80 line-clamp-1 mt-0.5 leading-snug">
+                                  <p className="text-[11.5px] text-muted-foreground line-clamp-1 mt-0.5 leading-snug">
                                     {item.desc}
                                   </p>
                                 </div>
@@ -485,18 +480,17 @@ export function Navbar() {
 
                         {/* Dropdown Bottom Quick Action Strip */}
                         {section.footerLink && (
-                          <div className="mt-2 pt-2 border-t border-border/60 dark:border-white/10 flex items-center justify-between px-2 text-[11px]">
+                          <div className="mt-2 pt-2 border-t border-border/60 dark:border-white/10 flex items-center justify-between px-2.5 py-1 text-[11.5px]">
                             <Link
                               href={section.footerLink.href}
                               onClick={() => setActiveDropdown(null)}
-                              className="group/fLink flex items-center gap-1 font-medium text-primary hover:text-primary-active transition-colors"
+                              className="group/fLink flex items-center gap-1 font-semibold text-primary hover:text-primary-active transition-colors"
                             >
                               <span>{section.footerLink.label}</span>
                               <ArrowUpRight className="h-3 w-3 transition-transform group-hover/fLink:translate-x-0.5 group-hover/fLink:-translate-y-0.5" />
                             </Link>
-                            <span className="flex items-center gap-1 text-[10px] font-mono text-muted-foreground/70">
-                              <span className="h-1.5 w-1.5 rounded-full bg-blue-600" />
-                              Active
+                            <span className="text-[10px] font-mono text-muted-foreground/70">
+                              ASCI Accredited
                             </span>
                           </div>
                         )}
@@ -509,26 +503,43 @@ export function Navbar() {
           })}
         </nav>
 
-        {/* 3. Right Action Gateway */}
+        {/* 3. Right Action Controls */}
         <div className="flex items-center gap-1.5 sm:gap-2.5">
-          {/* Search Trigger (Clean Icon Button) */}
+          {/* Desktop Search Trigger (Linear / Raycast Style Pill on XL) */}
           <button
             type="button"
             onClick={() => setSearchOpen(true)}
             aria-label="Search curriculum, 474 problems (⌘K)"
-            className="relative flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full border border-border/80 dark:border-white/15 bg-secondary/30 text-muted-foreground transition-all hover:bg-secondary hover:text-foreground hover:border-primary/50 shadow-2xs cursor-pointer group"
-            title="Search curriculum, 474 problems... (⌘K)"
+            className="hidden xl:flex items-center gap-2.5 h-9 rounded-full border border-border/80 dark:border-white/12 bg-secondary/40 hover:bg-secondary/80 text-muted-foreground hover:text-foreground px-3.5 text-xs transition-all shadow-2xs group cursor-pointer"
+            title="Search curriculum & 474 DSA problems... (⌘K)"
           >
-            <Search className="h-4 w-4 text-foreground/80 group-hover:text-primary transition-colors" />
-            <span className="sr-only">Search curriculum, 474 problems... (⌘K)</span>
+            <Search className="h-3.5 w-3.5 text-primary group-hover:scale-110 transition-transform" />
+            <span className="text-[12px] text-muted-foreground group-hover:text-foreground">
+              Search curriculum, DSA...
+            </span>
+            <kbd className="ml-1 px-1.5 py-0.5 text-[10px] font-mono rounded bg-background/80 border border-border/70 text-muted-foreground shadow-2xs">
+              ⌘K
+            </kbd>
           </button>
 
-          {/* Saved Courses Wishlist Trigger (Hidden on < 420px screens to prevent header wrapping; accessible in mobile menu) */}
+          {/* Compact Search Button on Large / Tablet */}
+          <button
+            type="button"
+            onClick={() => setSearchOpen(true)}
+            aria-label="Search curriculum, 474 problems (⌘K)"
+            className="flex xl:hidden h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full border border-border/80 dark:border-white/12 bg-secondary/30 text-muted-foreground transition-all hover:bg-secondary hover:text-foreground hover:border-primary/50 shadow-2xs cursor-pointer group"
+            title="Search curriculum & 474 DSA problems... (⌘K)"
+          >
+            <Search className="h-4 w-4 text-foreground/80 group-hover:text-primary transition-colors" />
+            <span className="sr-only">Search</span>
+          </button>
+
+          {/* Saved Courses Wishlist Trigger */}
           <button
             type="button"
             onClick={() => setWishlistDrawerOpen(true)}
             aria-label="View Saved Courses Wishlist"
-            className="relative hidden min-[420px]:flex sm:flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full border border-border/80 dark:border-white/15 bg-secondary/30 text-muted-foreground transition-all hover:bg-secondary hover:text-foreground hover:border-[#D4B872]/50 shadow-2xs cursor-pointer group"
+            className="relative hidden min-[420px]:flex sm:flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full border border-border/80 dark:border-white/12 bg-secondary/30 text-muted-foreground transition-all hover:bg-secondary hover:text-foreground hover:border-[#D4B872]/50 shadow-2xs cursor-pointer group"
             title="Saved Courses & Wishlist"
           >
             <Bookmark className="h-4 w-4 text-foreground/80 group-hover:text-[#D4B872] group-hover:fill-[#D4B872]/20 transition-colors" />
@@ -542,16 +553,16 @@ export function Navbar() {
           {/* Theme Toggle */}
           <ThemeToggle className="!h-9 !w-9 sm:!h-10 sm:!w-10" />
 
-          {/* Structural Hairline Divider */}
+          {/* Hairline Divider */}
           <div className="hidden md:block h-5 w-px bg-border/80 dark:border-white/15 mx-1" />
 
-          {/* User Auth Gateway */}
+          {/* Desktop User Auth Gateway */}
           {user ? (
-            <div className="hidden md:flex items-center gap-2.5">
+            <div className="hidden md:flex items-center gap-2">
               {isAdmin && (
                 <Link
                   href="/admin"
-                  className="flex items-center gap-1.5 rounded-full border border-destructive/30 bg-destructive/10 px-3.5 py-1.5 text-xs font-semibold text-destructive transition-all hover:bg-destructive/20"
+                  className="flex items-center gap-1.5 rounded-full border border-destructive/30 bg-destructive/10 px-3 py-1.5 text-xs font-semibold text-destructive transition-all hover:bg-destructive/20"
                 >
                   <Shield className="h-3.5 w-3.5" />
                   <span>Admin</span>
@@ -572,17 +583,17 @@ export function Navbar() {
               />
             </div>
           ) : (
-            <div className="hidden md:flex items-center gap-2.5">
+            <div className="hidden md:flex items-center gap-2">
               <Link
                 href="/login"
-                className="rounded-full border border-transparent hover:border-border/80 dark:hover:border-white/15 px-4 py-2 text-xs sm:text-[13.5px] font-medium text-muted-foreground hover:text-foreground hover:bg-secondary/70 transition-all cursor-pointer"
+                className="rounded-full border border-transparent hover:border-border/80 dark:hover:border-white/15 px-3.5 py-1.5 text-xs sm:text-[13px] font-medium text-muted-foreground hover:text-foreground hover:bg-secondary/70 transition-all cursor-pointer"
               >
                 Log in
               </Link>
               <Link
                 href="/signup"
                 suppressHydrationWarning
-                className="group relative flex items-center gap-2 rounded-full bg-primary hover:bg-primary-active px-5 py-2 text-xs sm:text-[13.5px] font-semibold text-primary-foreground hover:scale-[1.02] active:scale-[0.98] transition-all tracking-tight"
+                className="group relative flex items-center gap-1.5 rounded-full bg-primary hover:bg-primary-active px-4 py-1.5 text-xs sm:text-[13px] font-semibold text-primary-foreground hover:scale-[1.02] active:scale-[0.98] transition-all tracking-tight shadow-xs"
               >
                 <span>Get Started</span>
                 <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
@@ -594,19 +605,20 @@ export function Navbar() {
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             suppressHydrationWarning
-            className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full border border-border/80 dark:border-white/15 bg-secondary/30 text-muted-foreground transition-all hover:bg-secondary hover:text-foreground lg:hidden cursor-pointer"
-            aria-label="Toggle menu"
+            className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full border border-border/80 dark:border-white/15 bg-secondary/40 text-muted-foreground transition-all hover:bg-secondary hover:text-foreground lg:hidden cursor-pointer"
+            aria-label={mobileOpen ? "Close menu" : "Open navigation menu"}
+            aria-expanded={mobileOpen}
           >
             <div
-              className={`transition-all duration-300 ${
-                mobileOpen ? "rotate-90 opacity-0" : "rotate-0 opacity-100"
+              className={`transition-all duration-200 ${
+                mobileOpen ? "rotate-90 opacity-0 scale-75" : "rotate-0 opacity-100 scale-100"
               } absolute`}
             >
               <Menu className="h-4 w-4 sm:h-4.5 sm:w-4.5" />
             </div>
             <div
-              className={`transition-all duration-300 ${
-                mobileOpen ? "rotate-0 opacity-100" : "-rotate-90 opacity-0"
+              className={`transition-all duration-200 ${
+                mobileOpen ? "rotate-0 opacity-100 scale-100" : "-rotate-90 opacity-0 scale-75"
               } absolute`}
             >
               <X className="h-4 w-4 sm:h-4.5 sm:w-4.5" />
@@ -615,7 +627,7 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* 4. Mobile Drawer Overlay Backdrop (tap outside to close) */}
+      {/* 4. Mobile Drawer Backdrop */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
@@ -624,33 +636,47 @@ export function Navbar() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             onClick={() => setMobileOpen(false)}
-            className="fixed inset-0 top-16 sm:top-[68px] bg-black/60 backdrop-blur-xs z-40 lg:hidden"
+            className="fixed inset-0 top-16 sm:top-[68px] bg-black/60 dark:bg-black/80 backdrop-blur-xs z-40 lg:hidden"
             aria-hidden="true"
           />
         )}
       </AnimatePresence>
 
-      {/* 5. Mobile Drawer Content */}
+      {/* 5. Redesigned Mobile Drawer Menu (Simple, Easy, Responsive) */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-50 overflow-hidden border-t border-border/80 dark:border-white/10 bg-background/98 dark:bg-black/98 backdrop-blur-2xl lg:hidden shadow-lg"
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+            className="fixed inset-x-0 top-16 sm:top-[68px] bottom-0 z-50 overflow-y-auto border-t border-border/80 dark:border-white/10 bg-background/98 dark:bg-[#070b09]/98 backdrop-blur-3xl lg:hidden shadow-2xl flex flex-col justify-between"
           >
-            <nav
-              className="px-4 py-4 max-h-[85vh] overflow-y-auto space-y-3.5 selection:bg-accent/20"
-              aria-label="Mobile navigation"
-            >
-              {/* 1. Profile Header at TOP with Logo/Avatar & Instant Dashboard Action */}
+            <div className="px-4 py-4 space-y-4 max-w-xl mx-auto w-full">
+              {/* 1. Fast Command Search Bar at the Top */}
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileOpen(false)
+                  setSearchOpen(true)
+                }}
+                className="w-full flex items-center justify-between rounded-xl border border-border/80 dark:border-white/12 bg-secondary/50 px-3.5 py-2.5 text-xs text-muted-foreground hover:text-foreground hover:bg-secondary shadow-2xs cursor-pointer transition-all"
+              >
+                <div className="flex items-center gap-2.5">
+                  <Search className="h-4 w-4 text-primary" />
+                  <span className="font-medium">Search 474+ problems, tracks...</span>
+                </div>
+                <kbd className="rounded border border-border dark:border-white/10 bg-background/80 px-1.5 py-0.5 text-[9px] font-mono font-medium text-muted-foreground">
+                  ⌘K
+                </kbd>
+              </button>
+
+              {/* 2. Scholar Status or Guest Gateway */}
               {user ? (
-                <div className="rounded-2xl border border-stone-200 dark:border-stone-800 bg-secondary/50 dark:bg-[#0a0a0a] p-3.5 space-y-3 shadow-2xs">
+                <div className="rounded-2xl border border-border/80 dark:border-white/12 bg-secondary/40 p-3.5 space-y-3 shadow-2xs">
                   <div className="flex items-center justify-between gap-3">
-                    {/* User Avatar / Logo + Active Status */}
                     <div className="flex items-center gap-3 min-w-0 flex-1">
-                      <div className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-500/10 text-blue-600 font-bold text-sm uppercase border border-blue-500/25 overflow-hidden shadow-xs">
+                      <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/15 text-primary font-bold text-xs uppercase border border-primary/25 overflow-hidden">
                         {navAvatar ? (
                           <img
                             src={navAvatar}
@@ -661,19 +687,19 @@ export function Navbar() {
                         ) : (
                           <span className="font-mono">{userInitials}</span>
                         )}
-                        <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-emerald-500 border-2 border-background z-10" />
+                        <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-primary border-2 border-background z-10" />
                       </div>
 
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-1.5 flex-wrap">
-                          <p className="text-xs sm:text-sm font-bold text-foreground truncate tracking-tight">
+                          <p className="text-xs font-bold text-foreground truncate tracking-tight">
                             {displayName}
                           </p>
                           <span
-                            className={`shrink-0 text-[8.5px] font-mono uppercase px-1.5 py-0.5 rounded-md font-bold leading-none border ${
+                            className={`shrink-0 text-[8.5px] font-mono uppercase px-1.5 py-0.5 rounded font-bold leading-none border ${
                               isAdmin
                                 ? "bg-destructive/15 text-destructive border-destructive/30"
-                                : "bg-blue-500/10 text-blue-600 border-blue-500/20"
+                                : "bg-primary/10 text-primary border-primary/20"
                             }`}
                           >
                             {userRoleBadge}
@@ -685,49 +711,47 @@ export function Navbar() {
                       </div>
                     </div>
 
-                    {/* Official ASCI Academy Logo Mark Badge */}
-                    <div
-                      className="shrink-0 flex items-center justify-center p-2 rounded-xl bg-background/90 dark:bg-black/50 border border-stone-200/80 dark:border-stone-800 shadow-2xs"
-                      title="ASCI Academy"
-                    >
-                      <AsciLogo size={22} showText={false} useVector />
-                    </div>
+                    <AsciLogo size={24} showText={false} useVector />
                   </div>
 
-                  {/* Primary 1-Tap Dashboard CTA */}
+                  {/* 1-Tap Dashboard Button */}
                   <Link
                     href="/dashboard"
                     onClick={() => setMobileOpen(false)}
-                    className="w-full flex items-center justify-between rounded-xl bg-primary hover:bg-primary-active text-primary-foreground px-3.5 py-2.5 text-xs font-bold transition-all group"
+                    className="w-full flex items-center justify-between rounded-xl bg-primary hover:bg-primary-active text-primary-foreground px-3.5 py-2.5 text-xs font-bold transition-all shadow-xs group"
                   >
                     <div className="flex items-center gap-2">
-                      <LayoutDashboard className="h-3.5 w-3.5" />
+                      <LayoutDashboard className="h-4 w-4" />
                       <span>Open Engineering Dashboard</span>
                     </div>
                     <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
                   </Link>
                 </div>
               ) : (
-                /* Guest Brand & Auth Card with Clean Stacked Layout to Prevent Overlapping */
-                <div className="rounded-2xl border border-stone-200 dark:border-stone-800 bg-secondary/50 dark:bg-[#0a0a0a] p-4 space-y-3 shadow-2xs">
-                  <div className="flex items-center gap-2.5">
-                    <AsciLogo size={38} showText showBadge={false} useVector={false} />
+                <div className="rounded-2xl border border-border/80 dark:border-white/12 bg-secondary/40 p-4 space-y-2.5 shadow-2xs">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-foreground tracking-tight">
+                      Master Computer Science & Algorithmic Engineering
+                    </span>
+                    <span className="text-[9px] font-mono uppercase text-primary font-bold bg-primary/10 px-2 py-0.5 rounded-md border border-primary/20">
+                      Accredited
+                    </span>
                   </div>
-                  <p className="text-xs text-muted-foreground leading-relaxed">
-                    Interactive engineering curriculum, algorithmic sandboxes &amp; verified career credentials.
+                  <p className="text-[11.5px] text-muted-foreground leading-relaxed">
+                    Interactive engineering curriculum, algorithmic sandboxes & verified career credentials.
                   </p>
-                  <div className="grid grid-cols-2 gap-2 pt-0.5">
+                  <div className="grid grid-cols-2 gap-2 pt-1">
                     <Link
                       href="/login"
                       onClick={() => setMobileOpen(false)}
-                      className="flex items-center justify-center rounded-xl border border-stone-200 dark:border-stone-800 bg-card hover:bg-secondary px-3 py-2 text-xs font-semibold text-foreground transition-colors"
+                      className="flex items-center justify-center rounded-xl border border-border bg-card hover:bg-secondary px-3 py-2 text-xs font-semibold text-foreground transition-colors"
                     >
                       Log in
                     </Link>
                     <Link
                       href="/signup"
                       onClick={() => setMobileOpen(false)}
-                      className="flex items-center justify-center gap-1.5 rounded-xl bg-primary hover:bg-primary-active text-primary-foreground px-3 py-2 text-xs font-semibold transition-all"
+                      className="flex items-center justify-center gap-1.5 rounded-xl bg-primary hover:bg-primary-active text-primary-foreground px-3 py-2 text-xs font-semibold transition-all shadow-xs"
                     >
                       <span>Get Started</span>
                       <ArrowRight className="h-3.5 w-3.5" />
@@ -736,36 +760,46 @@ export function Navbar() {
                 </div>
               )}
 
-              {/* 2. Quick Search Trigger */}
-              <button
-                type="button"
-                onClick={() => {
-                  setMobileOpen(false)
-                  setSearchOpen(true)
-                }}
-                className="w-full flex items-center justify-between rounded-xl border border-stone-200 dark:border-stone-800 bg-secondary/60 px-3.5 py-2.5 text-xs text-muted-foreground hover:text-foreground shadow-2xs cursor-pointer transition-colors"
-              >
-                <div className="flex items-center gap-2.5">
-                  <Search className="h-4 w-4 text-primary" />
-                  <span>Search curriculum, code labs...</span>
+              {/* 3. Horizontal Quick Navigation Chips */}
+              <div className="space-y-1.5">
+                <span className="text-[10.5px] font-mono uppercase tracking-wider text-muted-foreground font-semibold px-1">
+                  Quick Access Tracks
+                </span>
+                <div className="flex items-center gap-1.5 overflow-x-auto pb-1 pt-0.5 no-scrollbar">
+                  {QUICK_MOBILE_PILLS.map((pill) => {
+                    const Icon = pill.icon
+                    return (
+                      <Link
+                        key={pill.label}
+                        href={pill.href}
+                        onClick={() => setMobileOpen(false)}
+                        className="flex items-center gap-1.5 shrink-0 rounded-full border border-border/80 dark:border-white/10 bg-secondary/50 hover:bg-secondary text-foreground px-3 py-1.5 text-xs font-medium transition-all shadow-2xs"
+                      >
+                        <Icon className="h-3.5 w-3.5 text-primary" />
+                        <span>{pill.label}</span>
+                        {pill.badge && (
+                          <span className="text-[8px] font-mono font-bold bg-primary/10 text-primary px-1 rounded">
+                            {pill.badge}
+                          </span>
+                        )}
+                      </Link>
+                    )
+                  })}
                 </div>
-                <kbd className="rounded border border-stone-200 dark:border-stone-700 bg-background px-1.5 py-0.5 text-[9px] font-mono font-medium text-muted-foreground">
-                  ⌘K
-                </kbd>
-              </button>
+              </div>
 
-              {/* 3. Compact Problem of the Day Banner */}
+              {/* 4. Problem of the Day Banner */}
               <Link
                 href="/dashboard?tab=practice-arena"
                 onClick={() => setMobileOpen(false)}
                 className="flex items-center justify-between p-3 rounded-xl border border-border/80 dark:border-white/10 bg-card hover:bg-secondary/60 shadow-2xs transition-colors group"
               >
                 <div className="flex items-center gap-2.5 min-w-0">
-                  <div className="w-7 h-7 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
-                    <Flame className="w-4 h-4 fill-current" />
+                  <div className="w-8 h-8 rounded-lg bg-[#D4B872]/15 text-[#D4B872] flex items-center justify-center shrink-0 border border-[#D4B872]/20">
+                    <Flame className="w-4 h-4 fill-[#D4B872]/40" />
                   </div>
                   <div className="min-w-0">
-                    <div className="text-[10px] font-mono uppercase tracking-wider font-bold text-primary">
+                    <div className="text-[9.5px] font-mono uppercase tracking-wider font-bold text-[#D4B872]">
                       Problem of the Day
                     </div>
                     <div className="text-xs font-bold text-foreground truncate">
@@ -773,13 +807,13 @@ export function Navbar() {
                     </div>
                   </div>
                 </div>
-                <span className="shrink-0 text-[10px] font-mono font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-md">
+                <span className="shrink-0 text-[10px] font-mono font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-md border border-primary/20">
                   +50 XP →
                 </span>
               </Link>
 
-              {/* 4. Primary Navigation Accordion Rows (Clean, Glanceable, Tap-Friendly) */}
-              <div className="space-y-1.5 pt-0.5">
+              {/* 5. Primary Navigation Accordion (Streamlined & Simple) */}
+              <div className="space-y-1.5">
                 {NAV_ITEMS.map((section) => {
                   const Icon = section.icon || BookOpen
                   const isExpanded = mobileExpandedSection === section.label
@@ -790,10 +824,10 @@ export function Navbar() {
                         key={section.label}
                         href={section.href}
                         onClick={() => setMobileOpen(false)}
-                        className="flex items-center justify-between p-3 rounded-xl border border-stone-200 dark:border-stone-800 bg-card hover:bg-secondary transition-colors"
+                        className="flex items-center justify-between p-3 rounded-xl border border-border/70 dark:border-white/8 bg-card hover:bg-secondary transition-colors"
                       >
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-600 flex items-center justify-center shrink-0">
+                          <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0 border border-primary/20">
                             <Icon className="w-4 h-4" />
                           </div>
                           <div>
@@ -801,7 +835,7 @@ export function Navbar() {
                             <div className="text-[11px] text-muted-foreground">{section.desc}</div>
                           </div>
                         </div>
-                        <ArrowRight className="h-3.5 w-3.5 text-muted-foreground" />
+                        <ChevronRight className="h-4 w-4 text-muted-foreground" />
                       </Link>
                     )
                   }
@@ -809,24 +843,25 @@ export function Navbar() {
                   return (
                     <div
                       key={section.label}
-                      className="rounded-xl border border-stone-200 dark:border-stone-800 bg-card overflow-hidden transition-all"
+                      className="rounded-xl border border-border/70 dark:border-white/8 bg-card overflow-hidden transition-all"
                     >
-                      {/* Accordion Trigger Header */}
                       <button
                         type="button"
-                        onClick={() => setMobileExpandedSection(isExpanded ? null : section.label)}
-                        className="w-full flex items-center justify-between p-3 text-left hover:bg-secondary/60 transition-colors cursor-pointer"
+                        onClick={() =>
+                          setMobileExpandedSection(isExpanded ? null : section.label)
+                        }
+                        className="w-full flex items-center justify-between p-3 text-left hover:bg-secondary/50 transition-colors cursor-pointer"
                         aria-expanded={isExpanded}
                       >
                         <div className="flex items-center gap-3 min-w-0 flex-1 pr-2">
-                          <div className="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-600 flex items-center justify-center shrink-0">
+                          <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0 border border-primary/20">
                             <Icon className="w-4 h-4" />
                           </div>
                           <div className="min-w-0 flex-1">
                             <div className="flex items-center gap-2">
                               <span className="text-xs font-bold text-foreground">{section.label}</span>
                               {section.items && (
-                                <span className="text-[9px] font-mono font-semibold px-1.5 py-0.5 rounded bg-stone-100 dark:bg-stone-800 text-muted-foreground leading-none">
+                                <span className="text-[9px] font-mono font-semibold px-1.5 py-0.5 rounded bg-secondary text-muted-foreground leading-none">
                                   {section.items.length}
                                 </span>
                               )}
@@ -837,20 +872,23 @@ export function Navbar() {
                           </div>
                         </div>
 
-                        <div className={`p-1.5 rounded-lg transition-transform duration-200 text-muted-foreground shrink-0 ${isExpanded ? "rotate-180 text-foreground bg-secondary" : ""}`}>
+                        <div
+                          className={`p-1.5 rounded-lg transition-transform duration-200 text-muted-foreground shrink-0 ${
+                            isExpanded ? "rotate-180 text-foreground bg-secondary" : ""
+                          }`}
+                        >
                           <ChevronDown className="h-4 w-4" />
                         </div>
                       </button>
 
-                      {/* Accordion Drawer Content */}
                       <AnimatePresence initial={false}>
                         {isExpanded && (
                           <motion.div
                             initial={{ height: 0, opacity: 0 }}
                             animate={{ height: "auto", opacity: 1 }}
                             exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.2 }}
-                            className="border-t border-stone-100 dark:border-stone-800/80 bg-secondary/30 px-2.5 py-2 space-y-0.5"
+                            transition={{ duration: 0.18 }}
+                            className="border-t border-border/50 dark:border-white/8 bg-secondary/30 px-2.5 py-2 space-y-1"
                           >
                             {section.items?.map((item) => {
                               const SubIcon = item.icon
@@ -862,11 +900,11 @@ export function Navbar() {
                                   className="flex items-center justify-between gap-2 p-2 rounded-lg text-xs text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
                                 >
                                   <div className="flex items-center gap-2.5 min-w-0 flex-1">
-                                    <SubIcon className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                                    <SubIcon className="w-3.5 h-3.5 text-primary shrink-0" />
                                     <span className="truncate font-medium">{item.title}</span>
                                   </div>
                                   {item.badge && (
-                                    <span className="shrink-0 text-[8px] font-mono uppercase px-1.5 py-0.5 rounded bg-stone-200 dark:bg-stone-800 text-stone-700 dark:text-stone-300 font-bold leading-none">
+                                    <span className="shrink-0 text-[8px] font-mono uppercase px-1.5 py-0.5 rounded bg-primary/10 text-primary font-bold leading-none border border-primary/20">
                                       {item.badge}
                                     </span>
                                   )}
@@ -874,11 +912,11 @@ export function Navbar() {
                               )
                             })}
 
-                            <div className="pt-1 border-t border-stone-200/60 dark:border-stone-800/60 mt-1">
+                            <div className="pt-1.5 border-t border-border/40 dark:border-white/6 mt-1">
                               <Link
                                 href={section.href}
                                 onClick={() => setMobileOpen(false)}
-                                className="flex items-center justify-between px-2 py-1.5 text-xs font-semibold text-blue-600 hover:underline"
+                                className="flex items-center justify-between px-2 py-1 text-xs font-semibold text-primary hover:text-primary-active"
                               >
                                 <span>Explore all {section.label}</span>
                                 <ArrowRight className="w-3.5 h-3.5" />
@@ -892,7 +930,7 @@ export function Navbar() {
                 })}
               </div>
 
-              {/* 5. Saved Wishlist Strip (if any items) */}
+              {/* 6. Saved Wishlist Strip (if items saved) */}
               {wishlistCount > 0 && (
                 <button
                   type="button"
@@ -900,64 +938,67 @@ export function Navbar() {
                     setMobileOpen(false)
                     setWishlistDrawerOpen(true)
                   }}
-                  className="w-full flex items-center justify-between rounded-xl border border-stone-200 dark:border-stone-800 bg-secondary/50 px-3.5 py-2 text-xs font-semibold text-foreground hover:bg-secondary cursor-pointer transition-colors"
+                  className="w-full flex items-center justify-between rounded-xl border border-border/80 dark:border-white/10 bg-secondary/50 px-3.5 py-2 text-xs font-semibold text-foreground hover:bg-secondary cursor-pointer transition-colors"
                 >
                   <div className="flex items-center gap-2">
-                    <Bookmark className="h-3.5 w-3.5 text-blue-600" />
-                    <span>Saved Tracks</span>
+                    <Bookmark className="h-3.5 w-3.5 text-[#D4B872]" />
+                    <span>Saved Tracks & Wishlist</span>
                   </div>
-                  <span className="rounded-full bg-blue-500/15 px-2 py-0.5 text-[10px] font-mono font-bold text-blue-600">
+                  <span className="rounded-full bg-[#D4B872]/20 px-2 py-0.5 text-[10px] font-mono font-bold text-[#D4B872]">
                     {wishlistCount} saved
                   </span>
                 </button>
               )}
+            </div>
 
-              {/* 6. Mobile Utility Footer: Appearance & Sign Out */}
-              <div className="pt-2 border-t border-stone-200 dark:border-stone-800 space-y-2">
-                {user ? (
-                  <>
-                    <div className="grid grid-cols-2 gap-2">
-                      <div className="flex items-center justify-center px-2 py-1 rounded-xl bg-secondary/60 border border-stone-200 dark:border-stone-800">
-                        <ThemeToggle showLabel />
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setMobileOpen(false)
-                          handleSignOut()
-                        }}
-                        className="flex items-center justify-center gap-1.5 rounded-xl border border-destructive/30 bg-destructive/10 px-3 py-2 text-xs font-semibold text-destructive hover:bg-destructive/20 cursor-pointer transition-colors"
-                      >
-                        <LogOut className="h-3.5 w-3.5" />
-                        <span>Sign Out</span>
-                      </button>
-                    </div>
-
-                    {isAdmin && (
-                      <Link
-                        href="/admin"
-                        onClick={() => setMobileOpen(false)}
-                        className="w-full flex items-center justify-center gap-2 rounded-xl border border-stone-200 dark:border-stone-800 bg-secondary/60 hover:bg-secondary px-3 py-2 text-xs font-medium text-foreground transition-colors"
-                      >
-                        <Shield className="h-3.5 w-3.5 text-blue-600" />
-                        <span>Admin Command Center</span>
-                      </Link>
-                    )}
-                  </>
-                ) : (
-                  <div className="flex items-center justify-between px-3 py-2 rounded-xl bg-secondary/40 text-xs text-muted-foreground border border-stone-200 dark:border-stone-800">
-                    <span>Appearance</span>
+            {/* 7. Mobile Utility Footer */}
+            <div className="p-4 border-t border-border/80 dark:border-white/10 bg-secondary/30 mt-4 space-y-2.5 max-w-xl mx-auto w-full">
+              {user ? (
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="flex items-center justify-center px-2 py-1 rounded-xl bg-card border border-border/80">
                     <ThemeToggle showLabel />
                   </div>
-                )}
+
+                  <button
+                    type="button"
+                    onClick={handleSignOut}
+                    className="flex items-center justify-center gap-1.5 rounded-xl border border-destructive/30 bg-destructive/10 px-3 py-2 text-xs font-semibold text-destructive hover:bg-destructive/20 cursor-pointer transition-colors"
+                  >
+                    <LogOut className="h-3.5 w-3.5" />
+                    <span>Sign Out</span>
+                  </button>
+                </div>
+              ) : (
+                <div className="flex items-center justify-between px-3 py-1.5 rounded-xl bg-card border border-border/80 text-xs text-muted-foreground">
+                  <span>Display Theme</span>
+                  <ThemeToggle showLabel />
+                </div>
+              )}
+
+              {isAdmin && (
+                <Link
+                  href="/admin"
+                  onClick={() => setMobileOpen(false)}
+                  className="w-full flex items-center justify-center gap-2 rounded-xl border border-destructive/20 bg-destructive/5 hover:bg-destructive/10 px-3 py-2 text-xs font-semibold text-destructive transition-colors"
+                >
+                  <Shield className="h-3.5 w-3.5" />
+                  <span>Admin Command Console</span>
+                </Link>
+              )}
+
+              <div className="flex items-center justify-between pt-1 text-[10.5px] font-mono text-muted-foreground/70">
+                <span className="flex items-center gap-1">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  ASCI Network Live
+                </span>
+                <span>v2.4 Editorial</span>
               </div>
-            </nav>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Search Command Dialog (Command Palette) */}
+      {/* Search Command Dialog */}
       <SearchCommandDialog open={searchOpen} onOpenChange={setSearchOpen} />
 
       {/* Auth Error Toast */}

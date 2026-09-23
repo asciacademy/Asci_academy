@@ -17,20 +17,20 @@
   --card-foreground: #0f172a;
   --popover: #ffffff;
   --popover-foreground: #0f172a;
-  --primary: #EA580C;
+  --primary: #2563eb;
   --primary-foreground: #ffffff;
-  --primary-active: #C2410C;
+  --primary-active: #1d4ed8;
   --secondary: #f8fafc;
   --secondary-foreground: #334155;
   --muted: #f1f5f9;
   --muted-foreground: #64748b;
-  --accent: #F97316;
+  --accent: #3b82f6;
   --accent-foreground: #ffffff;
   --destructive: #dc2626;
   --destructive-foreground: #ffffff;
   --border: #e2e8f0;
   --input: #e2e8f0;
-  --ring: #EA580C;
+  --ring: #2563eb;
 
   /* Extended surfaces */
   --surface: #ffffff;
@@ -75,9 +75,9 @@
   --card-foreground: #f8fafc;
   --popover: #000000;
   --popover-foreground: #f8fafc;
-  --primary: #F97316;
-  --primary-foreground: #000000;
-  --primary-active: #EA580C;
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+  --primary-active: #1d4ed8;
   --secondary: #0a0a0a;
   --secondary-foreground: #cbd5e1;
   --muted: #0a0a0a;
@@ -88,7 +88,7 @@
   --destructive-foreground: #ffffff;
   --border: rgba(255, 255, 255, 0.12);
   --input: rgba(255, 255, 255, 0.14);
-  --ring: #F97316;
+  --ring: #3b82f6;
 
   /* Extended surfaces */
   --surface: #000000;
@@ -1105,6 +1105,17 @@ html {
   );
   background-size: 200% 100%;
   animation: skeleton-shimmer 1.6s ease-in-out infinite;
+}
+
+/* ─────────────────────────────────────────────
+   CUSTOM UTILITY: NO-SCROLLBAR
+───────────────────────────────────────────── */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 /* ─────────────────────────────────────────────
