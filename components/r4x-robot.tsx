@@ -82,20 +82,39 @@ export function R4XRobot({
   useEffect(() => {
     let rafId: number | null = null
     let latestE: PointerEvent | null = null
+    const isVisibleRef = { current: false }
+    const centerRef = { current: { cx: 0, cy: 0 } }
+
+    const updateCenter = () => {
+      const iframe = iframeRef.current
+      if (!iframe) return
+      const r = iframe.getBoundingClientRect()
+      centerRef.current = {
+        cx: r.left + r.width / 2,
+        cy: r.top + r.height / 2,
+      }
+    }
+
+    let observer: IntersectionObserver | null = null
+    if (iframeRef.current && typeof IntersectionObserver !== "undefined") {
+      observer = new IntersectionObserver(([entry]) => {
+        isVisibleRef.current = entry.isIntersecting
+        if (entry.isIntersecting) {
+          updateCenter()
+        }
+      }, { threshold: 0.1 })
+      observer.observe(iframeRef.current)
+    }
 
     const processPointer = () => {
       rafId = null
-      if (!latestE) return
+      if (!latestE || !isVisibleRef.current) return
       const iframe = iframeRef.current
       if (!iframe || !iframe.contentWindow) return
 
-      const rect = iframe.getBoundingClientRect()
-      // Skip postMessage if robot is scrolled offscreen or hidden
-      if (rect.bottom < 0 || rect.top > window.innerHeight || rect.width === 0) return
-
-      // Center of robot in viewport coordinates
-      const cx = rect.left + rect.width / 2
-      const cy = rect.top + rect.height / 2
+      const cx = centerRef.current.cx
+      const cy = centerRef.current.cy
+      if (cx === 0 && cy === 0) return
 
       // Normalized coordinates from -1 to 1 based on distance to robot center
       const maxDistX = Math.max(window.innerWidth / 2, 400)
@@ -111,8 +130,7 @@ export function R4XRobot({
     }
 
     const handlePointerMove = (e: PointerEvent) => {
-      // Ignore touch events to prevent touch-scroll lag and frame drops on mobile
-      if (e.pointerType === "touch") return
+      if (e.pointerType === "touch" || !isVisibleRef.current) return
       latestE = e
       if (rafId === null) {
         rafId = requestAnimationFrame(processPointer)
@@ -125,16 +143,19 @@ export function R4XRobot({
         rafId = null
       }
       latestE = null
-      iframeRef.current?.contentWindow?.postMessage(
-        { type: "ROBOT_POINTER_MOVE", x: 0, y: 0 },
-        "*"
-      )
+      if (isVisibleRef.current) {
+        iframeRef.current?.contentWindow?.postMessage(
+          { type: "ROBOT_POINTER_MOVE", x: 0, y: 0 },
+          "*"
+        )
+      }
     }
 
     window.addEventListener("pointermove", handlePointerMove, { passive: true })
     document.addEventListener("mouseleave", handlePointerLeave)
 
     return () => {
+      if (observer) observer.disconnect()
       if (rafId !== null) {
         cancelAnimationFrame(rafId)
       }

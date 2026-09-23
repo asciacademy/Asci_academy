@@ -1,0 +1,30 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin/*
+Disallow: /api
+Disallow: /api/*
+Disallow: /checkout
+Disallow: /checkout/*
+Disallow: /dashboard
+Disallow: /dashboard/*
+Disallow: /results
+Disallow: /verify-otp
+Disallow: /reset-password
+
+User-agent: Googlebot
+Allow: /
+Disallow: /admin
+Disallow: /admin/*
+Disallow: /api
+Disallow: /api/*
+Disallow: /checkout
+Disallow: /checkout/*
+Disallow: /dashboard
+Disallow: /dashboard/*
+Disallow: /results
+Disallow: /verify-otp
+Disallow: /reset-password
+
+Sitemap: https://asci-academy.pages.dev/sitemap.xml
+Host: https://asci-academy.pages.dev

@@ -18,24 +18,62 @@ export default function GSAPChapterCard({ chapter, partColor, index, onLessonSel
     const chapNum = chapter.title.split(' — ')[0] || `Module ${index + 1}`
     const chapName = chapter.title.split(' — ')[1] || chapter.title
 
+    const rectRef = useRef<{ left: number; top: number; width: number; height: number } | null>(null)
+    const rafIdRef = useRef<number | null>(null)
+
     // Elegant 3D perspective hover effect
+    const handleMouseEnter = () => {
+        if (!cardRef.current) return
+        const rect = cardRef.current.getBoundingClientRect()
+        rectRef.current = {
+            left: rect.left,
+            top: rect.top,
+            width: rect.width,
+            height: rect.height,
+        }
+    }
+
     const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
         if (!cardRef.current || !contentRef.current) return
 
-        const rect = cardRef.current.getBoundingClientRect()
+        if (!rectRef.current) {
+            const rect = cardRef.current.getBoundingClientRect()
+            rectRef.current = {
+                left: rect.left,
+                top: rect.top,
+                width: rect.width,
+                height: rect.height,
+            }
+        }
+
+        const rect = rectRef.current
         const x = e.clientX - rect.left
         const y = e.clientY - rect.top
         
         const centerX = rect.width / 2
         const centerY = rect.height / 2
 
-        const rotateX = ((y - centerY) / centerY) * -8 // Max rotation deg
+        const rotateX = ((y - centerY) / centerY) * -8
         const rotateY = ((x - centerX) / centerX) * 8
 
-        contentRef.current.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`
+        if (rafIdRef.current !== null) {
+            cancelAnimationFrame(rafIdRef.current)
+        }
+
+        rafIdRef.current = requestAnimationFrame(() => {
+            rafIdRef.current = null
+            if (contentRef.current) {
+                contentRef.current.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.02, 1.02, 1.02)`
+            }
+        })
     }
 
     const handleMouseLeave = () => {
+        if (rafIdRef.current !== null) {
+            cancelAnimationFrame(rafIdRef.current)
+            rafIdRef.current = null
+        }
+        rectRef.current = null
         if (!contentRef.current) return
         contentRef.current.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`
     }
@@ -45,6 +83,7 @@ export default function GSAPChapterCard({ chapter, partColor, index, onLessonSel
             ref={cardRef}
             className="group relative w-[380px] h-[500px] shrink-0"
             style={{ perspective: "1500px" }}
+            onMouseEnter={handleMouseEnter}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
         >

@@ -253,91 +253,25 @@ export function AxelCompanion() {
     return () => window.removeEventListener("resize", handleResize)
   }, [refreshStations, updateAnchorPosition])
 
-  // Continuous layout shift observer (detects accordions, expanded cards, dynamic data loading)
-  useEffect(() => {
-    let ro: ResizeObserver | null = null
-    if (typeof ResizeObserver !== "undefined" && document.body) {
-      ro = new ResizeObserver(() => {
-        updateAnchorPosition(lastActiveRef.current)
-      })
-      ro.observe(document.body)
-    }
-
-    return () => {
-      if (ro) ro.disconnect()
-    }
-  }, [updateAnchorPosition])
-
-  // Route change & dynamic DOM lifecycle: observe tab switches and mutations
+  // Route change & tab switch lifecycle: update stations and anchor position cleanly
   useEffect(() => {
     refreshStations()
-    const t1 = setTimeout(refreshStations, 100)
-    const t2 = setTimeout(refreshStations, 350)
-    const t3 = setTimeout(refreshStations, 900)
+    const t1 = setTimeout(refreshStations, 120)
+    const t2 = setTimeout(refreshStations, 400)
 
     const handleRefreshEvent = () => {
       refreshStations()
-      setTimeout(refreshStations, 60)
-      setTimeout(refreshStations, 250)
+      setTimeout(refreshStations, 100)
     }
 
     window.addEventListener("axel-refresh-stations", handleRefreshEvent)
     window.addEventListener("popstate", handleRefreshEvent)
 
-    // MutationObserver: detects when tabs mount/unmount stages inside dashboard workspace
-    let mutationDebounce: NodeJS.Timeout | null = null
-    const observer = new MutationObserver((mutations) => {
-      let shouldRefresh = false
-      for (const m of mutations) {
-        if (m.type === "childList") {
-          for (const node of m.addedNodes) {
-            if (
-              node instanceof HTMLElement &&
-              (node.getAttribute?.("data-axel-anchor") === "true" ||
-                node.id?.endsWith("-robot-anchor") ||
-                node.querySelector?.('[data-axel-anchor="true"], [id$="-robot-anchor"]'))
-            ) {
-              shouldRefresh = true
-              break
-            }
-          }
-          if (!shouldRefresh) {
-            for (const node of m.removedNodes) {
-              if (
-                node instanceof HTMLElement &&
-                (node.getAttribute?.("data-axel-anchor") === "true" ||
-                  node.id?.endsWith("-robot-anchor") ||
-                  node.querySelector?.('[data-axel-anchor="true"], [id$="-robot-anchor"]'))
-              ) {
-                shouldRefresh = true
-                break
-              }
-            }
-          }
-        }
-        if (shouldRefresh) break
-      }
-
-      if (shouldRefresh) {
-        if (mutationDebounce) clearTimeout(mutationDebounce)
-        mutationDebounce = setTimeout(() => {
-          refreshStations()
-        }, 40)
-      }
-    })
-
-    if (document.body) {
-      observer.observe(document.body, { childList: true, subtree: true })
-    }
-
     return () => {
       clearTimeout(t1)
       clearTimeout(t2)
-      clearTimeout(t3)
-      if (mutationDebounce) clearTimeout(mutationDebounce)
       window.removeEventListener("axel-refresh-stations", handleRefreshEvent)
       window.removeEventListener("popstate", handleRefreshEvent)
-      observer.disconnect()
     }
   }, [pathname, refreshStations])
 

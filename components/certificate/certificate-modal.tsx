@@ -88,6 +88,12 @@ export function CertificateModal({
           Official verified certificate of completion and engineering credentials.
         </DialogDescription>
 
+        {/* On-demand Certificate Google Fonts */}
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cinzel:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap"
+        />
+
         {/* ══════════════════════════════════════════════
             1. MINIMAL FLOATING ASCI BRAND HEADER
         ══════════════════════════════════════════════ */}

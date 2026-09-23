@@ -23,10 +23,81 @@ const ebGaramond = EB_Garamond({
   display: 'swap',
 })
 
+import { JsonLd } from '@/components/seo/json-ld'
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://asci-academy.pages.dev'
+
 export const metadata: Metadata = {
-  title: 'ASCI — Master DSA & Modern Web Development',
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: 'ASCI Academy — Master DSA, Systems & Modern Web Development',
+    template: '%s | ASCI Academy',
+  },
   description:
-    'Comprehensive learning platform for mastering Data Structures, Algorithms, and full-stack web development. Interactive visualizers, 1-on-1 mentorship, real-world projects, and career-focused curriculum.',
+    'Comprehensive engineering learning platform for mastering Data Structures, Algorithms, Low-Level Systems, and Full-Stack Engineering. Interactive visualizers, 474 curated coding challenges, multi-language compiler runner, and career-focused curriculum.',
+  keywords: [
+    'ASCI Academy',
+    'Data Structures and Algorithms',
+    'A2Z DSA Sheet',
+    'Coding Interview Preparation',
+    'Systems Engineering',
+    'C++',
+    'Enterprise Java',
+    'Full-Stack Web Development',
+    'React 19',
+    'Next.js',
+    'Python for Engineers',
+    'Interactive Algorithm Visualizer',
+    'Online Code Compiler',
+  ],
+  authors: [{ name: 'ASCI Academy Editorial Team', url: siteUrl }],
+  creator: 'ASCI Academy',
+  publisher: 'ASCI Academy',
+  alternates: {
+    canonical: '/',
+  },
+  verification: {
+    google: 'google46148bccaeba60eb',
+    other: {
+      'google-site-verification': ['google46148bccaeba60eb', 'google46148bccaeba60eb.html'],
+    },
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: siteUrl,
+    siteName: 'ASCI Academy',
+    title: 'ASCI Academy — Master DSA, Systems & Modern Web Development',
+    description:
+      'Master Data Structures, Algorithms, Systems Architecture, and Full-Stack Engineering with 474 interactive problems, step-through visualizers, and verified certificates.',
+    images: [
+      {
+        url: '/logo.png',
+        width: 1200,
+        height: 630,
+        alt: 'ASCI Academy Platform',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'ASCI Academy — Master DSA, Systems & Modern Web Development',
+    description:
+      'Master Data Structures, Algorithms, Systems Architecture, and Full-Stack Engineering with 474 interactive problems and visualizers.',
+    images: ['/logo.png'],
+    creator: '@asciacademy',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
   icons: {
     icon: [
       { url: '/favicon.ico' },
@@ -71,6 +142,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${jetbrainsMono.variable} ${ebGaramond.variable} font-sans antialiased bg-background text-foreground min-h-screen transition-colors duration-200 overflow-x-hidden w-full max-w-full`}
       >
+        <JsonLd />
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <AuthProvider>
             <UserSettingsProvider>
