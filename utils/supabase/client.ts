@@ -10,6 +10,12 @@ export function createClient() {
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder-anon-key",
         {
             isSingleton: true,
+            auth: {
+                // Prevent navigator.locks stall and AbortError in browser / React Strict Mode
+                lock: async (_name: string, _acquireTimeout: number, fn: () => Promise<any>) => {
+                    return await fn()
+                },
+            },
         }
     )
 

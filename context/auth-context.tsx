@@ -157,8 +157,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             saveProfile(null)
           }
         }
-        // Do NOT wipe user state on null session here: keep cached state until an explicit SIGNED_OUT event
       } catch (err: any) {
+        if (err?.name === "AbortError" || err?.message?.includes("Lock broken")) {
+          // Benign lock handoff in browser / React Strict Mode
+          return
+        }
         console.warn("Auth initialization error, keeping cached state:", err)
       } finally {
         if (isMounted) {
@@ -200,9 +203,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     })
 
+    const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
+      const msg = event?.reason?.message || String(event?.reason || "")
+      if (
+        event?.reason?.name === "AbortError" ||
+        msg.includes("Lock broken") ||
+        msg.includes("navigator.locks")
+      ) {
+        event.preventDefault()
+      }
+    }
+    window.addEventListener("unhandledrejection", handleUnhandledRejection)
+
     return () => {
       isMounted = false
       subscription.unsubscribe()
+      window.removeEventListener("unhandledrejection", handleUnhandledRejection)
     }
   }, [fetchProfile, saveUser, saveProfile])
 

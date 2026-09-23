@@ -12,7 +12,7 @@ import {
   Play, Check, CheckCircle2, Circle, ChevronLeft, ChevronRight,
   Code2, RotateCcw, Copy, Bot, Activity, BookOpen, FileText, History,
   ListFilter, ExternalLink, Youtube, ArrowRight, Terminal, X,
-  Trophy, AlertCircle, Clock, Cpu, HelpCircle, ChevronDown, Share2, Eye, Lightbulb
+  Trophy, AlertCircle, Clock, Cpu, HelpCircle, ChevronDown, Share2, Eye, Lightbulb, Sparkles
 } from "lucide-react"
 import {
   ResizablePanelGroup,
@@ -29,6 +29,9 @@ import { executeCode, RunResult, SingleTestResult } from "@/lib/dsa/code-runner"
 import { ProblemListDrawer } from "./problem-list-drawer"
 import { ProblemVisualizer } from "./problem-visualizer"
 import { AxelTutorDrawer } from "./axel-tutor-drawer"
+import { EditorStatusBar } from "./editor-status-bar"
+import { TestOutputDiff } from "./test-output-diff"
+import { SolutionShareModal } from "./solution-share-modal"
 import { cn } from "@/lib/utils"
 import { toast } from "sonner"
 
@@ -106,7 +109,15 @@ export function ProblemSolver({ initialProblem }: ProblemSolverProps) {
   // Modals & Drawers
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [celebrationModalOpen, setCelebrationModalOpen] = useState(false)
+  const [shareModalOpen, setShareModalOpen] = useState(false)
   const [axelHintOpen, setAxelHintOpen] = useState(false)
+  const [cursorPos, setCursorPos] = useState({ line: 1, col: 1 })
+  const [activeFailureContext, setActiveFailureContext] = useState<{
+    input?: string
+    expected?: string
+    actual?: string
+    errorMessage?: string
+  } | null>(null)
   const [revealedHints, setRevealedHints] = useState<Record<number, boolean>>({})
 
   // Load solved set and drafts from localStorage
@@ -539,8 +550,18 @@ export function ProblemSolver({ initialProblem }: ProblemSolverProps) {
                 </button>
               </div>
 
-              {/* External LeetCode / YouTube Links */}
+              {/* External LeetCode / YouTube & Axel AI Trigger */}
               <div className="flex items-center gap-1">
+                <button
+                  onClick={() => setAxelHintOpen(prev => !prev)}
+                  className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-primary/30 bg-primary/10 hover:bg-primary/20 text-primary font-medium text-xs transition-all shadow-xs cursor-pointer mr-1"
+                  title="Open Axel AI Socratic Tutor"
+                >
+                  <Bot className="h-3.5 w-3.5" />
+                  <span className="hidden sm:inline">Axel AI</span>
+                  <Sparkles className="h-2.5 w-2.5 text-amber-300" />
+                </button>
+
                 {problem.youtubeUrl && (
                   <a
                     href={problem.youtubeUrl}
@@ -1042,10 +1063,27 @@ export function ProblemSolver({ initialProblem }: ProblemSolverProps) {
                       completionKeymap: true,
                       lintKeymap: true,
                     }}
+                    onUpdate={(viewUpdate) => {
+                      if (viewUpdate.selectionSet) {
+                        const head = viewUpdate.state.selection.main.head
+                        const line = viewUpdate.state.doc.lineAt(head)
+                        setCursorPos({ line: line.number, col: head - line.from + 1 })
+                      }
+                    }}
                     style={{ fontSize: `${fontSize}px` }}
                     className="h-full font-mono"
                   />
                 </div>
+
+                {/* IDE Status Bar */}
+                <EditorStatusBar
+                  language={language}
+                  cursorPos={cursorPos}
+                  lineCount={code.split("\n").length}
+                  charCount={code.length}
+                  onRunCode={handleRunCode}
+                  onSubmitCode={handleSubmitCode}
+                />
               </ResizablePanel>
 
               <ResizableHandle withHandle />
@@ -1247,31 +1285,41 @@ export function ProblemSolver({ initialProblem }: ProblemSolverProps) {
                               {/* Selected Case Inspection */}
                               {runResult.testResults[selectedCaseIdx] && (
                                 <div className="p-3 rounded-xl border border-border bg-card/60 dark:bg-[#141413] space-y-2.5">
-                                  <div>
-                                    <span className="text-muted-foreground text-[11px] font-medium block">Input:</span>
-                                    <code className="text-foreground bg-secondary/40 border border-border/70 px-2.5 py-1 rounded block mt-0.5 overflow-x-auto font-mono text-xs">
-                                      {runResult.testResults[selectedCaseIdx].inputFormatted}
-                                    </code>
-                                  </div>
+                                  {!runResult.testResults[selectedCaseIdx].passed ? (
+                                    <TestOutputDiff
+                                      expected={runResult.testResults[selectedCaseIdx].expectedFormatted}
+                                      actual={runResult.testResults[selectedCaseIdx].outputFormatted}
+                                      input={runResult.testResults[selectedCaseIdx].inputFormatted}
+                                      errorMessage={runResult.errorMessage}
+                                      onAskAxel={(ctx) => {
+                                        setActiveFailureContext(ctx)
+                                        setAxelHintOpen(true)
+                                      }}
+                                    />
+                                  ) : (
+                                    <>
+                                      <div>
+                                        <span className="text-muted-foreground text-[11px] font-medium block">Input:</span>
+                                        <code className="text-foreground bg-secondary/40 border border-border/70 px-2.5 py-1 rounded block mt-0.5 overflow-x-auto font-mono text-xs">
+                                          {runResult.testResults[selectedCaseIdx].inputFormatted}
+                                        </code>
+                                      </div>
 
-                                  <div>
-                                    <span className="text-muted-foreground text-[11px] font-medium block">Your Output:</span>
-                                    <code className={cn(
-                                      "px-2.5 py-1 rounded block mt-0.5 overflow-x-auto font-mono text-xs font-medium border",
-                                      runResult.testResults[selectedCaseIdx].passed
-                                        ? "bg-primary/10 border-primary/30 text-primary"
-                                        : "bg-rose-500/10 border-rose-500/30 text-rose-500"
-                                    )}>
-                                      {runResult.testResults[selectedCaseIdx].outputFormatted}
-                                    </code>
-                                  </div>
+                                      <div>
+                                        <span className="text-muted-foreground text-[11px] font-medium block">Your Output:</span>
+                                        <code className="px-2.5 py-1 rounded block mt-0.5 overflow-x-auto font-mono text-xs font-medium border bg-primary/10 border-primary/30 text-primary">
+                                          {runResult.testResults[selectedCaseIdx].outputFormatted}
+                                        </code>
+                                      </div>
 
-                                  <div>
-                                    <span className="text-muted-foreground text-[11px] font-medium block">Expected Output:</span>
-                                    <code className="text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded block mt-0.5 overflow-x-auto font-mono text-xs font-medium">
-                                      {runResult.testResults[selectedCaseIdx].expectedFormatted}
-                                    </code>
-                                  </div>
+                                      <div>
+                                        <span className="text-muted-foreground text-[11px] font-medium block">Expected Output:</span>
+                                        <code className="text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded block mt-0.5 overflow-x-auto font-mono text-xs font-medium">
+                                          {runResult.testResults[selectedCaseIdx].expectedFormatted}
+                                        </code>
+                                      </div>
+                                    </>
+                                  )}
 
                                   {runResult.testResults[selectedCaseIdx].stdout.length > 0 && (
                                     <div className="rounded-lg border border-white/10 bg-[#0c0c0e] p-2.5 space-y-1.5 mt-1">
@@ -1331,6 +1379,19 @@ export function ProblemSolver({ initialProblem }: ProblemSolverProps) {
               </div>
             </div>
 
+            {/* Share Card Trigger */}
+            <button
+              onClick={() => {
+                setCelebrationModalOpen(false)
+                setShareModalOpen(true)
+              }}
+              className="w-full py-2.5 rounded-xl border border-primary/30 bg-primary/10 hover:bg-primary/20 text-primary text-xs font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xs"
+            >
+              <Share2 className="h-4 w-4" />
+              <span>Generate Proof-of-Work Solution Card</span>
+              <Sparkles className="h-3 w-3 text-amber-300" />
+            </button>
+
             {/* Actions: Next Problem / Close */}
             <div className="flex items-center gap-3">
               <button
@@ -1364,6 +1425,19 @@ export function ProblemSolver({ initialProblem }: ProblemSolverProps) {
       )}
 
       {/* ========================================================================= */}
+      {/* PROOF-OF-WORK SOLUTION SHARE MODAL                                        */}
+      {/* ========================================================================= */}
+      <SolutionShareModal
+        isOpen={shareModalOpen}
+        onClose={() => setShareModalOpen(false)}
+        problem={problem}
+        code={code}
+        language={language}
+        runtimeMs={runResult?.runtimeMs || 18}
+        memoryMB={runResult?.memoryMB || 42}
+      />
+
+      {/* ========================================================================= */}
       {/* UPGRADED AXEL AI SOCRATIC TUTOR DRAWER                                    */}
       {/* ========================================================================= */}
       <AxelTutorDrawer
@@ -1372,6 +1446,7 @@ export function ProblemSolver({ initialProblem }: ProblemSolverProps) {
         problem={problem}
         userCode={code}
         runResult={runResult}
+        activeFailureContext={activeFailureContext}
         onOpenVisualizer={() => setLeftTab("visualizer")}
       />
 

@@ -1,4 +1,12 @@
--- Payment Orders table — replaces DynamoDB for payment order storage
+-- 1. Ensure profiles table has subscription columns
+ALTER TABLE public.profiles
+  ADD COLUMN IF NOT EXISTS subscription_tier TEXT DEFAULT 'free',
+  ADD COLUMN IF NOT EXISTS subscription_status TEXT DEFAULT 'inactive',
+  ADD COLUMN IF NOT EXISTS current_period_end TIMESTAMP WITH TIME ZONE,
+  ADD COLUMN IF NOT EXISTS razorpay_customer_id TEXT,
+  ADD COLUMN IF NOT EXISTS razorpay_subscription_id TEXT;
+
+-- 2. Payment Orders table — replaces DynamoDB for payment order storage
 -- Run this migration in Supabase SQL Editor
 
 CREATE TABLE IF NOT EXISTS payment_orders (

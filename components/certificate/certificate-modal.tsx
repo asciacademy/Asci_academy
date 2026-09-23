@@ -8,6 +8,7 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
+  DialogDescription,
 } from "@/components/ui/dialog"
 import {
   Printer,
@@ -79,10 +80,13 @@ export function CertificateModal({
         showCloseButton={false}
         className="fixed inset-0 top-0 left-0 translate-x-0 translate-y-0 w-full max-w-none sm:max-w-none h-full max-h-none p-0 gap-0 border-0 bg-[#0E0D0C]/96 backdrop-blur-2xl text-[#FDFBF7] shadow-none flex flex-col justify-between items-center overflow-hidden z-50 select-none print:p-0 print:border-0 print:bg-transparent print:shadow-none print:w-screen print:h-screen print:max-h-none print:overflow-visible"
       >
-        {/* Accessible screen-reader title */}
+        {/* Accessible screen-reader title & description */}
         <DialogTitle className="sr-only">
           {certificate.course_title} — Official ASCI Certificate of Completion for {certificate.recipient_name}
         </DialogTitle>
+        <DialogDescription className="sr-only">
+          Official verified certificate of completion and engineering credentials.
+        </DialogDescription>
 
         {/* ══════════════════════════════════════════════
             1. MINIMAL FLOATING ASCI BRAND HEADER

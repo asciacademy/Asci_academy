@@ -20,6 +20,9 @@ import { DailyTasksCard } from "@/components/gamification/daily-tasks-card"
 import { getCurriculumCourseBySlug, getAllCurriculumCourses } from "@/lib/curriculum-data"
 import { CertificateModal } from "@/components/certificate/certificate-modal"
 import { Certificate } from "@/lib/certificate-types"
+import { ResumeLearningDock } from "@/components/dashboard/resume-learning-dock"
+import { CardTiltWrapper } from "@/components/ui/card-tilt-wrapper"
+import { StreakFreezeModal } from "@/components/gamification/streak-freeze-modal"
 
 interface DashboardOverviewProps {
   userName: string
@@ -67,6 +70,7 @@ export function DashboardOverview({
 
   // Interactive UI States
   const [isCertModalOpen, setIsCertModalOpen] = useState(false)
+  const [isStreakModalOpen, setIsStreakModalOpen] = useState(false)
   const [downloadSuccess, setDownloadSuccess] = useState(false)
   const [velocityMetric, setVelocityMetric] = useState<"minutes" | "solved">("minutes")
   const [activeInspector, setActiveInspector] = useState<{ label: string; value: string; extra: string } | null>(null)
@@ -318,10 +322,15 @@ export function DashboardOverview({
               <div className="flex items-center gap-2 mt-1 text-xs text-muted-foreground">
                 <span className="font-mono text-primary font-semibold">{levelXP}/1000 XP</span>
                 <span>·</span>
-                <span className="text-emerald-500 font-medium flex items-center gap-1">
-                  <Flame className="w-3.5 h-3.5 fill-current text-primary" />
-                  {streak} Day Streak
-                </span>
+                <button
+                  onClick={() => setIsStreakModalOpen(true)}
+                  className="text-amber-500 hover:text-amber-400 font-medium flex items-center gap-1 px-1.5 py-0.5 rounded-md hover:bg-amber-500/10 border border-transparent hover:border-amber-500/20 transition-all cursor-pointer"
+                  title="View Streak Protection & Shields"
+                >
+                  <Flame className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
+                  <span>{streak} Day Streak</span>
+                  <ShieldCheck className="w-3 h-3 text-emerald-400 ml-0.5" />
+                </button>
               </div>
             </div>
           </div>
@@ -378,119 +387,128 @@ export function DashboardOverview({
       </section>
 
       {/* ─────────────────────────────────────────────────────────────
-          2. Dual Action Row: Jump Back In Hero + Problem of the Day
+          2. Continue Learning Persistent Quick-Dock
+      ───────────────────────────────────────────────────────────── */}
+      <ResumeLearningDock enrollments={enrollments} />
+
+      {/* ─────────────────────────────────────────────────────────────
+          3. Dual Action Row: Jump Back In Hero + Problem of the Day
       ───────────────────────────────────────────────────────────── */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-4">
         
-        {/* Jump Back In Hero (lg:col-span-7) */}
-        <div className="lg:col-span-7 rounded-2xl border border-primary/25 bg-gradient-to-br from-card via-card/90 to-primary/5 p-5 shadow-xs relative overflow-hidden flex flex-col justify-between group">
-          <div className="flex items-start justify-between gap-4">
-            <div className="space-y-1.5 min-w-0">
-              <div className="flex items-center gap-2">
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-primary/15 text-primary border border-primary/25">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
-                  Jump Back In
-                </span>
-                <span className="text-xs text-muted-foreground font-mono">
-                  {curriculumCourse?.category}
-                </span>
+        {/* Jump Back In Hero (lg:col-span-7) with 3D Tilt */}
+        <CardTiltWrapper maxTilt={4} scale={1.01} className="lg:col-span-7">
+          <div className="h-full rounded-2xl border border-primary/25 bg-gradient-to-br from-card via-card/90 to-primary/5 p-5 shadow-xs relative overflow-hidden flex flex-col justify-between group">
+            <div className="flex items-start justify-between gap-4">
+              <div className="space-y-1.5 min-w-0">
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-primary/15 text-primary border border-primary/25">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
+                    Jump Back In
+                  </span>
+                  <span className="text-xs text-muted-foreground font-mono">
+                    {curriculumCourse?.category}
+                  </span>
+                </div>
+
+                <h2 className="text-lg sm:text-xl font-bold text-foreground truncate group-hover:text-primary transition-colors">
+                  {curriculumCourse?.title}
+                </h2>
+
+                <div className="text-xs font-semibold text-foreground/90 bg-secondary/80 px-3 py-1.5 rounded-lg border border-border/60 flex items-center justify-between gap-2">
+                  <span className="truncate">{nextLessonTitle}</span>
+                  <span className="text-[11px] text-primary font-mono shrink-0">~12m</span>
+                </div>
               </div>
 
-              <h2 className="text-lg sm:text-xl font-bold text-foreground truncate group-hover:text-primary transition-colors">
-                {curriculumCourse?.title}
-              </h2>
-
-              <div className="text-xs font-semibold text-foreground/90 bg-secondary/80 px-3 py-1.5 rounded-lg border border-border/60 flex items-center justify-between gap-2">
-                <span className="truncate">{nextLessonTitle}</span>
-                <span className="text-[11px] text-primary font-mono shrink-0">~12m</span>
+              {/* Circular Progress Ring */}
+              <div className="relative w-20 h-20 shrink-0 flex items-center justify-center">
+                <svg className="w-full h-full -rotate-90" viewBox="0 0 80 80">
+                  <circle cx="40" cy="40" r="32" className="stroke-secondary" strokeWidth="6" fill="transparent" />
+                  <circle
+                    cx="40" cy="40" r="32"
+                    className="stroke-primary transition-all duration-700"
+                    strokeWidth="6"
+                    strokeDasharray={201}
+                    strokeDashoffset={201 - (201 * heroProgress) / 100}
+                    strokeLinecap="round"
+                    fill="transparent"
+                  />
+                </svg>
+                <div className="absolute text-center">
+                  <span className="text-sm font-extrabold text-foreground">{heroProgress}%</span>
+                </div>
               </div>
             </div>
 
-            {/* Circular Progress Ring */}
-            <div className="relative w-20 h-20 shrink-0 flex items-center justify-center">
-              <svg className="w-full h-full -rotate-90" viewBox="0 0 80 80">
-                <circle cx="40" cy="40" r="32" className="stroke-secondary" strokeWidth="6" fill="transparent" />
-                <circle
-                  cx="40" cy="40" r="32"
-                  className="stroke-primary transition-all duration-700"
-                  strokeWidth="6"
-                  strokeDasharray={201}
-                  strokeDashoffset={201 - (201 * heroProgress) / 100}
-                  strokeLinecap="round"
-                  fill="transparent"
-                />
-              </svg>
-              <div className="absolute text-center">
-                <span className="text-sm font-extrabold text-foreground">{heroProgress}%</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex items-center justify-between gap-3 pt-4 mt-2 border-t border-border/40">
-            <Link
-              href={nextLessonHref}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary hover:bg-primary-active text-primary-foreground text-xs font-semibold shadow-xs transition-all cursor-pointer group/btn"
-            >
-              <Terminal className="w-3.5 h-3.5" />
-              <span>Launch IDE Sandbox</span>
-              <ArrowRight className="w-3 h-3 group-hover/btn:translate-x-0.5 transition-transform" />
-            </Link>
-
-            <button
-              onClick={() => onSwitchTab("courses")}
-              className="text-xs font-medium text-muted-foreground hover:text-primary transition-colors cursor-pointer"
-            >
-              View Syllabus →
-            </button>
-          </div>
-        </div>
-
-        {/* Problem of the Day (lg:col-span-5) */}
-        <div className="lg:col-span-5 rounded-2xl border border-border/70 bg-card p-5 shadow-xs flex flex-col justify-between">
-          <div className="space-y-2">
-            <div className="flex items-center justify-between gap-2">
-              <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-primary">
+            <div className="flex items-center justify-between gap-3 pt-4 mt-2 border-t border-border/40">
+              <Link
+                href={nextLessonHref}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary hover:bg-primary-active text-primary-foreground text-xs font-semibold shadow-xs transition-all cursor-pointer group/btn"
+              >
                 <Terminal className="w-3.5 h-3.5" />
-                <span>Daily POTD</span>
+                <span>Launch IDE Sandbox</span>
+                <ArrowRight className="w-3 h-3 group-hover/btn:translate-x-0.5 transition-transform" />
+              </Link>
+
+              <button
+                onClick={() => onSwitchTab("courses")}
+                className="text-xs font-medium text-muted-foreground hover:text-primary transition-colors cursor-pointer"
+              >
+                View Syllabus →
+              </button>
+            </div>
+          </div>
+        </CardTiltWrapper>
+
+        {/* Problem of the Day (lg:col-span-5) with 3D Tilt */}
+        <CardTiltWrapper maxTilt={4} scale={1.01} className="lg:col-span-5">
+          <div className="h-full rounded-2xl border border-border/70 bg-card p-5 shadow-xs flex flex-col justify-between">
+            <div className="space-y-2">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-primary">
+                  <Terminal className="w-3.5 h-3.5" />
+                  <span>Daily POTD</span>
+                </div>
+                <div className="flex items-center gap-1 text-[11px] font-mono text-muted-foreground bg-secondary px-2 py-0.5 rounded-md border border-border/50">
+                  <Clock className="w-3 h-3 text-[#D4B872]" />
+                  <span>{String(potdTimeLeft.hours).padStart(2, "0")}h {String(potdTimeLeft.minutes).padStart(2, "0")}m</span>
+                </div>
               </div>
-              <div className="flex items-center gap-1 text-[11px] font-mono text-muted-foreground bg-secondary px-2 py-0.5 rounded-md border border-border/50">
-                <Clock className="w-3 h-3 text-[#D4B872]" />
-                <span>{String(potdTimeLeft.hours).padStart(2, "0")}h {String(potdTimeLeft.minutes).padStart(2, "0")}m</span>
+
+              <div>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-sm sm:text-base font-bold text-foreground truncate">
+                    {potd?.title || "Balanced Two-Pointer Partition"}
+                  </h3>
+                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md leading-none ${
+                    (potd?.difficulty || "Medium") === "Easy" ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400" :
+                    (potd?.difficulty || "Medium") === "Hard" ? "bg-rose-500/10 text-rose-600 dark:text-rose-400" :
+                    "bg-amber-500/10 text-amber-600 dark:text-amber-400"
+                  }`}>
+                    {potd?.difficulty || "Medium"}
+                  </span>
+                </div>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  Maintain your streak & earn <span className="font-semibold text-primary">+150 XP</span>
+                </p>
               </div>
             </div>
 
-            <div>
-              <div className="flex items-center gap-2">
-                <h3 className="text-sm sm:text-base font-bold text-foreground truncate">
-                  {potd?.title || "Balanced Two-Pointer Partition"}
-                </h3>
-                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md leading-none ${
-                  (potd?.difficulty || "Medium") === "Easy" ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400" :
-                  (potd?.difficulty || "Medium") === "Hard" ? "bg-rose-500/10 text-rose-600 dark:text-rose-400" :
-                  "bg-amber-500/10 text-amber-600 dark:text-amber-400"
-                }`}>
-                  {potd?.difficulty || "Medium"}
-                </span>
-              </div>
-              <p className="text-xs text-muted-foreground mt-0.5">
-                Maintain your streak & earn <span className="font-semibold text-primary">+150 XP</span>
-              </p>
+            <div className="flex items-center justify-between gap-3 pt-4 mt-2 border-t border-border/40">
+              <button
+                onClick={() => onSwitchTab("practice")}
+                className="px-4 py-2 rounded-xl bg-secondary hover:bg-secondary/80 border border-border text-xs font-semibold text-foreground hover:text-primary transition-all cursor-pointer shadow-2xs"
+              >
+                Solve in Practice Arena →
+              </button>
+              <span className="text-[11px] text-emerald-500 font-semibold flex items-center gap-1">
+                <Flame className="w-3.5 h-3.5" />
+                Streak Safe
+              </span>
             </div>
           </div>
-
-          <div className="flex items-center justify-between gap-3 pt-4 mt-2 border-t border-border/40">
-            <button
-              onClick={() => onSwitchTab("practice")}
-              className="px-4 py-2 rounded-xl bg-secondary hover:bg-secondary/80 border border-border text-xs font-semibold text-foreground hover:text-primary transition-all cursor-pointer shadow-2xs"
-            >
-              Solve in Practice Arena →
-            </button>
-            <span className="text-[11px] text-emerald-500 font-semibold flex items-center gap-1">
-              <Flame className="w-3.5 h-3.5" />
-              Streak Safe
-            </span>
-          </div>
-        </div>
+        </CardTiltWrapper>
 
       </section>
 
@@ -835,6 +853,14 @@ export function DashboardOverview({
         isOpen={isCertModalOpen}
         onClose={() => setIsCertModalOpen(false)}
         certificate={previewCertificate}
+      />
+
+      {/* Streak Protection & Freeze Economy Modal */}
+      <StreakFreezeModal
+        isOpen={isStreakModalOpen}
+        onClose={() => setIsStreakModalOpen(false)}
+        currentStreak={streak}
+        totalXP={totalXP}
       />
 
     </div>

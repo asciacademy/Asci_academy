@@ -104,7 +104,7 @@ export async function POST(req: Request) {
         periodEnd.setMonth(periodEnd.getMonth() + 1)
       }
 
-      await supabase
+      const { error: updateErr } = await supabase
         .from("profiles")
         .update({
           subscription_tier: tier,
@@ -112,6 +112,24 @@ export async function POST(req: Request) {
           current_period_end: periodEnd.toISOString(),
         })
         .eq("id", order.userId)
+
+      if (updateErr) {
+        console.warn("[PAYMENT_VERIFY] Profile update failed, retrying without period_end:", updateErr.message)
+        const retryResult = await supabase
+          .from("profiles")
+          .update({
+            subscription_tier: tier,
+            subscription_status: "active",
+          })
+          .eq("id", order.userId)
+
+        if (retryResult.error) {
+          await supabase
+            .from("profiles")
+            .update({ subscription_tier: tier })
+            .eq("id", order.userId)
+        }
+      }
     }
 
     return NextResponse.json({ success: true, status: newStatus })

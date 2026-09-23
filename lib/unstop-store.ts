@@ -1037,6 +1037,22 @@ export function setStoredData<T>(key: string, data: T): void {
 // 4. REACT HOOKS FOR LIVE ECOSYSTEM STATE
 // ==========================================
 
+let cachedEcosystemPromise: Promise<any> | null = null
+let lastEcosystemFetch = 0
+const ECOSYSTEM_CACHE_TTL = 30000 // 30 seconds
+
+function fetchEcosystemOnce() {
+  const now = Date.now()
+  if (!cachedEcosystemPromise || now - lastEcosystemFetch > ECOSYSTEM_CACHE_TTL) {
+    lastEcosystemFetch = now
+    cachedEcosystemPromise = getEcosystemData().catch(err => {
+      cachedEcosystemPromise = null
+      throw err
+    })
+  }
+  return cachedEcosystemPromise
+}
+
 export function useUnstopEcosystem() {
   const [hackathons, setHackathons] = useState<HackathonItem[]>([])
   const [jobs, setJobs] = useState<JobOpportunity[]>([])
@@ -1071,8 +1087,8 @@ export function useUnstopEcosystem() {
     setAtsResume(storedAtsResume)
     setIsLoaded(true)
 
-    // Hydrate real live data directly from Supabase PostgreSQL tables
-    getEcosystemData()
+    // Hydrate real live data directly from Supabase (de-duplicated across components)
+    fetchEcosystemOnce()
       .then((real) => {
         if (real.hackathons && real.hackathons.length > 0) {
           setHackathons(real.hackathons)

@@ -124,7 +124,21 @@ export async function POST(req: Request) {
         .eq("id", user.id)
 
       if (profileError) {
-        console.warn("[RAZORPAY_VERIFY] Profiles table update notice (handled by auth metadata):", profileError.message)
+        console.warn("[RAZORPAY_VERIFY] Profiles full update notice, retrying without period_end:", profileError.message)
+        const retryResult = await supabase
+          .from("profiles")
+          .update({
+            subscription_tier: "architect",
+            subscription_status: "active",
+          })
+          .eq("id", user.id)
+
+        if (retryResult.error) {
+          await supabase
+            .from("profiles")
+            .update({ subscription_tier: "architect" })
+            .eq("id", user.id)
+        }
       }
     } catch (dbErr) {
       console.warn("[RAZORPAY_VERIFY] Profiles table update non-blocking error:", dbErr)

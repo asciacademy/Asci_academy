@@ -59,7 +59,22 @@ export async function POST(req: Request) {
       periodEnd.setMonth(periodEnd.getMonth() + 1)
     }
 
-    // 3. Upgrade user's subscription tier in Supabase profiles
+    // 3. Sync to Supabase Auth metadata (always succeeds regardless of database table migrations)
+    try {
+      await supabase.auth.updateUser({
+        data: {
+          subscription_tier: "architect",
+          subscription_status: "active",
+          current_period_end: periodEnd.toISOString(),
+          last_payment_id: razorpayPaymentId,
+          last_order_id: orderId,
+        },
+      })
+    } catch (metaErr) {
+      console.warn("[RAZORPAY_VERIFY] updateUser auth metadata error:", metaErr)
+    }
+
+    // 4. Upgrade user's subscription tier in Supabase profiles
     // In this codebase, subscription_tier: "architect" grants full access to all premium courses!
     const { error: profileError } = await supabase
       .from("profiles")
@@ -71,8 +86,23 @@ export async function POST(req: Request) {
       .eq("id", user.id)
 
     if (profileError) {
-      console.error("[RAZORPAY_VERIFY] Profile update error:", profileError)
-      // Even if update failed, try upsert or log detailed error
+      console.warn("[RAZORPAY_VERIFY] Profile update with period end failed, retrying without current_period_end:", profileError.message)
+      // Fallback: update without current_period_end if column is not yet migrated in Supabase
+      const retryResult = await supabase
+        .from("profiles")
+        .update({
+          subscription_tier: "architect",
+          subscription_status: "active",
+        })
+        .eq("id", user.id)
+
+      if (retryResult.error) {
+        console.warn("[RAZORPAY_VERIFY] Profile status update failed, falling back to tier only:", retryResult.error.message)
+        await supabase
+          .from("profiles")
+          .update({ subscription_tier: "architect" })
+          .eq("id", user.id)
+      }
     }
 
     // 4. Safely update payment_orders table if present

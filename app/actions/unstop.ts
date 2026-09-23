@@ -34,30 +34,47 @@ export async function getEcosystemData(): Promise<EcosystemData> {
   const supabase = await createClient()
 
   // Get current user if logged in
-  const { data: { user } } = await supabase.auth.getUser()
+  const { data: { user } } = await supabase.auth.getUser().catch(() => ({ data: { user: null } }))
   const userId = user?.id
 
-  // 1. Fetch Hackathons
-  const { data: rawHackathons } = await supabase
-    .from("hackathons")
-    .select("*")
-    .order("created_at", { ascending: false })
+  // Execute all independent database requests in parallel
+  const [
+    rawHackathonsRes,
+    regDataRes,
+    rawJobsRes,
+    appDataRes,
+    rawAssessmentsRes,
+    subDataRes,
+    rawMentorsRes,
+    rawBookingsRes,
+    rawTeammatesRes,
+    rawPotdRes,
+    rawAmbRes,
+    rawResumeRes,
+  ] = await Promise.all([
+    supabase.from("hackathons").select("*").order("created_at", { ascending: false }),
+    userId ? supabase.from("hackathon_registrations").select("*").eq("user_id", userId) : Promise.resolve({ data: null }),
+    supabase.from("jobs").select("*").order("created_at", { ascending: false }),
+    userId ? supabase.from("job_applications").select("*").eq("user_id", userId) : Promise.resolve({ data: null }),
+    supabase.from("skill_assessments").select("*").order("created_at", { ascending: false }),
+    userId ? supabase.from("assessment_submissions").select("*").eq("user_id", userId) : Promise.resolve({ data: null }),
+    supabase.from("mentors").select("*").order("created_at", { ascending: false }),
+    userId ? supabase.from("mentor_bookings").select("*").eq("user_id", userId).order("booked_at", { ascending: false }) : Promise.resolve({ data: null }),
+    supabase.from("teammate_posts").select("*").order("posted_at", { ascending: false }),
+    supabase.from("potd_problems").select("*").order("challenge_date", { ascending: false }).limit(1).maybeSingle(),
+    userId ? supabase.from("ambassador_profiles").select("*").eq("user_id", userId).maybeSingle() : Promise.resolve({ data: null }),
+    userId ? supabase.from("ats_resumes").select("*").eq("user_id", userId).maybeSingle() : Promise.resolve({ data: null }),
+  ])
 
-  // If user is logged in, fetch their registrations
-  let userRegistrations: Record<string, any> = {}
-  if (userId) {
-    const { data: regData } = await supabase
-      .from("hackathon_registrations")
-      .select("*")
-      .eq("user_id", userId)
-    if (regData) {
-      regData.forEach((r: any) => {
-        userRegistrations[r.hackathon_id] = r
-      })
-    }
+  // 1. Process Hackathons & User Registrations
+  const userRegistrations: Record<string, any> = {}
+  if (regDataRes.data) {
+    regDataRes.data.forEach((r: any) => {
+      userRegistrations[r.hackathon_id] = r
+    })
   }
 
-  const hackathons: HackathonItem[] = (rawHackathons || []).map((h: any) => {
+  const hackathons: HackathonItem[] = (rawHackathonsRes.data || []).map((h: any) => {
     const reg = userRegistrations[h.id]
     return {
       id: h.id,
@@ -94,26 +111,15 @@ export async function getEcosystemData(): Promise<EcosystemData> {
     }
   })
 
-  // 2. Fetch Jobs
-  const { data: rawJobs } = await supabase
-    .from("jobs")
-    .select("*")
-    .order("created_at", { ascending: false })
-
-  let userApplications: Record<string, any> = {}
-  if (userId) {
-    const { data: appData } = await supabase
-      .from("job_applications")
-      .select("*")
-      .eq("user_id", userId)
-    if (appData) {
-      appData.forEach((a: any) => {
-        userApplications[a.job_id] = a
-      })
-    }
+  // 2. Process Jobs & Applications
+  const userApplications: Record<string, any> = {}
+  if (appDataRes.data) {
+    appDataRes.data.forEach((a: any) => {
+      userApplications[a.job_id] = a
+    })
   }
 
-  const jobs: JobOpportunity[] = (rawJobs || []).map((j: any) => {
+  const jobs: JobOpportunity[] = (rawJobsRes.data || []).map((j: any) => {
     const app = userApplications[j.id]
     return {
       id: j.id,
@@ -140,26 +146,15 @@ export async function getEcosystemData(): Promise<EcosystemData> {
     }
   })
 
-  // 3. Fetch Skill Assessments
-  const { data: rawAssessments } = await supabase
-    .from("skill_assessments")
-    .select("*")
-    .order("created_at", { ascending: false })
-
-  let userSubmissions: Record<string, any> = {}
-  if (userId) {
-    const { data: subData } = await supabase
-      .from("assessment_submissions")
-      .select("*")
-      .eq("user_id", userId)
-    if (subData) {
-      subData.forEach((s: any) => {
-        userSubmissions[s.assessment_id] = s
-      })
-    }
+  // 3. Process Skill Assessments
+  const userSubmissions: Record<string, any> = {}
+  if (subDataRes.data) {
+    subDataRes.data.forEach((s: any) => {
+      userSubmissions[s.assessment_id] = s
+    })
   }
 
-  const assessments: SkillAssessment[] = (rawAssessments || []).map((a: any) => {
+  const assessments: SkillAssessment[] = (rawAssessmentsRes.data || []).map((a: any) => {
     const sub = userSubmissions[a.id]
     return {
       id: a.id,
@@ -180,13 +175,8 @@ export async function getEcosystemData(): Promise<EcosystemData> {
     }
   })
 
-  // 4. Fetch Mentors & Bookings
-  const { data: rawMentors } = await supabase
-    .from("mentors")
-    .select("*")
-    .order("created_at", { ascending: false })
-
-  const mentors: MentorProfile[] = (rawMentors || []).map((m: any) => ({
+  // 4. Process Mentors & Bookings
+  const mentors: MentorProfile[] = (rawMentorsRes.data || []).map((m: any) => ({
     id: m.id,
     name: m.name,
     role: m.role,
@@ -201,39 +191,23 @@ export async function getEcosystemData(): Promise<EcosystemData> {
     availableSlots: m.available_slots || [],
   }))
 
-  let bookings: MentorBooking[] = []
-  if (userId) {
-    const { data: rawBookings } = await supabase
-      .from("mentor_bookings")
-      .select("*")
-      .eq("user_id", userId)
-      .order("booked_at", { ascending: false })
+  const bookings: MentorBooking[] = (rawBookingsRes.data || []).map((b: any) => ({
+    id: b.id,
+    mentorId: b.mentor_id,
+    mentorName: b.mentor_name,
+    mentorRole: b.mentor_role,
+    mentorCompany: b.mentor_company,
+    mentorAvatar: b.mentor_avatar || "/placeholder.svg",
+    date: b.booking_date,
+    timeSlot: b.time_slot,
+    topic: b.topic,
+    status: b.status as any,
+    meetLink: b.meet_link,
+    bookedAt: b.booked_at,
+  }))
 
-    if (rawBookings) {
-      bookings = rawBookings.map((b: any) => ({
-        id: b.id,
-        mentorId: b.mentor_id,
-        mentorName: b.mentor_name,
-        mentorRole: b.mentor_role,
-        mentorCompany: b.mentor_company,
-        mentorAvatar: b.mentor_avatar || "/placeholder.svg",
-        date: b.booking_date,
-        timeSlot: b.time_slot,
-        topic: b.topic,
-        status: b.status as any,
-        meetLink: b.meet_link,
-        bookedAt: b.booked_at,
-      }))
-    }
-  }
-
-  // 5. Fetch Teammate Posts
-  const { data: rawTeammates } = await supabase
-    .from("teammate_posts")
-    .select("*")
-    .order("posted_at", { ascending: false })
-
-  const teammatePosts: TeammatePost[] = (rawTeammates || []).map((t: any) => ({
+  // 5. Process Teammate Posts
+  const teammatePosts: TeammatePost[] = (rawTeammatesRes.data || []).map((t: any) => ({
     id: t.id,
     authorName: t.author_name,
     authorAvatar: t.author_avatar || "/placeholder.svg",
@@ -249,14 +223,8 @@ export async function getEcosystemData(): Promise<EcosystemData> {
     invited: false,
   }))
 
-  // 6. Fetch POTD
-  const { data: rawPotd } = await supabase
-    .from("potd_problems")
-    .select("*")
-    .order("challenge_date", { ascending: false })
-    .limit(1)
-    .maybeSingle()
-
+  // 6. Process POTD
+  const rawPotd = rawPotdRes.data
   let potd: POTDProblem | null = null
   if (rawPotd) {
     let solved = false
@@ -289,58 +257,44 @@ export async function getEcosystemData(): Promise<EcosystemData> {
     }
   }
 
-  // 7. Fetch Ambassador Profile
+  // 7. Process Ambassador Profile
   let ambassador: AmbassadorProfile | null = null
-  if (userId) {
-    const { data: rawAmb } = await supabase
-      .from("ambassador_profiles")
-      .select("*")
-      .eq("user_id", userId)
-      .maybeSingle()
-
-    if (rawAmb) {
-      ambassador = {
-        referralCode: rawAmb.referral_code,
-        referralUrl: `https://asci.academy/join?ref=${rawAmb.referral_code}`,
-        totalClicks: rawAmb.total_clicks,
-        joinedPeers: rawAmb.joined_peers,
-        tier: rawAmb.tier as any,
-        pointsEarned: rawAmb.points_earned,
-        campusRank: rawAmb.campus_rank,
-        campusName: rawAmb.campus_name,
-        unlockedPerks: rawAmb.unlocked_perks || [],
-      }
+  if (rawAmbRes.data) {
+    const rawAmb = rawAmbRes.data
+    ambassador = {
+      referralCode: rawAmb.referral_code,
+      referralUrl: `https://asci.academy/join?ref=${rawAmb.referral_code}`,
+      totalClicks: rawAmb.total_clicks,
+      joinedPeers: rawAmb.joined_peers,
+      tier: rawAmb.tier as any,
+      pointsEarned: rawAmb.points_earned,
+      campusRank: rawAmb.campus_rank,
+      campusName: rawAmb.campus_name,
+      unlockedPerks: rawAmb.unlocked_perks || [],
     }
   }
 
-  // 8. Fetch ATS Resume
+  // 8. Process ATS Resume
   let atsResume: AtsResumeData | null = null
-  if (userId) {
-    const { data: rawResume } = await supabase
-      .from("ats_resumes")
-      .select("*")
-      .eq("user_id", userId)
-      .maybeSingle()
-
-    if (rawResume) {
-      atsResume = {
-        targetRole: rawResume.target_role,
-        fullName: rawResume.full_name || "",
-        email: rawResume.email || "",
-        phone: rawResume.phone || "",
-        githubUrl: rawResume.github_url || "",
-        linkedinUrl: rawResume.linkedin_url || "",
-        summary: rawResume.summary || "",
-        skills: rawResume.skills || [],
-        projects: rawResume.projects || [],
-        workExperience: rawResume.work_experience || [],
-        education: rawResume.education || { college: "", degree: "", year: "", cgpa: "" },
-        atsScore: rawResume.ats_score,
-        actionVerbsScore: rawResume.action_verbs_score,
-        keywordMatchScore: rawResume.keyword_match_score,
-        missingKeywords: rawResume.missing_keywords || [],
-        suggestions: rawResume.suggestions || [],
-      }
+  if (rawResumeRes.data) {
+    const rawResume = rawResumeRes.data
+    atsResume = {
+      targetRole: rawResume.target_role,
+      fullName: rawResume.full_name || "",
+      email: rawResume.email || "",
+      phone: rawResume.phone || "",
+      githubUrl: rawResume.github_url || "",
+      linkedinUrl: rawResume.linkedin_url || "",
+      summary: rawResume.summary || "",
+      skills: rawResume.skills || [],
+      projects: rawResume.projects || [],
+      workExperience: rawResume.work_experience || [],
+      education: rawResume.education || { college: "", degree: "", year: "", cgpa: "" },
+      atsScore: rawResume.ats_score,
+      actionVerbsScore: rawResume.action_verbs_score,
+      keywordMatchScore: rawResume.keyword_match_score,
+      missingKeywords: rawResume.missing_keywords || [],
+      suggestions: rawResume.suggestions || [],
     }
   }
 

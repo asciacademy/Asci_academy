@@ -11,6 +11,8 @@ import { RunResult } from "@/lib/dsa/code-runner"
 import { AxelEmotion, AxelState } from "@/types/axel"
 import { cn } from "@/lib/utils"
 
+import { SocraticHintPanel } from "@/components/axel/socratic-hint-panel"
+
 interface ChatMessage {
   id: string
   role: "user" | "axel"
@@ -26,6 +28,12 @@ interface AxelTutorDrawerProps {
   problem: ProblemDetail
   userCode: string
   runResult: RunResult | null
+  activeFailureContext?: {
+    input?: string
+    expected?: string
+    actual?: string
+    errorMessage?: string
+  } | null
   onOpenVisualizer?: () => void
 }
 
@@ -35,8 +43,10 @@ export function AxelTutorDrawer({
   problem,
   userCode,
   runResult,
+  activeFailureContext,
   onOpenVisualizer,
 }: AxelTutorDrawerProps) {
+  const [activeTab, setActiveTab] = useState<"chat" | "socratic">(activeFailureContext ? "socratic" : "chat")
   const [messages, setMessages] = useState<ChatMessage[]>(() => [
     {
       id: "initial",
@@ -193,48 +203,92 @@ export function AxelTutorDrawer({
         </button>
       </div>
 
-      {/* Quick Action Mentorship Chips */}
-      <div className="px-3 py-2 border-b border-border/60 bg-secondary/15 flex items-center gap-1.5 overflow-x-auto shrink-0 scrollbar-none">
+      {/* Mode Segmented Controls */}
+      <div className="px-3 py-2 border-b border-border/40 bg-secondary/10 flex items-center gap-1.5 shrink-0">
         <button
-          onClick={() => sendMessage("Explain this problem simple as hell with a real-world analogy", "eli10")}
-          className="px-2.5 py-1 rounded-lg border border-border bg-card hover:bg-secondary text-[11px] font-medium text-foreground whitespace-nowrap flex items-center gap-1.5 shrink-0 transition-colors cursor-pointer"
+          onClick={() => setActiveTab("chat")}
+          className={cn(
+            "flex-1 py-1 px-2.5 rounded-lg text-xs font-medium flex items-center justify-center gap-1.5 transition-all cursor-pointer",
+            activeTab === "chat"
+              ? "bg-primary text-primary-foreground shadow-xs font-semibold"
+              : "bg-transparent text-muted-foreground hover:text-foreground hover:bg-secondary/60"
+          )}
         >
-          <AsciIcon name="help" size="xs" tone="accent" />
-          <span>Explain Simple as Hell</span>
+          <Bot className="h-3.5 w-3.5" />
+          <span>Interactive Chat</span>
         </button>
-
         <button
-          onClick={() => sendMessage("Give me a Socratic hint without revealing the code solution", "socratic-hint")}
-          className="px-2.5 py-1 rounded-lg border border-border bg-card hover:bg-secondary text-[11px] font-medium text-foreground whitespace-nowrap flex items-center gap-1.5 shrink-0 transition-colors cursor-pointer"
+          onClick={() => setActiveTab("socratic")}
+          className={cn(
+            "flex-1 py-1 px-2.5 rounded-lg text-xs font-medium flex items-center justify-center gap-1.5 transition-all cursor-pointer",
+            activeTab === "socratic"
+              ? "bg-primary text-primary-foreground shadow-xs font-semibold"
+              : "bg-transparent text-muted-foreground hover:text-foreground hover:bg-secondary/60"
+          )}
         >
-          <AsciIcon name="compass" size="xs" tone="gold" />
-          <span>Socratic Hint</span>
-        </button>
-
-        {runResult && runResult.status !== "ACCEPTED" && (
-          <button
-            onClick={() => sendMessage("Why did my latest code execution fail? Diagnose my logic without giving the full code away.", "diagnose-error")}
-            className="px-2.5 py-1 rounded-lg border border-destructive/30 bg-destructive/10 text-destructive text-[11px] font-medium whitespace-nowrap flex items-center gap-1.5 shrink-0 transition-colors cursor-pointer"
-          >
-            <AsciIcon name="search" size="xs" />
-            <span>Why did my code fail?</span>
-          </button>
-        )}
-
-        <button
-          onClick={() => {
-            if (onOpenVisualizer) onOpenVisualizer()
-            sendMessage("Walk me through the visualizer step by step", "visual-walkthrough")
-          }}
-          className="px-2.5 py-1 rounded-lg border border-border bg-card hover:bg-secondary text-[11px] font-medium text-foreground whitespace-nowrap flex items-center gap-1.5 shrink-0 transition-colors cursor-pointer"
-        >
-          <AsciIcon name="play" size="xs" tone="accent" />
-          <span>Visual Walkthrough</span>
+          <Lightbulb className="h-3.5 w-3.5 text-amber-300" />
+          <span>Socratic Hints (3 Tiers)</span>
         </button>
       </div>
 
-      {/* Messages Conversation Area */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      {/* Socratic Hint Panel Tab */}
+      {activeTab === "socratic" ? (
+        <div className="flex-1 overflow-y-auto p-4">
+          <SocraticHintPanel
+            problem={problem}
+            userCode={userCode}
+            runResult={runResult}
+            activeFailureContext={activeFailureContext}
+            onAskFollowUp={prompt => {
+              setActiveTab("chat")
+              sendMessage(prompt)
+            }}
+          />
+        </div>
+      ) : (
+        <>
+          {/* Quick Action Mentorship Chips */}
+          <div className="px-3 py-2 border-b border-border/60 bg-secondary/15 flex items-center gap-1.5 overflow-x-auto shrink-0 scrollbar-none">
+            <button
+              onClick={() => sendMessage("Explain this problem simple as hell with a real-world analogy", "eli10")}
+              className="px-2.5 py-1 rounded-lg border border-border bg-card hover:bg-secondary text-[11px] font-medium text-foreground whitespace-nowrap flex items-center gap-1.5 shrink-0 transition-colors cursor-pointer"
+            >
+              <AsciIcon name="help" size="xs" tone="accent" />
+              <span>Explain Simple as Hell</span>
+            </button>
+
+            <button
+              onClick={() => sendMessage("Give me a Socratic hint without revealing the code solution", "socratic-hint")}
+              className="px-2.5 py-1 rounded-lg border border-border bg-card hover:bg-secondary text-[11px] font-medium text-foreground whitespace-nowrap flex items-center gap-1.5 shrink-0 transition-colors cursor-pointer"
+            >
+              <AsciIcon name="compass" size="xs" tone="gold" />
+              <span>Socratic Hint</span>
+            </button>
+
+            {runResult && runResult.status !== "ACCEPTED" && (
+              <button
+                onClick={() => sendMessage("Why did my latest code execution fail? Diagnose my logic without giving the full code away.", "diagnose-error")}
+                className="px-2.5 py-1 rounded-lg border border-destructive/30 bg-destructive/10 text-destructive text-[11px] font-medium whitespace-nowrap flex items-center gap-1.5 shrink-0 transition-colors cursor-pointer"
+              >
+                <AsciIcon name="search" size="xs" />
+                <span>Why did my code fail?</span>
+              </button>
+            )}
+
+            <button
+              onClick={() => {
+                if (onOpenVisualizer) onOpenVisualizer()
+                sendMessage("Walk me through the visualizer step by step", "visual-walkthrough")
+              }}
+              className="px-2.5 py-1 rounded-lg border border-border bg-card hover:bg-secondary text-[11px] font-medium text-foreground whitespace-nowrap flex items-center gap-1.5 shrink-0 transition-colors cursor-pointer"
+            >
+              <AsciIcon name="play" size="xs" tone="accent" />
+              <span>Visual Walkthrough</span>
+            </button>
+          </div>
+
+          {/* Messages Conversation Area */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.map(msg => (
           <div
             key={msg.id}
@@ -329,6 +383,8 @@ export function AxelTutorDrawer({
           <Send className="h-3.5 w-3.5" />
         </button>
       </form>
+      </>
+      )}
     </div>
   )
 }
