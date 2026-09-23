@@ -63,7 +63,8 @@
 
   /* Skeleton Loading Tokens (Light Mode) */
   --skeleton-base: #ECECE8;
-  --skeleton-highlight: #F5F5F2;
+  --skeleton-highlight: #F7F7F4;
+  --skeleton-border: rgba(0, 0, 0, 0.08);
 }
 
 .dark {
@@ -118,6 +119,7 @@
   /* Skeleton Loading Tokens (Dark Mode) */
   --skeleton-base: rgba(255, 255, 255, 0.06);
   --skeleton-highlight: rgba(255, 255, 255, 0.12);
+  --skeleton-border: rgba(255, 255, 255, 0.1);
 }
 
 @theme inline {
@@ -158,6 +160,7 @@
   --color-ink: var(--ink);
   --color-skeleton-base: var(--skeleton-base);
   --color-skeleton-highlight: var(--skeleton-highlight);
+  --color-skeleton-border: var(--skeleton-border);
   --color-body: var(--body);
   --color-hairline: var(--hairline);
   --color-coral: var(--primary);
@@ -1092,6 +1095,7 @@ html {
   }
 }
 
+.skeleton,
 .animate-skeleton-shimmer {
   background: linear-gradient(
     90deg,
@@ -1113,6 +1117,7 @@ html {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+  .skeleton,
   .animate-skeleton-shimmer {
     animation: none !important;
     background: var(--skeleton-base) !important;
