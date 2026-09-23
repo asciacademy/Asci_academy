@@ -5,291 +5,346 @@ import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import {
   ArrowRight,
-  Code2,
-  Terminal,
-  CheckCircle2,
-  Flame,
+  ArrowUpRight,
+  Users,
+  BookOpen,
   FolderGit2,
-  Play,
+  Briefcase,
+  CheckCircle2,
+  ShieldCheck,
+  Star,
   Compass,
-  Layers,
-  Sparkles,
 } from "lucide-react"
 import { useAuth } from "@/context/auth-context"
 
+interface Pillar {
+  code: string
+  label: string
+  title: string
+  desc: string
+  meta: string
+  icon: typeof Users
+  href: string
+}
+
+const pillars: Pillar[] = [
+  {
+    code: "01",
+    label: "MENTORING",
+    title: "1-on-1 Mentoring",
+    desc: "Weekly video calls and line-by-line code reviews with senior engineers.",
+    meta: "Weekly 1:1 Video",
+    icon: Users,
+    href: "/community",
+  },
+  {
+    code: "02",
+    label: "LESSONS",
+    title: "Step-by-Step Lessons",
+    desc: "Over 200 bite-sized lessons with interactive visuals and zero setup.",
+    meta: "200+ Visual Guides",
+    icon: BookOpen,
+    href: "/programs",
+  },
+  {
+    code: "03",
+    label: "PROJECTS",
+    title: "Real Projects",
+    desc: "Build and deploy production-grade web apps and algorithms to the cloud.",
+    meta: "Production Cloud Apps",
+    icon: FolderGit2,
+    href: "/programs",
+  },
+  {
+    code: "04",
+    label: "CAREER",
+    title: "Career Support",
+    desc: "Tailored resume reviews, mock interviews, and personal job referrals.",
+    meta: "Direct Job Referrals",
+    icon: Briefcase,
+    href: "/results",
+  },
+]
+
+const alumni = ["Google", "Meta", "Stripe", "Vercel", "Amazon"]
+
+const headlineWordVariants = {
+  hidden: {
+    y: "115%",
+    opacity: 0,
+    rotate: 1.5,
+  },
+  visible: (i: number) => ({
+    y: "0%",
+    opacity: 1,
+    rotate: 0,
+    transition: {
+      duration: 0.75,
+      delay: 0.08 + i * 0.07,
+      ease: [0.16, 1, 0.3, 1] as const,
+    },
+  }),
+}
+
 export function Hero() {
   const { user: authUser } = useAuth()
+  const [ctaHovered, setCtaHovered] = useState(false)
+
   const [mounted, setMounted] = useState(false)
   const [demoBypassUser, setDemoBypassUser] = useState<any>(null)
-  const [activeTab, setActiveTab] = useState<"course" | "dsa" | "project">("course")
 
   useEffect(() => {
     setMounted(true)
     if (!authUser && typeof document !== "undefined") {
       const match = document.cookie.match(/(^| )demo_bypass=([^;]+)/)
       if (match) {
-        setDemoBypassUser({ email: "demo@asci.edu" })
+        setDemoBypassUser({ email: "demo@example.com" })
       }
     }
   }, [authUser])
 
-  const user = mounted ? authUser || demoBypassUser : null
+  const user = mounted ? (authUser || demoBypassUser) : null
+
+  useEffect(() => {
+    window.dispatchEvent(
+      new CustomEvent("hero-cta-hover", { detail: { hovered: ctaHovered } })
+    )
+  }, [ctaHovered])
 
   return (
     <section
       id="hero-section"
-      className="relative min-h-[92svh] flex flex-col justify-center bg-background pt-24 sm:pt-28 pb-12 lg:pb-16 border-b border-border/60"
+      className="relative min-h-[100svh] flex flex-col justify-between bg-background pt-24 sm:pt-28 lg:pt-32 pb-4 sm:pb-5"
     >
-      {/* Restrained engineering grid texture */}
+      {/* Background layer with isolated overflow bounds */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+        {/* Architectural hairline grid — barely visible, intentional texture */}
         <div
-          className="absolute inset-0 opacity-[0.025] dark:opacity-[0.035]"
+          className="absolute inset-0 opacity-[0.03] dark:opacity-[0.04]"
           style={{
             backgroundImage: `
-              linear-gradient(to right, currentColor 1px, transparent 1px),
-              linear-gradient(to bottom, currentColor 1px, transparent 1px)
+              linear-gradient(to right, var(--foreground) 1px, transparent 1px),
+              linear-gradient(to bottom, var(--foreground) 1px, transparent 1px)
             `,
-            backgroundSize: "64px 64px",
+            backgroundSize: "80px 80px",
           }}
         />
       </div>
 
-      <div className="relative mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+      <div className="relative mx-auto max-w-[1400px] px-5 sm:px-6 lg:px-8 w-full flex-1 flex flex-col justify-between">
+        <div>
           {/* ═══════════════════════════════════════════
-              LEFT COLUMN — EDITORIAL PRODUCT COPY
+              HEADLINE BLOCK & AXEL STAGE
           ═══════════════════════════════════════════ */}
-          <div className="lg:col-span-7 space-y-6 text-left">
-            {/* Small ASCI system badge */}
-            <div className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-3.5 py-1 text-xs font-mono font-medium text-primary shadow-2xs">
-              <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-              <span>THE OPERATING SYSTEM FOR AN ENGINEERING STUDENT</span>
-            </div>
+          <div className="relative">
+            <div className="max-w-3xl lg:max-w-2xl xl:max-w-3xl">
+              {/* Main headline — kinetic editorial reveal */}
+              <h1 className="font-serif text-[clamp(1.75rem,5.5vw,4.5rem)] leading-[1.04] tracking-[-0.035em] text-foreground font-normal select-none break-words">
+                <span className="block font-normal">
+                  ENGINEERING IS A CRAFT.
+                </span>
+                <span className="relative inline-block mt-1">
+                  <span className="italic text-primary font-normal">MASTER IT</span>
+                  <span className="text-primary not-italic">.</span>
 
-            {/* Main headline */}
-            <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-normal tracking-tight text-foreground leading-[1.08]">
-              Learn Engineering <br />
-              <span className="italic text-primary font-normal">by Building</span>.
-            </h1>
+                  {/* Hand-drawn editorial SVG underline curve */}
+                  <svg
+                    className="absolute -bottom-1 sm:-bottom-2 left-0 w-full h-2.5 sm:h-3.5 text-primary/45 dark:text-primary/60 overflow-visible pointer-events-none"
+                    viewBox="0 0 260 14"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
+                  >
+                    <motion.path
+                      d="M 3 8 C 75 2.5, 185 2.5, 257 9.5"
+                      stroke="currentColor"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                      initial={{ pathLength: 0, opacity: 0 }}
+                      animate={{ pathLength: 1, opacity: 1 }}
+                      transition={{
+                        duration: 0.75,
+                        delay: 0.45,
+                        ease: [0.16, 1, 0.3, 1],
+                      }}
+                    />
+                  </svg>
+                </span>
+              </h1>
 
-            {/* Direct, calm supporting text */}
-            <p className="text-base sm:text-lg text-muted-foreground leading-relaxed max-w-xl font-normal">
-              Structured courses, coding practice, projects and career opportunities in one place. Engineered for students who want to ship production software.
-            </p>
-
-            {/* Actions */}
-            <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-              <Link
-                href={user ? "/dashboard" : "/signup"}
-                className="group inline-flex items-center justify-center gap-2 rounded-xl bg-primary hover:bg-primary-active text-white px-6 py-3.5 text-sm font-semibold tracking-tight transition-all active:scale-[0.99] cursor-pointer shadow-xs text-center"
+              {/* Sub-headline — restrained, editorial */}
+              <motion.p
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.55, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                className="mt-5 text-[15px] sm:text-base leading-relaxed text-body max-w-xl font-normal"
               >
-                <span>{user ? "Go to Dashboard" : "Start Learning"}</span>
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-              </Link>
-              <Link
-                href="/courses"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-border hover:border-foreground/30 bg-card hover:bg-secondary/70 px-5 py-3.5 text-sm font-medium text-foreground transition-all cursor-pointer text-center"
+                Learn software engineering, AI, systems, algorithms, and modern development through interactive lessons, real projects, and intelligent guidance.
+              </motion.p>
+
+              {/* CTAs */}
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.45, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                className="mt-7 flex flex-col sm:flex-row sm:items-center gap-3.5"
               >
-                <Compass className="h-4 w-4 text-muted-foreground" />
-                <span>Explore Courses</span>
-              </Link>
+                {user ? (
+                  <>
+                    <Link
+                      href="/dashboard"
+                      onMouseEnter={() => setCtaHovered(true)}
+                      onMouseLeave={() => setCtaHovered(false)}
+                      className="group inline-flex items-center justify-center gap-2 rounded-xl bg-primary hover:bg-primary-active text-white px-6 py-3 text-sm font-semibold tracking-tight transition-all active:scale-[0.99] cursor-pointer w-full sm:w-auto text-center"
+                    >
+                      <span>Go to Dashboard</span>
+                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                    </Link>
+                    <Link
+                      href="/programs"
+                      className="inline-flex items-center justify-center gap-2 rounded-xl border border-hairline hover:border-foreground/30 bg-card/70 hover:bg-card px-5 py-3 text-sm font-medium text-foreground transition-all cursor-pointer w-full sm:w-auto text-center"
+                    >
+                      <Compass className="h-4 w-4 text-muted-foreground" />
+                      <span>Explore Curriculum</span>
+                    </Link>
+                  </>
+                ) : (
+                  <div className="flex flex-col gap-3 w-full sm:w-auto">
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
+                      <Link
+                        href="/signup"
+                        onMouseEnter={() => setCtaHovered(true)}
+                        onMouseLeave={() => setCtaHovered(false)}
+                        className="group inline-flex items-center justify-center gap-2 rounded-xl bg-primary hover:bg-primary-active text-white px-6 py-3 text-sm font-semibold tracking-tight transition-all active:scale-[0.99] cursor-pointer w-full sm:w-auto text-center"
+                      >
+                        <span>Start Learning</span>
+                        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                      </Link>
+                      <Link
+                        href="/programs"
+                        className="inline-flex items-center justify-center gap-2 rounded-xl border border-hairline hover:border-foreground/30 bg-card/70 hover:bg-card px-5 py-3 text-sm font-medium text-foreground transition-all cursor-pointer w-full sm:w-auto text-center"
+                      >
+                        <Compass className="h-4 w-4 text-muted-foreground" />
+                        <span>Explore Curriculum</span>
+                      </Link>
+                    </div>
+                    <div className="flex items-center gap-2 text-[11px] font-mono text-muted-foreground">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+                      <span>Zero setup needed · Free instant browser sandboxes</span>
+                    </div>
+                  </div>
+                )}
+              </motion.div>
             </div>
 
-            {/* Trustworthy micro indicators (no fabricated statistics) */}
-            <div className="pt-3 flex flex-wrap items-center gap-y-2 gap-x-6 text-xs text-muted-foreground font-mono">
-              <div className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-primary" />
-                <span>Zero setup needed</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-primary" />
-                <span>Interactive in-browser sandboxes</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-primary" />
-                <span>Real verified projects</span>
-              </div>
-            </div>
+            {/* 3D Robot Hero Stage Anchor — Fully responsive: below CTAs on mobile/tablet, right side on desktop */}
+            <div
+              id="hero-robot-anchor"
+              className="relative mx-auto mt-6 sm:mt-8 w-full max-w-[280px] sm:max-w-[320px] h-[240px] sm:h-[300px] flex lg:absolute lg:right-0 lg:top-1/2 lg:-translate-y-1/2 lg:w-[340px] xl:w-[420px] lg:h-[340px] xl:h-[380px] lg:mt-0 items-center justify-center pointer-events-none select-none"
+              aria-hidden="true"
+            />
           </div>
 
-          {/* ═══════════════════════════════════════════
-              RIGHT COLUMN — LIVE STUDENT COCKPIT PREVIEW
-              (NOT an abstract 3D robot or canvas)
-          ═══════════════════════════════════════════ */}
-          <div className="lg:col-span-5 w-full">
-            <div className="relative rounded-2xl border border-border/80 bg-card p-4 sm:p-5 shadow-xl transition-all duration-300 hover:border-border">
-              {/* Cockpit Window Chrome Header */}
-              <div className="flex items-center justify-between border-b border-border/60 pb-3 mb-4">
-                <div className="flex items-center gap-2">
-                  <div className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-amber-500/80" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
-                  <span className="ml-2 text-xs font-mono text-muted-foreground">asci-cockpit / student-view</span>
-                </div>
-                <div className="flex items-center gap-1.5 text-[11px] font-mono font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-md">
-                  <Flame className="w-3 h-3 text-primary fill-primary" />
-                  <span>7-Day Streak</span>
-                </div>
-              </div>
-
-              {/* Cockpit Interactive Tabs */}
-              <div className="flex items-center gap-1 bg-secondary/80 p-1 rounded-xl mb-4 text-xs font-medium">
-                <button
-                  onClick={() => setActiveTab("course")}
-                  className={`flex-1 py-1.5 px-2 rounded-lg transition-all text-center cursor-pointer ${
-                    activeTab === "course"
-                      ? "bg-card text-foreground font-semibold shadow-2xs"
-                      : "text-muted-foreground hover:text-foreground"
-                  }`}
+        {/* ═══════════════════════════════════════════
+            KEY HIGHLIGHTS STRIP
+        ═══════════════════════════════════════════ */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.5 }}
+          className="mt-8 sm:mt-10 lg:mt-12"
+        >
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
+            {pillars.map((p) => {
+              const IconComponent = p.icon
+              return (
+                <Link
+                  key={p.code}
+                  href={p.href}
+                  className="group flex items-center gap-2 sm:gap-3 rounded-2xl border border-hairline bg-card/60 hover:bg-card hover:border-primary/40 p-2.5 sm:p-3.5 transition-all shadow-2xs"
                 >
-                  Active Course
-                </button>
-                <button
-                  onClick={() => setActiveTab("dsa")}
-                  className={`flex-1 py-1.5 px-2 rounded-lg transition-all text-center cursor-pointer ${
-                    activeTab === "dsa"
-                      ? "bg-card text-foreground font-semibold shadow-2xs"
-                      : "text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  Today&apos;s Practice
-                </button>
-                <button
-                  onClick={() => setActiveTab("project")}
-                  className={`flex-1 py-1.5 px-2 rounded-lg transition-all text-center cursor-pointer ${
-                    activeTab === "project"
-                      ? "bg-card text-foreground font-semibold shadow-2xs"
-                      : "text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  Capstone
-                </button>
-              </div>
-
-              {/* Tab 1: Active Course Progress */}
-              {activeTab === "course" && (
-                <div className="space-y-4 animate-fadeIn">
-                  <div className="rounded-xl border border-border/80 bg-secondary/30 p-3.5">
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <span className="text-[10px] font-mono uppercase tracking-wider text-primary font-semibold">
-                          In Progress
-                        </span>
-                        <h4 className="text-sm font-semibold text-foreground mt-0.5">
-                          Production Python &amp; Systems Engineering
-                        </h4>
-                        <p className="text-xs text-muted-foreground mt-0.5">
-                          Lesson 34 / 50 · Functions, Modules &amp; Memory Scope
-                        </p>
-                      </div>
-                      <span className="text-xs font-mono font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-md shrink-0">
-                        68%
-                      </span>
-                    </div>
-
-                    {/* Progress Bar */}
-                    <div className="w-full bg-secondary h-2 rounded-full overflow-hidden mt-3">
-                      <div
-                        className="bg-primary h-full rounded-full transition-all duration-500"
-                        style={{ width: "68%" }}
-                      />
-                    </div>
+                  <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-secondary border border-hairline flex items-center justify-center text-primary shrink-0 group-hover:scale-105 group-hover:bg-primary/10 transition-all">
+                    <IconComponent className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   </div>
-
-                  {/* Up Next Snippet */}
-                  <div className="flex items-center justify-between text-xs px-1">
-                    <div className="flex items-center gap-2 text-muted-foreground">
-                      <Play className="w-3.5 h-3.5 text-primary" />
-                      <span>Next: <strong className="text-foreground font-medium">Asyncio Event Loops &amp; Sockets</strong></span>
-                    </div>
-                    <span className="font-mono text-[11px] text-muted-foreground">18 min</span>
-                  </div>
-
-                  <Link
-                    href="/programs/python"
-                    className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-primary text-white text-xs font-semibold hover:bg-primary-active transition-all cursor-pointer text-center"
-                  >
-                    <span>Resume Course</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
-                </div>
-              )}
-
-              {/* Tab 2: Today's DSA Problem */}
-              {activeTab === "dsa" && (
-                <div className="space-y-4 animate-fadeIn">
-                  <div className="rounded-xl border border-border/80 bg-secondary/30 p-3.5">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-mono uppercase tracking-wider text-emerald-600 dark:text-emerald-400 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded">
-                        Medium · Hash Map
-                      </span>
-                      <span className="text-[11px] font-mono text-muted-foreground">POTD #142</span>
-                    </div>
-                    <h4 className="text-sm font-semibold text-foreground mt-2">
-                      Two Sum II — Input Array Is Sorted
-                    </h4>
-                    <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
-                      Find two numbers such that they add up to a specific target number using two-pointer approach in O(1) space.
+                  <div className="min-w-0">
+                    <p className="text-xs sm:text-sm font-semibold text-foreground truncate group-hover:text-primary transition-colors">
+                      {p.title}
                     </p>
-
-                    <div className="flex items-center gap-2 mt-3 text-[11px] font-mono text-muted-foreground">
-                      <span className="text-primary font-semibold">+50 XP</span>
-                      <span>·</span>
-                      <span>Target: &lt;15 min</span>
-                      <span>·</span>
-                      <span className="text-emerald-600 dark:text-emerald-400">Acceptance 62.4%</span>
-                    </div>
-                  </div>
-
-                  <Link
-                    href="/dsa/problems/two-sum"
-                    className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-primary text-white text-xs font-semibold hover:bg-primary-active transition-all cursor-pointer text-center"
-                  >
-                    <Code2 className="w-3.5 h-3.5" />
-                    <span>Open in Problem Solver</span>
-                  </Link>
-                </div>
-              )}
-
-              {/* Tab 3: Capstone Project Milestone */}
-              {activeTab === "project" && (
-                <div className="space-y-4 animate-fadeIn">
-                  <div className="rounded-xl border border-border/80 bg-secondary/30 p-3.5">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-mono uppercase tracking-wider text-primary font-semibold">
-                        Systems Architecture
-                      </span>
-                      <span className="text-xs font-mono font-bold text-primary">Milestone 2 / 4</span>
-                    </div>
-                    <h4 className="text-sm font-semibold text-foreground mt-1">
-                      ApexKV — Distributed Raft-Consensus KV Store
-                    </h4>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      Leader election complete. Implementing log replication and heartbeat RPCs.
+                    <p className="text-[10.5px] sm:text-[11px] text-muted-foreground font-mono truncate">
+                      {p.meta}
                     </p>
-
-                    <div className="flex items-center gap-1.5 flex-wrap mt-3">
-                      {["Go", "Raft", "gRPC", "Docker"].map((tech) => (
-                        <span key={tech} className="text-[10px] font-mono px-2 py-0.5 rounded bg-card border border-border/80 text-muted-foreground">
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
                   </div>
-
-                  <Link
-                    href="/projects"
-                    className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-primary text-white text-xs font-semibold hover:bg-primary-active transition-all cursor-pointer text-center"
-                  >
-                    <FolderGit2 className="w-3.5 h-3.5" />
-                    <span>View Project Specification</span>
-                  </Link>
-                </div>
-              )}
-            </div>
+                </Link>
+              )
+            })}
           </div>
+        </motion.div>
         </div>
+
+        {/* ═══════════════════════════════════════════
+            SOCIAL PROOF — Editorial strip
+        ═══════════════════════════════════════════ */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.7 }}
+          className="mt-6 lg:mt-8 pb-1 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-t border-hairline pt-4"
+        >
+          {/* Left: Rating + learner count */}
+          <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
+            {/* Avatar stack */}
+            <div className="flex -space-x-2.5">
+              {["A", "S", "M", "R"].map((letter, i) => {
+                const colors = [
+                  "bg-blue-600/15 text-blue-600 dark:text-blue-400",
+                  "bg-indigo-600/15 text-indigo-600 dark:text-indigo-400",
+                  "bg-cyan-600/15 text-cyan-600 dark:text-cyan-400",
+                  "bg-blue-500/15 text-blue-700 dark:text-blue-300",
+                ]
+                return (
+                  <div
+                    key={letter}
+                    className={`w-7 h-7 rounded-full ${colors[i]} border-2 border-background flex items-center justify-center text-[10px] font-bold`}
+                  >
+                    {letter}
+                  </div>
+                )
+              })}
+              <div className="w-7 h-7 rounded-full bg-muted border-2 border-background flex items-center justify-center text-[10px] font-bold text-muted-foreground">
+                +
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <div className="flex">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star key={i} className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+                ))}
+              </div>
+              <span className="text-xs font-semibold text-foreground">4.9</span>
+              <span className="text-muted-foreground/30">·</span>
+              <span className="text-xs text-muted-foreground">2,400+ active learners</span>
+            </div>
+          </div>
+
+          {/* Right: Alumni placements */}
+          <div className="flex flex-wrap items-center gap-2 text-[11px] font-mono">
+            <span className="text-muted-foreground/50 uppercase tracking-wider text-[10px]">
+              Alumni at
+            </span>
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+              {alumni.map((name, i) => (
+                <span key={name} className="flex items-center gap-2">
+                  {i > 0 && <span className="text-hairline">·</span>}
+                  <span className="text-foreground/70 font-medium">{name}</span>
+                </span>
+              ))}
+            </div>
+          </div>
+        </motion.div>
       </div>
+
+
     </section>
   )
 }

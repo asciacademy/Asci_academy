@@ -58,7 +58,8 @@ import { AxelProvider } from "@/context/axel-context"
 import { RouteProgressBar } from "@/components/route-progress-bar"
 import { XpCelebrationToast } from "@/components/gamification/xp-celebration-toast"
 import { GoogleOneTap } from "@/components/auth/google-one-tap"
-import { MobileBottomNav } from "@/components/navigation/mobile-bottom-nav"
+
+import { ScrollRobotWrapper } from "@/components/scroll-robot-wrapper"
 
 export default function RootLayout({
   children,
@@ -81,7 +82,7 @@ export default function RootLayout({
                   <GoogleOneTap />
                   <XpCelebrationToast />
                   {children}
-                  <MobileBottomNav />
+                  <ScrollRobotWrapper />
                 </AxelProvider>
               </AdminProvider>
             </UserSettingsProvider>

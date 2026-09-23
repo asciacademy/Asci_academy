@@ -1,48 +1,35 @@
 import { Navbar } from "@/components/navbar"
 import { Hero } from "@/components/hero"
-import { ContinueLearningCard } from "@/components/home/continue-learning-card"
-import { ExploreByGoal } from "@/components/home/explore-by-goal"
-import { CourseCatalogPreview } from "@/components/home/course-catalog-preview"
-import { LearningPathsSection } from "@/components/home/learning-paths-section"
-import { PracticeSection } from "@/components/home/practice-section"
-import { ProjectsPreviewSection } from "@/components/home/projects-preview-section"
-import { CareerPreviewSection } from "@/components/home/career-preview-section"
-import { ProductCTA } from "@/components/home/product-cta"
+import { LandingMarquee } from "@/components/landing-marquee"
+import { StatsCounter } from "@/components/stats-counter"
+import { Courses } from "@/components/courses"
+import { FeaturedMasterTracks } from "@/components/featured-master-tracks"
+import { Features } from "@/components/features"
+import { DSAVisualizerWrapper } from "@/components/dsa-visualizer-wrapper"
+import { Testimonials } from "@/components/testimonials"
+import { Pricing } from "@/components/pricing"
+import { FAQ } from "@/components/faq"
 import { Footer } from "@/components/footer"
 
-export default function Home() {
+import { getPlatformStats } from "@/app/actions/stats"
+
+export default async function Home() {
+  const stats = await getPlatformStats()
+
   return (
-    <main className="min-h-screen bg-background text-foreground selection:bg-primary/20 selection:text-primary pb-16 md:pb-0">
-      {/* 1. Global Product Navigation */}
+    <main className="min-h-screen bg-background text-foreground selection:bg-primary/20 selection:text-primary">
       <Navbar />
-
-      {/* 2. Hero Section with Live Student Cockpit Preview */}
       <Hero />
-
-      {/* 3. Continue Learning Quick Resume Card */}
-      <ContinueLearningCard />
-
-      {/* 4. Explore by Goal (Intent-Driven Paths) */}
-      <ExploreByGoal />
-
-      {/* 5. Course Catalog Preview */}
-      <CourseCatalogPreview />
-
-      {/* 6. Structured Learning Paths (AI, Web, Systems) */}
-      <LearningPathsSection />
-
-      {/* 7. Practice & Daily Coding Challenges */}
-      <PracticeSection />
-
-      {/* 8. Portfolio Projects & Systems */}
-      <ProjectsPreviewSection />
-
-      {/* 9. Career & Opportunity Discovery (Unstop-style) */}
-      <CareerPreviewSection />
-
-      {/* 10. Product Call to Action & Compact Footer */}
-      <ProductCTA />
-      <Footer showCTA={false} />
+      <LandingMarquee />
+      <StatsCounter />
+      <Courses />
+      <FeaturedMasterTracks />
+      <Features stats={stats} />
+      <DSAVisualizerWrapper />
+      <Testimonials />
+      <Pricing />
+      <FAQ />
+      <Footer showCTA />
     </main>
   )
 }
