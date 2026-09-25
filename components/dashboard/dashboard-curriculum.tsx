@@ -378,20 +378,20 @@ export function DashboardCurriculum({
         <div className="space-y-1.5 min-w-0">
           <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
             <span className="text-[10px] sm:text-[11px] font-mono px-2.5 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 font-semibold shrink-0 leading-none">
-              Academic Directory
+              My Courses
             </span>
             <span className="text-xs font-mono text-muted-foreground shrink-0 flex items-center gap-1.5">
               <span className="w-1 h-1 rounded-full bg-stone-300 dark:bg-stone-700 hidden sm:inline-block" />
-              <span>{enrolledList.length} Active Enrolled</span>
+              <span>{enrolledList.length} Enrolled</span>
               <span className="text-muted-foreground/60">·</span>
-              <span>{activeCatalogTracks.length} Specialization Tracks</span>
+              <span>{activeCatalogTracks.length} Courses Available</span>
             </span>
           </div>
-          <h1 className="font-serif text-2xl sm:text-3xl font-normal tracking-tight text-foreground">
-            My Engineering Curriculum &amp; Specializations
+          <h1 className="font-sans text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
+            My Courses &amp; Learning Tracks
           </h1>
           <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed max-w-xl">
-            Verified academic courses, accredited partner certifications, algorithmic challenges, and interactive compilers.
+            Track your enrolled courses, continue learning where you left off, or explore new topics.
           </p>
         </div>
 
@@ -408,10 +408,10 @@ export function DashboardCurriculum({
           {/* Filter Pills */}
           <div className="flex flex-wrap items-center gap-2">
             {[
-              { id: "all", label: "All Curriculum" },
+              { id: "all", label: "All Courses" },
               { id: "in-progress", label: "In Progress" },
               { id: "completed", label: "Completed" },
-              { id: "catalog", label: "Explore Tracks" },
+              { id: "catalog", label: "Browse Catalog" },
             ].map((f) => (
               <button
                 key={f.id}
@@ -488,12 +488,12 @@ export function DashboardCurriculum({
       {filter !== "catalog" && (
         <div className="space-y-6">
           <div className="flex items-center justify-between">
-            <h2 className="font-serif text-xl font-normal text-foreground flex items-center gap-2">
+            <h2 className="font-sans text-lg sm:text-xl font-bold text-foreground flex items-center gap-2">
               <BookOpen className="w-4 h-4 text-primary" />
-              <span>My Enrolled Curriculum Syllabi</span>
+              <span>Enrolled Courses</span>
             </h2>
             <span className="text-xs font-mono text-muted-foreground">
-              {filteredEnrollments.length} track{filteredEnrollments.length === 1 ? "" : "s"} enrolled
+              {filteredEnrollments.length} course{filteredEnrollments.length === 1 ? "" : "s"}
             </span>
           </div>
 
@@ -505,13 +505,13 @@ export function DashboardCurriculum({
                 <BookOpen className="w-6 h-6" />
               </div>
               <div className="space-y-1">
-                <h3 className="font-serif text-lg font-normal text-foreground">
-                  {search ? "No matching enrolled tracks found" : "No Tracks Enrolled Yet"}
+                <h3 className="font-sans text-base sm:text-lg font-semibold text-foreground">
+                  {search ? "No courses found" : "No Enrolled Courses Yet"}
                 </h3>
                 <p className="text-xs text-muted-foreground max-w-sm mx-auto leading-relaxed">
                   {search 
-                    ? "Try adjusting your search query to view your enrolled curriculum tracks."
-                    : "You haven't enrolled in any curriculum tracks yet. Browse the accredited specialization catalog below to enroll."}
+                    ? "Try searching for a different keyword or browse all available courses below."
+                    : "You haven't enrolled in any courses yet. Browse the course catalog below to start learning."}
                 </p>
               </div>
               {(filter as string) !== "catalog" && enrolledList.length === 0 && (
@@ -519,7 +519,7 @@ export function DashboardCurriculum({
                   onClick={() => setFilter("catalog" as any)}
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary hover:bg-primary-active text-primary-foreground text-xs font-semibold shadow-xs transition-all cursor-pointer"
                 >
-                  <span>Explore Specialization Tracks</span>
+                  <span>Explore Courses</span>
                   <ChevronRight className="w-3.5 h-3.5" />
                 </button>
               )}
@@ -603,7 +603,7 @@ export function DashboardCurriculum({
 
                           <Link
                             href={`/courses/${course.slug || course.id}`}
-                            className="block font-serif text-lg sm:text-xl font-medium text-foreground leading-snug hover:text-primary transition-colors"
+                            className="block font-sans text-base sm:text-lg font-bold text-foreground leading-snug hover:text-primary transition-colors"
                           >
                             {course.title}
                           </Link>
@@ -676,10 +676,10 @@ export function DashboardCurriculum({
                       <div className="border-t border-hairline bg-secondary/50 p-6 sm:p-7 space-y-6 animate-fadeIn">
                         <div className="flex items-center justify-between pb-3 border-b border-hairline">
                           <h4 className="text-xs font-mono uppercase tracking-widest text-foreground font-semibold">
-                            Curriculum Chapters &amp; Interactive Challenges
+                            Course Modules &amp; Lessons
                           </h4>
                           <span className="text-xs font-mono text-muted-foreground">
-                            Autosaves code assertions
+                            Auto-saves your progress
                           </span>
                         </div>
 
@@ -688,7 +688,7 @@ export function DashboardCurriculum({
                             {syllabus.map((mod: any, mi: number) => (
                               <div key={mi} className="rounded-xl border border-hairline bg-card p-5 space-y-3">
                                 <div className="flex items-center justify-between">
-                                  <h5 className="font-serif text-base font-normal text-foreground">
+                                  <h5 className="font-sans text-sm sm:text-base font-semibold text-foreground">
                                     {mod.moduleTitle}
                                   </h5>
                                   <span className="text-[11px] font-mono text-muted-foreground">
@@ -749,13 +749,13 @@ export function DashboardCurriculum({
             <div>
               <div className="inline-flex items-center gap-1.5 text-[10px] font-mono text-primary uppercase tracking-widest font-semibold mb-1">
                 <Layers className="w-3.5 h-3.5" />
-                <span>Accredited Academic Curriculum</span>
+                <span>Course Catalog</span>
               </div>
-              <h2 className="font-serif text-2xl font-normal text-foreground">
-                Available Specialization Tracks
+              <h2 className="font-sans text-xl sm:text-2xl font-bold text-foreground">
+                Explore Courses &amp; Tracks
               </h2>
               <p className="text-xs text-muted-foreground mt-1">
-                Showing {filteredCatalogTracks.length === 0 ? 0 : (catalogPage - 1) * catalogItemsPerPage + 1}–{Math.min(catalogPage * catalogItemsPerPage, filteredCatalogTracks.length)} of {filteredCatalogTracks.length} tracks across the academy
+                Showing {filteredCatalogTracks.length === 0 ? 0 : (catalogPage - 1) * catalogItemsPerPage + 1}–{Math.min(catalogPage * catalogItemsPerPage, filteredCatalogTracks.length)} of {filteredCatalogTracks.length} courses
               </p>
             </div>
             <div className="flex items-center gap-3">
@@ -765,14 +765,14 @@ export function DashboardCurriculum({
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-primary text-primary-foreground text-xs font-medium hover:bg-primary-active transition-all cursor-pointer shadow-xs"
                 >
                   <Plus className="w-3.5 h-3.5" />
-                  <span>New Specialization</span>
+                  <span>New Course</span>
                 </button>
               )}
               <Link
                 href="/programs"
                 className="text-xs font-medium text-primary hover:underline inline-flex items-center gap-1"
               >
-                <span>View Full Academic Catalog</span>
+                <span>View Full Catalog</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
@@ -814,8 +814,8 @@ export function DashboardCurriculum({
             <CourseGridSkeleton count={catalogItemsPerPage} />
           ) : paginatedCatalogTracks.length === 0 ? (
             <div className="rounded-3xl border border-dashed border-hairline bg-card/60 p-10 text-center space-y-2">
-              <h3 className="font-serif text-lg font-normal text-foreground">No tracks match your filter</h3>
-              <p className="text-xs text-muted-foreground">Try selecting a different category or clearing the search bar.</p>
+              <h3 className="font-sans text-base sm:text-lg font-semibold text-foreground">No courses match your filter</h3>
+              <p className="text-xs text-muted-foreground">Try selecting a different category or clearing your search.</p>
               <button
                 onClick={() => { setCatalogCategory("All"); setSearch(""); }}
                 className="mt-2 text-xs font-semibold text-primary hover:underline cursor-pointer"
@@ -903,7 +903,7 @@ export function DashboardCurriculum({
                           href={`/courses/${trackSlug}`}
                           className="block group-hover:text-primary transition-colors"
                         >
-                          <h3 className="font-serif text-lg font-medium text-foreground line-clamp-1 leading-snug">
+                          <h3 className="font-sans text-base font-semibold text-foreground line-clamp-1 leading-snug">
                             {track.title}
                           </h3>
                         </Link>
@@ -1104,14 +1104,14 @@ export function DashboardCurriculum({
             <div className="flex items-center gap-2">
               <Award className="w-4 h-4 text-[#D4B872]" />
               <span className="text-xs font-mono uppercase tracking-widest text-primary font-semibold">
-                ASCI Accreditation Track
+                Certification Track
               </span>
             </div>
-            <h3 className="font-serif text-2xl font-normal text-foreground">
-              Certified Systems Engineer (ACSE) Status
+            <h3 className="font-sans text-xl sm:text-2xl font-bold text-foreground">
+              Systems Engineer Certification Progress
             </h3>
             <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-              Complete the foundational DSA curriculum, pass the 4 interactive visualizer assertions, and submit your distributed cache capstone project to receive your verified digital credential.
+              Complete your DSA coursework, pass the interactive visualizer challenges, and submit your capstone project to earn your verified certificate.
             </p>
           </div>
 
@@ -1119,21 +1119,21 @@ export function DashboardCurriculum({
             <AxelStage
               id="dashboard-courses-catalog-anchor"
               sectionId="dashboard-courses-catalog"
-              label="Accreditation Advisor"
+              label="Learning Advisor"
               emotion="happy"
               scale={0.44}
               size="sm"
             />
             <div className="flex flex-col sm:items-end gap-2">
               <div className="text-right">
-                <span className="font-serif text-3xl font-normal text-primary">{capstoneReadiness}%</span>
-                <span className="text-xs text-muted-foreground block font-mono">Capstone Readiness</span>
+                <span className="font-sans text-3xl font-bold text-primary">{capstoneReadiness}%</span>
+                <span className="text-xs text-muted-foreground block font-mono">Certificate Progress</span>
               </div>
               <Link
                 href="/results"
                 className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
               >
-                <span>Inspect Credential Standards</span>
+                <span>View Requirements</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
@@ -1162,11 +1162,11 @@ export function DashboardCurriculum({
               <Trash2 className="w-6 h-6" />
             </div>
             <div className="space-y-1">
-              <h3 className="font-serif text-lg font-semibold text-foreground">
-                Delete Academic Program?
+              <h3 className="font-sans text-lg font-semibold text-foreground">
+                Delete Course?
               </h3>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                Are you sure you want to remove <strong className="text-foreground">{deleteConfirmCourse.title}</strong> from the academic catalog? This action will remove it from both the Home Page and the Student Dashboard.
+                Are you sure you want to remove <strong className="text-foreground">{deleteConfirmCourse.title}</strong> from the course catalog? Students will no longer see this course.
               </p>
             </div>
             <div className="flex items-center justify-end gap-3 pt-2">
@@ -1184,7 +1184,7 @@ export function DashboardCurriculum({
                 className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-destructive text-destructive-foreground text-xs font-semibold hover:bg-destructive/90 transition-all cursor-pointer shadow-xs disabled:opacity-50"
               >
                 {isDeleting ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Trash2 className="w-3.5 h-3.5" />}
-                <span>Delete Program</span>
+                <span>Delete Course</span>
               </button>
             </div>
           </div>

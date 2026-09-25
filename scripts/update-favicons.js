@@ -99,8 +99,8 @@ async function generate() {
   <!-- ASCI Blue Logo Mark -->
   <image href="data:image/png;base64,${logoMark96.toString('base64')}" x="6" y="6" width="48" height="48" />
 
-  <!-- Wordmark "ASCI" in serif -->
-  <text x="64" y="38" font-family="'EB Garamond', 'Georgia', serif" font-size="28" font-weight="500" fill="#0f172a" letter-spacing="1">ASCI</text>
+  <!-- Wordmark "ASCI" in Inter -->
+  <text x="64" y="38" font-family="'Inter', sans-serif" font-size="28" font-weight="700" fill="#0f172a" letter-spacing="1">ASCI</text>
 
   <!-- Academy Pill Badge in electric blue -->
   <rect x="154" y="20" width="74" height="22" rx="11" fill="#2563eb" />

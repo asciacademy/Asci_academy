@@ -292,7 +292,7 @@ export function ProfileWorkspace({
         {/* Main Grid: Sidebar Tabs + Content */}
         <section id="profile-settings" className="grid grid-cols-1 md:grid-cols-4 gap-8 scroll-mt-24">
           {/* Vertical Tabs Sidebar */}
-          <div className="space-y-4">
+          <div className="space-y-4 md:sticky md:top-24 self-start">
             <div className="space-y-1">
               {tabs.map((tab) => {
                 const isActive = activeTab === tab.id

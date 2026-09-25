@@ -40,12 +40,12 @@ export function StudioLightingDefs({ prefix }: { prefix: string }) {
       {/* Left Facing Isometric Surface (Direct Light) */}
       <linearGradient id={`${prefix}-face-left`} x1="0%" y1="0%" x2="0%" y2="100%">
         <stop offset="0%" stopColor="#252320" />
-        <stop offset="100%" stopColor="#141413" />
+        <stop offset="100%" stopColor="#1F2937" />
       </linearGradient>
 
       {/* Right Facing Isometric Surface (Fill / Shadow) */}
       <linearGradient id={`${prefix}-face-right`} x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stopColor="#181715" />
+        <stop offset="0%" stopColor="#111827" />
         <stop offset="100%" stopColor="#0a0a09" />
       </linearGradient>
 

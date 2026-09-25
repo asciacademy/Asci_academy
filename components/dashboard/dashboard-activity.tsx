@@ -84,15 +84,15 @@ export function DashboardActivity({ totalXP, streak, userName, events = [] }: Da
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-mono uppercase tracking-wider bg-primary/10 text-primary border border-primary/20 shrink-0 leading-none font-semibold">
-              Telemetry &amp; Logs
+              Activity &amp; History
             </span>
-            <span className="text-xs font-mono text-muted-foreground">Historical Audit Record</span>
+            <span className="text-xs font-mono text-muted-foreground">Your learning log</span>
           </div>
-          <h1 className="font-serif text-3xl font-normal tracking-tight text-foreground">
-            Activity & Execution Logs
+          <h1 className="font-sans text-3xl font-bold tracking-tight text-foreground">
+            Activity &amp; Study History
           </h1>
           <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
-            Verified proof-of-work timestamps, compiler assertions, quiz scores, and streak telemetry.
+            Your recent coding sessions, solved problems, quiz scores, and streak history.
           </p>
         </div>
 
@@ -110,7 +110,7 @@ export function DashboardActivity({ totalXP, streak, userName, events = [] }: Da
             className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-hairline bg-card hover:bg-secondary text-xs font-medium text-foreground transition-all cursor-pointer shadow-xs"
           >
             {downloadSuccess ? <Check className="w-4 h-4 text-emerald-500" /> : <Download className="w-4 h-4 text-primary" />}
-            <span>{downloadSuccess ? "Transcript Exported" : "Export Activity Audit"}</span>
+            <span>{downloadSuccess ? "Activity Exported" : "Export Activity"}</span>
           </button>
         </div>
       </div>
@@ -118,10 +118,10 @@ export function DashboardActivity({ totalXP, streak, userName, events = [] }: Da
       {/* 4 Telemetry Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { label: "Total Sessions Logged", value: `${allEvents.length}`, sub: allEvents.length > 0 ? "100% cloud synced" : "No sessions recorded", icon: Activity },
-          { label: "Lifetime XP Earned", value: `${totalXP.toLocaleString()}`, sub: totalXP > 0 ? "Verified Points" : "Zero XP earned", icon: Zap },
-          { label: "Assertions Passed", value: `${allEvents.length * 4}`, sub: allEvents.length > 0 ? "O(n) & O(1) verified" : "0 assertions verified", icon: Code },
-          { label: "Evaluation Accuracy", value: allEvents.length > 0 ? "100%" : "—", sub: allEvents.length > 0 ? "All tasks verified" : "No evaluations yet", icon: Trophy },
+          { label: "Total Sessions", value: `${allEvents.length}`, sub: allEvents.length > 0 ? "Saved to account" : "No sessions yet", icon: Activity },
+          { label: "Total XP Earned", value: `${totalXP.toLocaleString()}`, sub: totalXP > 0 ? "Points earned" : "0 XP earned", icon: Zap },
+          { label: "Tests Passed", value: `${allEvents.length * 4}`, sub: allEvents.length > 0 ? "Code tests passed" : "0 tests passed", icon: Code },
+          { label: "Accuracy Rate", value: allEvents.length > 0 ? "100%" : "—", sub: allEvents.length > 0 ? "Completed tasks" : "No tasks yet", icon: Trophy },
         ].map((stat, i) => (
           <div key={i} className="rounded-xl border border-hairline bg-card p-5 shadow-xs">
             <div className="flex items-center justify-between mb-2">
@@ -130,7 +130,7 @@ export function DashboardActivity({ totalXP, streak, userName, events = [] }: Da
               </span>
               <stat.icon className="w-4 h-4 text-primary" />
             </div>
-            <div className="font-serif text-3xl font-normal text-foreground">{stat.value}</div>
+            <div className="font-sans text-3xl font-bold text-foreground">{stat.value}</div>
             <div className="text-xs text-body mt-1">{stat.sub}</div>
           </div>
         ))}
@@ -142,12 +142,12 @@ export function DashboardActivity({ totalXP, streak, userName, events = [] }: Da
       <div className="rounded-2xl border border-hairline bg-card p-6 shadow-xs space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-hairline">
           <div>
-            <h3 className="font-serif text-lg font-normal text-foreground flex items-center gap-2">
+            <h3 className="font-sans text-lg font-bold text-foreground flex items-center gap-2">
               <Calendar className="w-4 h-4 text-primary" />
-              <span>35-Day Study Continuity Heatmap</span>
+              <span>35-Day Study Heatmap</span>
             </h3>
             <p className="text-xs text-muted-foreground mt-0.5">
-              Daily engineering contributions, compiler assertions, and problem sets.
+              Daily practice history and coding consistency.
             </p>
           </div>
           <div className="flex items-center gap-2 text-xs font-mono text-muted-foreground">
@@ -233,13 +233,13 @@ export function DashboardActivity({ totalXP, streak, userName, events = [] }: Da
             <table className="w-full text-left text-xs border-collapse">
               <thead>
                 <tr className="border-b border-hairline bg-secondary/80 text-[11px] font-mono text-muted-foreground uppercase tracking-wider">
-                  <th className="py-3 px-5 font-medium">Timestamp</th>
-                  <th className="py-3 px-5 font-medium">Event & Task</th>
-                  <th className="py-3 px-5 font-medium">Curriculum Module</th>
+                  <th className="py-3 px-5 font-medium">Time</th>
+                  <th className="py-3 px-5 font-medium">Activity</th>
+                  <th className="py-3 px-5 font-medium">Course Module</th>
                   <th className="py-3 px-5 font-medium">Category</th>
-                  <th className="py-3 px-5 font-medium">Telemetry</th>
-                  <th className="py-3 px-5 font-medium">XP Reward</th>
-                  <th className="py-3 px-5 font-medium text-right">Verification</th>
+                  <th className="py-3 px-5 font-medium">Details</th>
+                  <th className="py-3 px-5 font-medium">XP Earned</th>
+                  <th className="py-3 px-5 font-medium text-right">Status</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-hairline">

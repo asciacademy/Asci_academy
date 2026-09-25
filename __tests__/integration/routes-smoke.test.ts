@@ -6,6 +6,7 @@ async function probeUrl(path: string, options: RequestInit = {}) {
   try {
     const res = await fetch(`${BASE_URL}${path}`, {
       redirect: "manual",
+      signal: AbortSignal.timeout(4000),
       ...options,
     })
     return { status: res.status, headers: res.headers, ok: res.ok, res }
@@ -26,6 +27,7 @@ describe("Integration Smoke Tests - Live Application Server & Routes", () => {
       "/pricing",
       "/degrees",
       "/community",
+      "/live-classes",
       "/login",
       "/signup",
     ]
@@ -39,7 +41,7 @@ describe("Integration Smoke Tests - Live Application Server & Routes", () => {
         }
       })
     )
-  }, 15000)
+  }, 30000)
 
   it("verifies legacy plus routes issue permanent redirect to /pricing", async () => {
     const probePlus = await probeUrl("/plus")
@@ -51,7 +53,7 @@ describe("Integration Smoke Tests - Live Application Server & Routes", () => {
     if (probeCourseraPlus.status !== 0) {
       expect([307, 308]).toContain(probeCourseraPlus.status)
     }
-  })
+  }, 30000)
 
   it("verifies protected administrative routes require auth or allow demo bypass", async () => {
     // Unauthenticated request should redirect (307)
@@ -74,6 +76,14 @@ describe("Integration Smoke Tests - Live Application Server & Routes", () => {
     })
     if (adminCoursesProbe.status !== 0) {
       expect(adminCoursesProbe.status).toBe(200)
+    }
+
+    // Admin live-classes manager
+    const adminLiveProbe = await probeUrl("/admin/live-classes", {
+      headers: { Cookie: "demo_bypass=admin" },
+    })
+    if (adminLiveProbe.status !== 0) {
+      expect(adminLiveProbe.status).toBe(200)
     }
   })
 

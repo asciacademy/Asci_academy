@@ -35,15 +35,15 @@ const STORAGE_KEY = "asci-user-settings"
 function sanitizeAccentColor(color?: string): string {
     if (!color) return "#2563eb"
     const lower = color.trim().toLowerCase()
-    // Migrate old orange colors to royal blue
+    // Migrate old orange colors to Unstop action blue
     if (
-        lower === "#ea580c" ||
+        lower.startsWith("#ea58") ||
         lower === "#c2410c" ||
         lower === "#f97316" ||
         lower.includes("orange") ||
         lower.includes("amber")
     ) {
-        return "#2563eb"
+        return "#0073E6"
     }
     return color
 }

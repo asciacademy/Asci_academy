@@ -57,6 +57,7 @@ export interface HackathonItem {
   tags: string[]
   problemStatement: string
   rounds: HackathonRound[]
+  daysLeft?: number
   isRegistered?: boolean
   registration?: {
     teamName: string

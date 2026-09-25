@@ -116,9 +116,9 @@ export function DashboardResumeAts() {
       }
     }
     return {
-      badge: "Editorial ATS Architect",
-      title: "ATS Resume Architect & Job Match Evaluator",
-      description: "Format your engineering CV to pass Tier-1 ATS screeners (Google, Zerodha, Razorpay). Benchmark keywords against live job openings and print clean, recruiter-ready resumes."
+      badge: "Resume & ATS",
+      title: "Resume Reviewer & ATS Score",
+      description: "Build an ATS-friendly engineering resume, check keyword matches for target jobs, and export a clean recruiter-ready PDF."
     }
   })
 
@@ -245,7 +245,7 @@ export function DashboardResumeAts() {
               <span>ATS Benchmark 2026</span>
             </span>
           </div>
-          <h1 className="font-serif text-2xl sm:text-3xl font-normal text-foreground flex items-start sm:items-center gap-2.5 leading-tight">
+          <h1 className="font-sans text-2xl sm:text-3xl font-bold tracking-tight text-foreground flex items-start sm:items-center gap-2.5 leading-tight">
             <FileText className="w-6 h-6 text-primary shrink-0 mt-0.5 sm:mt-0" />
             <span className="break-words">{sectionConfig.title}</span>
           </h1>
@@ -258,7 +258,7 @@ export function DashboardResumeAts() {
           <AxelStage
             id="dashboard-ats-robot-anchor"
             sectionId="dashboard-ats-header"
-            label="Resume Architect"
+            label="Resume Advisor"
             emotion="proud"
             scale={0.44}
             size="sm"
@@ -317,7 +317,7 @@ export function DashboardResumeAts() {
               </div>
             </div>
             <div className="flex items-baseline gap-2">
-              <span className="font-serif text-3xl font-normal text-foreground">
+              <span className="font-sans text-3xl font-bold text-foreground">
                 {resumeData.atsScore}
               </span>
               <span className="text-xs font-mono text-muted-foreground">/ 100</span>
@@ -350,7 +350,7 @@ export function DashboardResumeAts() {
               </div>
             </div>
             <div className="flex items-baseline gap-2">
-              <span className="font-serif text-3xl font-normal text-foreground">
+              <span className="font-sans text-3xl font-bold text-foreground">
                 {resumeData.actionVerbsScore}%
               </span>
             </div>
@@ -380,7 +380,7 @@ export function DashboardResumeAts() {
               </div>
             </div>
             <div className="flex items-baseline gap-2">
-              <span className="font-serif text-3xl font-normal text-foreground">
+              <span className="font-sans text-3xl font-bold text-foreground">
                 {resumeData.keywordMatchScore || 86}%
               </span>
               <span className="text-xs text-muted-foreground">with {selectedJob?.company}</span>
@@ -427,7 +427,7 @@ export function DashboardResumeAts() {
                 : "bg-secondary text-muted-foreground hover:text-foreground"
             }`}
           >
-            ATS Resume Builder &amp; Optimizer
+            Resume Builder
           </button>
           <button
             onClick={() => setActiveTab("preview")}
@@ -437,7 +437,7 @@ export function DashboardResumeAts() {
                 : "bg-secondary text-muted-foreground hover:text-foreground"
             }`}
           >
-            <span>Recruiter Print Preview</span>
+            <span>Print Preview</span>
           </button>
 
           {/* Template Switcher Pill */}
@@ -492,7 +492,7 @@ export function DashboardResumeAts() {
           <div className="lg:col-span-8 space-y-6">
             {/* Target Role & Summary */}
             <div className="rounded-xl border border-hairline bg-card p-5 space-y-4">
-              <h3 className="font-serif text-base font-normal text-foreground">Target Role &amp; Executive Summary</h3>
+              <h3 className="font-sans text-base font-bold text-foreground">Target Role &amp; Summary</h3>
               <div className="space-y-3">
                 <div>
                   <label className="text-xs font-mono text-muted-foreground block mb-1">Target Engineering Role</label>
@@ -528,7 +528,7 @@ export function DashboardResumeAts() {
             {/* Core Skills Chip Arena */}
             <div className="rounded-xl border border-hairline bg-card p-5 space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="font-serif text-base font-normal text-foreground">Core Technical Skills ({resumeData.skills.length})</h3>
+                <h3 className="font-sans text-sm sm:text-base font-semibold text-foreground">Core Technical Skills ({resumeData.skills.length})</h3>
                 <span className="text-[11px] font-mono text-muted-foreground">Scanned by ATS filters</span>
               </div>
               <div className="flex flex-wrap gap-2">
@@ -567,7 +567,7 @@ export function DashboardResumeAts() {
             {/* Key Technical Projects */}
             <div className="rounded-xl border border-hairline bg-card p-5 space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="font-serif text-base font-normal text-foreground">Featured Technical Projects</h3>
+                <h3 className="font-sans text-sm sm:text-base font-semibold text-foreground">Technical Projects</h3>
                 <span className="text-[11px] font-mono text-muted-foreground">Must contain quantifiable metrics</span>
               </div>
               <div className="space-y-4">
@@ -600,7 +600,7 @@ export function DashboardResumeAts() {
             <div className="rounded-xl border border-hairline bg-card p-5 space-y-4">
               <div className="flex items-center gap-2">
                 <Sliders className="w-4 h-4 text-primary" />
-                <h3 className="font-serif text-base font-normal text-foreground">ATS Optimization Insights</h3>
+                <h3 className="font-sans text-sm sm:text-base font-semibold text-foreground">Resume Insights</h3>
               </div>
               <div className="space-y-3">
                 {resumeData.suggestions.map((sug, i) => (
@@ -1012,7 +1012,7 @@ export function DashboardResumeAts() {
                   <Sliders className="h-4 w-4" />
                 </div>
                 <div>
-                  <h3 className="font-serif text-lg font-medium text-foreground">Customize Resume ATS Section</h3>
+                  <h3 className="font-sans text-base sm:text-lg font-bold text-foreground">Customize Resume ATS Section</h3>
                   <p className="text-xs text-muted-foreground">Adjust section header, badge, and description.</p>
                 </div>
               </div>
@@ -1045,7 +1045,7 @@ export function DashboardResumeAts() {
                   type="text"
                   value={tempSectionConfig.title}
                   onChange={(e) => setTempSectionConfig({ ...tempSectionConfig, title: e.target.value })}
-                  className="w-full bg-secondary/60 border border-hairline rounded-xl px-3.5 py-2.5 text-xs text-foreground focus:outline-none focus:border-primary font-serif text-base"
+                  className="w-full bg-secondary/60 border border-hairline rounded-xl px-3.5 py-2.5 text-xs text-foreground focus:outline-none focus:border-primary font-sans text-sm font-semibold"
                 />
               </div>
 

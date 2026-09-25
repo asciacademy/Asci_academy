@@ -14,7 +14,7 @@ function SectionHeader({ icon: Icon, title, description }: { icon: any; title: s
                 <Icon className="h-4 w-4" />
             </div>
             <div>
-                <h2 className="font-serif text-2xl font-normal text-foreground">{title}</h2>
+                <h2 className="font-sans text-2xl font-bold text-foreground">{title}</h2>
                 <p className="text-xs text-muted-foreground mt-0.5 font-sans">{description}</p>
             </div>
         </div>
@@ -162,7 +162,7 @@ export default function AdminSettingsPage() {
                     <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase tracking-widest bg-primary/10 text-primary border border-primary/20 mb-2 font-semibold">
                         System Configuration
                     </div>
-                    <h1 className="font-serif text-3xl sm:text-4xl font-normal text-foreground tracking-tight">
+                    <h1 className="font-sans text-3xl sm:text-4xl font-bold text-foreground tracking-tight">
                         Platform Settings
                     </h1>
                     <p className="text-xs sm:text-sm text-muted-foreground mt-1 font-sans">
@@ -190,7 +190,7 @@ export default function AdminSettingsPage() {
 
             <div className="flex flex-col md:flex-row gap-8 items-start">
                 {/* Sidebar Navigation */}
-                <aside className="w-full md:w-52 flex-shrink-0">
+                <aside className="w-full md:w-52 flex-shrink-0 md:sticky md:top-6 self-start">
                     <nav className="space-y-1 bg-card/70 p-2 rounded-2xl border border-border/80 backdrop-blur-xl">
                         {tabs.map(tab => {
                             const active = activeTab === tab.id
@@ -422,11 +422,11 @@ export default function AdminSettingsPage() {
                                     <div className="px-3 py-1 rounded-full text-xs font-mono bg-[#2563eb] text-white border border-[#2563eb]/60">
                                         Electric Blue (#2563eb)
                                     </div>
-                                    <div className="px-3 py-1 rounded-full text-xs font-mono bg-[#181715] text-[#f5f0e8] border border-white/10">
-                                        Obsidian Studio (#181715)
+                                    <div className="px-3 py-1 rounded-full text-xs font-mono bg-[#112C4D] text-white border border-white/10">
+                                        Unstop Deep Navy (#112C4D)
                                     </div>
                                     <div className="px-3 py-1 rounded-full text-xs font-mono bg-card text-foreground border border-border">
-                                        Warm Cream Surface
+                                        Unstop Canvas Surface
                                     </div>
                                 </div>
                             </div>

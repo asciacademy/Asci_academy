@@ -159,16 +159,16 @@ export function DashboardProjects() {
         <div>
           <div className="flex items-center gap-2">
             <span className="text-xs font-mono uppercase tracking-wider text-primary font-semibold">
-              Capstone Engineering Labs
+              Portfolio Projects
             </span>
             <span className="h-1 w-1 rounded-full bg-border" />
-            <span className="text-xs font-mono text-muted-foreground">Proof of Mastery</span>
+            <span className="text-xs font-mono text-muted-foreground">Hands-On Practice</span>
           </div>
-          <h2 className="font-serif text-2xl sm:text-3xl font-normal text-foreground mt-1">
-            Build Portfolio-Grade Systems
+          <h2 className="font-sans text-2xl sm:text-3xl font-bold text-foreground mt-1">
+            Build Real-World Projects
           </h2>
           <p className="text-xs sm:text-sm text-muted-foreground mt-1 max-w-2xl leading-relaxed">
-            Move beyond tutorial exercises. Implement distributed consensus engines, network reactors, and AI agent architectures with automated rubric reviews and code verification.
+            Build hands-on systems and apps to showcase in your portfolio and resume.
           </p>
         </div>
 
@@ -262,7 +262,7 @@ export function DashboardProjects() {
               </span>
             </div>
 
-            <h3 className="font-serif text-xl sm:text-2xl font-normal text-foreground">
+            <h3 className="font-sans text-xl sm:text-2xl font-bold text-foreground">
               {selectedProject.title}
             </h3>
             <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">

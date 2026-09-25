@@ -385,7 +385,7 @@ export default function AdminCoursesPage() {
                     <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase tracking-widest bg-primary/10 text-primary border border-primary/20 mb-2 font-semibold">
                         Curriculum Command Center
                     </div>
-                    <h1 className="font-serif text-3xl sm:text-4xl font-normal text-foreground tracking-tight flex items-center gap-3">
+                    <h1 className="font-sans text-3xl sm:text-4xl font-bold text-foreground tracking-tight flex items-center gap-3">
                         <span>Course Catalog Directory</span>
                         <span className="text-muted-foreground text-xl font-mono font-normal">
                             ({filteredCourses.length} of {courses.length})
@@ -430,31 +430,31 @@ export default function AdminCoursesPage() {
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
                 <div className="bg-card border border-border/80 rounded-2xl p-4 relative overflow-hidden shadow-2xs">
                     <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground block">Total Programs</span>
-                    <div className="text-2xl font-serif text-foreground mt-1 font-semibold">{courses.length}</div>
+                    <div className="text-2xl font-sans text-foreground mt-1 font-bold">{courses.length}</div>
                     <span className="text-[10px] text-muted-foreground font-mono">Curriculum Tracks</span>
                 </div>
 
                 <div className="bg-card border border-border/80 rounded-2xl p-4 relative overflow-hidden shadow-2xs">
                     <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground block">Live Catalog</span>
-                    <div className="text-2xl font-serif text-primary mt-1 font-semibold">{counts.published}</div>
+                    <div className="text-2xl font-sans text-primary mt-1 font-bold">{counts.published}</div>
                     <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono">Accessible by Students</span>
                 </div>
 
                 <div className="bg-card border border-border/80 rounded-2xl p-4 relative overflow-hidden shadow-2xs">
                     <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground block">Drafts Pending</span>
-                    <div className="text-2xl font-serif text-amber-600 dark:text-amber-400 mt-1 font-semibold">{counts.draft}</div>
+                    <div className="text-2xl font-sans text-amber-600 dark:text-amber-400 mt-1 font-bold">{counts.draft}</div>
                     <span className="text-[10px] text-muted-foreground font-mono">In-review / staging</span>
                 </div>
 
                 <div className="bg-card border border-border/80 rounded-2xl p-4 relative overflow-hidden shadow-2xs">
                     <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground block">Architect Tier</span>
-                    <div className="text-2xl font-serif text-[#D4B872] mt-1 font-semibold">{counts.premium}</div>
+                    <div className="text-2xl font-sans text-primary mt-1 font-bold">{counts.premium}</div>
                     <span className="text-[10px] text-muted-foreground font-mono">Pro plan tracks</span>
                 </div>
 
                 <div className="bg-card border border-border/80 rounded-2xl p-4 relative overflow-hidden shadow-2xs col-span-2 sm:col-span-1">
                     <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground block">Active Scholars</span>
-                    <div className="text-2xl font-serif text-foreground mt-1 font-semibold">
+                    <div className="text-2xl font-sans text-foreground mt-1 font-bold">
                         {courses.reduce((acc, c) => acc + (c.enrollment_count || 0), 0)}
                     </div>
                     <span className="text-[10px] text-primary font-mono">Total enrollments</span>
@@ -787,7 +787,7 @@ export default function AdminCoursesPage() {
                                         </span>
                                     </div>
 
-                                    <h3 className="text-base font-serif font-semibold text-foreground leading-snug line-clamp-1 mb-1.5">
+                                    <h3 className="text-base font-sans font-bold text-foreground leading-snug line-clamp-1 mb-1.5">
                                         {course.title}
                                     </h3>
 
@@ -1052,7 +1052,7 @@ export default function AdminCoursesPage() {
             {filteredCourses.length === 0 && (
                 <div className="rounded-3xl border border-dashed border-border bg-card/60 p-12 text-center space-y-3">
                     <BookOpen className="w-8 h-8 text-primary mx-auto opacity-60" />
-                    <h3 className="font-serif text-lg font-normal text-foreground">No courses match your filter</h3>
+                    <h3 className="font-sans text-lg font-bold text-foreground">No courses match your filter</h3>
                     <p className="text-xs text-muted-foreground max-w-sm mx-auto">
                         Try resetting your search query or selecting a different status or category tab.
                     </p>

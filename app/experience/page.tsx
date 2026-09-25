@@ -19,7 +19,7 @@ export default function ExperiencePage() {
                             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono uppercase tracking-widest bg-primary/10 text-primary border border-primary/20">
                                 How You Learn
                             </div>
-                            <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-normal text-foreground tracking-tight">
+                            <h1 className="font-sans text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground tracking-tight">
                                 Learn by Doing, Not Just Watching
                             </h1>
                             <p className="text-base sm:text-lg text-muted-foreground leading-relaxed max-w-2xl">
@@ -57,7 +57,7 @@ export default function ExperiencePage() {
                 <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-16 gap-6 border-b border-border/50 pb-6">
                     <div className="space-y-2">
                         <span className="text-xs font-mono uppercase tracking-widest text-primary">Our Learning Method</span>
-                        <h2 className="font-serif text-3xl sm:text-4xl font-normal text-foreground">Three Ways We Help You Learn Faster</h2>
+                        <h2 className="font-sans text-3xl sm:text-4xl font-bold text-foreground">Three Ways We Help You Learn Faster</h2>
                     </div>
                     <AxelStage
                         id="experience-pillars-robot-anchor"
@@ -76,7 +76,7 @@ export default function ExperiencePage() {
                             <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary border border-primary/20 flex items-center justify-center mb-6">
                                 <Layers className="w-6 h-6" />
                             </div>
-                            <h3 className="font-serif text-2xl font-normal text-foreground mb-3">Visual Memory &amp; Logic</h3>
+                            <h3 className="font-sans text-2xl font-bold text-foreground mb-3">Visual Memory &amp; Logic</h3>
                             <p className="text-xs text-muted-foreground leading-relaxed mb-6">
                                 Instead of guessing how recursion and memory work, watch values change, move, and stack step-by-step with interactive visual tools.
                             </p>
@@ -93,7 +93,7 @@ export default function ExperiencePage() {
                             <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary border border-primary/20 flex items-center justify-center mb-6">
                                 <Terminal className="w-6 h-6" />
                             </div>
-                            <h3 className="font-serif text-2xl font-normal text-foreground mb-3">Instant Code Execution</h3>
+                            <h3 className="font-sans text-2xl font-bold text-foreground mb-3">Instant Code Execution</h3>
                             <p className="text-xs text-muted-foreground leading-relaxed mb-6">
                                 Run code right inside your web browser with zero waiting and zero setup. No complex installations needed to start practicing.
                             </p>
@@ -110,7 +110,7 @@ export default function ExperiencePage() {
                             <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary border border-primary/20 flex items-center justify-center mb-6">
                                 <Cpu className="w-6 h-6" />
                             </div>
-                            <h3 className="font-serif text-2xl font-normal text-foreground mb-3">Step-by-Step Problem Solving</h3>
+                            <h3 className="font-sans text-2xl font-bold text-foreground mb-3">Step-by-Step Problem Solving</h3>
                             <p className="text-xs text-muted-foreground leading-relaxed mb-6">
                                 Each problem guides you through edge cases and teaches you how to think through solutions like an experienced software developer.
                             </p>
@@ -139,13 +139,13 @@ export default function ExperiencePage() {
                                     size="sm"
                                 />
                             </div>
-                            <h2 className="font-serif text-3xl sm:text-4xl font-normal text-[#faf9f5]">
+                            <h2 className="font-sans text-3xl sm:text-4xl font-bold text-white">
                                 Focus Without Distraction
                             </h2>
-                            <p className="text-sm text-[#faf9f5]/70 leading-relaxed">
+                            <p className="text-sm text-slate-300 leading-relaxed">
                                 A clean, modern workspace with zero clutter. Write code, view instant output, and test your solutions with ease.
                             </p>
-                            <ul className="space-y-3 text-xs text-[#faf9f5]/80 font-mono">
+                            <ul className="space-y-3 text-xs text-slate-200 font-mono">
                                 <li className="flex items-center gap-3">
                                     <CheckCircle2 className="w-4 h-4 text-blue-400 shrink-0" />
                                     <span>No ads, banners, or annoying popups</span>

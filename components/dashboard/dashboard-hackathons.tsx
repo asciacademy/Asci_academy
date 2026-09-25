@@ -132,9 +132,9 @@ export function DashboardHackathons() {
       }
     }
     return {
-      badge: "Flagship Innovation Arena",
-      title: "Competitions & Hackathons Arena",
-      description: "Solve industry-grade architectural challenges, compete for ₹10L+ cash prizes, and secure direct interview fast-tracks with engineering leaders."
+      badge: "Competitions",
+      title: "Hackathons & Challenges",
+      description: "Build real projects, compete with fellow students for prizes, and get recognized by hiring partners."
     }
   })
 
@@ -423,7 +423,7 @@ export function DashboardHackathons() {
               {sectionConfig.badge}
             </span>
           </div>
-          <h1 className="font-serif text-2xl sm:text-3xl font-normal tracking-tight text-foreground">
+          <h1 className="font-sans text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
             {sectionConfig.title}
           </h1>
           <p className="text-xs text-muted-foreground mt-1 max-w-2xl">
@@ -435,7 +435,7 @@ export function DashboardHackathons() {
           <AxelStage
             id="dashboard-hackathons-robot-anchor"
             sectionId="dashboard-hackathons-header"
-            label="Hackathon Strategist"
+            label="Hackathon Advisor"
             emotion="shocked"
             scale={0.44}
             size="sm"
@@ -516,7 +516,7 @@ export function DashboardHackathons() {
             <Award className="w-3.5 h-3.5 text-primary" />
             Total Prize Pool
           </span>
-          <p className="text-xl font-serif font-normal text-foreground mt-1">{totalPrizeSum}</p>
+          <p className="text-xl font-sans font-bold text-foreground mt-1">{totalPrizeSum}</p>
           <span className="text-[11px] text-muted-foreground mt-0.5 block">Across 3 live flagship cups</span>
         </div>
 
@@ -525,7 +525,7 @@ export function DashboardHackathons() {
             <Users className="w-3.5 h-3.5 text-[#D4B872]" />
             Registered Competitors
           </span>
-          <p className="text-xl font-serif font-normal text-foreground mt-1">{totalCompetitors.toLocaleString()}+</p>
+          <p className="text-xl font-sans font-bold text-foreground mt-1">{totalCompetitors.toLocaleString()}+</p>
           <span className="text-[11px] text-muted-foreground mt-0.5 block">Engineers &amp; Fellows</span>
         </div>
 
@@ -534,7 +534,7 @@ export function DashboardHackathons() {
             <Zap className="w-3.5 h-3.5 text-primary" />
             My Active Registrations
           </span>
-          <p className="text-xl font-serif font-normal text-foreground mt-1">{userRegisteredCount}</p>
+          <p className="text-xl font-sans font-bold text-foreground mt-1">{userRegisteredCount}</p>
           <span className="text-[11px] text-muted-foreground mt-0.5 block">
             {userRegisteredCount > 0 ? "Eligible for next round" : "No active registrations yet"}
           </span>
@@ -545,7 +545,7 @@ export function DashboardHackathons() {
             <Award className="w-3.5 h-3.5 text-[#D4B872]" />
             Contest Rating
           </span>
-          <p className="text-xl font-serif font-normal text-foreground mt-1">1,640 ELO</p>
+          <p className="text-xl font-sans font-bold text-foreground mt-1">1,640 ELO</p>
           <span className="text-[11px] text-muted-foreground mt-0.5 block">Division I • Top 6% in ASCI</span>
         </div>
       </div>
@@ -604,7 +604,7 @@ export function DashboardHackathons() {
                 <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground block">
                   Hall of Excellence
                 </span>
-                <h2 className="font-serif text-xl font-normal text-foreground">Top 3 National Grandmasters</h2>
+                <h2 className="font-sans text-xl font-bold text-foreground">Top 3 Students</h2>
               </div>
               <span className="text-xs font-mono text-muted-foreground">Updated live • Season 2026</span>
             </div>
@@ -645,7 +645,7 @@ export function DashboardHackathons() {
 
                       <div className="flex items-center gap-3 mb-3">
                         <div
-                          className={`w-12 h-12 rounded-2xl flex items-center justify-center font-serif text-sm font-semibold text-foreground overflow-hidden border ${
+                          className={`w-12 h-12 rounded-2xl flex items-center justify-center font-sans text-sm font-bold text-foreground overflow-hidden border ${
                             isFirst ? "border-[#D4B872]/50" : "border-hairline"
                           }`}
                         >
@@ -656,7 +656,7 @@ export function DashboardHackathons() {
                           />
                         </div>
                         <div>
-                          <h3 className="font-serif text-base font-medium text-foreground">{entry.name}</h3>
+                          <h3 className="font-sans text-base font-bold text-foreground">{entry.name}</h3>
                           <p className="text-xs text-muted-foreground">{entry.college}</p>
                         </div>
                       </div>
@@ -664,7 +664,7 @@ export function DashboardHackathons() {
                       <div className="grid grid-cols-3 gap-2 py-3 border-y border-hairline my-2 text-center">
                         <div>
                           <span className="text-[9px] font-mono uppercase text-muted-foreground block">Rating</span>
-                          <span className="text-sm font-serif font-bold text-foreground">{entry.elo}</span>
+                          <span className="text-sm font-sans font-bold text-foreground">{entry.elo}</span>
                         </div>
                         <div>
                           <span className="text-[9px] font-mono uppercase text-muted-foreground block">Tier</span>
@@ -690,12 +690,12 @@ export function DashboardHackathons() {
           {/* Current User Standing Simple Card */}
           <div className="rounded-2xl border border-hairline bg-card p-5 shadow-2xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center font-serif text-base font-bold text-primary">
+              <div className="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center font-sans text-base font-bold text-primary">
                 #42
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-serif font-medium text-foreground">Arjun Mehta (Your Standing)</span>
+                  <span className="text-sm font-sans font-semibold text-foreground">Arjun Mehta (Your Standing)</span>
                   <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
                     Division I
                   </span>
@@ -732,8 +732,8 @@ export function DashboardHackathons() {
             <div className="lg:col-span-2 rounded-2xl border border-hairline bg-card p-5 shadow-2xs space-y-4">
               <div className="flex items-center justify-between pb-2 border-b border-hairline">
                 <div>
-                  <h3 className="font-serif text-base font-normal text-foreground">Engineering Division Ranks (4–10)</h3>
-                  <p className="text-xs text-muted-foreground">National algorithmic &amp; system architecture ranking</p>
+                  <h3 className="font-sans text-base font-semibold text-foreground">Leaderboard (Ranks 4–10)</h3>
+                  <p className="text-xs text-muted-foreground">National problem-solving &amp; contest rankings</p>
                 </div>
                 <span className="text-[11px] font-mono text-muted-foreground">Season 2026</span>
               </div>
@@ -785,8 +785,8 @@ export function DashboardHackathons() {
             {/* Top Engineering Campuses */}
             <div className="rounded-2xl border border-hairline bg-card p-5 shadow-2xs space-y-4">
               <div className="pb-2 border-b border-hairline">
-                <h3 className="font-serif text-base font-normal text-foreground">Top Engineering Campuses</h3>
-                <p className="text-xs text-muted-foreground">Cumulative collegiate rankings</p>
+                <h3 className="font-sans text-base font-semibold text-foreground">Top College Rankings</h3>
+                <p className="text-xs text-muted-foreground">Campus leaderboards &amp; active student teams</p>
               </div>
 
               <div className="space-y-3">
@@ -878,7 +878,7 @@ export function DashboardHackathons() {
       ) : filteredHackathons.length === 0 ? (
         <div className="rounded-2xl border border-hairline bg-card/40 p-12 text-center">
           <Trophy className="w-10 h-10 text-muted-foreground/40 mx-auto mb-3" />
-          <h3 className="font-serif text-lg font-normal text-foreground">No Competitions Found</h3>
+          <h3 className="font-sans text-lg font-bold text-foreground">No Competitions Found</h3>
           <p className="text-xs text-muted-foreground mt-1 max-w-sm mx-auto">
             {filter === "registered"
               ? "You haven't registered for any competitions yet. Explore open hackathons below and sign up your team."
@@ -961,7 +961,7 @@ export function DashboardHackathons() {
 
                   {/* Title & Registration Status */}
                   <div className="flex flex-wrap items-baseline justify-between gap-2 mb-1">
-                    <h3 className="font-serif text-xl font-normal text-foreground group-hover:text-primary transition-colors">
+                    <h3 className="font-sans text-base sm:text-lg font-bold text-foreground group-hover:text-primary transition-colors">
                       {hackathon.title}
                     </h3>
                     {hackathon.isRegistered ? (
@@ -986,7 +986,7 @@ export function DashboardHackathons() {
                   <div className="grid grid-cols-3 gap-2 my-4 p-3 rounded-xl bg-secondary/50 border border-hairline text-center">
                     <div>
                       <span className="text-[9px] font-mono uppercase text-muted-foreground block">Prize Pool</span>
-                      <span className="text-sm font-serif font-bold text-[#D4B872]">{hackathon.prizePool}</span>
+                      <span className="text-sm font-sans font-bold text-[#D4B872]">{hackathon.prizePool}</span>
                     </div>
                     <div>
                       <span className="text-[9px] font-mono uppercase text-muted-foreground block">First Prize</span>
@@ -1100,7 +1100,7 @@ export function DashboardHackathons() {
                 </span>
                 <span className="text-xs font-mono text-muted-foreground">{activeTeammatesCount} Active Requests</span>
               </div>
-              <h2 className="font-serif text-xl font-normal text-foreground flex items-center gap-2">
+              <h2 className="font-sans text-xl font-bold text-foreground flex items-center gap-2">
                 <Users className="w-5 h-5 text-primary" />
                 <span>Hackathon Teammate Matchmaker</span>
               </h2>
@@ -1128,7 +1128,7 @@ export function DashboardHackathons() {
                 <div className="space-y-3">
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-2.5">
-                      <div className="w-9 h-9 rounded-xl bg-secondary border border-hairline flex items-center justify-center font-serif text-xs font-semibold text-primary overflow-hidden">
+                      <div className="w-9 h-9 rounded-xl bg-secondary border border-hairline flex items-center justify-center font-sans text-xs font-bold text-primary overflow-hidden">
                         {post.authorAvatar ? (
                           <img src={post.authorAvatar} alt={post.authorName} className="w-full h-full object-cover" />
                         ) : (
@@ -1219,7 +1219,7 @@ export function DashboardHackathons() {
             <div className="flex items-center justify-between pb-3 border-b border-hairline">
               <div>
                 <span className="text-[10px] font-mono uppercase tracking-wider text-primary">Competition Entry</span>
-                <h3 className="font-serif text-lg font-normal text-foreground">Register for {selectedHackathonForReg.title}</h3>
+                <h3 className="font-sans text-base sm:text-lg font-bold text-foreground">Register for {selectedHackathonForReg.title}</h3>
               </div>
               <button
                 onClick={() => setSelectedHackathonForReg(null)}
@@ -1315,7 +1315,7 @@ export function DashboardHackathons() {
             <div className="flex items-center justify-between pb-3 border-b border-hairline">
               <div>
                 <span className="text-[10px] font-mono uppercase tracking-wider text-primary">Prototype Submission</span>
-                <h3 className="font-serif text-lg font-normal text-foreground">{selectedHackathonForSubmit.title}</h3>
+                <h3 className="font-sans text-base sm:text-lg font-bold text-foreground">{selectedHackathonForSubmit.title}</h3>
               </div>
               <button
                 onClick={() => setSelectedHackathonForSubmit(null)}
@@ -1396,7 +1396,7 @@ export function DashboardHackathons() {
             <div className="flex items-center justify-between pb-3 border-b border-hairline">
               <div>
                 <span className="text-[10px] font-mono uppercase tracking-wider text-primary">Matchmaker Broadcast</span>
-                <h3 className="font-serif text-lg font-normal text-foreground">Post Teammate Search Request</h3>
+                <h3 className="font-sans text-base sm:text-lg font-bold text-foreground">Find Teammates</h3>
               </div>
               <button
                 onClick={() => setShowPostTeammateModal(false)}
@@ -1540,7 +1540,7 @@ export function DashboardHackathons() {
                   <Trophy className="h-5 w-5" />
                 </div>
                 <div>
-                  <h3 className="font-serif text-xl font-medium text-foreground">
+                  <h3 className="font-sans text-lg sm:text-xl font-bold text-foreground">
                     {editingHackId ? "Edit Hackathon" : "Create New Hackathon"}
                   </h3>
                   <p className="text-xs text-muted-foreground mt-0.5">
@@ -1752,7 +1752,7 @@ export function DashboardHackathons() {
                   <Sliders className="h-4 w-4" />
                 </div>
                 <div>
-                  <h3 className="font-serif text-lg font-medium text-foreground">Customize Hackathons Section</h3>
+                  <h3 className="font-sans text-lg font-bold text-foreground">Customize Hackathons Section</h3>
                   <p className="text-xs text-muted-foreground">Adjust section header, badge, and intro copy.</p>
                 </div>
               </div>
@@ -1785,7 +1785,7 @@ export function DashboardHackathons() {
                   type="text"
                   value={tempSectionConfig.title}
                   onChange={(e) => setTempSectionConfig({ ...tempSectionConfig, title: e.target.value })}
-                  className="w-full bg-secondary/60 border border-hairline rounded-xl px-3.5 py-2.5 text-xs text-foreground focus:outline-none focus:border-primary font-serif text-base"
+                  className="w-full bg-secondary/60 border border-hairline rounded-xl px-3.5 py-2.5 text-xs text-foreground focus:outline-none focus:border-primary font-sans text-sm font-semibold"
                 />
               </div>
 
@@ -1831,7 +1831,7 @@ export function DashboardHackathons() {
               <Trash2 className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="font-serif text-lg font-medium text-foreground">Delete Hackathon?</h3>
+              <h3 className="font-sans text-base sm:text-lg font-bold text-foreground">Delete Hackathon?</h3>
               <p className="text-xs text-muted-foreground mt-1">
                 Are you sure you want to permanently delete this competition? This action cannot be undone.
               </p>

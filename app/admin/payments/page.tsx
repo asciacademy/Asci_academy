@@ -115,7 +115,7 @@ export default function AdminPaymentsPage() {
           <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase tracking-widest bg-primary/10 text-primary border border-primary/20 mb-2">
             Payment Verification
           </div>
-          <h1 className="font-serif text-3xl sm:text-4xl font-normal text-foreground tracking-tight">
+          <h1 className="font-sans text-3xl sm:text-4xl font-bold text-foreground tracking-tight">
             UPI Transactions &amp; Orders
           </h1>
           <p className="text-xs sm:text-sm text-muted-foreground mt-1">

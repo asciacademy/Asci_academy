@@ -631,7 +631,9 @@ export function AxelCompanion() {
             />
             {/* Interactive touch & click shield: tightly centered on Axel, NEVER overflowing or blocking surrounding text */}
             <div
-              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-36 sm:w-40 sm:h-44 z-30 cursor-pointer pointer-events-auto rounded-full bg-transparent"
+              className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-36 sm:w-40 sm:h-44 z-30 cursor-pointer rounded-full bg-transparent ${
+                hasMeasuredCoords ? "pointer-events-auto" : "pointer-events-none"
+              }`}
               onClick={handleRobotClick}
               onMouseEnter={handleRobotHover}
               onMouseLeave={handleRobotLeave}

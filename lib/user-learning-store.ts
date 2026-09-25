@@ -305,6 +305,7 @@ export interface EnrollmentItem {
   lessonsCompleted?: number
   totalLessons?: number
   enrolledAt?: string
+  brand?: string
 }
 
 const ENROLLMENTS_KEY = "asci_user_enrollments_v1"

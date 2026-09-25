@@ -300,7 +300,7 @@ export function UnifiedCoursePlayer({
         {/* 2A. LEFT SIDEBAR NAVIGATION */}
         <aside
           className={`
-            fixed lg:sticky top-16 z-30 h-[calc(100vh-4rem)] w-72 sm:w-80 shrink-0
+            fixed top-16 left-0 z-30 h-[calc(100vh-4rem)] w-72 sm:w-80 shrink-0
             border-r border-border/80 bg-card/60 dark:bg-[#141413] backdrop-blur-xl
             flex flex-col transition-transform duration-200
             ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
@@ -403,7 +403,7 @@ export function UnifiedCoursePlayer({
         </aside>
 
         {/* 2B. MAIN LESSON VIEWER */}
-        <main className="flex-1 min-w-0 p-4 sm:p-6 lg:p-10 max-w-4xl mx-auto space-y-8">
+        <main className="flex-1 min-w-0 p-4 sm:p-6 lg:p-10 max-w-4xl mx-auto space-y-8 lg:ml-80">
           {/* Track Progress & Course Completion Banner */}
           {completedIds.size >= allLessons.length && allLessons.length > 0 ? (
             <div className="p-5 rounded-2xl border border-emerald-500/40 bg-emerald-950/20 text-foreground flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-lg">

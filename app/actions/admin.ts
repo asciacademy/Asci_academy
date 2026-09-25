@@ -3,6 +3,7 @@
 import { createClient } from "@/utils/supabase/server"
 import { revalidatePath } from "next/cache"
 import { createModule, createLesson } from "./curriculum"
+import { normalizeImageUrl } from "@/lib/popups-data"
 
 // ─── Admin Authorization Guard ────────────────────────────────
 /**
@@ -467,23 +468,129 @@ export async function getRecentActivity() {
 }
 
 // ─── Announcements ────────────────────────────────────────────
+// ─── Announcements & Pop-up Ads / Posters ──────────────────────
 export async function getAnnouncements() {
     const supabase = await createClient()
     const { data, error } = await supabase
         .from("announcements")
         .select("*")
         .order("created_at", { ascending: false })
-    if (error) return { success: false, announcements: [] }
-    return { success: true, announcements: data ?? [] }
+    if (error) {
+        // Return default seed popup if table query fails or is empty
+        const { SEED_POPUP } = await import("@/lib/popups-data")
+        return { success: true, announcements: [SEED_POPUP] }
+    }
+    if (!data || data.length === 0) {
+        const { SEED_POPUP } = await import("@/lib/popups-data")
+        return { success: true, announcements: [SEED_POPUP] }
+    }
+    return { success: true, announcements: data }
 }
 
-export async function createAnnouncement(values: { title: string; content: string; type: string; is_active: boolean }) {
+export async function createAnnouncement(values: {
+    title: string
+    content: string
+    type?: string
+    is_active?: boolean
+    is_popup?: boolean
+    image_url?: string
+    badge_text?: string
+    cta_text?: string
+    cta_url?: string
+    secondary_cta_text?: string
+    secondary_cta_url?: string
+    target_audience?: string
+    display_placement?: string
+    frequency?: string
+    priority?: number
+    accent_color?: string
+}) {
     try {
         const supabase = await requireAdmin()
-        const { error } = await supabase.from("announcements").insert(values)
+        const payload = {
+            title: values.title.trim(),
+            content: values.content.trim(),
+            type: values.type || "promo",
+            is_active: values.is_active !== undefined ? values.is_active : true,
+            is_popup: values.is_popup !== undefined ? values.is_popup : true,
+            image_url: values.image_url ? normalizeImageUrl(values.image_url.trim()) : null,
+            badge_text: values.badge_text?.trim() || null,
+            cta_text: values.cta_text?.trim() || null,
+            cta_url: values.cta_url?.trim() || null,
+            secondary_cta_text: values.secondary_cta_text?.trim() || null,
+            secondary_cta_url: values.secondary_cta_url?.trim() || null,
+            target_audience: values.target_audience || "all",
+            display_placement: values.display_placement || "all",
+            frequency: values.frequency || "once_per_session",
+            priority: values.priority || 10,
+            accent_color: values.accent_color || "auto",
+        }
+
+        const { data, error } = await supabase.from("announcements").insert(payload).select().single()
+        if (error) {
+            // If new columns don't exist yet, retry with basic columns
+            const basic = {
+                title: values.title.trim(),
+                content: values.content.trim(),
+                type: values.type || "promo",
+                is_active: values.is_active !== undefined ? values.is_active : true,
+            }
+            const fallbackRes = await supabase.from("announcements").insert(basic)
+            if (fallbackRes.error) return { success: false, error: fallbackRes.error.message }
+        }
+        revalidatePath("/admin/announcements")
+        revalidatePath("/dashboard")
+        revalidatePath("/")
+        return { success: true, announcement: data }
+    } catch (e: any) {
+        return { success: false, error: e.message || "Unauthorized" }
+    }
+}
+
+export async function updateAnnouncement(id: string, updates: Partial<{
+    title: string
+    content: string
+    type: string
+    is_active: boolean
+    is_popup: boolean
+    image_url: string
+    badge_text: string
+    cta_text: string
+    cta_url: string
+    secondary_cta_text: string
+    secondary_cta_url: string
+    target_audience: string
+    display_placement: string
+    frequency: string
+    priority: number
+    accent_color: string
+}>) {
+    try {
+        const supabase = await requireAdmin()
+        const payload: Record<string, any> = {}
+
+        if (updates.title !== undefined) payload.title = updates.title.trim()
+        if (updates.content !== undefined) payload.content = updates.content.trim()
+        if (updates.type !== undefined) payload.type = updates.type
+        if (updates.is_active !== undefined) payload.is_active = updates.is_active
+        if (updates.is_popup !== undefined) payload.is_popup = updates.is_popup
+        if (updates.image_url !== undefined) payload.image_url = updates.image_url ? normalizeImageUrl(updates.image_url.trim()) : null
+        if (updates.badge_text !== undefined) payload.badge_text = updates.badge_text?.trim() || null
+        if (updates.cta_text !== undefined) payload.cta_text = updates.cta_text?.trim() || null
+        if (updates.cta_url !== undefined) payload.cta_url = updates.cta_url?.trim() || null
+        if (updates.secondary_cta_text !== undefined) payload.secondary_cta_text = updates.secondary_cta_text?.trim() || null
+        if (updates.secondary_cta_url !== undefined) payload.secondary_cta_url = updates.secondary_cta_url?.trim() || null
+        if (updates.target_audience !== undefined) payload.target_audience = updates.target_audience
+        if (updates.display_placement !== undefined) payload.display_placement = updates.display_placement
+        if (updates.frequency !== undefined) payload.frequency = updates.frequency
+        if (updates.priority !== undefined) payload.priority = updates.priority
+        if (updates.accent_color !== undefined) payload.accent_color = updates.accent_color
+
+        const { error } = await supabase.from("announcements").update(payload).eq("id", id)
         if (error) return { success: false, error: error.message }
         revalidatePath("/admin/announcements")
         revalidatePath("/dashboard")
+        revalidatePath("/")
         return { success: true }
     } catch (e: any) {
         return { success: false, error: e.message || "Unauthorized" }
@@ -497,6 +604,7 @@ export async function deleteAnnouncement(id: string) {
         if (error) return { success: false, error: error.message }
         revalidatePath("/admin/announcements")
         revalidatePath("/dashboard")
+        revalidatePath("/")
         return { success: true }
     } catch (e: any) {
         return { success: false, error: e.message || "Unauthorized" }
@@ -510,11 +618,60 @@ export async function toggleAnnouncement(id: string, isActive: boolean) {
         if (error) return { success: false, error: error.message }
         revalidatePath("/admin/announcements")
         revalidatePath("/dashboard")
+        revalidatePath("/")
         return { success: true }
     } catch (e: any) {
         return { success: false, error: e.message || "Unauthorized" }
     }
 }
+
+/**
+ * Public action: Get the active site popup / poster / ad for user display
+ */
+export async function getActiveSitePopup() {
+    try {
+        const supabase = await createClient()
+        const { data, error } = await supabase
+            .from("announcements")
+            .select("*")
+            .eq("is_active", true)
+            .order("created_at", { ascending: false })
+            .limit(1)
+
+        if (error || !data || data.length === 0) {
+            const { SEED_POPUP } = await import("@/lib/popups-data")
+            return { success: true, popup: SEED_POPUP }
+        }
+
+        const item = data[0]
+        // If it's a basic announcement, supplement with default poster format if is_popup is null
+        const popup = {
+            id: item.id,
+            title: item.title,
+            content: item.content,
+            type: item.type || "promo",
+            is_active: item.is_active,
+            is_popup: item.is_popup ?? true,
+            image_url: item.image_url ? normalizeImageUrl(item.image_url) : "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=1200&auto=format&fit=crop",
+            badge_text: item.badge_text || "LIVE ZOOM MASTERCLASS",
+            cta_text: item.cta_text || "Join Live Class Now",
+            cta_url: item.cta_url || "/live-classes",
+            secondary_cta_text: item.secondary_cta_text || "Learn More",
+            secondary_cta_url: item.secondary_cta_url || "/live-classes",
+            target_audience: item.target_audience || "all",
+            display_placement: item.display_placement || "all",
+            frequency: item.frequency || "once_per_session",
+            priority: item.priority ?? 10,
+            accent_color: item.accent_color || "auto",
+        }
+
+        return { success: true, popup }
+    } catch (err) {
+        const { SEED_POPUP } = await import("@/lib/popups-data")
+        return { success: true, popup: SEED_POPUP }
+    }
+}
+
 
 // ─── Opportunities / Hiring Drives ─────────────────────────────
 export async function getAdminOpportunities() {

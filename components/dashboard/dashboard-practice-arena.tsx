@@ -142,19 +142,19 @@ export function DashboardPracticeArena() {
           <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-mono uppercase tracking-wider bg-primary/10 text-primary border border-primary/20 shrink-0 leading-none font-semibold">
               <Sparkles className="w-3 h-3 text-primary shrink-0" />
-              <span>Algorithmic &amp; Systems Competency</span>
+              <span>Practice &amp; Problem Solving</span>
             </span>
             <span className="text-xs font-mono text-muted-foreground shrink-0 flex items-center gap-1.5">
               <span className="w-1 h-1 rounded-full bg-stone-300 dark:bg-stone-700 hidden sm:inline-block" />
-              <span>100-Day Engineering Cadence</span>
+              <span>Daily Practice</span>
             </span>
           </div>
-          <h1 className="font-serif text-2xl sm:text-3xl font-normal text-foreground flex items-start sm:items-center gap-2.5 leading-tight">
+          <h1 className="font-sans text-2xl sm:text-3xl font-bold tracking-tight text-foreground flex items-start sm:items-center gap-2.5 leading-tight">
             <Layers className="w-6 h-6 text-primary shrink-0 mt-0.5 sm:mt-0" />
-            <span className="break-words">Skill Graph &amp; Practice Arena</span>
+            <span className="break-words">Practice Arena</span>
           </h1>
           <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed max-w-xl">
-            Track your multi-dimensional software engineering mastery across Data Structures, Distributed Systems, Concurrency, and Agentic AI.
+            Sharpen your problem-solving skills with daily coding challenges, quizzes, visualizers, and skill assessments.
           </p>
         </div>
 
@@ -182,7 +182,7 @@ export function DashboardPracticeArena() {
             }`}
           >
             <Layers className="w-3.5 h-3.5 shrink-0" />
-            <span>Skill Graph Matrix</span>
+            <span>Skills Overview</span>
           </button>
           <button
             onClick={() => setActiveTab("potd")}
@@ -193,7 +193,7 @@ export function DashboardPracticeArena() {
             }`}
           >
             <Terminal className="w-3.5 h-3.5 shrink-0" />
-            <span>Problem of the Day</span>
+            <span>Daily Problem</span>
             {potd.solved && (
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
             )}
@@ -207,7 +207,7 @@ export function DashboardPracticeArena() {
             }`}
           >
             <HelpCircle className="w-3.5 h-3.5 shrink-0" />
-            <span>CS Fundamentals Quiz</span>
+            <span>Quick Quiz</span>
           </button>
           <button
             onClick={() => setActiveTab("visualizers")}
@@ -218,7 +218,7 @@ export function DashboardPracticeArena() {
             }`}
           >
             <Cpu className="w-3.5 h-3.5 shrink-0" />
-            <span>Algorithm Simulators</span>
+            <span>Visualizers</span>
             <span className="px-1.5 py-0.2 rounded-full text-[9px] bg-primary/20 text-primary font-mono font-bold">8</span>
           </button>
           <button
@@ -230,7 +230,7 @@ export function DashboardPracticeArena() {
             }`}
           >
             <Flame className="w-3.5 h-3.5 text-[#D4B872] shrink-0" />
-            <span>100-Day Streak</span>
+            <span>Daily Streak</span>
           </button>
         </div>
 
@@ -248,18 +248,18 @@ export function DashboardPracticeArena() {
             <div className="space-y-2 max-w-xl min-w-0">
               <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
                 <span className="text-xs font-mono px-2.5 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 font-bold shrink-0 leading-none">
-                  SDE-2 Benchmark: 74% Overall
+                  Overall Level: 74%
                 </span>
                 <span className="text-xs font-mono text-muted-foreground shrink-0 flex items-center gap-1.5">
                   <span className="w-1 h-1 rounded-full bg-stone-300 dark:bg-stone-700 hidden sm:inline-block" />
-                  <span>5 Domains Evaluated</span>
+                  <span>5 Skill Areas</span>
                 </span>
               </div>
-              <h2 className="font-serif text-xl sm:text-2xl font-normal text-foreground leading-snug">
-                Engineering Competency Radar
+              <h2 className="font-sans text-lg sm:text-xl font-bold text-foreground leading-snug">
+                Skills Overview
               </h2>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                Calculated dynamically from solved problems, curriculum assessments, code submissions, and speed quizzes.
+                Calculated automatically from your solved challenges, quizzes, and course progress.
               </p>
             </div>
 
@@ -294,7 +294,7 @@ export function DashboardPracticeArena() {
                     </div>
 
                     <div>
-                      <h3 className="font-serif text-base font-medium text-foreground leading-snug">{comp.title}</h3>
+                      <h3 className="font-sans text-sm sm:text-base font-semibold text-foreground leading-snug">{comp.title}</h3>
                       <div className="flex items-center justify-between text-xs text-muted-foreground mt-1.5 font-mono">
                         <span>Mastery</span>
                         <span className="font-bold text-foreground">{comp.mastery}%</span>
@@ -309,7 +309,7 @@ export function DashboardPracticeArena() {
 
                     <div className="space-y-2 pt-2.5 border-t border-hairline">
                       <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground block font-medium">
-                        Core Competencies ({comp.modulesCompleted}/{comp.totalModules} Mastered)
+                        Key Topics ({comp.modulesCompleted}/{comp.totalModules} Completed)
                       </span>
                       <div className="flex flex-wrap gap-1.5">
                         {comp.skills.map((skill, idx) => (
@@ -341,17 +341,17 @@ export function DashboardPracticeArena() {
               <div className="space-y-3.5">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <span className="text-[10px] font-mono uppercase tracking-wider text-[#D4B872] font-bold shrink-0">
-                    Target Role Benchmark
+                    Goal Benchmark
                   </span>
                   <span className="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20 shrink-0 leading-none">
                     82% Match
                   </span>
                 </div>
-                <h3 className="font-serif text-lg font-medium text-foreground leading-snug">
-                  Senior Systems Engineer (L5 / SDE-2)
+                <h3 className="font-sans text-base sm:text-lg font-bold text-foreground leading-snug">
+                  Software Engineer Readiness
                 </h3>
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                  Your concurrency and data structures exceed the target threshold. Focus on Raft consensus protocols to reach 90%+ interview readiness.
+                  Great progress in data structures and coding basics! Keep practicing system design and distributed topics to boost interview readiness.
                 </p>
 
                 <div className="p-3 rounded-xl bg-secondary/50 border border-hairline space-y-1.5 text-xs">
@@ -393,7 +393,7 @@ export function DashboardPracticeArena() {
               </div>
 
               <div>
-                <h2 className="font-serif text-xl sm:text-2xl font-normal text-foreground leading-snug">
+                <h2 className="font-sans text-xl sm:text-2xl font-bold text-foreground leading-snug">
                   {potd.title}
                 </h2>
                 <div className="flex flex-wrap gap-1.5 mt-2.5">
@@ -411,7 +411,7 @@ export function DashboardPracticeArena() {
 
               <div className="space-y-3 pt-2">
                 <span className="text-xs font-mono font-medium text-foreground block">
-                  Example Scenarios:
+                  Examples:
                 </span>
                 {potd.examples.map((ex, i) => (
                   <div key={i} className="p-3 rounded-xl bg-secondary/70 border border-hairline text-xs font-mono space-y-1.5 overflow-x-auto">
@@ -462,7 +462,7 @@ export function DashboardPracticeArena() {
                   className="text-[11px] font-mono text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1 cursor-pointer shrink-0"
                 >
                   <RefreshCw className="w-3 h-3" />
-                  <span>Reset Stub</span>
+                  <span>Reset Code</span>
                 </button>
               </div>
 
@@ -529,10 +529,10 @@ export function DashboardPracticeArena() {
           <div className="flex flex-wrap items-center justify-between gap-2 border-b border-hairline pb-4">
             <div>
               <span className="text-[10px] font-mono uppercase tracking-widest text-primary block font-semibold">
-                Rapid Round {quizIndex + 1} of {speedQuizzes.length}
+                Question {quizIndex + 1} of {speedQuizzes.length}
               </span>
-              <h2 className="font-serif text-xl sm:text-2xl font-normal text-foreground mt-0.5">
-                {speedQuizzes[quizIndex].category} Fundamentals
+              <h2 className="font-sans text-xl sm:text-2xl font-bold text-foreground mt-0.5">
+                {speedQuizzes[quizIndex].category} Quiz
               </h2>
             </div>
             <div className="flex items-center gap-2 shrink-0">
@@ -580,7 +580,7 @@ export function DashboardPracticeArena() {
 
           {isAnswerSubmitted && (
             <div className="p-4 rounded-xl bg-secondary/80 border border-hairline text-xs space-y-2 animate-fadeIn">
-              <span className="font-mono text-primary font-semibold block">Architectural Explanation:</span>
+              <span className="font-mono text-primary font-semibold block">Explanation:</span>
               <p className="text-muted-foreground leading-relaxed">
                 {speedQuizzes[quizIndex].explanation}
               </p>
@@ -610,17 +610,17 @@ export function DashboardPracticeArena() {
         <div className="rounded-2xl border border-hairline bg-card p-5 sm:p-8 shadow-xs space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 border-b border-hairline pb-4">
             <div>
-              <h2 className="font-serif text-xl sm:text-2xl font-normal text-foreground flex items-center gap-2">
+              <h2 className="font-sans text-xl sm:text-2xl font-bold text-foreground flex items-center gap-2">
                 <Flame className="w-5 h-5 text-[#D4B872] shrink-0" />
-                <span>ASCI 100-Day Engineering Cadence</span>
+                <span>Daily Practice Streak</span>
               </h2>
               <p className="text-xs text-muted-foreground mt-0.5">
-                Consistent algorithmic problem solving compounds into tier-1 tech mastery.
+                Solving at least one problem every day keeps your problem-solving sharp and builds long-term consistency.
               </p>
             </div>
             <div className="flex items-center gap-3 shrink-0 self-start sm:self-auto">
               <span className="text-xs font-mono px-2.5 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 font-bold shrink-0 leading-none">
-                Day 42 Active Streak
+                42 Day Streak
               </span>
             </div>
           </div>
@@ -628,7 +628,7 @@ export function DashboardPracticeArena() {
           {/* Heatmap Grid Simulator */}
           <div className="space-y-3">
             <span className="text-xs font-mono text-muted-foreground block">
-              Recent 12 Weeks Submission Activity
+              Activity in the Last 12 Weeks
             </span>
             <div className="grid grid-flow-col grid-rows-7 gap-1.5 overflow-x-auto p-3 rounded-xl bg-secondary/50 border border-hairline">
               {Array.from({ length: 84 }).map((_, i) => {

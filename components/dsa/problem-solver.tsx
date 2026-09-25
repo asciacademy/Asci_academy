@@ -366,7 +366,7 @@ export function ProblemSolver({ initialProblem }: ProblemSolverProps) {
             className="flex items-center gap-2 p-1.5 rounded-lg hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors shrink-0"
             title="Return to ASCI A2Z Sheet"
           >
-            <div className="h-7 w-7 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary font-bold font-serif text-sm">
+            <div className="h-7 w-7 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary font-bold font-sans text-sm">
               A
             </div>
             <span className="hidden md:inline text-xs font-semibold tracking-wide text-foreground">
@@ -446,7 +446,7 @@ export function ProblemSolver({ initialProblem }: ProblemSolverProps) {
 
         {/* Right Section: Action Buttons */}
         <div className="flex items-center gap-2 shrink-0">
-          {/* Axel AI Helper */}
+          {/* Axel AI Helper - DSA: Ask Axel "Give me a hint" */}
           <button
             onClick={() => setAxelHintOpen(!axelHintOpen)}
             className={cn(
@@ -455,10 +455,11 @@ export function ProblemSolver({ initialProblem }: ProblemSolverProps) {
                 ? "bg-primary text-primary-foreground border-primary shadow-xs"
                 : "border-primary/30 bg-primary/10 text-primary hover:bg-primary/20"
             )}
-            title="Get assistance and hints from Axel AI"
+            title="Ask Axel: Give me a hint"
+            aria-label="Ask Axel: Give me a hint"
           >
             <Bot className="h-3.5 w-3.5" />
-            <span className="hidden sm:inline">Ask Axel AI</span>
+            <span className="hidden sm:inline">Ask Axel: &ldquo;Give me a hint&rdquo;</span>
           </button>
 
           {/* Run Code Button */}
@@ -565,10 +566,11 @@ export function ProblemSolver({ initialProblem }: ProblemSolverProps) {
                 <button
                   onClick={() => setAxelHintOpen(prev => !prev)}
                   className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-primary/30 bg-primary/10 hover:bg-primary/20 text-primary font-medium text-xs transition-all shadow-xs cursor-pointer mr-1"
-                  title="Open Axel AI Socratic Tutor"
+                  title="Ask Axel: Give me a hint"
+                  aria-label="Ask Axel: Give me a hint"
                 >
                   <Bot className="h-3.5 w-3.5" />
-                  <span className="hidden sm:inline">Axel AI</span>
+                  <span className="hidden sm:inline">Ask Axel: &ldquo;Give me a hint&rdquo;</span>
                   <Sparkles className="h-2.5 w-2.5 text-amber-300" />
                 </button>
 
@@ -1262,11 +1264,31 @@ export function ProblemSolver({ initialProblem }: ProblemSolverProps) {
                             </div>
                           </div>
 
-                          {/* Error Stack or Output if any */}
+                          {/* Error Stack or Output if any - CODE: Ask Axel "Explain this error" */}
                           {runResult.errorMessage && (
-                            <div className="p-3 rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-400 font-mono text-xs whitespace-pre-wrap">
-                              {runResult.errorMessage}
-                              {runResult.errorStack && `\n\n${runResult.errorStack}`}
+                            <div className="p-3 rounded-xl border border-rose-500/30 bg-rose-500/10 space-y-2.5">
+                              <div className="text-rose-400 font-mono text-xs whitespace-pre-wrap">
+                                {runResult.errorMessage}
+                                {runResult.errorStack && `\n\n${runResult.errorStack}`}
+                              </div>
+                              <div className="pt-2 border-t border-rose-500/20 flex justify-end">
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setActiveFailureContext({
+                                      errorMessage: runResult.errorMessage,
+                                      actual: runResult.errorStack || runResult.errorMessage,
+                                    })
+                                    setAxelHintOpen(true)
+                                  }}
+                                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-sans text-xs font-semibold shadow-xs cursor-pointer"
+                                  title="Ask Axel: Explain this error"
+                                  aria-label="Ask Axel: Explain this error"
+                                >
+                                  <Bot className="w-3.5 h-3.5" />
+                                  <span>Ask Axel: &ldquo;Explain this error&rdquo;</span>
+                                </button>
+                              </div>
                             </div>
                           )}
 
@@ -1369,7 +1391,7 @@ export function ProblemSolver({ initialProblem }: ProblemSolverProps) {
             </div>
 
             <div className="space-y-1">
-              <h3 className="text-2xl font-bold tracking-tight text-foreground font-serif">
+              <h3 className="text-2xl font-bold tracking-tight text-foreground font-sans">
                 Accepted!
               </h3>
               <p className="text-xs text-muted-foreground">

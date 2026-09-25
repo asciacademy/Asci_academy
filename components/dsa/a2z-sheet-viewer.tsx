@@ -159,7 +159,7 @@ export function A2ZSheetViewer() {
               <Activity className="h-3 w-3" />
               <span>Interactive Progress Tracker</span>
             </div>
-            <h2 className="font-serif text-2xl sm:text-3xl font-normal text-foreground">
+            <h2 className="font-sans text-2xl sm:text-3xl font-bold text-foreground">
               Your Learning Journey
             </h2>
             <p className="text-xs sm:text-sm text-muted-foreground">
@@ -353,7 +353,7 @@ export function A2ZSheetViewer() {
                       Step {String(step.stepNumber).padStart(2, '0')}
                     </span>
                     <div className="min-w-0 flex-1">
-                      <h3 className="font-serif text-base sm:text-lg font-medium text-foreground truncate">
+                      <h3 className="font-sans text-base sm:text-lg font-bold text-foreground truncate">
                         {step.title}
                       </h3>
                       <div className="flex flex-wrap items-center gap-2 mt-0.5 text-xs text-muted-foreground">

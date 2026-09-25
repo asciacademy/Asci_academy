@@ -5,7 +5,7 @@ import Link from "next/link"
 import { createClient } from "@/utils/supabase/client"
 import {
   BookOpen, Award, Search, LogOut, ArrowRight,
-  Target, Menu, X, Home, Briefcase, ChevronDown
+  Target, Menu, X, Home, Briefcase, ChevronDown, Video
 } from "lucide-react"
 import { updateUserProfile } from "@/app/actions/user"
 import { DashboardOverview } from "@/components/dashboard/dashboard-overview"
@@ -13,6 +13,7 @@ import { DashboardCurriculum } from "@/components/dashboard/dashboard-curriculum
 import { DashboardPracticeArena } from "@/components/dashboard/dashboard-practice-arena"
 import { DashboardCareer } from "@/components/dashboard/dashboard-career"
 import { DashboardCertificates } from "@/components/dashboard/dashboard-certificates"
+import { DashboardLiveClasses } from "@/components/dashboard/dashboard-live-classes"
 import { BadgesShowcase } from "@/components/gamification/badges-showcase"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { AsciLogo } from "@/components/asci-logo"
@@ -28,7 +29,7 @@ import { CURRICULUM_COURSES } from "@/lib/curriculum-data"
 /* ═══════════════════════════════════════════
    5 Core Tabs — Simple & Clean
 ═══════════════════════════════════════════ */
-export type DashboardTab = "home" | "courses" | "practice" | "opportunities" | "achievements"
+export type DashboardTab = "home" | "courses" | "live" | "practice" | "opportunities" | "achievements"
 
 interface DashboardWorkspaceProps {
   initialData: {
@@ -50,6 +51,9 @@ const LEGACY_TAB_MAP: Record<string, DashboardTab> = {
   curriculum: "courses",
   wishlist: "courses",
   history: "courses",
+  live: "live",
+  "live-classes": "live",
+  zoom: "live",
   practice: "practice",
   "practice-arena": "practice",
   career: "opportunities",
@@ -309,9 +313,10 @@ export function DashboardWorkspace({ initialData, user }: DashboardWorkspaceProp
   /* ═══════════════════════════════════════════
      5 Sidebar Navigation Items
   ═══════════════════════════════════════════ */
-  const NAV_ITEMS: { id: DashboardTab; label: string; icon: typeof Home }[] = [
+  const NAV_ITEMS: { id: DashboardTab; label: string; icon: any }[] = [
     { id: "home", label: "Home", icon: Home },
     { id: "courses", label: "My Courses", icon: BookOpen },
+    { id: "live", label: "Live Classes", icon: Video },
     { id: "practice", label: "Practice", icon: Target },
     { id: "opportunities", label: "Opportunities", icon: Briefcase },
     { id: "achievements", label: "Achievements", icon: Award },
@@ -329,16 +334,16 @@ export function DashboardWorkspace({ initialData, user }: DashboardWorkspaceProp
       )}
 
       {/* ══════════════════════════════════════
-          Sidebar — Clean & Minimal
+          Sidebar — Clean & Fixed
       ══════════════════════════════════════ */}
       <aside
-        className={`fixed md:sticky top-0 left-0 h-screen z-50 md:z-40 border-r border-border/60 bg-card flex flex-col justify-between shrink-0 transition-all duration-300 ease-in-out w-64 max-w-[80vw] ${
-          mobileSidebarOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full md:translate-x-0"
+        className={`fixed top-0 left-0 h-screen z-40 border-r border-border/60 bg-card flex flex-col justify-between shrink-0 transition-all duration-300 ease-in-out w-64 max-w-[80vw] ${
+          mobileSidebarOpen ? "translate-x-0 shadow-2xl z-50" : "-translate-x-full md:translate-x-0"
         }`}
       >
-        <div>
+        <div className="flex flex-col flex-1 min-h-0">
           {/* Logo Header */}
-          <div className="h-16 border-b border-border/40 px-5 flex items-center justify-between">
+          <div className="h-16 border-b border-border/40 px-5 flex items-center justify-between shrink-0">
             <Link
               href="/"
               onClick={() => setMobileSidebarOpen(false)}
@@ -356,7 +361,7 @@ export function DashboardWorkspace({ initialData, user }: DashboardWorkspaceProp
           </div>
 
           {/* Navigation Items */}
-          <nav className="p-3 space-y-0.5">
+          <nav className="p-3 space-y-0.5 overflow-y-auto flex-1 custom-scrollbar">
             {NAV_ITEMS.map((item) => (
               <button
                 key={item.id}
@@ -375,7 +380,7 @@ export function DashboardWorkspace({ initialData, user }: DashboardWorkspaceProp
         </div>
 
         {/* Sidebar Footer — Simple User Info */}
-        <div className="p-3 border-t border-border/40">
+        <div className="p-3 border-t border-border/40 shrink-0">
           <div className="flex items-center justify-between px-2 py-2">
             <div className="flex items-center gap-2.5 min-w-0">
               <div className="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-xs font-semibold text-primary overflow-hidden shrink-0">
@@ -401,7 +406,7 @@ export function DashboardWorkspace({ initialData, user }: DashboardWorkspaceProp
       {/* ══════════════════════════════════════
           Main Workspace Area
       ══════════════════════════════════════ */}
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex-1 flex flex-col min-w-0 md:ml-64">
         {/* Top Header — Clean & Simple */}
         <header className="border-b border-border/40 bg-background/95 backdrop-blur-sm sticky top-0 z-30">
           <div className="h-14 sm:h-16 px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3">
@@ -519,6 +524,7 @@ export function DashboardWorkspace({ initialData, user }: DashboardWorkspaceProp
               oauthAvatarUrl={oauthAvatarUrl}
               onUpdateName={handleUpdateName}
               onUpdateAvatar={handleUpdateAvatar}
+              onUpdateXp={(newXp) => setProfile((prev: any) => ({ ...prev, xp: newXp }))}
               rank={rank}
               totalXP={totalXP}
               streak={streak}
@@ -564,6 +570,8 @@ export function DashboardWorkspace({ initialData, user }: DashboardWorkspaceProp
               }}
             />
           )}
+
+          {activeTab === "live" && <DashboardLiveClasses />}
 
           {activeTab === "practice" && <DashboardPracticeArena />}
 

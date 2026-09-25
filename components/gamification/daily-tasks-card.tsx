@@ -175,8 +175,8 @@ export function DailyTasksCard({ onXpAwarded, className = "" }: DailyTasksCardPr
                 <Trophy className="h-4 w-4" />
               </div>
               <div>
-                <h3 className="font-serif text-lg font-normal text-foreground leading-none">
-                  Daily Quests
+                <h3 className="font-sans text-base sm:text-lg font-semibold text-foreground leading-none">
+                  Daily Goals
                 </h3>
                 <p className="text-[11px] text-muted-foreground mt-0.5">
                   Resets in {timeLeft.hours}h {timeLeft.minutes}m
@@ -201,11 +201,11 @@ export function DailyTasksCard({ onXpAwarded, className = "" }: DailyTasksCardPr
           {/* Progress Tracker Bar */}
           <div className="mb-3.5">
             <div className="flex items-center justify-between text-xs mb-1.5">
-              <span className="text-[11px] font-mono text-muted-foreground uppercase tracking-wider">
-                Today's Completion
+              <span className="text-[11px] font-medium text-muted-foreground">
+                Today&apos;s Progress
               </span>
-              <span className="text-xs font-mono font-semibold text-primary">
-                {completedCount} of {totalTasks} Tasks
+              <span className="text-xs font-semibold text-primary">
+                {completedCount} of {totalTasks} Completed
               </span>
             </div>
             <div className="h-1.5 w-full bg-secondary rounded-full overflow-hidden border border-hairline">
@@ -218,13 +218,13 @@ export function DailyTasksCard({ onXpAwarded, className = "" }: DailyTasksCardPr
 
           {/* 7-Day Flame Week Activity Strip */}
           <div className="mb-4 p-2.5 rounded-xl bg-secondary/40 border border-hairline">
-            <div className="flex items-center justify-between text-[11px] font-mono text-muted-foreground mb-2">
+            <div className="flex items-center justify-between text-[11px] text-muted-foreground mb-2">
               <span className="flex items-center gap-1 text-[10px] uppercase tracking-wider font-semibold">
                 <Flame className="h-3 w-3 text-blue-500 fill-blue-500" />
-                <span>Week Momentum</span>
+                <span>Weekly Streak</span>
               </span>
-              <span className="text-[10px] text-blue-500 font-mono font-semibold">
-                +{calculateStreakDailyBonus(streakCount)} XP Multiplier
+              <span className="text-[10px] text-blue-500 font-semibold">
+                +{calculateStreakDailyBonus(streakCount)} XP Daily Bonus
               </span>
             </div>
             <div className="grid grid-cols-7 gap-1.5">
@@ -292,14 +292,14 @@ export function DailyTasksCard({ onXpAwarded, className = "" }: DailyTasksCardPr
 
                     <div className="min-w-0">
                       <div className="flex items-center gap-1.5">
-                        <p className="text-xs font-semibold text-foreground truncate">
+                        <p className="text-xs sm:text-sm font-semibold text-foreground truncate">
                           {task.title}
                         </p>
                         <span className="text-[10px] font-mono font-medium text-primary px-1.5 rounded bg-primary/10 shrink-0">
                           +{task.xpReward} XP
                         </span>
                       </div>
-                      <p className="text-[11px] text-muted-foreground line-clamp-1 mt-0.5">
+                      <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">
                         {task.description}
                       </p>
                     </div>
@@ -308,7 +308,7 @@ export function DailyTasksCard({ onXpAwarded, className = "" }: DailyTasksCardPr
                   {/* Task Action Button */}
                   <div className="shrink-0">
                     {task.claimed ? (
-                      <span className="text-[10px] font-mono text-muted-foreground uppercase">
+                      <span className="text-[11px] font-semibold text-muted-foreground">
                         Claimed
                       </span>
                     ) : task.completed ? (
@@ -322,13 +322,13 @@ export function DailyTasksCard({ onXpAwarded, className = "" }: DailyTasksCardPr
                     ) : task.actionUrl ? (
                       <Link
                         href={task.actionUrl}
-                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-hairline bg-background hover:bg-secondary text-[11px] font-medium text-muted-foreground hover:text-foreground transition-colors"
+                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-hairline bg-background hover:bg-secondary text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors"
                       >
                         <span>Start</span>
                         <ArrowRight className="h-3 w-3" />
                       </Link>
                     ) : (
-                      <span className="text-[10px] font-mono text-muted-foreground">In progress</span>
+                      <span className="text-[11px] text-muted-foreground">In progress</span>
                     )}
                   </div>
                 </div>
@@ -337,17 +337,17 @@ export function DailyTasksCard({ onXpAwarded, className = "" }: DailyTasksCardPr
           </div>
         </div>
 
-        {/* Daily Mastery Bonus Footer */}
+        {/* Daily Bonus Footer */}
         <div className="mt-4 pt-3 border-t border-hairline">
           <div className="flex items-center justify-between p-2.5 rounded-xl bg-secondary/50 border border-hairline">
             <div className="flex items-center gap-2">
               <Gift className="h-4 w-4 text-[#D4B872]" />
               <div>
-                <span className="text-xs font-medium text-foreground block">
-                  Daily Mastery Bonus
+                <span className="text-xs sm:text-sm font-semibold text-foreground block">
+                  Daily Bonus
                 </span>
-                <span className="text-[10px] text-muted-foreground">
-                  Finish all 3 quests for +{XP_RULES.DAILY_MASTERY_BONUS} extra XP
+                <span className="text-xs text-muted-foreground">
+                  Complete all 3 tasks today to earn +{XP_RULES.DAILY_MASTERY_BONUS} bonus XP
                 </span>
               </div>
             </div>
@@ -393,11 +393,11 @@ export function DailyTasksCard({ onXpAwarded, className = "" }: DailyTasksCardPr
                   <Flame className="h-7 w-7 text-blue-500 fill-blue-500" />
                 </div>
                 <div>
-                  <h3 className="font-serif text-2xl font-normal text-foreground">
-                    Streak Journey & Badges
+                  <h3 className="font-sans text-xl sm:text-2xl font-bold text-foreground">
+                    Streak Journey &amp; Badges
                   </h3>
-                  <p className="text-xs font-mono text-muted-foreground">
-                    Continuous Engineering Momentum · Daily XP Scaling
+                  <p className="text-xs text-muted-foreground">
+                    Study every day to maintain your streak and earn bonus XP
                   </p>
                 </div>
               </div>
@@ -409,7 +409,7 @@ export function DailyTasksCard({ onXpAwarded, className = "" }: DailyTasksCardPr
                     <span className="text-[10px] font-mono text-muted-foreground uppercase block mb-1">
                       Current Streak
                     </span>
-                    <span className="font-mono text-2xl font-bold text-blue-600 dark:text-blue-400">
+                    <span className="font-sans text-2xl font-bold text-blue-600 dark:text-blue-400">
                       {streakCount} <span className="text-xs font-normal text-muted-foreground">Days</span>
                     </span>
                   </div>
@@ -418,7 +418,7 @@ export function DailyTasksCard({ onXpAwarded, className = "" }: DailyTasksCardPr
                     <span className="text-[10px] font-mono text-muted-foreground uppercase block mb-1">
                       Longest Streak
                     </span>
-                    <span className="font-mono text-2xl font-bold text-foreground">
+                    <span className="font-sans text-2xl font-bold text-foreground">
                       {longestStreak || streakCount}{" "}
                       <span className="text-xs font-normal text-muted-foreground">Days</span>
                     </span>
@@ -428,7 +428,7 @@ export function DailyTasksCard({ onXpAwarded, className = "" }: DailyTasksCardPr
                     <span className="text-[10px] font-mono text-muted-foreground uppercase block mb-1">
                       Daily Bonus
                     </span>
-                    <span className="font-mono text-2xl font-bold text-emerald-600 dark:text-emerald-400">
+                    <span className="font-sans text-2xl font-bold text-emerald-600 dark:text-emerald-400">
                       +{calculateStreakDailyBonus(streakCount)}{" "}
                       <span className="text-xs font-normal text-muted-foreground">XP/d</span>
                     </span>
@@ -438,7 +438,7 @@ export function DailyTasksCard({ onXpAwarded, className = "" }: DailyTasksCardPr
                     <span className="text-[10px] font-mono text-muted-foreground uppercase block mb-1">
                       Next Target
                     </span>
-                    <span className="font-mono text-2xl font-bold text-indigo-600 dark:text-indigo-400">
+                    <span className="font-sans text-2xl font-bold text-indigo-600 dark:text-indigo-400">
                       {nextTargetDays} <span className="text-xs font-normal text-muted-foreground">Days</span>
                     </span>
                   </div>
@@ -471,8 +471,8 @@ export function DailyTasksCard({ onXpAwarded, className = "" }: DailyTasksCardPr
               {/* All Streak Badges Showcase */}
               <div className="mb-6">
                 <div className="flex items-center justify-between mb-3">
-                  <h4 className="font-serif text-base text-foreground">
-                    Official Streak Badges
+                  <h4 className="font-sans text-sm sm:text-base font-semibold text-foreground">
+                    Streak Badges
                   </h4>
                   <span className="text-xs font-mono text-muted-foreground">
                     {streakBadges.filter((b) => streakCount >= parseInt(b.criteriaDescription.match(/(\d+)/)?.[1] || "0", 10)).length} of {streakBadges.length} Unlocked
@@ -507,7 +507,7 @@ export function DailyTasksCard({ onXpAwarded, className = "" }: DailyTasksCardPr
 
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center gap-2 mb-0.5">
-                            <h5 className="font-serif text-sm font-medium text-foreground truncate">
+                            <h5 className="font-sans text-sm font-semibold text-foreground truncate">
                               {badge.title}
                             </h5>
                             <span

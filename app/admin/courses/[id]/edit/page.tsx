@@ -372,7 +372,7 @@ export default function EditCourseDashboard() {
                                 <span className="text-[10px] font-mono text-primary uppercase tracking-widest bg-primary/10 px-2.5 py-0.5 rounded-full border border-primary/20 font-semibold">
                                     Global Settings
                                 </span>
-                                <h1 className="font-serif text-3xl font-normal mt-2 text-foreground">Course Details</h1>
+                                <h1 className="font-sans text-3xl font-bold mt-2 text-foreground">Course Details</h1>
                             </div>
                             <button
                                 onClick={handleSaveCourseDetails}
@@ -481,7 +481,7 @@ export default function EditCourseDashboard() {
                                 <span className="text-[10px] font-mono text-primary uppercase tracking-widest bg-primary/10 px-2.5 py-0.5 rounded-full border border-primary/20 font-semibold">
                                     Module Properties
                                 </span>
-                                <h1 className="font-serif text-3xl font-normal mt-2 text-foreground">Editing Module</h1>
+                                <h1 className="font-sans text-3xl font-bold mt-2 text-foreground">Editing Module</h1>
                             </div>
                             <button
                                 onClick={handleSaveModule}
@@ -524,7 +524,7 @@ export default function EditCourseDashboard() {
                                         <MonitorPlay className="h-3 w-3" /> Toggle Mode
                                     </button>
                                 </div>
-                                <h1 className="font-serif text-3xl font-normal mt-2 text-foreground">{activeLesson.title}</h1>
+                                <h1 className="font-sans text-3xl font-bold mt-2 text-foreground">{activeLesson.title}</h1>
                             </div>
                             <button
                                 onClick={handleSaveLesson}
@@ -634,7 +634,7 @@ export default function EditCourseDashboard() {
                                                 ...lessonEditForm,
                                                 challenge_data: { ...(lessonEditForm.challenge_data || {}), initialCode: e.target.value }
                                             })}
-                                            className="w-full bg-[#181715] text-blue-400 border border-border/80 rounded-xl p-3 text-xs font-mono focus:outline-none min-h-[140px] shadow-inner"
+                                            className="w-full bg-[#111827] text-blue-400 border border-border/80 rounded-xl p-3 text-xs font-mono focus:outline-none min-h-[140px] shadow-inner"
                                         />
                                     </div>
                                     <div>
@@ -646,7 +646,7 @@ export default function EditCourseDashboard() {
                                                 ...lessonEditForm,
                                                 challenge_data: { ...(lessonEditForm.challenge_data || {}), expectedOutput: e.target.value }
                                             })}
-                                            className="w-full bg-[#181715] text-primary border border-border/80 rounded-xl p-3 text-xs font-mono focus:outline-none"
+                                            className="w-full bg-[#111827] text-primary border border-border/80 rounded-xl p-3 text-xs font-mono focus:outline-none"
                                             placeholder="e.g. 120"
                                         />
                                     </div>

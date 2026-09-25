@@ -97,7 +97,7 @@ function CompanyLogo({ logo, name }: { logo?: string; name: string }) {
   }
 
   return (
-    <div className="w-10 h-10 rounded-xl bg-secondary border border-hairline flex items-center justify-center shrink-0 text-foreground font-serif font-semibold text-xs shadow-2xs">
+    <div className="w-10 h-10 rounded-xl bg-secondary border border-hairline flex items-center justify-center shrink-0 text-foreground font-sans font-bold text-xs shadow-2xs">
       {name.slice(0, 2).toUpperCase()}
     </div>
   )
@@ -323,7 +323,7 @@ export default function AdminOpportunitiesPage() {
               Career Hub Admin
             </span>
           </div>
-          <h1 className="font-serif text-2xl sm:text-3xl font-normal tracking-tight text-foreground">
+          <h1 className="font-sans text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
             Opportunities &amp; Hiring Drives
           </h1>
           <p className="text-xs text-muted-foreground mt-1 max-w-2xl">
@@ -356,7 +356,7 @@ export default function AdminOpportunitiesPage() {
             <Briefcase className="w-3.5 h-3.5 text-primary" />
             Total Drives
           </span>
-          <p className="text-2xl font-serif font-normal text-foreground mt-1">{opportunities.length}</p>
+          <p className="text-2xl font-sans font-bold text-foreground mt-1">{opportunities.length}</p>
           <span className="text-[11px] text-muted-foreground mt-0.5 block">Active hiring pipelines</span>
         </div>
 
@@ -365,7 +365,7 @@ export default function AdminOpportunitiesPage() {
             <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
             Full-Time Jobs
           </span>
-          <p className="text-2xl font-serif font-normal text-foreground mt-1">{fullTimeCount}</p>
+          <p className="text-2xl font-sans font-bold text-foreground mt-1">{fullTimeCount}</p>
           <span className="text-[11px] text-muted-foreground mt-0.5 block">Core SDE &amp; Systems</span>
         </div>
 
@@ -374,7 +374,7 @@ export default function AdminOpportunitiesPage() {
             <Clock className="w-3.5 h-3.5 text-amber-500" />
             Summer Internships
           </span>
-          <p className="text-2xl font-serif font-normal text-foreground mt-1">{internCount}</p>
+          <p className="text-2xl font-sans font-bold text-foreground mt-1">{internCount}</p>
           <span className="text-[11px] text-muted-foreground mt-0.5 block">Pre-Placement Opportunities</span>
         </div>
 
@@ -383,7 +383,7 @@ export default function AdminOpportunitiesPage() {
             <Users className="w-3.5 h-3.5 text-primary" />
             Candidate Applications
           </span>
-          <p className="text-2xl font-serif font-normal text-foreground mt-1">{totalApps}</p>
+          <p className="text-2xl font-sans font-bold text-foreground mt-1">{totalApps}</p>
           <span className="text-[11px] text-muted-foreground mt-0.5 block">1-Click referrals submitted</span>
         </div>
       </div>
@@ -431,7 +431,7 @@ export default function AdminOpportunitiesPage() {
       ) : filtered.length === 0 ? (
         <div className="rounded-2xl border border-hairline bg-card/40 p-12 text-center">
           <Briefcase className="w-10 h-10 text-muted-foreground/40 mx-auto mb-3" />
-          <h3 className="font-serif text-lg font-normal text-foreground">No Opportunities Found</h3>
+          <h3 className="font-sans text-lg font-bold text-foreground">No Opportunities Found</h3>
           <p className="text-xs text-muted-foreground mt-1 max-w-sm mx-auto">
             Try adjusting your search criteria or create a new opportunity drive.
           </p>
@@ -467,7 +467,7 @@ export default function AdminOpportunitiesPage() {
                           </span>
                         )}
                       </div>
-                      <h3 className="font-serif text-base font-normal text-foreground group-hover:text-primary transition-colors mt-0.5">
+                      <h3 className="font-sans text-base font-bold text-foreground group-hover:text-primary transition-colors mt-0.5">
                         {opp.title}
                       </h3>
                     </div>
@@ -554,7 +554,7 @@ export default function AdminOpportunitiesPage() {
                 </div>
                 <div>
                   <span className="text-[10px] font-mono uppercase tracking-wider text-primary">Portal Admin</span>
-                  <h3 className="font-serif text-lg font-normal text-foreground">
+                  <h3 className="font-sans text-lg font-bold text-foreground">
                     {modalMode === "create" ? "Post New Opportunity" : `Edit Opportunity: ${formValues.company}`}
                   </h3>
                 </div>
@@ -781,7 +781,7 @@ export default function AdminOpportunitiesPage() {
                 <AlertTriangle className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="font-serif text-base font-medium text-foreground">Delete Opportunity?</h3>
+                <h3 className="font-sans text-base font-bold text-foreground">Delete Opportunity?</h3>
                 <p className="text-xs text-muted-foreground mt-0.5">
                   This will permanently delete this drive and any associated application records.
                 </p>

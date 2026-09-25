@@ -273,18 +273,18 @@ public class QuickSort {
         <div className="space-y-1.5 min-w-0">
           <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-mono uppercase tracking-wider bg-primary/10 text-primary border border-primary/20 shrink-0 leading-none font-semibold">
-              Algorithm Workbench
+              Algorithm Visualizers
             </span>
             <span className="text-xs font-mono text-muted-foreground shrink-0 flex items-center gap-1.5">
               <span className="w-1 h-1 rounded-full bg-stone-300 dark:bg-stone-700 hidden sm:inline-block" />
-              <span>8 Interactive Engines + Sandbox</span>
+              <span>8 Visualizers &amp; Code Runner</span>
             </span>
           </div>
-          <h1 className="font-serif text-2xl sm:text-3xl font-normal tracking-tight text-foreground">
+          <h1 className="font-sans text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
             Visualizers &amp; Code Sandbox
           </h1>
           <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed max-w-xl">
-            Step-by-step physical memory simulations, algorithm comparisons, and Wasm runtime compiler.
+            Step-by-step algorithm animations, memory visualizers, and interactive code runner.
           </p>
         </div>
 
@@ -292,7 +292,7 @@ public class QuickSort {
           {/* Quick status */}
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-hairline bg-secondary text-xs font-mono">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-foreground">Wasm Engine Ready</span>
+            <span className="text-foreground">Ready to Run</span>
           </div>
         </div>
       </div>
@@ -465,7 +465,7 @@ public class QuickSort {
             {/* Split Editor and Terminal Panes */}
             <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[500px]">
               {/* Code Editor Area */}
-              <div className="lg:col-span-7 bg-[#141413] text-[#faf9f5] p-5 font-mono text-xs flex flex-col justify-between overflow-hidden">
+              <div className="lg:col-span-7 bg-[#111827] text-white p-5 font-mono text-xs flex flex-col justify-between overflow-hidden">
                 <div className="flex items-center justify-between pb-3 border-b border-white/10 text-zinc-400 text-[11px] mb-3">
                   <span className="font-mono">main.{selectedLanguage === "python" ? "py" : selectedLanguage === "java" ? "java" : "ts"}</span>
                   <span className="text-primary font-mono">Client-Side Wasm Sandbox</span>

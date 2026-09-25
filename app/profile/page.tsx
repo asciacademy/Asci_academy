@@ -1,15 +1,17 @@
 import { redirect } from "next/navigation"
 import { createClient } from "@/utils/supabase/server"
 import { getUserGamificationStats } from "@/app/actions/gamification"
+import { getUserEnrollmentsWithProgress } from "@/app/actions/user"
 import { extractFirstName } from "@/lib/user-utils"
-import { ProfileWorkspace } from "@/components/profile/profile-workspace"
+import { StudentProfileView } from "@/components/profile/student-profile-view"
+import { resolveStudentProfile } from "@/lib/student-profile-data"
 import type { Metadata } from "next"
 
 export const dynamic = "force-dynamic"
 
 export const metadata: Metadata = {
-  title: "Scholar Profile & Settings | ASCI",
-  description: "Manage your ASCI learning identity, certifications, preferences, and account security.",
+  title: "Student Profile & Career Proof | ASCI",
+  description: "Verified student identity, production portfolio, learning record, and accredited credentials.",
 }
 
 export default async function ProfilePage() {
@@ -22,19 +24,19 @@ export default async function ProfilePage() {
     redirect("/login")
   }
 
-  // Fetch profile and gamification stats concurrently on the server
-  const [profileRes, gamificationStats] = await Promise.all([
+  // Fetch profile, gamification stats, and enrollments concurrently
+  const [profileRes, gamificationStats, enrollments] = await Promise.all([
     supabase
       .from("profiles")
       .select("*")
       .eq("id", user.id)
       .maybeSingle(),
     getUserGamificationStats(user.id).catch(() => null),
+    getUserEnrollmentsWithProgress().catch(() => []),
   ])
 
   let profileData = profileRes?.data
 
-  // If user has no profile record yet, auto-provision default row
   if (!profileData) {
     const meta = user.user_metadata || {}
     const defaultName = extractFirstName(null, meta, user.email)
@@ -55,7 +57,7 @@ export default async function ProfilePage() {
           rank: "Recruit",
           bio: "",
           username: usernameSlug,
-          is_public: false,
+          is_public: true,
         })
         .select()
         .maybeSingle()
@@ -77,7 +79,7 @@ export default async function ProfilePage() {
         rank: "Recruit",
         bio: "",
         username: usernameSlug,
-        is_public: false,
+        is_public: true,
       }
     }
   }
@@ -86,14 +88,15 @@ export default async function ProfilePage() {
     ...profileData,
     xp: profileData.xp ?? 0,
     streak_count: profileData.streak_count ?? profileData.streak ?? 0,
-    rank: profileData.rank || "Recruit",
+    rank: profileData.rank || "Scholar",
   }
 
+  const studentProfile = resolveStudentProfile(resolvedProfile, user, gamificationStats, enrollments || [])
+
   return (
-    <ProfileWorkspace
-      user={user}
-      initialProfile={resolvedProfile}
-      initialBadges={gamificationStats?.unlockedBadgeIds || []}
+    <StudentProfileView
+      initialProfile={studentProfile}
+      isOwner={true}
     />
   )
 }

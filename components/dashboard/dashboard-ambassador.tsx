@@ -77,13 +77,12 @@ export function DashboardAmbassador() {
               <span>{ambassador.campusName}</span>
             </span>
           </div>
-          <h1 className="font-serif text-2xl sm:text-3xl font-normal text-foreground flex items-start sm:items-center gap-2.5 leading-tight">
+          <h1 className="font-sans text-2xl sm:text-3xl font-bold text-foreground flex items-start sm:items-center gap-2.5 leading-tight">
             <Users className="w-6 h-6 text-primary shrink-0 mt-0.5 sm:mt-0" />
-            <span className="break-words">Campus Ambassador &amp; Student Partner Program</span>
+            <span className="break-words">Campus Ambassador Program</span>
           </h1>
           <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed max-w-xl">
-            Lead your college chapter, invite engineering peers to national hackathons, and earn verified
-            leadership honors, exclusive tech swag, and direct interview passes.
+            Lead your campus club, invite friends to coding contests, and unlock tech rewards and certificates.
           </p>
         </div>
 
@@ -177,7 +176,7 @@ export function DashboardAmbassador() {
                 </div>
               </div>
               <div className="flex items-baseline gap-1.5">
-                <span className="font-serif text-3xl font-normal text-foreground">
+                <span className="font-sans text-3xl font-bold text-foreground">
                   {metric.value}
                 </span>
                 {metric.unit && <span className="text-xs text-muted-foreground">{metric.unit}</span>}
@@ -194,9 +193,9 @@ export function DashboardAmbassador() {
         <div className="lg:col-span-7 rounded-2xl border border-hairline bg-card p-6 shadow-xs space-y-5">
           <div className="flex items-center justify-between border-b border-hairline pb-4">
             <div>
-              <h2 className="font-serif text-xl font-normal text-foreground flex items-center gap-2">
+              <h2 className="font-sans text-xl font-bold text-foreground flex items-center gap-2">
                 <ShieldCheck className="w-5 h-5 text-primary" />
-                <span>Chapter Tier Progression</span>
+                <span>Tier Progression</span>
               </h2>
               <p className="text-xs text-muted-foreground mt-0.5">
                 Milestones unlocked based on campus engagement and verified registrations.
@@ -224,7 +223,7 @@ export function DashboardAmbassador() {
                     <span className="text-xs font-mono font-semibold px-2 py-0.5 rounded bg-card border border-hairline">
                       Tier {tier.level}
                     </span>
-                    <span className="font-serif text-base font-normal text-foreground">
+                    <span className="font-sans text-base font-semibold text-foreground">
                       {tier.title}
                     </span>
                   </div>
@@ -259,7 +258,7 @@ export function DashboardAmbassador() {
         <div className="lg:col-span-5 rounded-2xl border border-hairline bg-card p-6 shadow-xs space-y-5">
           <div className="flex items-center justify-between border-b border-hairline pb-4">
             <div>
-              <h2 className="font-serif text-xl font-normal text-foreground flex items-center gap-2">
+              <h2 className="font-sans text-xl font-bold text-foreground flex items-center gap-2">
                 <Trophy className="w-5 h-5 text-[#D4B872]" />
                 <span>Campus Leaderboard</span>
               </h2>

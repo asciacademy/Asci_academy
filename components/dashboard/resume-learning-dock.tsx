@@ -81,16 +81,16 @@ export function ResumeLearningDock({ enrollments = [], className }: ResumeLearni
 
           <div className="space-y-0.5">
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-primary font-bold">
-                Continue Where You Left Off
+              <span className="text-[10px] uppercase tracking-wider text-primary font-bold">
+                Continue Learning
               </span>
               <span className="text-[10px] text-muted-foreground/60">•</span>
               <span className="text-[10px] font-mono text-muted-foreground">{activeCourse.percent}% Complete</span>
             </div>
-            <h4 className="text-sm font-bold text-foreground tracking-tight leading-snug">
+            <h4 className="font-sans text-sm sm:text-base font-bold text-foreground tracking-tight leading-snug">
               {activeCourse.title}
             </h4>
-            <p className="text-xs text-muted-foreground truncate max-w-[280px] sm:max-w-md">
+            <p className="font-sans text-xs text-muted-foreground truncate max-w-[280px] sm:max-w-md">
               {activeCourse.lesson}
             </p>
           </div>

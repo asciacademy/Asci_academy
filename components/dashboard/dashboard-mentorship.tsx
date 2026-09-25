@@ -110,9 +110,9 @@ export function DashboardMentorship() {
       }
     }
     return {
-      badge: "Elite Engineering Advisory",
-      title: "1-on-1 Mentorship & Direct Network",
-      description: "Book private architecture consultations, mock algorithmic screens, and code reviews with verified Principal & Staff Engineers from Google, Microsoft, Amazon, and leading tech companies."
+      badge: "Mentor Network",
+      title: "1-on-1 Mentorship Sessions",
+      description: "Book mock interviews, code reviews, and career advice with senior engineers from Google, Microsoft, Amazon, and top tech companies."
     }
   })
 
@@ -394,7 +394,7 @@ export function DashboardMentorship() {
               {sectionConfig.badge}
             </span>
           </div>
-          <h1 className="font-serif text-2xl sm:text-3xl font-normal tracking-tight text-foreground">
+          <h1 className="font-sans text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
             {sectionConfig.title}
           </h1>
           <p className="text-xs text-muted-foreground mt-1 max-w-2xl">
@@ -469,7 +469,7 @@ export function DashboardMentorship() {
             <Mail className="w-3.5 h-3.5 text-primary" />
             Unread Messages
           </span>
-          <p className="text-xl font-serif font-bold text-primary mt-1">{unreadCount} New</p>
+          <p className="text-xl font-sans font-bold text-primary mt-1">{unreadCount} New</p>
           <span className="text-[11px] text-muted-foreground mt-0.5 block">Active conversations</span>
         </div>
 
@@ -478,7 +478,7 @@ export function DashboardMentorship() {
             <Calendar className="w-3.5 h-3.5 text-[#D4B872]" />
             My Booked Sessions
           </span>
-          <p className="text-xl font-serif font-normal text-foreground mt-1">{confirmedBookings.length}</p>
+          <p className="text-xl font-sans font-bold text-foreground mt-1">{confirmedBookings.length}</p>
           <span className="text-[11px] text-muted-foreground mt-0.5 block">
             {confirmedBookings.length > 0 ? "Upcoming Google Meet scheduled" : "No sessions booked yet"}
           </span>
@@ -489,8 +489,8 @@ export function DashboardMentorship() {
             <Star className="w-3.5 h-3.5 text-yellow-400 fill-yellow-400" />
             Average Rating
           </span>
-          <p className="text-xl font-serif font-normal text-foreground mt-1">4.96 / 5.0</p>
-          <span className="text-[11px] text-muted-foreground mt-0.5 block">From 1,200+ mock reviews</span>
+          <p className="text-xl font-sans font-bold text-foreground mt-1">4.96 / 5.0</p>
+          <span className="text-[11px] text-muted-foreground mt-0.5 block">From 1,200+ student reviews</span>
         </div>
 
         <div className="rounded-2xl border border-hairline bg-card p-4 sm:p-5 shadow-2xs">
@@ -498,8 +498,8 @@ export function DashboardMentorship() {
             <ShieldCheck className="w-3.5 h-3.5 text-primary" />
             Interview Clearance
           </span>
-          <p className="text-xl font-serif font-normal text-foreground mt-1">87% Success</p>
-          <span className="text-[11px] text-muted-foreground mt-0.5 block">Candidates cleared real rounds</span>
+          <p className="text-xl font-sans font-bold text-foreground mt-1">87% Success</p>
+          <span className="text-[11px] text-muted-foreground mt-0.5 block">Students placed at top firms</span>
         </div>
       </div>
 
@@ -562,12 +562,12 @@ export function DashboardMentorship() {
         <div className="space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-2xl bg-secondary/40 border border-hairline">
             <div>
-              <h2 className="font-serif text-lg font-normal text-foreground flex items-center gap-2">
+              <h2 className="font-sans text-lg font-bold text-foreground flex items-center gap-2">
                 <MessageSquare className="w-4 h-4 text-primary" />
-                <span>Inbox Communications</span>
+                <span>Messages &amp; Updates</span>
               </h2>
               <p className="text-xs text-muted-foreground mt-0.5">
-                Direct updates from your mock interview mentors, hackathon squads, TAs, and placement advisors.
+                Direct messages from your mentors and advisors.
               </p>
             </div>
             <span className="text-xs font-mono text-muted-foreground">
@@ -599,7 +599,7 @@ export function DashboardMentorship() {
 
                   <div className="space-y-1.5 min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="font-serif text-base font-medium text-foreground">{msg.sender}</span>
+                      <span className="font-sans text-base font-semibold text-foreground">{msg.sender}</span>
                       <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 leading-none">
                         {msg.badge}
                       </span>
@@ -702,7 +702,7 @@ export function DashboardMentorship() {
                       </div>
                       <div>
                         <div className="flex items-center gap-1.5">
-                          <h3 className="font-serif text-lg font-normal text-foreground group-hover:text-primary transition-colors">
+                          <h3 className="font-sans text-lg font-bold text-foreground group-hover:text-primary transition-colors">
                             {mentor.name}
                           </h3>
                           <ShieldCheck className="w-3.5 h-3.5 text-primary shrink-0" />
@@ -812,7 +812,7 @@ export function DashboardMentorship() {
         <div className="space-y-4">
           {confirmedBookings.length > 0 ? (
             <div className="space-y-4">
-              <h2 className="font-serif text-xl font-normal text-foreground">My Scheduled 1-on-1 Sessions</h2>
+              <h2 className="font-sans text-xl font-bold text-foreground">My Scheduled Sessions</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 {confirmedBookings.map((booking) => (
                   <div
@@ -838,7 +838,7 @@ export function DashboardMentorship() {
                           className="w-12 h-12 rounded-full object-cover border border-hairline shrink-0"
                         />
                         <div>
-                          <h3 className="font-serif text-lg font-normal text-foreground">{booking.mentorName}</h3>
+                          <h3 className="font-sans text-lg font-bold text-foreground">{booking.mentorName}</h3>
                           <p className="text-xs text-muted-foreground">{booking.mentorRole} • {booking.mentorCompany}</p>
                         </div>
                       </div>
@@ -873,9 +873,9 @@ export function DashboardMentorship() {
           ) : (
             <div className="rounded-2xl border border-hairline bg-card/40 p-12 text-center">
               <Calendar className="w-10 h-10 text-muted-foreground/40 mx-auto mb-3" />
-              <h3 className="font-serif text-lg font-normal text-foreground">No Upcoming Sessions</h3>
+              <h3 className="font-sans text-lg font-bold text-foreground">No Upcoming Sessions</h3>
               <p className="text-xs text-muted-foreground mt-1 max-w-sm mx-auto">
-                You haven&apos;t scheduled any 1-on-1 mentorship sessions yet. Select a mentor from the directory to book mock technical interviews.
+                You haven&apos;t scheduled any 1-on-1 sessions yet. Pick a mentor from the list to book your session.
               </p>
               <button
                 onClick={() => setMentorshipMode("mentors")}
@@ -900,7 +900,7 @@ export function DashboardMentorship() {
                 <span className="text-[10px] font-mono uppercase tracking-wider text-primary">
                   Schedule 1-on-1 Call
                 </span>
-                <h3 className="font-serif text-lg font-normal text-foreground">Session with {selectedMentorForBooking.name}</h3>
+                <h3 className="font-sans text-lg font-bold text-foreground">Session with {selectedMentorForBooking.name}</h3>
               </div>
               <button
                 onClick={() => setSelectedMentorForBooking(null)}
@@ -1018,7 +1018,7 @@ export function DashboardMentorship() {
                 <span className="text-[10px] font-mono uppercase tracking-wider text-primary">
                   Quick Reply
                 </span>
-                <h3 className="font-serif text-lg font-normal text-foreground">
+                <h3 className="font-sans text-lg font-bold text-foreground">
                   Reply to {activeReplyMessage.sender}
                 </h3>
               </div>
@@ -1081,8 +1081,8 @@ export function DashboardMentorship() {
                   <Users className="h-5 w-5" />
                 </div>
                 <div>
-                  <h3 className="font-serif text-xl font-medium text-foreground">
-                    {editingMentorId ? "Edit Mentor Profile" : "Onboard Industry Mentor"}
+                  <h3 className="font-sans text-xl font-bold text-foreground">
+                    {editingMentorId ? "Edit Mentor Profile" : "Add Mentor"}
                   </h3>
                   <p className="text-xs text-muted-foreground mt-0.5">
                     Configure mentor credentials, advisory focus, and session format.
@@ -1298,7 +1298,7 @@ export function DashboardMentorship() {
                   <Sliders className="h-4 w-4" />
                 </div>
                 <div>
-                  <h3 className="font-serif text-lg font-medium text-foreground">Customize Mentorship Section</h3>
+                  <h3 className="font-sans text-lg font-bold text-foreground">Customize Mentorship Section</h3>
                   <p className="text-xs text-muted-foreground">Adjust section header, badge, and description.</p>
                 </div>
               </div>
@@ -1331,7 +1331,7 @@ export function DashboardMentorship() {
                   type="text"
                   value={tempSectionConfig.title}
                   onChange={(e) => setTempSectionConfig({ ...tempSectionConfig, title: e.target.value })}
-                  className="w-full bg-secondary/60 border border-hairline rounded-xl px-3.5 py-2.5 text-xs text-foreground focus:outline-none focus:border-primary font-serif text-base"
+                  className="w-full bg-secondary/60 border border-hairline rounded-xl px-3.5 py-2.5 text-xs text-foreground focus:outline-none focus:border-primary font-sans font-semibold text-base"
                 />
               </div>
 
@@ -1377,7 +1377,7 @@ export function DashboardMentorship() {
               <Trash2 className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="font-serif text-lg font-medium text-foreground">Remove Mentor?</h3>
+              <h3 className="font-sans text-lg font-bold text-foreground">Remove Mentor?</h3>
               <p className="text-xs text-muted-foreground mt-1">
                 Are you sure you want to remove this mentor profile? Ongoing confirmed bookings will remain accessible.
               </p>

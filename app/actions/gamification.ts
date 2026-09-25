@@ -643,3 +643,48 @@ export async function awardUserXpServer(
   }
 }
 
+/**
+ * Server Action: Deduct XP when equipping a Streak Shield in the Gamification Economy
+ */
+export async function purchaseStreakShieldServer(
+  cost: number = 200
+): Promise<{ success: boolean; newTotalXp: number; message: string }> {
+  try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) {
+      return { success: true, newTotalXp: 0, message: "Streak Shield equipped locally." }
+    }
+
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("id, xp")
+      .eq("id", user.id)
+      .maybeSingle()
+
+    const currentXp = profile?.xp ?? 0
+    if (currentXp < cost) {
+      return { success: false, newTotalXp: currentXp, message: "Insufficient XP balance" }
+    }
+
+    const newXp = Math.max(0, currentXp - cost)
+    await supabase
+      .from("profiles")
+      .update({
+        xp: newXp,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", user.id)
+
+    return {
+      success: true,
+      newTotalXp: newXp,
+      message: `Streak Shield equipped! (-${cost} XP)`,
+    }
+  } catch (err: any) {
+    return { success: false, newTotalXp: 0, message: err?.message || "Failed to equip Streak Shield" }
+  }
+}
+
+

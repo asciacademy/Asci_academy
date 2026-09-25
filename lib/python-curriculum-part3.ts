@@ -128,7 +128,7 @@ def compose_incident_report(incident_id: str, severity: str) -> EmailMessage:
     msg.add_alternative(f"""\\
 <!DOCTYPE html>
 <html>
-    <body style="font-family: sans-serif; background: #181715; color: #f5f0e8; padding: 20px;">
+    <body style="font-family: sans-serif; background: #111827; color: #f8fafc; padding: 20px;">
         <h2 style="color: #2563eb;">Incident Alert: #{incident_id}</h2>
         <p>Severity Level: <strong>{severity}</strong></p>
         <p>Automated telemetry trigger dispatched from ASCI Health Engine.</p>

@@ -50,9 +50,10 @@ export function TestOutputDiff({
           <button
             onClick={() => onAskAxel({ expected, actual, input, errorMessage })}
             className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md bg-primary hover:bg-primary/90 text-primary-foreground font-sans font-medium text-xs transition-all shadow-xs hover:shadow-primary/25 cursor-pointer w-full sm:w-auto"
+            title="Ask Axel: Explain this error"
           >
             <Bot className="h-3.5 w-3.5" />
-            <span>Explain with Axel AI</span>
+            <span>Ask Axel: &ldquo;Explain this error&rdquo;</span>
             <Sparkles className="h-3 w-3 text-amber-300" />
           </button>
         )}

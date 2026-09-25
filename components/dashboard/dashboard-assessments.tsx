@@ -129,14 +129,14 @@ export function DashboardAssessments() {
           <div className="flex items-center gap-2 mb-1.5">
             <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase tracking-wider bg-primary/10 text-primary border border-primary/20 font-semibold">
               <Award className="w-3 h-3" />
-              Standardized Skill Proctored Tests
+              Skill Quizzes &amp; Tests
             </span>
           </div>
-          <h1 className="font-serif text-2xl sm:text-3xl font-normal tracking-tight text-foreground">
-            Skill Assessments &amp; Quizzes Arena
+          <h1 className="font-sans text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
+            Quizzes &amp; Skill Tests
           </h1>
           <p className="text-xs text-muted-foreground mt-1 max-w-2xl">
-            Verify your algorithmic problem-solving and software architecture proficiency. Passing assessments grants verified credentials displayed on your candidate profile.
+            Test your knowledge with quick quizzes. Passing tests unlocks verified badges on your profile.
           </p>
         </div>
 
@@ -159,41 +159,41 @@ export function DashboardAssessments() {
         <div className="rounded-2xl border border-hairline bg-card p-4 sm:p-5 shadow-2xs">
           <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
             <HelpCircle className="w-3.5 h-3.5 text-primary" />
-            Standardized Tests
+            Available Tests
           </span>
-          <p className="text-xl font-serif font-normal text-foreground mt-1">{assessments.length}</p>
-          <span className="text-[11px] text-muted-foreground mt-0.5 block">Industry benchmarked suites</span>
+          <p className="text-xl font-sans font-bold text-foreground mt-1">{assessments.length}</p>
+          <span className="text-[11px] text-muted-foreground mt-0.5 block">Short topic tests</span>
         </div>
 
         <div className="rounded-2xl border border-hairline bg-card p-4 sm:p-5 shadow-2xs">
           <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
             <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
-            Verified Badges Earned
+            Badges Earned
           </span>
-          <p className="text-xl font-serif font-normal text-foreground mt-1">{passedCount}</p>
+          <p className="text-xl font-sans font-bold text-foreground mt-1">{passedCount}</p>
           <span className="text-[11px] text-muted-foreground mt-0.5 block">
-            {passedCount > 0 ? "Credited to profile honors" : "None completed yet"}
+            {passedCount > 0 ? "Displayed on profile" : "None completed yet"}
           </span>
         </div>
 
         <div className="rounded-2xl border border-hairline bg-card p-4 sm:p-5 shadow-2xs">
           <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
             <Award className="w-3.5 h-3.5 text-[#D4B872]" />
-            Average Percentile
+            Average Score
           </span>
-          <p className="text-xl font-serif font-normal text-foreground mt-1">
-            {passedCount > 0 ? "94th" : "—"}
+          <p className="text-xl font-sans font-bold text-foreground mt-1">
+            {passedCount > 0 ? "94%" : "—"}
           </p>
-          <span className="text-[11px] text-muted-foreground mt-0.5 block">Nationwide candidate ranking</span>
+          <span className="text-[11px] text-muted-foreground mt-0.5 block">Quiz accuracy</span>
         </div>
 
         <div className="rounded-2xl border border-hairline bg-card p-4 sm:p-5 shadow-2xs">
           <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
             <Shield className="w-3.5 h-3.5 text-primary" />
-            Proctor Integrity
+            Test Quality
           </span>
-          <p className="text-xl font-serif font-normal text-foreground mt-1">100% Score</p>
-          <span className="text-[11px] text-muted-foreground mt-0.5 block">Zero flag integrity record</span>
+          <p className="text-xl font-sans font-bold text-foreground mt-1">100%</p>
+          <span className="text-[11px] text-muted-foreground mt-0.5 block">Verified test bank</span>
         </div>
       </div>
 
@@ -264,7 +264,7 @@ export function DashboardAssessments() {
                 )}
               </div>
 
-              <h3 className="font-serif text-xl font-normal text-foreground group-hover:text-primary transition-colors">
+              <h3 className="font-sans text-xl font-bold text-foreground group-hover:text-primary transition-colors">
                 {assessment.title}
               </h3>
 
@@ -355,29 +355,29 @@ export function DashboardAssessments() {
 
                 <div>
                   <span className="text-xs font-mono uppercase tracking-wider text-muted-foreground">Test Result</span>
-                  <h2 className="font-serif text-2xl font-normal text-foreground mt-1">
-                    {testResult.passed ? "Congratulations! Assessment Passed" : "Assessment Completed — Needs Retake"}
+                  <h2 className="font-sans text-2xl font-bold text-foreground mt-1">
+                    {testResult.passed ? "Congratulations! You Passed" : "Quiz Finished — Try Again"}
                   </h2>
                   <p className="text-xs text-muted-foreground max-w-sm mx-auto mt-1">
                     {testResult.passed
-                      ? `You scored ${testResult.score}% (${testResult.correctCount}/${activeTest.questions.length} correct). The verified badge "${activeTest.badgeReward.name}" is now unlocked on your profile.`
-                      : `You scored ${testResult.score}%. A minimum score of ${activeTest.passingScore}% is required to earn this certification. You can review and retake anytime.`}
+                      ? `You scored ${testResult.score}% (${testResult.correctCount}/${activeTest.questions.length} correct). The verified badge "${activeTest.badgeReward.name}" is now on your profile.`
+                      : `You scored ${testResult.score}%. A score of ${activeTest.passingScore}% is required to earn this badge. You can review and retake anytime.`}
                   </p>
                 </div>
 
                 <div className="inline-flex items-center gap-6 p-4 rounded-xl bg-secondary/50 border border-hairline">
                   <div>
                     <span className="text-[10px] font-mono uppercase text-muted-foreground block">Final Score</span>
-                    <span className="text-lg font-serif font-bold text-foreground">{testResult.score}%</span>
+                    <span className="text-lg font-sans font-bold text-foreground">{testResult.score}%</span>
                   </div>
                   <div>
                     <span className="text-[10px] font-mono uppercase text-muted-foreground block">Correct Answers</span>
-                    <span className="text-lg font-serif font-bold text-foreground">{testResult.correctCount} / {activeTest.questions.length}</span>
+                    <span className="text-lg font-sans font-bold text-foreground">{testResult.correctCount} / {activeTest.questions.length}</span>
                   </div>
                   <div>
                     <span className="text-[10px] font-mono uppercase text-muted-foreground block">Status</span>
                     <span className={`text-sm font-semibold uppercase ${testResult.passed ? "text-emerald-500" : "text-destructive"}`}>
-                      {testResult.passed ? "Certified" : "Not Passed"}
+                      {testResult.passed ? "Passed" : "Not Passed"}
                     </span>
                   </div>
                 </div>
@@ -410,8 +410,8 @@ export function DashboardAssessments() {
                 {/* Header with Title & Live Timer */}
                 <div className="flex items-center justify-between pb-4 border-b border-hairline">
                   <div>
-                    <span className="text-[10px] font-mono uppercase tracking-wider text-primary">Proctored Session</span>
-                    <h3 className="font-serif text-lg font-normal text-foreground">{activeTest.title}</h3>
+                    <span className="text-[10px] font-mono uppercase tracking-wider text-primary">Live Quiz</span>
+                    <h3 className="font-sans text-lg font-bold text-foreground">{activeTest.title}</h3>
                   </div>
 
                   <div className="flex items-center gap-3">
@@ -577,17 +577,17 @@ export function DashboardAssessments() {
                 <span className="text-[11px] font-mono uppercase tracking-[0.25em] text-[#D4B872] font-semibold">
                   ASCI Academy · Verification of Excellence
                 </span>
-                <h2 className="font-serif text-2xl sm:text-3xl font-normal text-foreground mt-1">
-                  Certificate of Technical Competency
+                <h2 className="font-sans text-2xl sm:text-3xl font-bold text-foreground mt-1">
+                  Certificate of Competency
                 </h2>
                 <p className="text-xs text-muted-foreground mt-2 max-w-md mx-auto leading-relaxed">
-                  This formally certifies that the candidate has successfully completed proctored evaluation and demonstrated standardized industry mastery in:
+                  This certifies that the student has completed the skill assessment and demonstrated proficiency in:
                 </p>
               </div>
 
               {/* Assessment Title Banner */}
               <div className="p-4 rounded-xl bg-card border border-hairline">
-                <h3 className="font-serif text-xl font-medium text-foreground">
+                <h3 className="font-sans text-xl font-bold text-foreground">
                   {selectedCredential.title}
                 </h3>
                 <div className="flex flex-wrap items-center justify-center gap-2 mt-2">

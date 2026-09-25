@@ -112,7 +112,7 @@ export function DashboardRightPanel({
       {showCloseButton && onClosePanel && (
         <div className="flex items-center justify-between pt-0.5">
           <span className="text-xs font-mono font-semibold uppercase tracking-wider text-muted-foreground/80">
-            Student Identity &amp; Cadence
+            Student Profile
           </span>
           <button
             onClick={onClosePanel}
@@ -199,7 +199,7 @@ export function DashboardRightPanel({
             )}
 
             <p className="text-xs text-muted-foreground truncate mb-2">
-              ASCI Fellow · Engineering Cohort
+              ASCI Academy Student
             </p>
 
             {/* Real Points / XP Badge */}

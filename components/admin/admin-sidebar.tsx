@@ -7,17 +7,24 @@ import { createClient } from "@/utils/supabase/client"
 import {
     LayoutDashboard, Users, BookOpen, MessageSquare, Settings,
     Megaphone, ChevronLeft, ChevronRight, LogOut, Shield, ExternalLink,
-    Menu, X, Briefcase, CreditCard
+    Menu, X, Briefcase, CreditCard, Video, Trophy, FolderGit2,
+    GraduationCap, Award, BarChart3, FileCode, Sparkles
 } from "lucide-react"
 
-const navLinks = [
+export const ADMIN_NAV_LINKS = [
     { name: "Overview", href: "/admin", icon: LayoutDashboard, exact: true },
     { name: "Users", href: "/admin/users", icon: Users },
     { name: "Courses", href: "/admin/courses", icon: BookOpen },
+    { name: "Lessons", href: "/admin/lessons", icon: FileCode },
+    { name: "Competitions", href: "/admin/competitions", icon: Trophy },
+    { name: "Projects", href: "/admin/projects", icon: FolderGit2 },
+    { name: "Jobs", href: "/admin/jobs", icon: Briefcase },
+    { name: "Internships", href: "/admin/internships", icon: GraduationCap },
+    { name: "Certificates", href: "/admin/certificates", icon: Award },
+    { name: "Live Classes", href: "/admin/live-classes", icon: Video },
     { name: "Payments", href: "/admin/payments", icon: CreditCard },
-    { name: "Opportunities", href: "/admin/opportunities", icon: Briefcase },
-    { name: "Testimonials", href: "/admin/testimonials", icon: MessageSquare },
     { name: "Announcements", href: "/admin/announcements", icon: Megaphone },
+    { name: "Analytics", href: "/admin/analytics", icon: BarChart3 },
     { name: "Settings", href: "/admin/settings", icon: Settings },
 ]
 
@@ -57,7 +64,7 @@ export function AdminSidebar({ userName, userRole }: { userName: string; userRol
                     Admin
                 </span>
                 <div className="ml-auto flex items-center gap-1">
-                    {navLinks.slice(0, 3).map(l => (
+                    {ADMIN_NAV_LINKS.slice(0, 4).map(l => (
                         <Link
                             key={l.href}
                             href={l.href}
@@ -147,7 +154,7 @@ export function AdminSidebar({ userName, userRole }: { userName: string; userRol
 
                 {/* Navigation Menu */}
                 <div className="flex-1 px-3 py-3 space-y-1 overflow-y-auto">
-                    {navLinks.map(link => {
+                    {ADMIN_NAV_LINKS.map(link => {
                         const active = isActive(link.href, link.exact)
                         return (
                             <Link

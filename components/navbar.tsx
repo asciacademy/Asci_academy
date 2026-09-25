@@ -3,199 +3,226 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState, useEffect, useRef, useCallback } from "react"
-import { motion, AnimatePresence } from "framer-motion"
 import {
+  Search,
+  ChevronDown,
+  Bell,
   Menu,
   X,
-  ChevronDown,
-  Search,
-  ArrowRight,
-  User,
-  Shield,
-  LayoutDashboard,
   BookOpen,
-  Code2,
-  Layers,
-  Server,
-  Braces,
-  Cpu,
-  Network,
-  Database,
-  GraduationCap,
-  Award,
-  Users,
-  Terminal,
-  PlayCircle,
-  ArrowUpRight,
   Compass,
-  FolderGit2,
+  GraduationCap,
+  Code2,
   Flame,
-  LogOut,
-  Bookmark,
-  Clock,
-  Briefcase,
+  CheckCircle2,
+  FolderGit2,
+  Cpu,
   Trophy,
-  Hammer,
+  Award,
   Sparkles,
+  Briefcase,
+  Building,
+  Zap,
+  Users,
+  ArrowRight,
 } from "lucide-react"
-import { createClient } from "@/utils/supabase/client"
+import { motion, AnimatePresence } from "framer-motion"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { AsciLogo } from "@/components/asci-logo"
 import { SearchCommandDialog } from "@/components/search-command-dialog"
 import { UserMenu } from "@/components/auth/user-menu"
-import { WishlistDrawer } from "@/components/courses/wishlist-drawer"
-import { useWishlist } from "@/lib/user-learning-store"
-import { useUserSettings } from "@/context/user-settings-context"
 import { useAuth } from "@/context/auth-context"
+import { useUserSettings } from "@/context/user-settings-context"
 import { extractFirstName, getInitials } from "@/lib/user-utils"
 
-interface NavSubItem {
-  title: string
-  desc: string
-  href: string
-  icon: any
-  badge?: string
-}
+/**
+ * 5 Primary Navigation Items
+ * Specified in Phase 3:
+ * Explore | Learn | Practice | Compete | Career
+ */
+export const PRIMARY_NAV = [
+  { label: "Learn", href: "/courses", match: ["/courses", "/paths"] },
+  { label: "Practice", href: "/practice", match: ["/practice", "/dsa", "/challenges"] },
+  { label: "Compete", href: "/competitions", match: ["/competitions"] },
+  { label: "Career", href: "/career", match: ["/career", "/jobs", "/internships"] },
+]
 
-interface NavItem {
-  label: string
-  href: string
-  hasDropdown: boolean
-  icon?: any
-  desc?: string
-  dropdownWidth?: string
-  alignClass?: string
-  items?: NavSubItem[]
-  footerLink?: { label: string; href: string }
-}
-
-const NAV_ITEMS: NavItem[] = [
+/**
+ * Explore Mega Menu Structure
+ * 5 Pillars with small icons:
+ * 1. LEARN (Courses, Learning Paths, Tutorials)
+ * 2. PRACTICE (DSA, Challenges, Assessments)
+ * 3. BUILD (Projects, Simulators)
+ * 4. COMPETE (Hackathons, Competitions, Quizzes)
+ * 5. CAREER (Jobs, Internships, Hiring Challenges, Mentorship)
+ */
+export const EXPLORE_MEGA_MENU = [
   {
-    label: "Programs",
-    href: "/programs",
-    hasDropdown: true,
-    icon: BookOpen,
-    desc: "Curricula & Engineering Tracks",
-    dropdownWidth: "w-[360px]",
-    alignClass: "left-0",
+    category: "LEARN",
+    dotColor: "bg-blue-500",
     items: [
       {
-        title: "Systems Engineering",
-        desc: "Low-level C, C++20, and memory model fundamentals",
-        href: "/programs/cpp",
-        icon: Cpu,
-        badge: "Core",
+        label: "Courses",
+        href: "/courses",
+        description: "47+ full-stack & systems courses",
+        icon: BookOpen,
+        iconColor: "text-blue-500 dark:text-blue-400",
+        bgClass: "bg-blue-500/10 border-blue-500/20 group-hover:bg-blue-500/20 group-hover:border-blue-500/30",
       },
       {
-        title: "Enterprise Backend & Java",
-        desc: "Spring Boot, Concurrency, and Microservices",
-        href: "/programs/java",
-        icon: Server,
-        badge: "Popular",
+        label: "Learning Paths",
+        href: "/paths",
+        description: "Structured career roadmaps",
+        icon: Compass,
+        iconColor: "text-indigo-500 dark:text-indigo-400",
+        bgClass: "bg-indigo-500/10 border-indigo-500/20 group-hover:bg-indigo-500/20 group-hover:border-indigo-500/30",
       },
       {
-        title: "Full-Stack Web & TypeScript",
-        desc: "React 19, Next.js, and distributed UI architecture",
-        href: "/programs/react",
-        icon: Layers,
-      },
-      {
-        title: "Python for Engineers",
-        desc: "High-throughput APIs, algorithms, and data systems",
-        href: "/programs/python",
-        icon: Terminal,
-      },
-    ],
-    footerLink: { label: "Explore All Tracks & Curricula →", href: "/programs" },
-  },
-  {
-    label: "Practice DSA",
-    href: "/dsa",
-    hasDropdown: true,
-    icon: Code2,
-    desc: "Algorithmic Sheets & Visualizers",
-    dropdownWidth: "w-[360px]",
-    alignClass: "left-[-20px]",
-    items: [
-      {
-        title: "Complete DSA Sheet",
-        desc: "474 hand-picked algorithmic problems with visual proofs",
-        href: "/dsa/a2z-sheet",
-        icon: Code2,
-        badge: "474 Problems",
-      },
-      {
-        title: "Interactive Visualizers",
-        desc: "Step-through visual animations for trees, graphs, and pointers",
-        href: "/dsa",
-        icon: PlayCircle,
-      },
-      {
-        title: "Algorithmic Problem Arena",
-        desc: "Search, filter, and practice coding challenges with test runner",
-        href: "/dsa",
-        icon: Flame,
-      },
-    ],
-    footerLink: { label: "Open Algorithmic Arena →", href: "/dsa" },
-  },
-  {
-    label: "Degrees & Careers",
-    href: "/degrees",
-    hasDropdown: true,
-    icon: Briefcase,
-    desc: "Industry Roles, Capstones & Verified Repos",
-    dropdownWidth: "w-[350px]",
-    alignClass: "left-[-40px]",
-    items: [
-      {
-        title: "Career Pathways & Degrees",
-        desc: "Structured paths for AI, DevOps, Backend & Full-Stack roles",
-        href: "/degrees",
+        label: "Tutorials",
+        href: "/courses",
+        description: "Guided engineering walk-throughs",
         icon: GraduationCap,
-        badge: "Industry",
-      },
-      {
-        title: "Student Capstone Showcase",
-        desc: "Verified student open-source repositories and production builds",
-        href: "/portfolio",
-        icon: FolderGit2,
-      },
-      {
-        title: "Mentorship & Placement",
-        desc: "Code reviews, mock technical interviews, and career guidance",
-        href: "/pricing",
-        icon: Users,
+        iconColor: "text-emerald-500 dark:text-emerald-400",
+        bgClass: "bg-emerald-500/10 border-emerald-500/20 group-hover:bg-emerald-500/20 group-hover:border-emerald-500/30",
       },
     ],
-    footerLink: { label: "Explore Career Pathways →", href: "/degrees" },
   },
   {
-    label: "Pricing",
-    href: "/pricing",
-    hasDropdown: false,
-    icon: Sparkles,
-    desc: "Fellowship & Membership Plans",
+    category: "PRACTICE",
+    dotColor: "bg-orange-500",
+    items: [
+      {
+        label: "DSA",
+        href: "/practice",
+        description: "Striver A2Z & 470+ problems",
+        icon: Code2,
+        iconColor: "text-cyan-500 dark:text-cyan-400",
+        bgClass: "bg-cyan-500/10 border-cyan-500/20 group-hover:bg-cyan-500/20 group-hover:border-cyan-500/30",
+      },
+      {
+        label: "Challenges",
+        href: "/challenges",
+        description: "Daily timed coding sprints",
+        icon: Flame,
+        iconColor: "text-orange-500 dark:text-orange-400 fill-orange-500/20",
+        bgClass: "bg-orange-500/10 border-orange-500/25 group-hover:bg-orange-500/20 group-hover:border-orange-500/40",
+      },
+      {
+        label: "Assessments",
+        href: "/career?tab=assessments",
+        description: "Skill benchmark certificates",
+        icon: CheckCircle2,
+        iconColor: "text-teal-500 dark:text-teal-400",
+        bgClass: "bg-teal-500/10 border-teal-500/20 group-hover:bg-teal-500/20 group-hover:border-teal-500/30",
+      },
+    ],
+  },
+  {
+    category: "BUILD",
+    dotColor: "bg-purple-500",
+    items: [
+      {
+        label: "Projects",
+        href: "/projects",
+        description: "Guided production codebases",
+        icon: FolderGit2,
+        iconColor: "text-purple-500 dark:text-purple-400",
+        bgClass: "bg-purple-500/10 border-purple-500/20 group-hover:bg-purple-500/20 group-hover:border-purple-500/30",
+      },
+      {
+        label: "Simulators",
+        href: "/sandbox/call-stack",
+        description: "Call-stack & memory visualizers",
+        icon: Cpu,
+        iconColor: "text-pink-500 dark:text-pink-400",
+        bgClass: "bg-pink-500/10 border-pink-500/20 group-hover:bg-pink-500/20 group-hover:border-pink-500/30",
+      },
+    ],
+  },
+  {
+    category: "COMPETE",
+    dotColor: "bg-amber-500",
+    items: [
+      {
+        label: "Hackathons",
+        href: "/competitions",
+        description: "Grand Prix with cash prizes",
+        icon: Trophy,
+        iconColor: "text-amber-500 dark:text-amber-400",
+        bgClass: "bg-amber-500/10 border-amber-500/20 group-hover:bg-amber-500/20 group-hover:border-amber-500/30",
+      },
+      {
+        label: "Competitions",
+        href: "/competitions",
+        description: "Algorithmic weekend contests",
+        icon: Award,
+        iconColor: "text-rose-500 dark:text-rose-400",
+        bgClass: "bg-rose-500/10 border-rose-500/20 group-hover:bg-rose-500/20 group-hover:border-rose-500/30",
+      },
+      {
+        label: "Quizzes",
+        href: "/practice",
+        description: "Speed CS aptitude & trivia",
+        icon: Sparkles,
+        iconColor: "text-fuchsia-500 dark:text-fuchsia-400",
+        bgClass: "bg-fuchsia-500/10 border-fuchsia-500/20 group-hover:bg-fuchsia-500/20 group-hover:border-fuchsia-500/30",
+      },
+    ],
+  },
+  {
+    category: "CAREER",
+    dotColor: "bg-emerald-500",
+    items: [
+      {
+        label: "Jobs",
+        href: "/career?tab=jobs",
+        description: "Full-time verified engineering roles",
+        icon: Briefcase,
+        iconColor: "text-sky-500 dark:text-sky-400",
+        bgClass: "bg-sky-500/10 border-sky-500/20 group-hover:bg-sky-500/20 group-hover:border-sky-500/30",
+      },
+      {
+        label: "Internships",
+        href: "/career?tab=internships",
+        description: "Summer & winter internships",
+        icon: Building,
+        iconColor: "text-emerald-500 dark:text-emerald-400",
+        bgClass: "bg-emerald-500/10 border-emerald-500/20 group-hover:bg-emerald-500/20 group-hover:border-emerald-500/30",
+      },
+      {
+        label: "Hiring Challenges",
+        href: "/competitions",
+        description: "Direct recruitment coding sprints",
+        icon: Zap,
+        iconColor: "text-yellow-500 dark:text-yellow-400 fill-yellow-500/20",
+        bgClass: "bg-yellow-500/10 border-yellow-500/20 group-hover:bg-yellow-500/20 group-hover:border-yellow-500/30",
+      },
+      {
+        label: "Mentorship",
+        href: "/career?tab=mentors",
+        description: "1-on-1 industry mentorship",
+        icon: Users,
+        iconColor: "text-violet-500 dark:text-violet-400",
+        bgClass: "bg-violet-500/10 border-violet-500/20 group-hover:bg-violet-500/20 group-hover:border-violet-500/30",
+      },
+    ],
   },
 ]
 
 export function Navbar() {
   const pathname = usePathname()
   const { settings } = useUserSettings()
-  const { user: authUser, profile: authProfile, signOut: authSignOut, error: authError, clearError: authClearError } = useAuth()
-  const [mobileOpen, setMobileOpen] = useState(false)
-  const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
-  const [scrolled, setScrolled] = useState(false)
-  const [searchOpen, setSearchOpen] = useState(false)
-  const [wishlistDrawerOpen, setWishlistDrawerOpen] = useState(false)
-  const [mobileExpandedSection, setMobileExpandedSection] = useState<string | null>(null)
-  const { count: wishlistCount } = useWishlist()
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const { user: authUser, profile: authProfile, signOut: authSignOut } = useAuth()
 
+  const [exploreOpen, setExploreOpen] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const [searchOpen, setSearchOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
   const [demoBypassUser, setDemoBypassUser] = useState<any>(null)
 
-  // Hydrate demo bypass safely on client mount to avoid SSR hydration mismatch
+  const exploreRef = useRef<HTMLDivElement | null>(null)
+  const exploreTimerRef = useRef<NodeJS.Timeout | null>(null)
+
   useEffect(() => {
     setMounted(true)
     if (!authUser && typeof document !== "undefined") {
@@ -206,36 +233,80 @@ export function Navbar() {
           user: {
             id: "demo-user-id",
             email: isDemoAdmin ? "admin@asci.edu" : "fellow@asci.edu",
-            user_metadata: { full_name: isDemoAdmin ? "ASCI Administrator" : "ASCI Fellow", avatar_url: null, picture: null },
-          } as any,
+            user_metadata: { full_name: isDemoAdmin ? "ASCI Administrator" : "ASCI Fellow" },
+          },
           profile: {
             id: "demo-user-id",
             name: isDemoAdmin ? "ASCI Administrator" : "ASCI Fellow",
             role: isDemoAdmin ? "admin" : "fellow",
             rank: isDemoAdmin ? "Admin" : "Fellow",
-            avatar_url: null,
-            xp: 0,
-            streak_count: 0,
-          } as any,
+            xp: 1420,
+            streak_count: 5,
+          },
           isAdmin: isDemoAdmin,
         })
       }
     }
   }, [authUser])
 
-  // Active user and profile derived directly from AuthContext as the single source of truth (mounted-guarded for zero SSR mismatch)
-  const user: any = mounted ? (authUser || demoBypassUser?.user || null) : null
-  const userProfile: any = mounted ? (authProfile || demoBypassUser?.profile || (user ? {
-    id: user.id || "guest",
-    name: user.user_metadata?.full_name || user.email?.split("@")[0] || "Scholar",
-    role: "user",
-    rank: "Engineer",
-    xp: 0,
-    streak_count: 0,
-    avatar_url: user.user_metadata?.avatar_url || user.user_metadata?.picture || null,
-  } : null)) : null
+  // Listen for mobile bottom nav "Explore" tap
+  useEffect(() => {
+    const handleOpenExplore = () => {
+      setMobileOpen(true)
+    }
+    window.addEventListener("asci:open-explore-drawer", handleOpenExplore)
+    return () => window.removeEventListener("asci:open-explore-drawer", handleOpenExplore)
+  }, [])
 
-  const isAdmin = Boolean(mounted && (authProfile?.role === "admin" || authProfile?.role === "super_admin" || demoBypassUser?.isAdmin))
+  // Close menus on route change
+  useEffect(() => {
+    setExploreOpen(false)
+    setMobileOpen(false)
+  }, [pathname])
+
+  // Click outside to close explore menu
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (exploreRef.current && !exploreRef.current.contains(e.target as Node)) {
+        setExploreOpen(false)
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [])
+
+  const handleExploreEnter = useCallback(() => {
+    if (exploreTimerRef.current) clearTimeout(exploreTimerRef.current)
+    setExploreOpen(true)
+  }, [])
+
+  const handleExploreLeave = useCallback(() => {
+    exploreTimerRef.current = setTimeout(() => {
+      setExploreOpen(false)
+    }, 180)
+  }, [])
+
+  const user: any = mounted ? (authUser || demoBypassUser?.user || null) : null
+  const userProfile: any = mounted
+    ? authProfile ||
+      demoBypassUser?.profile ||
+      (user
+        ? {
+            id: user.id || "guest",
+            name: user.user_metadata?.full_name || user.email?.split("@")[0] || "Scholar",
+            role: "user",
+            rank: "Engineer",
+            xp: 0,
+            streak_count: 0,
+            avatar_url: user.user_metadata?.avatar_url || null,
+          }
+        : null)
+    : null
+
+  const isAdmin = Boolean(
+    mounted &&
+      (authProfile?.role === "admin" || authProfile?.role === "super_admin" || demoBypassUser?.isAdmin)
+  )
 
   const handleSignOut = async () => {
     try {
@@ -245,722 +316,322 @@ export function Navbar() {
       await authSignOut()
     } catch (e) {
       console.warn("SignOut error:", e)
-    } finally {
-      setActiveDropdown(null)
     }
   }
 
-  // Close mobile navigation drawer and flyouts on route change
-  useEffect(() => {
-    setMobileOpen(false)
-    setActiveDropdown(null)
-    setMobileExpandedSection(null)
-  }, [pathname])
-
-  // Lock body scroll when mobile menu is open to prevent background scroll jank
-  useEffect(() => {
-    if (mobileOpen) {
-      document.body.style.overflow = "hidden"
-    } else {
-      document.body.style.overflow = ""
-    }
-    return () => {
-      document.body.style.overflow = ""
-    }
-  }, [mobileOpen])
-
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setActiveDropdown(null)
-        setMobileOpen(false)
-      }
-    }
-
-    document.addEventListener("keydown", handleKeyDown)
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown)
-    }
-  }, [])
-
-  useEffect(() => {
-    let ticking = false
-    const onScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const isScrolled = window.scrollY > 15
-          setScrolled((prev) => (prev !== isScrolled ? isScrolled : prev))
-          ticking = false
-        })
-        ticking = true
-      }
-    }
-    window.addEventListener("scroll", onScroll, { passive: true })
-
-    return () => {
-      window.removeEventListener("scroll", onScroll)
-      if (timeoutRef.current) clearTimeout(timeoutRef.current)
-    }
-  }, [])
-
-  const handleMouseEnter = (label: string) => {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current)
-    setActiveDropdown(label)
-  }
-
-  const handleMouseLeave = () => {
-    timeoutRef.current = setTimeout(() => {
-      setActiveDropdown(null)
-    }, 180)
-  }
-
-  const displayName = extractFirstName(
-    userProfile,
-    user?.user_metadata,
-    user?.email
-  )
-
+  const displayName = extractFirstName(userProfile, user?.user_metadata, user?.email)
   const userInitials = getInitials(displayName)
-  const oauthAvatar = user?.user_metadata?.avatar_url || user?.user_metadata?.picture || null
-  const navAvatar = userProfile?.avatar_url || settings.avatar || oauthAvatar || null
-
-  const userRoleBadge = isAdmin
-    ? "Admin"
-    : userProfile?.role === "fellow"
-    ? "Fellow"
-    : userProfile?.rank || "Engineer"
+  const navAvatar = userProfile?.avatar_url || settings.avatar || user?.user_metadata?.avatar_url || null
+  const userRoleBadge = isAdmin ? "Admin" : userProfile?.role === "fellow" ? "Fellow" : userProfile?.rank || "Engineer"
 
   return (
-    <header
-      className={`fixed left-0 right-0 top-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "border-b border-border/80 dark:border-white/10 bg-background/95 dark:bg-black/95 backdrop-blur-2xl shadow-xs"
-          : "border-b border-border/60 dark:border-white/10 bg-background/90 dark:bg-black/90 backdrop-blur-2xl"
-      }`}
-    >
-      {/* Soft Ambient Dimmer when Mega-Menu is open to guarantee 100% legibility over any page text or markdown */}
-      <AnimatePresence>
-        {activeDropdown && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.18 }}
-            onClick={() => setActiveDropdown(null)}
-            className="fixed inset-0 top-16 sm:top-[68px] bg-black/40 dark:bg-black/70 backdrop-blur-xs z-40 pointer-events-auto"
-          />
-        )}
-      </AnimatePresence>
+    <header className="sticky top-0 z-50 w-full bg-card border-b border-border shadow-2xs">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between gap-3">
+        {/* ==============================================================
+            LEFT: ASCI Logo
+        ============================================================== */}
+        <div className="flex items-center gap-3 shrink-0">
+          <Link href="/" className="inline-flex items-center transition-transform hover:opacity-95">
+            <AsciLogo size={28} showBadge={true} badgeText="Academy" />
+          </Link>
+        </div>
 
-      <div className="mx-auto flex h-16 sm:h-[68px] max-w-[1400px] items-center justify-between px-3.5 sm:px-6 lg:px-8">
-        {/* 1. Brand Logo (Pure & Minimalist) */}
-        <Link
-          href="/"
-          className="group flex items-center gap-2.5 transition-transform duration-200 hover:scale-[1.01]"
-        >
-          <AsciLogo size={46} showText showBadge={false} useVector={false} />
-        </Link>
+        {/* ==============================================================
+            CENTER/LEFT: Primary Navigation (Explore, Learn, Practice, Compete, Career)
+        ============================================================== */}
+        <nav className="hidden lg:flex items-center gap-0.5 shrink-0" aria-label="Main Navigation">
+          {/* Explore Mega Menu Button */}
+          <div
+            ref={exploreRef}
+            className="relative"
+            onMouseEnter={handleExploreEnter}
+            onMouseLeave={handleExploreLeave}
+          >
+            <button
+              type="button"
+              onClick={() => setExploreOpen((prev) => !prev)}
+              className={`flex items-center gap-1 px-3 py-1.5 rounded-md text-xs sm:text-sm font-medium transition-colors cursor-pointer ${
+                exploreOpen
+                  ? "text-primary font-semibold bg-primary/10"
+                  : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+              }`}
+              aria-expanded={exploreOpen}
+              aria-haspopup="true"
+            >
+              <span>Explore</span>
+              <ChevronDown
+                className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                  exploreOpen ? "rotate-180 text-primary" : ""
+                }`}
+              />
+            </button>
 
-        {/* 2. Desktop Navigation with Clean, Minimal Dropdown Flyouts */}
-        <nav
-          className="hidden lg:flex items-center gap-2"
-          aria-label="Main navigation"
-        >
-          {NAV_ITEMS.map((section) => {
-            const isOpen = activeDropdown === section.label
+            {/* Hover tunnel bridge */}
+            <div className="absolute top-full left-0 w-full h-2 z-40" />
 
-            if (!section.hasDropdown) {
-              return (
-                <Link
-                  key={section.label}
-                  href={section.href}
-                  className="group/navlink relative flex items-center gap-1.5 rounded-full px-4 py-2 text-[14px] font-medium tracking-tight text-muted-foreground hover:bg-secondary/80 hover:text-foreground transition-all duration-150"
+            {/* Explore Mega Menu Flyout */}
+            <AnimatePresence>
+              {exploreOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: 6, scale: 0.99 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 4, scale: 0.99 }}
+                  transition={{ duration: 0.14, ease: "easeOut" }}
+                  className="fixed left-1/2 -translate-x-1/2 top-14 w-[94vw] max-w-[1180px] z-50 pointer-events-auto"
                 >
-                  <span>{section.label}</span>
-                </Link>
-              )
-            }
-
-            return (
-              <div
-                key={section.label}
-                className="relative py-3"
-                onMouseEnter={() => handleMouseEnter(section.label)}
-                onMouseLeave={handleMouseLeave}
-              >
-                <Link
-                  href={section.href}
-                  className={`group/navlink relative flex items-center gap-1.5 rounded-full px-4 py-2 text-[14px] font-medium tracking-tight transition-all duration-150 ${
-                    isOpen
-                      ? "bg-secondary text-foreground shadow-2xs font-semibold"
-                      : "text-muted-foreground hover:bg-secondary/80 hover:text-foreground"
-                  }`}
-                >
-                  <span>{section.label}</span>
-                  <ChevronDown
-                    className={`h-3.5 w-3.5 opacity-40 transition-transform duration-200 group-hover/navlink:opacity-80 ${
-                      isOpen ? "rotate-180 opacity-100 text-primary" : ""
-                    }`}
-                  />
-                </Link>
-
-                {/* Invisible Hover Tunnel to prevent mouse drop */}
-                <div className="absolute top-full left-0 right-0 h-4" />
-
-                {/* Minimal Single-Column Flyout Card */}
-                <AnimatePresence>
-                  {isOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 8, scale: 0.985 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: 6, scale: 0.985 }}
-                      transition={{ duration: 0.16, ease: [0.16, 1, 0.3, 1] }}
-                      className={`absolute top-full z-50 pt-2 ${
-                        section.alignClass || "left-0"
-                      } ${section.dropdownWidth || "w-[360px]"}`}
-                    >
-                      <div className="relative overflow-hidden rounded-2xl border border-border/80 dark:border-white/15 bg-card/98 dark:bg-black/98 p-3 backdrop-blur-2xl shadow-xl">
-                        {/* List of items */}
-                        <div className="flex flex-col gap-1">
-                          {section.items?.map((item) => {
-                            const Icon = item.icon
-                            return (
-                              <Link
-                                key={item.title}
-                                href={item.href}
-                                onClick={() => setActiveDropdown(null)}
-                                className="group/item flex items-start gap-3 rounded-xl p-2.5 transition-colors hover:bg-secondary/70"
-                              >
-                                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-border/80 bg-secondary/50 text-foreground transition-all duration-150 group-hover/item:border-primary/40 group-hover/item:bg-primary group-hover/item:text-primary-foreground mt-0.5">
-                                  <Icon className="h-3.5 w-3.5" />
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                  <div className="flex items-center justify-between gap-1.5">
-                                    <span className="text-xs font-semibold text-foreground tracking-tight group-hover/item:text-primary transition-colors truncate">
-                                      {item.title}
-                                    </span>
-                                    {item.badge && (
-                                      <span className="shrink-0 text-[8px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-bold border border-primary/20 leading-none">
-                                        {item.badge}
-                                      </span>
-                                    )}
-                                  </div>
-                                  <p className="text-[11px] text-muted-foreground/80 line-clamp-1 mt-0.5 leading-snug">
-                                    {item.desc}
-                                  </p>
-                                </div>
-                              </Link>
-                            )
-                          })}
-                        </div>
-
-                        {/* Dropdown Bottom Quick Action Strip */}
-                        {section.footerLink && (
-                          <div className="mt-2 pt-2 border-t border-border/60 dark:border-white/10 flex items-center justify-between px-2 text-[11px]">
-                            <Link
-                              href={section.footerLink.href}
-                              onClick={() => setActiveDropdown(null)}
-                              className="group/fLink flex items-center gap-1 font-medium text-primary hover:text-primary-active transition-colors"
-                            >
-                              <span>{section.footerLink.label}</span>
-                              <ArrowUpRight className="h-3 w-3 transition-transform group-hover/fLink:translate-x-0.5 group-hover/fLink:-translate-y-0.5" />
-                            </Link>
-                            <span className="flex items-center gap-1 text-[10px] font-mono text-muted-foreground/70">
-                              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                              Active
-                            </span>
+                  <div className="relative overflow-hidden rounded-xl border border-border bg-card shadow-2xl p-5">
+                    {/* 5 Distinct Pillar Columns */}
+                    <div className="grid grid-cols-5 gap-4">
+                      {EXPLORE_MEGA_MENU.map((pillar) => (
+                        <div key={pillar.category} className="space-y-2.5">
+                          {/* Column Header */}
+                          <div className="flex items-center gap-1.5 text-[11px] font-mono font-bold tracking-wider text-muted-foreground uppercase pb-1.5 border-b border-border/70">
+                            <span className={`w-1.5 h-1.5 rounded-full ${pillar.dotColor || "bg-primary"}`} />
+                            <span>{pillar.category}</span>
                           </div>
-                        )}
+
+                          {/* Column Items */}
+                          <div className="space-y-1">
+                            {pillar.items.map((item) => {
+                              const Icon = item.icon
+                              return (
+                                <Link
+                                  key={item.label}
+                                  href={item.href}
+                                  onClick={() => setExploreOpen(false)}
+                                  className="group flex items-start gap-2.5 p-2 rounded-lg hover:bg-secondary transition-colors"
+                                >
+                                  <div
+                                    className={`w-7 h-7 rounded-md border flex items-center justify-center shrink-0 transition-all duration-200 mt-0.5 shadow-2xs ${
+                                      item.bgClass || "bg-secondary border-border/80"
+                                    }`}
+                                  >
+                                    <Icon
+                                      className={`w-3.5 h-3.5 transition-transform duration-200 group-hover:scale-110 ${
+                                        item.iconColor || "text-primary"
+                                      }`}
+                                    />
+                                  </div>
+                                  <div className="flex flex-col min-w-0">
+                                    <span className="text-xs font-semibold text-foreground group-hover:text-primary transition-colors">
+                                      {item.label}
+                                    </span>
+                                    <span className="text-[10px] text-muted-foreground line-clamp-1 leading-snug">
+                                      {item.description}
+                                    </span>
+                                  </div>
+                                </Link>
+                              )
+                            })}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Bottom Quick Bar */}
+                    <div className="mt-4 pt-3 border-t border-border flex items-center justify-between text-xs text-muted-foreground">
+                      <div className="flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-primary" />
+                        <span>Engineering Ecosystem · 30+ Integrated Capabilities</span>
                       </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setExploreOpen(false)
+                          setSearchOpen(true)
+                        }}
+                        className="inline-flex items-center gap-1.5 text-xs text-primary hover:underline font-medium cursor-pointer"
+                      >
+                        <span>Looking for something specific? Search catalog</span>
+                        <kbd className="px-1.5 py-0.5 rounded border border-border bg-card text-[10px] font-mono text-muted-foreground">⌘K</kbd>
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* Core Primary Navigation Links */}
+          {PRIMARY_NAV.map((nav) => {
+            const isActive = nav.match.some((m) => pathname.startsWith(m))
+            return (
+              <Link
+                key={nav.label}
+                href={nav.href}
+                className={`px-3 py-1.5 rounded-md text-xs sm:text-sm font-medium transition-colors cursor-pointer ${
+                  isActive
+                    ? "text-primary font-semibold bg-primary/10"
+                    : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+                }`}
+              >
+                {nav.label}
+              </Link>
             )
           })}
         </nav>
 
-        {/* 3. Right Action Gateway */}
-        <div className="flex items-center gap-1.5 sm:gap-2.5">
-          {/* Search Trigger (Clean Icon Button) */}
+        {/* ==============================================================
+            CENTER: Large Global Search
+        ============================================================== */}
+        <div className="hidden md:flex flex-1 max-w-sm lg:max-w-md xl:max-w-lg items-center mx-2 lg:mx-4">
           <button
             type="button"
             onClick={() => setSearchOpen(true)}
-            aria-label="Search curriculum, 474 problems (⌘K)"
-            className="relative flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full border border-border/80 dark:border-white/15 bg-secondary/30 text-muted-foreground transition-all hover:bg-secondary hover:text-foreground hover:border-primary/50 shadow-2xs cursor-pointer group"
-            title="Search curriculum, 474 problems... (⌘K)"
+            className="w-full flex items-center justify-between h-9 px-3 rounded-lg border border-border bg-secondary/40 hover:bg-secondary text-left transition-[border-color,background] hover:border-slate-300 dark:hover:border-slate-700 cursor-pointer group shadow-2xs"
+            aria-label="Open global search"
           >
-            <Search className="h-4 w-4 text-foreground/80 group-hover:text-primary transition-colors" />
-            <span className="sr-only">Search curriculum, 474 problems... (⌘K)</span>
+            <div className="flex items-center gap-2 text-muted-foreground text-xs sm:text-sm min-w-0">
+              <Search className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors shrink-0" />
+              <span className="truncate text-xs sm:text-[13px]">
+                Search courses, skills, jobs, competitions...
+              </span>
+            </div>
+            <kbd className="hidden xl:inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded border border-border bg-card text-[10px] font-mono text-muted-foreground shrink-0 select-none">
+              ⌘K
+            </kbd>
           </button>
+        </div>
 
-          {/* Saved Courses Wishlist Trigger (Hidden on < 420px screens to prevent header wrapping; accessible in mobile menu) */}
+        {/* ==============================================================
+            RIGHT: Notifications & Profile
+        ============================================================== */}
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          {/* Mobile Search Button */}
           <button
             type="button"
-            onClick={() => setWishlistDrawerOpen(true)}
-            aria-label="View Saved Courses Wishlist"
-            className="relative hidden min-[420px]:flex sm:flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full border border-border/80 dark:border-white/15 bg-secondary/30 text-muted-foreground transition-all hover:bg-secondary hover:text-foreground hover:border-[#D4B872]/50 shadow-2xs cursor-pointer group"
-            title="Saved Courses & Wishlist"
+            onClick={() => setSearchOpen(true)}
+            className="md:hidden p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary cursor-pointer"
+            aria-label="Search"
           >
-            <Bookmark className="h-4 w-4 text-foreground/80 group-hover:text-[#D4B872] group-hover:fill-[#D4B872]/20 transition-colors" />
-            {wishlistCount > 0 && (
-              <span className="absolute -top-1 -right-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#D4B872] px-1 text-[9px] font-mono font-bold text-black shadow-xs">
-                {wishlistCount}
-              </span>
-            )}
+            <Search className="w-4.5 h-4.5" />
           </button>
 
+          {/* Notifications Bell */}
+          <Link
+            href="/notifications"
+            className="relative p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+            title="Notifications"
+            aria-label="View notifications"
+          >
+            <Bell className="w-4.5 h-4.5" />
+            <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-primary ring-2 ring-card" />
+          </Link>
+
           {/* Theme Toggle */}
-          <ThemeToggle className="!h-9 !w-9 sm:!h-10 sm:!w-10" />
+          <ThemeToggle />
 
-          {/* Structural Hairline Divider */}
-          <div className="hidden md:block h-5 w-px bg-border/80 dark:border-white/15 mx-1" />
-
-          {/* User Auth Gateway */}
+          {/* Profile Menu / Guest Buttons */}
           {user ? (
-            <div className="hidden md:flex items-center gap-2.5">
-              {isAdmin && (
-                <Link
-                  href="/admin"
-                  className="flex items-center gap-1.5 rounded-full border border-destructive/30 bg-destructive/10 px-3.5 py-1.5 text-xs font-semibold text-destructive transition-all hover:bg-destructive/20"
-                >
-                  <Shield className="h-3.5 w-3.5" />
-                  <span>Admin</span>
-                </Link>
-              )}
-
-              <UserMenu
-                user={user}
-                userProfile={userProfile}
-                isAdmin={isAdmin}
-                displayName={displayName}
-                userInitials={userInitials}
-                navAvatar={navAvatar}
-                userRoleBadge={userRoleBadge}
-                wishlistCount={wishlistCount}
-                onSignOut={handleSignOut}
-                onOpenWishlist={() => setWishlistDrawerOpen(true)}
-              />
-            </div>
+            <UserMenu
+              user={user}
+              userProfile={userProfile}
+              isAdmin={isAdmin}
+              displayName={displayName}
+              userInitials={userInitials}
+              navAvatar={navAvatar}
+              userRoleBadge={userRoleBadge}
+              onSignOut={handleSignOut}
+            />
           ) : (
-            <div className="hidden md:flex items-center gap-2.5">
+            <div className="hidden sm:flex items-center gap-1.5">
               <Link
                 href="/login"
-                className="rounded-full border border-transparent hover:border-border/80 dark:hover:border-white/15 px-4 py-2 text-xs sm:text-[13.5px] font-medium text-muted-foreground hover:text-foreground hover:bg-secondary/70 transition-all cursor-pointer"
+                className="px-3 py-1.5 rounded-lg border border-border text-foreground hover:bg-secondary text-xs font-medium transition-colors"
               >
-                Log in
+                Sign In
               </Link>
               <Link
                 href="/signup"
-                suppressHydrationWarning
-                className="group relative flex items-center gap-2 rounded-full bg-primary hover:bg-primary-active px-5 py-2 text-xs sm:text-[13.5px] font-semibold text-primary-foreground hover:scale-[1.02] active:scale-[0.98] transition-all tracking-tight"
+                className="px-3 py-1.5 rounded-lg bg-primary hover:bg-[#EA5300] text-primary-foreground text-xs font-semibold transition-all shadow-xs active:scale-[0.98]"
               >
-                <span>Get Started</span>
-                <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+                Get Started
               </Link>
             </div>
           )}
 
-          {/* Mobile Menu Hamburger Toggle */}
+          {/* Mobile Menu Toggle */}
           <button
+            type="button"
             onClick={() => setMobileOpen(!mobileOpen)}
-            suppressHydrationWarning
-            className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full border border-border/80 dark:border-white/15 bg-secondary/30 text-muted-foreground transition-all hover:bg-secondary hover:text-foreground lg:hidden cursor-pointer"
-            aria-label="Toggle menu"
+            className="lg:hidden p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary cursor-pointer"
+            aria-label="Toggle mobile menu"
           >
-            <div
-              className={`transition-all duration-300 ${
-                mobileOpen ? "rotate-90 opacity-0" : "rotate-0 opacity-100"
-              } absolute`}
-            >
-              <Menu className="h-4 w-4 sm:h-4.5 sm:w-4.5" />
-            </div>
-            <div
-              className={`transition-all duration-300 ${
-                mobileOpen ? "rotate-0 opacity-100" : "-rotate-90 opacity-0"
-              } absolute`}
-            >
-              <X className="h-4 w-4 sm:h-4.5 sm:w-4.5" />
-            </div>
+            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
       </div>
 
-      {/* 4. Mobile Drawer Overlay Backdrop (tap outside to close) */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            onClick={() => setMobileOpen(false)}
-            className="fixed inset-0 top-16 sm:top-[68px] bg-black/60 backdrop-blur-xs z-40 lg:hidden"
-            aria-hidden="true"
-          />
-        )}
-      </AnimatePresence>
+      {/* ==============================================================
+          MOBILE DRAWER (Structured 5-Pillar Explore Directory)
+      ============================================================== */}
+      {mobileOpen && (
+        <div className="lg:hidden fixed inset-0 top-14 z-50 bg-card border-t border-border overflow-y-auto p-4 flex flex-col justify-between">
+          <div className="space-y-5">
+            {/* Quick auth on mobile if guest */}
+            {!user && (
+              <div className="grid grid-cols-2 gap-2 pb-4 border-b border-border">
+                <Link
+                  href="/login"
+                  onClick={() => setMobileOpen(false)}
+                  className="w-full flex items-center justify-center py-2 rounded-lg border border-border text-foreground font-medium text-xs text-center"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href="/signup"
+                  onClick={() => setMobileOpen(false)}
+                  className="w-full flex items-center justify-center py-2 rounded-lg bg-primary text-primary-foreground font-semibold text-xs text-center shadow-xs"
+                >
+                  Get Started
+                </Link>
+              </div>
+            )}
 
-      {/* 5. Mobile Drawer Content */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-50 overflow-hidden border-t border-border/80 dark:border-white/10 bg-background/98 dark:bg-black/98 backdrop-blur-2xl lg:hidden shadow-lg"
-          >
-            <nav
-              className="px-4 py-4 max-h-[85vh] overflow-y-auto space-y-3.5 selection:bg-accent/20"
-              aria-label="Mobile navigation"
-            >
-              {/* 1. Profile Header at TOP with Logo/Avatar & Instant Dashboard Action */}
-              {user ? (
-                <div className="rounded-2xl border border-stone-200 dark:border-stone-800 bg-secondary/50 dark:bg-[#0a0a0a] p-3.5 space-y-3 shadow-2xs">
-                  <div className="flex items-center justify-between gap-3">
-                    {/* User Avatar / Logo + Active Status */}
-                    <div className="flex items-center gap-3 min-w-0 flex-1">
-                      <div className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary font-bold text-sm uppercase border border-primary/20 overflow-hidden shadow-xs">
-                        {navAvatar ? (
-                          <img
-                            src={navAvatar}
-                            alt={displayName}
-                            className="w-full h-full object-cover"
-                            referrerPolicy="no-referrer"
-                          />
-                        ) : (
-                          <span className="font-mono">{userInitials}</span>
-                        )}
-                        <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-emerald-500 border-2 border-background z-10" />
-                      </div>
-
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-1.5 flex-wrap">
-                          <p className="text-xs sm:text-sm font-bold text-foreground truncate tracking-tight">
-                            {displayName}
-                          </p>
-                          <span
-                            className={`shrink-0 text-[8.5px] font-mono uppercase px-1.5 py-0.5 rounded-md font-bold leading-none border ${
-                              isAdmin
-                                ? "bg-destructive/15 text-destructive border-destructive/30"
-                                : "bg-primary/10 text-primary border-primary/20"
-                            }`}
-                          >
-                            {userRoleBadge}
-                          </span>
-                        </div>
-                        <p className="text-[11px] text-muted-foreground truncate font-mono mt-0.5">
-                          {user.email}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Official ASCI Academy Logo Mark Badge */}
-                    <div
-                      className="shrink-0 flex items-center justify-center p-2 rounded-xl bg-background/90 dark:bg-black/50 border border-stone-200/80 dark:border-stone-800 shadow-2xs"
-                      title="ASCI Academy"
-                    >
-                      <AsciLogo size={22} showText={false} useVector />
-                    </div>
-                  </div>
-
-                  {/* Primary 1-Tap Dashboard CTA */}
-                  <Link
-                    href="/dashboard"
-                    onClick={() => setMobileOpen(false)}
-                    className="w-full flex items-center justify-between rounded-xl bg-primary hover:bg-primary-active text-primary-foreground px-3.5 py-2.5 text-xs font-bold transition-all group"
-                  >
-                    <div className="flex items-center gap-2">
-                      <LayoutDashboard className="h-3.5 w-3.5" />
-                      <span>Open Engineering Dashboard</span>
-                    </div>
-                    <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-                  </Link>
+            {/* 5-Pillar Explore Directory on Mobile */}
+            {EXPLORE_MEGA_MENU.map((pillar) => (
+              <div key={pillar.category} className="space-y-2">
+                <div className="flex items-center gap-1.5 text-[11px] font-mono font-bold tracking-wider text-muted-foreground uppercase px-1">
+                  <span className={`w-1.5 h-1.5 rounded-full ${pillar.dotColor || "bg-primary"}`} />
+                  <span>{pillar.category}</span>
                 </div>
-              ) : (
-                /* Guest Brand & Auth Card with Clean Stacked Layout to Prevent Overlapping */
-                <div className="rounded-2xl border border-stone-200 dark:border-stone-800 bg-secondary/50 dark:bg-[#0a0a0a] p-4 space-y-3 shadow-2xs">
-                  <div className="flex items-center gap-2.5">
-                    <AsciLogo size={38} showText showBadge={false} useVector={false} />
-                  </div>
-                  <p className="text-xs text-muted-foreground leading-relaxed">
-                    Interactive engineering curriculum, algorithmic sandboxes &amp; verified career credentials.
-                  </p>
-                  <div className="grid grid-cols-2 gap-2 pt-0.5">
-                    <Link
-                      href="/login"
-                      onClick={() => setMobileOpen(false)}
-                      className="flex items-center justify-center rounded-xl border border-stone-200 dark:border-stone-800 bg-card hover:bg-secondary px-3 py-2 text-xs font-semibold text-foreground transition-colors"
-                    >
-                      Log in
-                    </Link>
-                    <Link
-                      href="/signup"
-                      onClick={() => setMobileOpen(false)}
-                      className="flex items-center justify-center gap-1.5 rounded-xl bg-primary hover:bg-primary-active text-primary-foreground px-3 py-2 text-xs font-semibold transition-all"
-                    >
-                      <span>Get Started</span>
-                      <ArrowRight className="h-3.5 w-3.5" />
-                    </Link>
-                  </div>
-                </div>
-              )}
-
-              {/* 2. Quick Search Trigger */}
-              <button
-                type="button"
-                onClick={() => {
-                  setMobileOpen(false)
-                  setSearchOpen(true)
-                }}
-                className="w-full flex items-center justify-between rounded-xl border border-stone-200 dark:border-stone-800 bg-secondary/60 px-3.5 py-2.5 text-xs text-muted-foreground hover:text-foreground shadow-2xs cursor-pointer transition-colors"
-              >
-                <div className="flex items-center gap-2.5">
-                  <Search className="h-4 w-4 text-primary" />
-                  <span>Search curriculum, code labs...</span>
-                </div>
-                <kbd className="rounded border border-stone-200 dark:border-stone-700 bg-background px-1.5 py-0.5 text-[9px] font-mono font-medium text-muted-foreground">
-                  ⌘K
-                </kbd>
-              </button>
-
-              {/* 3. Compact Problem of the Day Banner */}
-              <Link
-                href="/dashboard?tab=practice-arena"
-                onClick={() => setMobileOpen(false)}
-                className="flex items-center justify-between p-3 rounded-xl border border-border/80 dark:border-white/10 bg-card hover:bg-secondary/60 shadow-2xs transition-colors group"
-              >
-                <div className="flex items-center gap-2.5 min-w-0">
-                  <div className="w-7 h-7 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
-                    <Flame className="w-4 h-4 fill-current" />
-                  </div>
-                  <div className="min-w-0">
-                    <div className="text-[10px] font-mono uppercase tracking-wider font-bold text-primary">
-                      Problem of the Day
-                    </div>
-                    <div className="text-xs font-bold text-foreground truncate">
-                      Sliding Window Maximum
-                    </div>
-                  </div>
-                </div>
-                <span className="shrink-0 text-[10px] font-mono font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-md">
-                  +50 XP →
-                </span>
-              </Link>
-
-              {/* 4. Primary Navigation Accordion Rows (Clean, Glanceable, Tap-Friendly) */}
-              <div className="space-y-1.5 pt-0.5">
-                {NAV_ITEMS.map((section) => {
-                  const Icon = section.icon || BookOpen
-                  const isExpanded = mobileExpandedSection === section.label
-
-                  if (!section.hasDropdown) {
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                  {pillar.items.map((item) => {
+                    const Icon = item.icon
                     return (
                       <Link
-                        key={section.label}
-                        href={section.href}
+                        key={item.label}
+                        href={item.href}
                         onClick={() => setMobileOpen(false)}
-                        className="flex items-center justify-between p-3 rounded-xl border border-stone-200 dark:border-stone-800 bg-card hover:bg-secondary transition-colors"
+                        className="p-2.5 rounded-lg border border-border bg-secondary/30 hover:bg-secondary text-foreground text-xs font-medium flex items-center justify-between group transition-colors"
                       >
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
-                            <Icon className="w-4 h-4" />
+                        <div className="flex items-center gap-2.5">
+                          <div
+                            className={`w-7 h-7 rounded-md border flex items-center justify-center shrink-0 shadow-2xs ${
+                              item.bgClass || "bg-secondary border-border"
+                            }`}
+                          >
+                            <Icon className={`w-3.5 h-3.5 ${item.iconColor || "text-primary"}`} />
                           </div>
-                          <div>
-                            <div className="text-xs font-bold text-foreground">{section.label}</div>
-                            <div className="text-[11px] text-muted-foreground">{section.desc}</div>
-                          </div>
+                          <span className="group-hover:text-primary transition-colors font-medium">{item.label}</span>
                         </div>
-                        <ArrowRight className="h-3.5 w-3.5 text-muted-foreground" />
+                        <ArrowRight className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
                       </Link>
                     )
-                  }
-
-                  return (
-                    <div
-                      key={section.label}
-                      className="rounded-xl border border-stone-200 dark:border-stone-800 bg-card overflow-hidden transition-all"
-                    >
-                      {/* Accordion Trigger Header */}
-                      <button
-                        type="button"
-                        onClick={() => setMobileExpandedSection(isExpanded ? null : section.label)}
-                        className="w-full flex items-center justify-between p-3 text-left hover:bg-secondary/60 transition-colors cursor-pointer"
-                        aria-expanded={isExpanded}
-                      >
-                        <div className="flex items-center gap-3 min-w-0 flex-1 pr-2">
-                          <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
-                            <Icon className="w-4 h-4" />
-                          </div>
-                          <div className="min-w-0 flex-1">
-                            <div className="flex items-center gap-2">
-                              <span className="text-xs font-bold text-foreground">{section.label}</span>
-                              {section.items && (
-                                <span className="text-[9px] font-mono font-semibold px-1.5 py-0.5 rounded bg-stone-100 dark:bg-stone-800 text-muted-foreground leading-none">
-                                  {section.items.length}
-                                </span>
-                              )}
-                            </div>
-                            <div className="text-[11px] text-muted-foreground line-clamp-1 leading-normal mt-0.5">
-                              {section.desc}
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className={`p-1.5 rounded-lg transition-transform duration-200 text-muted-foreground shrink-0 ${isExpanded ? "rotate-180 text-foreground bg-secondary" : ""}`}>
-                          <ChevronDown className="h-4 w-4" />
-                        </div>
-                      </button>
-
-                      {/* Accordion Drawer Content */}
-                      <AnimatePresence initial={false}>
-                        {isExpanded && (
-                          <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: "auto", opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.2 }}
-                            className="border-t border-stone-100 dark:border-stone-800/80 bg-secondary/30 px-2.5 py-2 space-y-0.5"
-                          >
-                            {section.items?.map((item) => {
-                              const SubIcon = item.icon
-                              return (
-                                <Link
-                                  key={item.title}
-                                  href={item.href}
-                                  onClick={() => setMobileOpen(false)}
-                                  className="flex items-center justify-between gap-2 p-2 rounded-lg text-xs text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
-                                >
-                                  <div className="flex items-center gap-2.5 min-w-0 flex-1">
-                                    <SubIcon className="w-3.5 h-3.5 text-primary shrink-0" />
-                                    <span className="truncate font-medium">{item.title}</span>
-                                  </div>
-                                  {item.badge && (
-                                    <span className="shrink-0 text-[8px] font-mono uppercase px-1.5 py-0.5 rounded bg-stone-200 dark:bg-stone-800 text-stone-700 dark:text-stone-300 font-bold leading-none">
-                                      {item.badge}
-                                    </span>
-                                  )}
-                                </Link>
-                              )
-                            })}
-
-                            <div className="pt-1 border-t border-stone-200/60 dark:border-stone-800/60 mt-1">
-                              <Link
-                                href={section.href}
-                                onClick={() => setMobileOpen(false)}
-                                className="flex items-center justify-between px-2 py-1.5 text-xs font-semibold text-primary hover:text-primary-active"
-                              >
-                                <span>Explore all {section.label}</span>
-                                <ArrowRight className="w-3.5 h-3.5" />
-                              </Link>
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                  )
-                })}
+                  })}
+                </div>
               </div>
+            ))}
+          </div>
 
-              {/* 5. Saved Wishlist Strip (if any items) */}
-              {wishlistCount > 0 && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setMobileOpen(false)
-                    setWishlistDrawerOpen(true)
-                  }}
-                  className="w-full flex items-center justify-between rounded-xl border border-stone-200 dark:border-stone-800 bg-secondary/50 px-3.5 py-2 text-xs font-semibold text-foreground hover:bg-secondary cursor-pointer transition-colors"
-                >
-                  <div className="flex items-center gap-2">
-                    <Bookmark className="h-3.5 w-3.5 text-[#D4B872]" />
-                    <span>Saved Tracks</span>
-                  </div>
-                  <span className="rounded-full bg-[#D4B872]/20 px-2 py-0.5 text-[10px] font-mono font-bold text-[#D4B872]">
-                    {wishlistCount} saved
-                  </span>
-                </button>
-              )}
+          <div className="pt-4 border-t border-border mt-6 text-center text-xs text-muted-foreground">
+            ASCI Academy · Engineering &amp; Talent Platform
+          </div>
+        </div>
+      )}
 
-              {/* 6. Mobile Utility Footer: Appearance & Sign Out */}
-              <div className="pt-2 border-t border-stone-200 dark:border-stone-800 space-y-2">
-                {user ? (
-                  <>
-                    <div className="grid grid-cols-2 gap-2">
-                      <div className="flex items-center justify-center px-2 py-1 rounded-xl bg-secondary/60 border border-stone-200 dark:border-stone-800">
-                        <ThemeToggle showLabel />
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setMobileOpen(false)
-                          handleSignOut()
-                        }}
-                        className="flex items-center justify-center gap-1.5 rounded-xl border border-destructive/30 bg-destructive/10 px-3 py-2 text-xs font-semibold text-destructive hover:bg-destructive/20 cursor-pointer transition-colors"
-                      >
-                        <LogOut className="h-3.5 w-3.5" />
-                        <span>Sign Out</span>
-                      </button>
-                    </div>
-
-                    {isAdmin && (
-                      <Link
-                        href="/admin"
-                        onClick={() => setMobileOpen(false)}
-                        className="w-full flex items-center justify-center gap-2 rounded-xl border border-stone-200 dark:border-stone-800 bg-secondary/60 hover:bg-secondary px-3 py-2 text-xs font-medium text-foreground transition-colors"
-                      >
-                        <Shield className="h-3.5 w-3.5 text-primary" />
-                        <span>Admin Command Center</span>
-                      </Link>
-                    )}
-                  </>
-                ) : (
-                  <div className="flex items-center justify-between px-3 py-2 rounded-xl bg-secondary/40 text-xs text-muted-foreground border border-stone-200 dark:border-stone-800">
-                    <span>Appearance</span>
-                    <ThemeToggle showLabel />
-                  </div>
-                )}
-              </div>
-            </nav>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Search Command Dialog (Command Palette) */}
+      {/* Global Command Search Dialog */}
       <SearchCommandDialog open={searchOpen} onOpenChange={setSearchOpen} />
-
-      {/* Auth Error Toast */}
-      <AnimatePresence>
-        {authError && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.2 }}
-            className="fixed top-20 right-4 z-[60] max-w-sm"
-          >
-            <div className="flex items-center gap-2.5 rounded-xl border border-destructive/30 bg-card dark:bg-black p-3 shadow-md text-xs text-destructive">
-              <span className="flex-1">{authError}</span>
-              <button
-                type="button"
-                onClick={authClearError}
-                className="text-muted-foreground hover:text-foreground transition-colors cursor-pointer p-0.5"
-                aria-label="Dismiss error"
-              >
-                <X className="h-3.5 w-3.5" />
-              </button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Saved Courses Wishlist Drawer */}
-      <WishlistDrawer
-        isOpen={wishlistDrawerOpen}
-        onClose={() => setWishlistDrawerOpen(false)}
-      />
     </header>
   )
 }

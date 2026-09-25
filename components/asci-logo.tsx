@@ -9,7 +9,6 @@ interface AsciLogoProps {
   showBadge?: boolean
   badgeText?: string
   className?: string
-  useVector?: boolean
 }
 
 export function AsciLogo({
@@ -18,57 +17,43 @@ export function AsciLogo({
   showBadge = false,
   badgeText = "Academy",
   className = "",
-  useVector = false,
 }: AsciLogoProps) {
   const pixelSize =
     typeof size === "number"
       ? size
       : size === "sm"
-      ? 28
+      ? 26
       : size === "md"
-      ? 40
+      ? 34
       : size === "lg"
-      ? 48
-      : 64
+      ? 42
+      : 52
 
   return (
-    <div className={`flex items-center gap-3 ${className}`}>
-      {/* Logo Mark Container */}
+    <div className={`inline-flex items-center gap-2.5 select-none ${className}`}>
+      {/* Crisp Logo Mark */}
       <div
-        className="relative shrink-0 flex items-center justify-center transition-transform duration-200 group-hover:scale-105"
+        className="relative shrink-0 flex items-center justify-center rounded-lg bg-primary/10 border border-primary/20 overflow-hidden"
         style={{ width: pixelSize, height: pixelSize }}
       >
-        {useVector ? (
-          /* Scalable SVG Vector with high-res emblem */
-          <svg
-            viewBox="0 0 100 100"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-full h-full"
-          >
-            <image href="/images/asci-logo.png" width="100" height="100" />
-          </svg>
-        ) : (
-          /* Official Master ASCI Logo Asset */
-          <Image
-            src="/images/asci-logo.png"
-            alt="ASCI Logo"
-            width={pixelSize * 2}
-            height={pixelSize * 2}
-            className="w-full h-full object-contain filter drop-shadow-[0_2px_8px_rgba(37,99,235,0.22)]"
-            priority
-          />
-        )}
+        <Image
+          src="/images/asci-logo.png"
+          alt="ASCI Logo"
+          width={pixelSize * 2}
+          height={pixelSize * 2}
+          className="w-full h-full object-contain p-1"
+          priority
+        />
       </div>
 
-      {/* Brand Wordmark (Clean & Stately) */}
+      {/* Brand Wordmark (Clean & Modern UI Font) */}
       {showText && (
-        <div className="flex items-center select-none">
-          <span className="font-serif text-[24px] sm:text-[27px] font-medium tracking-tight text-foreground transition-colors duration-200 group-hover:text-primary">
-            ASCI
+        <div className="flex items-center gap-1.5">
+          <span className="font-sans font-bold text-lg sm:text-xl tracking-tight text-foreground">
+            ASCI<span className="text-primary">.</span>
           </span>
           {showBadge && (
-            <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-mono font-medium tracking-wide uppercase bg-primary/10 text-primary border border-primary/20">
+            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-sans font-semibold tracking-wide uppercase bg-secondary text-muted-foreground border border-border">
               {badgeText}
             </span>
           )}

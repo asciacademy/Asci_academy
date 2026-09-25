@@ -9,6 +9,7 @@ import { getUserProfile } from "@/app/actions/user"
 import { Navbar } from "@/components/navbar"
 import { useState, useEffect, use } from "react"
 import { getCurriculumCourseBySlug } from "@/lib/curriculum-data"
+import { ContextualAxelButton } from "@/components/axel/contextual-axel-button"
 
 export default function CourseLayout({
     children,
@@ -100,9 +101,9 @@ export default function CourseLayout({
         <div className="flex min-h-screen flex-col bg-background text-foreground">
             <Navbar />
 
-            <div className="flex flex-1 flex-col lg:flex-row mt-16 sm:mt-[68px]">
+            <div className="flex flex-1 flex-col lg:flex-row mt-14">
                 {/* Sidebar Navigation */}
-                <aside className="w-full shrink-0 border-r border-border/80 bg-card/70 backdrop-blur-2xl lg:w-80 flex flex-col h-auto lg:h-full lg:min-h-[calc(100vh-68px)]">
+                <aside className="w-full shrink-0 border-r border-border/80 bg-card/70 backdrop-blur-2xl lg:w-80 flex flex-col h-auto lg:fixed lg:top-14 lg:left-0 lg:bottom-0 lg:z-30 lg:h-[calc(100vh-3.5rem)]">
                     {/* Header */}
                     <div className="flex items-center justify-between border-b border-border/80 p-4 sm:p-5 bg-card/50">
                         <div className="flex items-center gap-3">
@@ -110,7 +111,7 @@ export default function CourseLayout({
                                 <BookOpen className="h-4 w-4" />
                             </div>
                             <div>
-                                <h2 className="font-serif text-base font-semibold capitalize text-foreground">
+                                <h2 className="font-sans text-base font-bold capitalize text-foreground">
                                     {slug.replace("-", " ")}
                                 </h2>
                                 <p className="text-[11px] text-muted-foreground">Curriculum Index</p>
@@ -133,7 +134,7 @@ export default function CourseLayout({
                             <span className="text-xs font-semibold text-primary">{rank}</span>
                         </div>
                         <div className="flex items-baseline gap-1 mb-2">
-                            <span className="font-serif text-2xl font-normal text-foreground">{currentXp}</span>
+                            <span className="font-sans text-2xl font-bold text-foreground">{currentXp}</span>
                             <span className="text-xs text-muted-foreground">/ {nextTierXp} XP</span>
                         </div>
 
@@ -156,6 +157,16 @@ export default function CourseLayout({
                             <span>100% Required</span>
                             <ChevronRight className="w-3 h-3" />
                         </Link>
+                    </div>
+
+                    {/* Contextual Axel: Ask Axel "Give me an example" */}
+                    <div className="px-5 py-2.5 border-b border-border/80 bg-secondary/20 shrink-0">
+                        <ContextualAxelButton
+                            context="lesson"
+                            topicTitle={staticCourse?.title || slug}
+                            variant="compact"
+                            className="w-full justify-center"
+                        />
                     </div>
 
                     {/* Accordion Curriculum List */}
@@ -230,7 +241,7 @@ export default function CourseLayout({
                 </aside>
 
                 {/* Main Content Area */}
-                <main className="flex-1 relative overflow-hidden flex flex-col bg-background">
+                <main className="flex-1 relative overflow-hidden flex flex-col bg-background lg:ml-80">
                     {children}
                 </main>
             </div>

@@ -123,12 +123,12 @@ export default function CallStackDive() {
   if (!mounted) return null;
 
   return (
-    <div className="flex-1 w-full bg-black text-[#faf9f5] font-sans overflow-hidden flex flex-col">
+    <div className="flex-1 w-full bg-black text-[#FFFFFF] font-sans overflow-hidden flex flex-col">
       {/* Top Header Bar */}
       <div className="px-6 py-4 border-b border-white/10 bg-[#050505] flex items-center justify-between shrink-0">
          <div className="flex items-center gap-3">
             <Layers className="text-blue-500" size={18} />
-            <h2 className="font-mono text-xs uppercase tracking-widest font-semibold text-[#faf9f5]">
+            <h2 className="font-mono text-xs uppercase tracking-widest font-semibold text-[#FFFFFF]">
               Call Stack Visualizer
             </h2>
          </div>

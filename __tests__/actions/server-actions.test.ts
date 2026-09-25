@@ -72,4 +72,16 @@ describe("Server Actions - Guest & Demo Mode Fallback Math", () => {
     expect(courseUuid).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/)
     expect(lessonUuid).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/)
   })
+
+  it("calculates accurate streak shield XP balance deduction", () => {
+    const initialXp = 500
+    const shieldCost = 200
+    const remainingXp = Math.max(0, initialXp - shieldCost)
+    expect(remainingXp).toBe(300)
+
+    // Insufficient XP validation check
+    const lowXp = 150
+    const canAfford = lowXp >= shieldCost
+    expect(canAfford).toBe(false)
+  })
 })

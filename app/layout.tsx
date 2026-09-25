@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter, JetBrains_Mono, EB_Garamond } from 'next/font/google'
+import { Inter, JetBrains_Mono } from 'next/font/google'
 import { ThemeProvider } from '@/components/theme-provider'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
@@ -13,13 +13,6 @@ const inter = Inter({
 const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
   variable: '--font-jetbrains-mono',
-  display: 'swap',
-})
-
-const ebGaramond = EB_Garamond({
-  subsets: ['latin'],
-  variable: '--font-eb-garamond',
-  weight: ['400', '500', '600', '700'],
   display: 'swap',
 })
 
@@ -131,6 +124,10 @@ import { XpCelebrationToast } from "@/components/gamification/xp-celebration-toa
 import { GoogleOneTap } from "@/components/auth/google-one-tap"
 
 import { ScrollRobotWrapper } from "@/components/scroll-robot-wrapper"
+import { SitePopupModal } from "@/components/popups/site-popup-modal"
+import { MobileBottomNav } from "@/components/navigation/mobile-bottom-nav"
+
+import { AsciSplashScreen } from "@/components/splash/asci-splash-screen"
 
 export default function RootLayout({
   children,
@@ -140,7 +137,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
       <body
-        className={`${inter.variable} ${jetbrainsMono.variable} ${ebGaramond.variable} font-sans antialiased bg-background text-foreground min-h-screen transition-colors duration-200 overflow-x-hidden w-full max-w-full`}
+        className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased bg-background text-foreground min-h-screen transition-colors duration-200 overflow-x-hidden w-full max-w-full pb-14 md:pb-0`}
       >
         <JsonLd />
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
@@ -148,12 +145,15 @@ export default function RootLayout({
             <UserSettingsProvider>
               <AdminProvider>
                 <AxelProvider>
+                  <AsciSplashScreen minimumDuration={800} />
                   <Suspense fallback={null}>
                     <RouteProgressBar />
                   </Suspense>
                   <GoogleOneTap />
                   <XpCelebrationToast />
+                  <SitePopupModal />
                   {children}
+                  <MobileBottomNav />
                   <ScrollRobotWrapper />
                 </AxelProvider>
               </AdminProvider>

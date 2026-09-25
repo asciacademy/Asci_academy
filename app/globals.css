@@ -4,114 +4,128 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ─────────────────────────────────────────────
-   ANTHROPIC / CLAUDE DESIGN TOKENS
-   Cream canvas · Near-black ink · Coral accent · Dark navy surfaces
+   UNSTOP DESIGN SYSTEM TOKENS
+   Canvas #F6F8FA · Sapphire #1C4980 · Action Blue #0073E6 · Pure White Cards #FFFFFF
 ───────────────────────────────────────────── */
 
 :root {
-  /* Core palette — Crisp Pure White Canvas & Modern Slate Ink · Electric Gradient Blue */
-  --background: #ffffff;
-  --foreground: #0f172a;
-  --card: #ffffff;
-  --card-foreground: #0f172a;
-  --popover: #ffffff;
-  --popover-foreground: #0f172a;
-  --primary: #2563eb;
-  --primary-foreground: #ffffff;
-  --primary-active: #1d4ed8;
-  --secondary: #f8fafc;
-  --secondary-foreground: #334155;
-  --muted: #f1f5f9;
-  --muted-foreground: #64748b;
-  --accent: #3b82f6;
-  --accent-foreground: #ffffff;
-  --destructive: #dc2626;
-  --destructive-foreground: #ffffff;
-  --border: #e2e8f0;
-  --input: #e2e8f0;
-  --ring: #2563eb;
+  /* ASCI Academy Ecosystem Palette */
+  --background: #F8F9FA;
+  --foreground: #0F172A;
+  --card: #FFFFFF;
+  --card-foreground: #0F172A;
+  --popover: #FFFFFF;
+  --popover-foreground: #0F172A;
+  
+  /* Primary Action Color: ASCI Orange */
+  --primary: #FF5B00;
+  --primary-foreground: #FFFFFF;
+  --primary-active: #D44900;
+  --primary-hover: #EA5300;
+  --primary-subtle: #FFF4ED;
+  
+  --interactive: #FF5B00;
+  --interactive-foreground: #FFFFFF;
+  --interactive-hover: #EA5300;
+  
+  --secondary: #F1F5F9;
+  --secondary-foreground: #0F172A;
+  --muted: #F1F5F9;
+  --muted-foreground: #64748B;
+  --accent: #FFF4ED;
+  --accent-foreground: #FF5B00;
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  --border: #E2E8F0;
+  --input: #E2E8F0;
+  --ring: #FF5B00;
 
   /* Extended surfaces */
-  --surface: #ffffff;
-  --surface-2: #f8fafc;
-  --surface-card: #ffffff;
-  --surface-elevated: #ffffff;
-  --surface-cream-strong: #f1f5f9;
-  --surface-dark: #0b0f19;
-  --surface-dark-elevated: #111827;
-  --surface-dark-soft: #0f172a;
-  --on-dark: #f8fafc;
-  --on-dark-soft: #94a3b8;
+  --surface: #F8F9FA;
+  --surface-2: #F1F5F9;
+  --surface-card: #FFFFFF;
+  --surface-elevated: #FFFFFF;
+  --surface-cream-strong: #E2E8F0;
+  --surface-dark: #0F172A;
+  --surface-dark-elevated: #1E293B;
+  --surface-dark-soft: #334155;
+  --on-dark: #FFFFFF;
+  --on-dark-soft: #94A3B8;
 
   /* Semantic */
-  --success: #16a34a;
-  --warning: #eab308;
-  --info: #0284c7;
-  --error: #dc2626;
+  --success: #10B981;
+  --warning: #F59E0B;
+  --info: #0284C7;
+  --error: #EF4444;
 
   /* Ink hierarchy */
-  --ink: #0f172a;
+  --ink: #0F172A;
   --body: #334155;
-  --body-strong: #0f172a;
-  --muted-soft: #94a3b8;
-  --hairline: #e2e8f0;
-  --hairline-soft: #f1f5f9;
+  --body-strong: #0F172A;
+  --muted-soft: #64748B;
+  --hairline: #E2E8F0;
+  --hairline-soft: #F1F5F9;
 
-  /* Shape & Elevation */
+  /* Shape & Elevation (Disciplined, no bloated radii) */
   --radius: 0.625rem;
 
   /* Skeleton Loading Tokens (Light Mode) */
-  --skeleton-base: #ECECE8;
-  --skeleton-highlight: #F7F7F4;
-  --skeleton-border: rgba(0, 0, 0, 0.08);
+  --skeleton-base: #E2E8F0;
+  --skeleton-highlight: #F8F9FA;
+  --skeleton-border: rgba(15, 23, 42, 0.06);
 }
 
 .dark {
-  /* Core palette — Pure Black Technical Minimalist */
-  --background: #000000;
-  --foreground: #f8fafc;
-  --card: #050505;
-  --card-foreground: #f8fafc;
-  --popover: #000000;
-  --popover-foreground: #f8fafc;
-  --primary: #2563eb;
-  --primary-foreground: #ffffff;
-  --primary-active: #1d4ed8;
-  --secondary: #0a0a0a;
-  --secondary-foreground: #cbd5e1;
-  --muted: #0a0a0a;
-  --muted-foreground: #94a3b8;
-  --accent: #141414;
-  --accent-foreground: #ffffff;
-  --destructive: #ef4444;
-  --destructive-foreground: #ffffff;
-  --border: rgba(255, 255, 255, 0.12);
-  --input: rgba(255, 255, 255, 0.14);
-  --ring: #3b82f6;
+  /* ASCI Dark / Slate & Carbon Theme */
+  --background: #0B0F19;
+  --foreground: #F8FAFC;
+  --card: #131B2E;
+  --card-foreground: #F8FAFC;
+  --popover: #131B2E;
+  --popover-foreground: #F8FAFC;
+  --primary: #FF6A1A;
+  --primary-foreground: #FFFFFF;
+  --primary-active: #EA5300;
+  --interactive: #FF6A1A;
+  --interactive-foreground: #FFFFFF;
+  --interactive-hover: #FF7D38;
+  --primary-hover: #FF7D38;
+  --primary-subtle: rgba(255, 106, 26, 0.15);
+  --secondary: #1E293B;
+  --secondary-foreground: #94A3B8;
+  --muted: #1A243B;
+  --muted-foreground: #94A3B8;
+  --accent: rgba(255, 106, 26, 0.15);
+  --accent-foreground: #FF7D38;
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.12);
+  --ring: #FF6A1A;
 
   /* Extended surfaces */
-  --surface: #000000;
-  --surface-2: #080808;
-  --surface-card: #050505;
-  --surface-elevated: #0a0a0a;
-  --surface-cream-strong: #080808;
-  --surface-dark: #000000;
-  --surface-dark-elevated: #080808;
-  --surface-dark-soft: #000000;
-  --on-dark: #f8fafc;
-  --on-dark-soft: #94a3b8;
+  --surface: #0B0F19;
+  --surface-2: #131B2E;
+  --surface-card: #131B2E;
+  --surface-elevated: #1A243B;
+  --surface-cream-strong: #1E293B;
+  --surface-dark: #070A12;
+  --surface-dark-elevated: #0B0F19;
+  --surface-dark-soft: #131B2E;
+  --on-dark: #F8FAFC;
+  --on-dark-soft: #94A3B8;
 
   /* Semantic */
-  --success: #22c55e;
-  --warning: #facc15;
-  --info: #38bdf8;
-  --error: #ef4444;
+  --success: #05C165;
+  --warning: #FFC700;
+  --info: #388BFD;
+  --error: #EF4444;
 
   /* Ink hierarchy */
-  --ink: #f8fafc;
-  --body: #cbd5e1;
-  --body-strong: #ffffff;
-  --muted-soft: #94a3b8;
+  --ink: #F8FAFC;
+  --body: #CBD5E1;
+  --body-strong: #FFFFFF;
+  --muted-soft: #94A3B8;
   --hairline: rgba(255, 255, 255, 0.12);
   --hairline-soft: rgba(255, 255, 255, 0.06);
 
@@ -123,9 +137,9 @@
 
 @theme inline {
   --font-sans: var(--font-inter), 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-serif: var(--font-eb-garamond), 'Cormorant Garamond', 'EB Garamond', 'Playfair Display', Georgia, serif;
+  --font-serif: var(--font-inter), 'Inter', sans-serif;
   --font-mono: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
-  --font-display: var(--font-eb-garamond), 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+  --font-display: var(--font-inter), 'Inter', sans-serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -150,7 +164,7 @@
   --color-success: var(--success);
   --color-info: var(--info);
 
-  /* Extended Claude tokens */
+  /* Extended Unstop tokens */
   --color-surface-card: var(--surface-card);
   --color-surface-dark: var(--surface-dark);
   --color-surface-dark-elevated: var(--surface-dark-elevated);
@@ -162,8 +176,8 @@
   --color-skeleton-border: var(--skeleton-border);
   --color-body: var(--body);
   --color-hairline: var(--hairline);
-  --color-coral: var(--primary);
-  --color-coral-active: var(--primary-active);
+  --color-interactive: var(--interactive);
+  --color-interactive-hover: var(--interactive-hover);
   --color-warning: var(--warning);
   --color-error: var(--error);
 
@@ -203,7 +217,12 @@
     -webkit-overflow-scrolling: touch;
   }
 
-  h1, h2, h3, h4, .font-serif, .font-display {
+  h1, h2, h3, h4 {
+    font-family: var(--font-sans);
+    letter-spacing: -0.025em;
+  }
+
+  .font-serif {
     font-family: var(--font-serif);
     font-feature-settings: 'kern' 1, 'liga' 1;
     text-rendering: optimizeLegibility;
@@ -964,7 +983,7 @@ html {
 }
 
 .font-certificate-serif {
-  font-family: 'Playfair Display', 'EB Garamond', Georgia, serif;
+  font-family: 'Playfair Display', Georgia, serif;
 }
 
 .font-certificate-script {

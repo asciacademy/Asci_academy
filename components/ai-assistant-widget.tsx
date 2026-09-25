@@ -149,8 +149,8 @@ export function AIAssistantWidget() {
         whileHover={{ scale: 1.08 }}
         whileTap={{ scale: 0.92 }}
         className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 group flex items-center justify-center h-12 w-12 sm:h-14 sm:w-14 rounded-full border border-border/80 dark:border-white/15 bg-card/95 dark:bg-black/95 backdrop-blur-2xl hover:border-primary/60 dark:hover:border-primary/60 transition-all duration-300 cursor-pointer select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
-        aria-label={isOpen ? "Close AI Assistant" : "Open AI Assistant"}
-        title={isOpen ? "Close AI Assistant" : "Ask AI Assistant"}
+        aria-label={isOpen ? "Close Axel Assistant" : "Ask Axel"}
+        title={isOpen ? "Close Axel Assistant" : "Ask Axel"}
       >
         {/* Ambient Ring Pulse when thinking or speaking */}
         {(isSpeaking || isThinking) && (
@@ -160,7 +160,7 @@ export function AIAssistantWidget() {
         {/* Hover Context Tooltip (Left Side of Circle - Desktop Only) */}
         <div className="pointer-events-none hidden sm:flex absolute right-full mr-3.5 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-xl bg-card/95 dark:bg-black/95 backdrop-blur-xl border border-border/80 dark:border-white/15 text-xs font-semibold text-foreground whitespace-nowrap opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200 items-center gap-1.5">
           <Bot className="h-3.5 w-3.5 text-primary shrink-0" />
-          <span>{isOpen ? "Close Assistant" : "Ask AI Assistant"}</span>
+          <span>{isOpen ? "Close Axel" : "Ask Axel"}</span>
         </div>
 
         {/* Center Icon with Smooth Rotation/Morph */}
@@ -415,7 +415,7 @@ export function AIAssistantWidget() {
                   placeholder={
                     isListening
                       ? "Listening to your voice..."
-                      : "Ask AI Assistant anything (code, DSA, roadmap)..."
+                      : "Ask Axel anything (code, DSA, roadmap)..."
                   }
                   className="flex-1 h-9 px-3 text-xs rounded-xl bg-background dark:bg-[#141414] border border-hairline dark:border-[#282828] focus:border-primary focus:ring-1 focus:ring-primary/40 focus:outline-none transition-all text-foreground placeholder:text-muted-foreground/60 font-sans"
                 />

@@ -195,19 +195,19 @@ export function DashboardCertificates({
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
           <div className="space-y-2">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase tracking-wider bg-primary/10 text-primary border border-primary/20 shrink-0 leading-none">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase tracking-wider bg-primary/10 text-primary border border-primary/20 shrink-0 leading-none font-semibold">
                 <ShieldCheck className="w-3 h-3" />
-                Accredited Credentials
+                Verified Certificates
               </span>
               <span className="text-xs font-mono text-muted-foreground shrink-0">
-                Gravit Engineering Partnership
+                Course Completions
               </span>
             </div>
-            <h1 className="font-serif text-3xl sm:text-4xl font-normal text-foreground">
+            <h1 className="font-sans text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
               Certificates of Completion
             </h1>
             <p className="text-sm text-muted-foreground max-w-2xl leading-relaxed">
-              Official Gravit credentials are <strong>strictly conferred upon 100% completion</strong> of a curriculum track. Enrolling in a course does not grant a certificate; every lesson, challenge, and requirement must be satisfied.
+              Earn a verified certificate whenever you complete 100% of a course. Share your certificates on LinkedIn or add them to your resume.
             </p>
           </div>
 
@@ -215,7 +215,7 @@ export function DashboardCertificates({
             <AxelStage
               id="dashboard-certificates-robot-anchor"
               sectionId="dashboard-certificates-header"
-              label="Credentials Verifier"
+              label="Certificates Advisor"
               emotion="proud"
               scale={0.44}
               size="sm"
@@ -226,7 +226,7 @@ export function DashboardCertificates({
                   {certificates.length}
                 </div>
                 <div className="text-[11px] font-mono text-muted-foreground">
-                  Earned Credentials
+                  Certificates Earned
                 </div>
               </div>
               <div className="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/20 text-primary flex items-center justify-center">
@@ -256,12 +256,12 @@ export function DashboardCertificates({
       ══════════════════════════════════════════════ */}
       <section className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="font-mono text-xs uppercase tracking-widest text-muted-foreground font-semibold flex items-center gap-2">
+          <h2 className="font-sans text-sm sm:text-base font-bold text-foreground flex items-center gap-2">
             <Award className="w-4 h-4 text-primary" />
-            <span>Your Issued Certificates ({certificates.length})</span>
+            <span>Your Certificates ({certificates.length})</span>
           </h2>
           <span className="font-mono text-[11px] text-muted-foreground">
-            Cryptographically Registered
+            Verified by ASCI Academy
           </span>
         </div>
 
@@ -271,11 +271,11 @@ export function DashboardCertificates({
               <EmptyCertificate3DIcon size="lg" className="hover:scale-105 transition-transform duration-300" />
             </div>
             <div className="space-y-1.5">
-              <h3 className="font-serif text-lg font-normal text-foreground">
+              <h3 className="font-sans text-base sm:text-lg font-semibold text-foreground">
                 No Certificates Earned Yet
               </h3>
               <p className="text-xs text-muted-foreground max-w-md mx-auto leading-relaxed">
-                Complete 100% of all curriculum lessons in any enrolled course below to unlock and mint your official Gravit Certificate.
+                Complete all lessons and projects in any course below to unlock and download your verified certificate.
               </p>
             </div>
           </div>
@@ -300,14 +300,14 @@ export function DashboardCertificates({
                     </span>
                   </div>
 
-                  <h3 className="font-serif text-xl font-medium text-foreground group-hover:text-primary transition-colors">
+                  <h3 className="font-sans text-base sm:text-lg font-bold text-foreground group-hover:text-primary transition-colors">
                     {cert.course_title}
                   </h3>
 
                   <div className="mt-2.5 flex items-center gap-2">
                     <span className="inline-flex items-center gap-1.5 text-[11px] font-mono text-muted-foreground">
                       <ShieldCheck className="w-3.5 h-3.5 text-primary" />
-                      {cert.grade || "Mastery with Highest Distinction"}
+                      {cert.grade || "Completed with Distinction"}
                     </span>
                   </div>
                 </div>
@@ -330,13 +330,13 @@ export function DashboardCertificates({
                       rel="noopener noreferrer"
                       className="px-3.5 py-2 rounded-xl border border-hairline hover:border-foreground/30 hover:bg-secondary text-xs font-mono font-medium text-foreground transition-colors inline-flex items-center gap-1.5 shrink-0"
                     >
-                      <span>Public Verify</span>
+                      <span>Verify</span>
                       <ExternalLink className="w-3 h-3 text-muted-foreground" />
                     </a>
                   </div>
 
                   <span className="font-mono text-[10px] text-muted-foreground/70 uppercase tracking-wider shrink-0">
-                    ASCI × Gravit
+                    ASCI Academy
                   </span>
                 </div>
               </div>
@@ -350,20 +350,20 @@ export function DashboardCertificates({
       ══════════════════════════════════════════════ */}
       <section className="space-y-4 pt-4 border-t border-hairline">
         <div>
-          <h2 className="font-mono text-xs uppercase tracking-widest text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-2">
+          <h2 className="font-sans text-sm sm:text-base font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-            <span>Completed Courses — Eligible For Credential Issuance ({completedCourses.length})</span>
+            <span>Completed Courses — Ready to Claim ({completedCourses.length})</span>
           </h2>
           <p className="text-xs text-muted-foreground mt-1">
-            These tracks have achieved 100% curriculum completion. Click &quot;Claim Certificate&quot; to mint your verified credential.
+            You have completed all lessons in these courses. Click &quot;Claim Certificate&quot; to receive your verified certificate.
           </p>
         </div>
 
         {completedCourses.length === 0 ? (
           <div className="rounded-xl border border-hairline bg-card/40 p-6 text-center space-y-3">
-            <p className="text-xs font-mono text-muted-foreground">
+            <p className="text-xs text-muted-foreground">
               {coursesList.length === 0
-                ? "You have not enrolled in any courses yet. Enroll in a curriculum track to begin earning credentials."
+                ? "You have not enrolled in any courses yet. Enroll in a course below to begin earning certificates."
                 : "No courses are 100% completed yet. Review your courses in progress below to finish remaining lessons."}
             </p>
             {coursesList.length === 0 && (
@@ -392,7 +392,7 @@ export function DashboardCertificates({
                   <div>
                     <div className="flex items-center justify-between mb-2.5">
                       <span className="text-[10px] font-mono text-muted-foreground uppercase">
-                        {course.category || "Curriculum"}
+                        {course.category || "Course"}
                       </span>
                       <span className="text-[10px] font-mono font-bold text-emerald-600 bg-emerald-500/15 px-2 py-0.5 rounded-full flex items-center gap-1">
                         <CheckCircle2 className="w-3 h-3" />
@@ -400,11 +400,11 @@ export function DashboardCertificates({
                       </span>
                     </div>
 
-                    <h3 className="text-sm sm:text-base font-serif font-medium text-foreground leading-snug">
+                    <h3 className="text-sm sm:text-base font-sans font-semibold text-foreground leading-snug">
                       {course.title}
                     </h3>
                     <p className="text-[11px] font-mono text-muted-foreground mt-1.5">
-                      All {course.totalLessons ?? course.lessonsCompleted ?? 0} curriculum modules completed.
+                      All {course.totalLessons ?? course.lessonsCompleted ?? 0} lessons completed.
                     </p>
                   </div>
 
@@ -412,7 +412,7 @@ export function DashboardCertificates({
                     {alreadyClaimed ? (
                       <span className="text-xs font-mono text-emerald-600 font-medium flex items-center gap-1.5">
                         <ShieldCheck className="w-4 h-4" />
-                        Certificate Conferred
+                        Certificate Issued
                       </span>
                     ) : (
                       <button
@@ -421,7 +421,7 @@ export function DashboardCertificates({
                         className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary hover:bg-primary-active disabled:opacity-50 text-primary-foreground text-xs font-semibold shadow-xs transition-colors cursor-pointer w-full justify-center"
                       >
                         <Award className="w-3.5 h-3.5 text-[#D4B872]" />
-                        <span>{isGenerating ? "Minting Credential..." : "Claim Gravit Certificate"}</span>
+                        <span>{isGenerating ? "Generating..." : "Claim Certificate"}</span>
                       </button>
                     )}
                   </div>
@@ -438,12 +438,12 @@ export function DashboardCertificates({
       {inProgressCourses.length > 0 && (
         <section className="space-y-4 pt-4 border-t border-hairline">
           <div>
-            <h2 className="font-mono text-xs uppercase tracking-widest text-muted-foreground font-semibold flex items-center gap-2">
+            <h2 className="font-sans text-sm sm:text-base font-bold text-foreground flex items-center gap-2">
               <Lock className="w-4 h-4 text-muted-foreground" />
-              <span>In-Progress Curriculum Tracks (Locked Until 100% Complete)</span>
+              <span>In-Progress Courses</span>
             </h2>
             <p className="text-xs text-muted-foreground mt-1">
-              Certificates remain locked until every lesson is completed. Continue learning to reach 100%.
+              Complete the remaining lessons to unlock your certificate for these courses.
             </p>
           </div>
 
@@ -471,7 +471,7 @@ export function DashboardCertificates({
                       </span>
                     </div>
 
-                    <h3 className="text-sm sm:text-base font-serif font-medium text-foreground leading-snug">
+                    <h3 className="text-sm sm:text-base font-sans font-semibold text-foreground leading-snug">
                       {course.title}
                     </h3>
 

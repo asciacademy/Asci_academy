@@ -104,7 +104,7 @@ export default function AdminTestimonialsPage() {
                     <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase tracking-widest bg-primary/10 text-primary border border-primary/20 mb-2 font-semibold">
                         Scholar Endorsements
                     </div>
-                    <h1 className="font-serif text-3xl sm:text-4xl font-normal text-foreground tracking-tight">
+                    <h1 className="font-sans text-3xl sm:text-4xl font-bold text-foreground tracking-tight">
                         Testimonials &amp; Evaluations <span className="text-muted-foreground text-xl">({filtered.length})</span>
                     </h1>
                     <p className="text-xs sm:text-sm text-muted-foreground mt-1 font-sans">
@@ -131,7 +131,7 @@ export default function AdminTestimonialsPage() {
                 ].map(card => (
                     <div key={card.label} className="bg-card/70 border border-border/80 backdrop-blur-xl rounded-2xl p-5 relative overflow-hidden">
                         <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">{card.label}</span>
-                        <div className="text-2xl sm:text-3xl font-serif text-foreground mt-1">{card.value}</div>
+                        <div className="text-2xl sm:text-3xl font-sans text-foreground mt-1 font-bold">{card.value}</div>
                         <span className="text-[11px] font-mono text-primary mt-1 block">{card.sub}</span>
                     </div>
                 ))}
@@ -220,7 +220,7 @@ export default function AdminTestimonialsPage() {
 
                             {/* Content */}
                             <div className="relative pl-4 border-l-2 border-primary/40 mb-4 bg-secondary/30 p-3.5 rounded-r-xl">
-                                <p className="font-serif text-sm text-foreground leading-relaxed italic">
+                                <p className="font-sans text-sm text-foreground leading-relaxed italic">
                                     &ldquo;{t.content}&rdquo;
                                 </p>
                             </div>

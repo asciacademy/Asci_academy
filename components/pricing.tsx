@@ -121,7 +121,7 @@ export function Pricing() {
           </div>
         </div>
 
-        {/* 3-Tier Grid: Featured is Dark Navy Surface (#181715) */}
+        {/* 3-Tier Grid: Featured is Unstop Navy Surface (#112C4D) */}
         <div className="grid gap-6 md:grid-cols-3 w-full">
           {plans.map((plan) => {
             const price = isYearly ? plan.priceYearly : plan.priceMonthly

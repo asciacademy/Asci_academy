@@ -1,0 +1,184 @@
+/* ASCI Academy — Digital Glitch Boot Sequence Styles */
+
+@keyframes asci-boot-fade {
+  0% {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Subtle, controlled 2-3 glitch events during 120ms - 320ms window */
+@keyframes asci-glitch-slice-1 {
+  0%, 100% {
+    opacity: 0;
+    transform: translate(0, 0);
+    clip-path: inset(0 0 0 0);
+  }
+  20% {
+    opacity: 0.9;
+    transform: translate(-2px, -1px);
+    clip-path: polygon(0 15%, 100% 15%, 100% 38%, 0 38%);
+  }
+  35% {
+    opacity: 0;
+    transform: translate(0, 0);
+  }
+  50% {
+    opacity: 0.85;
+    transform: translate(2px, 1px);
+    clip-path: polygon(0 62%, 100% 62%, 100% 82%, 0 82%);
+  }
+  65% {
+    opacity: 0;
+  }
+  80% {
+    opacity: 0.75;
+    transform: translate(-1px, 0.5px);
+    clip-path: polygon(0 42%, 100% 42%, 100% 55%, 0 55%);
+  }
+  95% {
+    opacity: 0;
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes asci-glitch-slice-2 {
+  0%, 100% {
+    opacity: 0;
+    transform: translate(0, 0);
+    clip-path: inset(0 0 0 0);
+  }
+  15% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.8;
+    transform: translate(2px, -1px);
+    clip-path: polygon(0 28%, 100% 28%, 100% 45%, 0 45%);
+  }
+  40% {
+    opacity: 0;
+  }
+  60% {
+    opacity: 0.9;
+    transform: translate(-2px, 1px);
+    clip-path: polygon(0 75%, 100% 75%, 100% 92%, 0 92%);
+  }
+  75% {
+    opacity: 0;
+    transform: translate(0, 0);
+  }
+}
+
+/* Subtle line sweep for boot signal */
+@keyframes asci-glitch-scanline {
+  0% {
+    top: 0%;
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.6;
+  }
+  70% {
+    opacity: 0.6;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
+
+/* Safe area padding wrapper */
+.asci-splash-safe-viewport {
+  padding-top: max(1rem, env(safe-area-inset-top));
+  padding-right: max(1rem, env(safe-area-inset-right));
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  padding-left: max(1rem, env(safe-area-inset-left));
+}
+
+/* Container for Glitch Layers */
+.asci-glitch-container {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Base Clean Layer */
+.asci-glitch-base {
+  position: relative;
+  z-index: 2;
+  will-change: opacity, transform;
+}
+
+/* Glitch Slices: Only active during 120ms - 320ms, then transparent */
+.asci-glitch-slice-a {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0;
+  mix-blend-mode: multiply;
+  animation: asci-glitch-slice-1 0.28s ease-in-out 0.12s 1 forwards;
+  will-change: transform, opacity, clip-path;
+}
+
+.asci-glitch-slice-b {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0;
+  mix-blend-mode: screen;
+  animation: asci-glitch-slice-2 0.26s ease-in-out 0.14s 1 forwards;
+  will-change: transform, opacity, clip-path;
+}
+
+/* High contrast & dark mode blend modes */
+.dark .asci-glitch-slice-a {
+  mix-blend-mode: screen;
+}
+
+.dark .asci-glitch-slice-b {
+  mix-blend-mode: color-dodge;
+}
+
+/* Micro scanline accent */
+.asci-glitch-scan {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, #FF6B00 50%, transparent 100%);
+  pointer-events: none;
+  z-index: 4;
+  animation: asci-glitch-scanline 0.3s ease-out 0.1s 1 forwards;
+}
+
+/* Respect prefers-reduced-motion: completely eliminate glitch displacement */
+@media (prefers-reduced-motion: reduce) {
+  .asci-glitch-slice-a,
+  .asci-glitch-slice-b,
+  .asci-glitch-scan {
+    animation: none !important;
+    display: none !important;
+    opacity: 0 !important;
+  }
+
+  .asci-glitch-base {
+    animation: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}

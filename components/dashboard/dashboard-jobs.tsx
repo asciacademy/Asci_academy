@@ -92,7 +92,7 @@ function CompanyLogo({ logo, name }: { logo?: string; name: string }) {
   }
 
   return (
-    <div className="w-11 h-11 rounded-xl bg-secondary border border-hairline flex items-center justify-center shrink-0 text-foreground font-serif font-semibold text-xs shadow-2xs">
+    <div className="w-11 h-11 rounded-xl bg-secondary border border-hairline flex items-center justify-center shrink-0 text-foreground font-sans font-bold text-xs shadow-2xs">
       {name.slice(0, 2).toUpperCase()}
     </div>
   )
@@ -111,9 +111,9 @@ export function DashboardJobs() {
 
   // Section Header Customization
   const [sectionConfig, setSectionConfig] = useState({
-    badge: "Unstop Career Portal",
-    title: "Hiring Drives & Opportunities Hub",
-    description: "Explore verified software engineering jobs, summer internships, and fast-track hiring pipelines with real-time stage tracking.",
+    badge: "Careers & Jobs",
+    title: "Job Opportunities & Internships",
+    description: "Explore verified software engineering jobs and internships with direct application tracking.",
   })
   const [isSectionEditOpen, setIsSectionEditOpen] = useState(false)
   const [sectionForm, setSectionForm] = useState(sectionConfig)
@@ -322,7 +322,7 @@ export function DashboardJobs() {
             </span>
           </div>
           <div className="flex items-center gap-2.5">
-            <h1 className="font-serif text-2xl sm:text-3xl font-normal tracking-tight text-foreground">
+            <h1 className="font-sans text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
               {sectionConfig.title}
             </h1>
             {isAdmin && (
@@ -347,7 +347,7 @@ export function DashboardJobs() {
           <AxelStage
             id="dashboard-jobs-robot-anchor"
             sectionId="dashboard-jobs-header"
-            label="Placement Mentor"
+            label="Career Advisor"
             emotion="proud"
             scale={0.44}
             size="sm"
@@ -415,8 +415,8 @@ export function DashboardJobs() {
             <Briefcase className="w-3.5 h-3.5 text-primary" />
             Active Openings
           </span>
-          <p className="text-xl font-serif font-normal text-foreground mt-1">{jobs.length}</p>
-          <span className="text-[11px] text-muted-foreground mt-0.5 block">High-growth tech partners</span>
+          <p className="text-xl font-sans font-bold text-foreground mt-1">{jobs.length}</p>
+          <span className="text-[11px] text-muted-foreground mt-0.5 block">Hiring partners</span>
         </div>
 
         <div className="rounded-2xl border border-hairline bg-card p-4 sm:p-5 shadow-2xs">
@@ -424,28 +424,28 @@ export function DashboardJobs() {
             <UserCheck className="w-3.5 h-3.5 text-[#D4B872]" />
             My Applications
           </span>
-          <p className="text-xl font-serif font-normal text-foreground mt-1">{appliedJobs.length}</p>
+          <p className="text-xl font-sans font-bold text-foreground mt-1">{appliedJobs.length}</p>
           <span className="text-[11px] text-muted-foreground mt-0.5 block">
-            {appliedJobs.length > 0 ? "Under active recruiter review" : "Ready to apply"}
+            {appliedJobs.length > 0 ? "Under recruiter review" : "Ready to apply"}
           </span>
         </div>
 
         <div className="rounded-2xl border border-hairline bg-card p-4 sm:p-5 shadow-2xs">
           <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
             <DollarSign className="w-3.5 h-3.5 text-emerald-500" />
-            Top Compensation
+            Top Package
           </span>
-          <p className="text-xl font-serif font-normal text-foreground mt-1">₹28 LPA</p>
-          <span className="text-[11px] text-muted-foreground mt-0.5 block">Full-time Core SDE roles</span>
+          <p className="text-xl font-sans font-bold text-foreground mt-1">₹28 LPA</p>
+          <span className="text-[11px] text-muted-foreground mt-0.5 block">Full-time software roles</span>
         </div>
 
         <div className="rounded-2xl border border-hairline bg-card p-4 sm:p-5 shadow-2xs">
           <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
             <Target className="w-3.5 h-3.5 text-primary" />
-            Shortlist Match Rate
+            Profile Match
           </span>
-          <p className="text-xl font-serif font-normal text-foreground mt-1">92% Match</p>
-          <span className="text-[11px] text-muted-foreground mt-0.5 block">Based on your DSA &amp; projects</span>
+          <p className="text-xl font-sans font-bold text-foreground mt-1">92% Match</p>
+          <span className="text-[11px] text-muted-foreground mt-0.5 block">Based on your skills &amp; projects</span>
         </div>
       </div>
 
@@ -495,8 +495,8 @@ export function DashboardJobs() {
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="font-serif text-xl font-normal text-foreground">Active Application Pipelines</h2>
-              <p className="text-xs text-muted-foreground">Real-time status updates synced with partner hiring systems.</p>
+              <h2 className="font-sans text-xl font-bold text-foreground">Active Applications</h2>
+              <p className="text-xs text-muted-foreground">Track the status of your job applications in real time.</p>
             </div>
           </div>
 
@@ -516,7 +516,7 @@ export function DashboardJobs() {
                           {job.roleType}
                         </span>
                       </div>
-                      <h3 className="font-serif text-lg sm:text-xl font-normal text-foreground mt-0.5">{job.title}</h3>
+                      <h3 className="font-sans text-base sm:text-lg font-bold text-foreground mt-0.5">{job.title}</h3>
                     </div>
                   </div>
 
@@ -529,7 +529,7 @@ export function DashboardJobs() {
                 {/* 5-Stage Stepper Tracker */}
                 <div>
                   <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground block mb-3">
-                    Application Lifecycle Tracker
+                    Application Status
                   </span>
 
                   <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
@@ -576,7 +576,7 @@ export function DashboardJobs() {
       ) : filteredJobs.length === 0 ? (
         <div className="rounded-2xl border border-hairline bg-card/40 p-12 text-center">
           <Briefcase className="w-10 h-10 text-muted-foreground/40 mx-auto mb-3" />
-          <h3 className="font-serif text-lg font-normal text-foreground">No Opportunities Found</h3>
+          <h3 className="font-sans text-base sm:text-lg font-semibold text-foreground">No Opportunities Found</h3>
           <p className="text-xs text-muted-foreground mt-1 max-w-sm mx-auto">
             {filter === "applied"
               ? "You haven't submitted any job applications yet. Browse the hiring board below to fast-track your profile."
@@ -629,7 +629,7 @@ export function DashboardJobs() {
                           </span>
                         )}
                       </div>
-                      <h3 className="font-serif text-lg sm:text-xl font-normal text-foreground group-hover:text-primary transition-colors mt-0.5">
+                      <h3 className="font-sans text-base sm:text-lg font-bold text-foreground group-hover:text-primary transition-colors mt-0.5">
                         {job.title}
                       </h3>
                     </div>
@@ -753,7 +753,7 @@ export function DashboardJobs() {
             <div className="flex items-center justify-between pb-3 border-b border-hairline">
               <div>
                 <span className="text-[10px] font-mono uppercase tracking-wider text-primary">Direct Application</span>
-                <h3 className="font-serif text-lg font-normal text-foreground">Apply to {selectedJobForApply.company}</h3>
+                <h3 className="font-sans text-base sm:text-lg font-bold text-foreground">Apply to {selectedJobForApply.company}</h3>
               </div>
               <button
                 onClick={() => setSelectedJobForApply(null)}
@@ -837,7 +837,7 @@ export function DashboardJobs() {
                 </div>
                 <div>
                   <span className="text-[10px] font-mono uppercase tracking-wider text-primary">Admin Control</span>
-                  <h3 className="font-serif text-lg font-normal text-foreground">
+                  <h3 className="font-sans text-base sm:text-lg font-bold text-foreground">
                     {jobModalMode === "create" ? "Post New Opportunity" : `Edit Opportunity: ${jobForm.company}`}
                   </h3>
                 </div>
@@ -1080,7 +1080,7 @@ export function DashboardJobs() {
                 <AlertTriangle className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="font-serif text-base font-medium text-foreground">Delete Opportunity?</h3>
+                <h3 className="font-sans text-base font-semibold text-foreground">Delete Opportunity?</h3>
                 <p className="text-xs text-muted-foreground mt-0.5">
                   This will remove this job drive from the portal and revoke active application tracking.
                 </p>
@@ -1113,7 +1113,7 @@ export function DashboardJobs() {
             <div className="flex items-center justify-between pb-3 border-b border-hairline">
               <div className="flex items-center gap-2">
                 <SlidersHorizontal className="w-4 h-4 text-primary" />
-                <h3 className="font-serif text-lg font-normal text-foreground">Customize Section Copy</h3>
+                <h3 className="font-sans text-base sm:text-lg font-bold text-foreground">Customize Section Header</h3>
               </div>
               <button
                 onClick={() => setIsSectionEditOpen(false)}
